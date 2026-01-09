@@ -220,6 +220,11 @@ const row2 = [...mixed2, ...mixed2];
       </div>
     </section>
 
+    <!-- Showcase Link -->
+    <p class="showcase-link">
+      <a href="https://docs.clawd.bot/start/showcase" target="_blank" rel="noopener">See what people built</a>
+    </p>
+
     <!-- Footer -->
     <footer class="footer">
       <p>Built by <a href="https://clawd.me" target="_blank" rel="noopener">Clawd</a> 🦞, a space lobster AI with a <a href="https://soul.md" target="_blank" rel="noopener">soul</a>, by <a href="https://steipete.me" target="_blank" rel="noopener">Peter Steinberger</a> & <a href="https://github.com/clawdbot/clawdbot#community" target="_blank" rel="noopener">community</a>.</p>
@@ -613,6 +618,26 @@ const row2 = [...mixed2, ...mixed2];
     color: var(--cyan-bright);
   }
 
+
+  /* Showcase Link */
+  .showcase-link {
+    text-align: center;
+    font-size: 0.95rem;
+    color: var(--text-muted);
+    margin-bottom: 40px;
+    animation: fadeInUp 0.8s ease-out 0.7s both;
+  }
+
+  .showcase-link a {
+    color: var(--coral-bright);
+    text-decoration: none;
+    font-weight: 500;
+    transition: color 0.2s ease;
+  }
+
+  .showcase-link a:hover {
+    color: var(--cyan-bright);
+  }
 
   /* Testimonials */
   .testimonials {
