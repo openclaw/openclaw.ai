@@ -767,6 +767,8 @@ const duration2 = (row2.length / 2 * pixelsPerItem) / pixelsPerSecond;
     backdrop-filter: blur(8px);
     font-size: 0.85rem;
     color: var(--text-secondary);
+    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    cursor: default;
   }
 
   .integration-pill :global(svg) {
@@ -778,7 +780,8 @@ const duration2 = (row2.length / 2 * pixelsPerItem) / pixelsPerSecond;
 
   .integration-pill:hover {
     border-color: var(--coral-bright);
-    transform: translateY(-2px);
+    transform: translateY(-4px);
+    box-shadow: 0 8px 24px color-mix(in srgb, var(--coral-bright) 20%, transparent);
   }
 
   .integrations-link {
