@@ -6,6 +6,7 @@ set -e
 
 BOLD='\033[1m'
 ACCENT='\033[38;2;255;90;45m'
+# shellcheck disable=SC2034
 ACCENT_BRIGHT='\033[38;2;255;122;61m'
 ACCENT_DIM='\033[38;2;209;74;34m'
 INFO='\033[38;2;255;138;91m'
@@ -78,7 +79,7 @@ TAGLINES+=("Your messages, your servers, Meta's tears.")
 TAGLINES+=("iMessage green bubble energy, but for everyone.")
 TAGLINES+=("Siri's competent cousin.")
 TAGLINES+=("Works on Android. Crazy concept, we know.")
-TAGLINES+=("No \\$999 stand required.")
+TAGLINES+=("No \$999 stand required.")
 TAGLINES+=("We ship features faster than Apple ships calculator updates.")
 TAGLINES+=("Your AI assistant, now without the \\$3,499 headset.")
 TAGLINES+=("Think different. Actually think.")
@@ -403,6 +404,7 @@ fix_npm_permissions() {
     mkdir -p "$HOME/.npm-global"
     npm config set prefix "$HOME/.npm-global"
 
+    # shellcheck disable=SC2016
     local path_line='export PATH="$HOME/.npm-global/bin:$PATH"'
     for rc in "$HOME/.bashrc" "$HOME/.zshrc"; do
         if [[ -f "$rc" ]] && ! grep -q ".npm-global" "$rc"; then
@@ -449,6 +451,7 @@ ensure_user_local_bin_on_path() {
 
     export PATH="$target:$PATH"
 
+    # shellcheck disable=SC2016
     local path_line='export PATH="$HOME/.local/bin:$PATH"'
     for rc in "$HOME/.bashrc" "$HOME/.zshrc"; do
         if [[ -f "$rc" ]] && ! grep -q ".local/bin" "$rc"; then

@@ -216,7 +216,7 @@ EOF
 resolve_clawdbot_version() {
   local version=""
   if [[ -x "${PREFIX}/bin/clawdbot" ]]; then
-    version="$(${PREFIX}/bin/clawdbot --version 2>/dev/null | head -n 1 | tr -d '\r')"
+    version="$("${PREFIX}/bin/clawdbot" --version 2>/dev/null | head -n 1 | tr -d '\r')"
   fi
   echo "$version"
 }
@@ -228,7 +228,8 @@ main() {
     RUN_ONBOARD=0
   fi
 
-  export PATH="$(node_dir)/bin:${PREFIX}/bin:${PATH}"
+  PATH="$(node_dir)/bin:${PREFIX}/bin:${PATH}"
+  export PATH
 
   install_node
   if [[ "$SET_NPM_PREFIX" -eq 1 ]]; then
