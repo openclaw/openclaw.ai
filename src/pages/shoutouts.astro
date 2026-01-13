@@ -24,10 +24,11 @@ const allTestimonials = [...testimonials, ...extraTestimonials];
       {allTestimonials.map((t) => (
         <a href={t.url} target="_blank" rel="noopener" class="shoutout-card">
           <img
-            src={`https://unavatar.io/x/${t.author}`}
+            src={`https://unavatar.io/twitter/${t.author}`}
             alt={t.author}
             class="shoutout-avatar"
             loading="lazy"
+            onerror={`this.src='https://ui-avatars.com/api/?name=${t.author}&background=FF4D4D&color=fff&size=96'`}
           />
           <div class="shoutout-content">
             <p class="shoutout-quote">"{t.quote}"</p>

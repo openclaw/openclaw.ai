@@ -103,10 +103,11 @@ const duration2 = (row2.length / 2 * pixelsPerItem) / pixelsPerSecond;
           {row1.map((t) => (
             <a href={t.url} target="_blank" rel="noopener" class="testimonial-card">
               <img
-                src={`https://unavatar.io/x/${t.author}`}
+                src={`https://unavatar.io/twitter/${t.author}`}
                 alt={t.author}
                 class="testimonial-avatar"
                 loading="lazy"
+                onerror={`this.src='https://ui-avatars.com/api/?name=${t.author}&background=FF4D4D&color=fff&size=88'`}
               />
               <div class="testimonial-content">
                 <p class="testimonial-quote">"{t.quote}"</p>
@@ -119,10 +120,11 @@ const duration2 = (row2.length / 2 * pixelsPerItem) / pixelsPerSecond;
           {row2.map((t) => (
             <a href={t.url} target="_blank" rel="noopener" class="testimonial-card">
               <img
-                src={`https://unavatar.io/x/${t.author}`}
+                src={`https://unavatar.io/twitter/${t.author}`}
                 alt={t.author}
                 class="testimonial-avatar"
                 loading="lazy"
+                onerror={`this.src='https://ui-avatars.com/api/?name=${t.author}&background=FF4D4D&color=fff&size=88'`}
               />
               <div class="testimonial-content">
                 <p class="testimonial-quote">"{t.quote}"</p>
@@ -153,6 +155,10 @@ const duration2 = (row2.length / 2 * pixelsPerItem) / pixelsPerSecond;
           <div class="pm-switch" id="pm-switch" style="display: none;">
             <button class="pm-btn active" data-pm="npm">npm</button>
             <button class="pm-btn" data-pm="pnpm">pnpm</button>
+          </div>
+          <div class="hackable-switch" id="hackable-switch" style="display: none;">
+            <button class="hackable-btn active" data-hackable="installer">installer</button>
+            <button class="hackable-btn" data-hackable="pnpm">pnpm</button>
           </div>
           <div class="os-indicator" id="os-indicator">
             <span class="os-detected" id="os-detected">macOS/Linux</span>
@@ -195,31 +201,44 @@ const duration2 = (row2.length / 2 * pixelsPerItem) / pixelsPerSecond;
           </div>
         </div>
         <div id="code-hackable" class="code-content" style="display: none;">
-          <div class="code-line comment"># Clone and build from source</div>
-          <div class="code-line cmd">
-            <span class="code-prompt">$</span>
-            <span>git clone https://github.com/clawdbot/clawdbot.git</span>
-            <button class="copy-line-btn" data-cmd="clone" title="Copy">
-              <svg class="copy-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
-              <svg class="check-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="display:none"><polyline points="20 6 9 17 4 12"/></svg>
-            </button>
+          <div id="hackable-installer-content">
+            <div class="code-line comment"># Clones the repo, installs deps (pnpm), builds, and sets up everything</div>
+            <div class="code-line cmd">
+              <span class="code-prompt">$</span>
+              <span class="os-cmd-hackable">curl -fsSL https://clawd.bot/install.sh | bash -s -- --install-method git</span>
+              <button class="copy-line-btn" data-cmd="hackable-installer" title="Copy">
+                <svg class="copy-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+                <svg class="check-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="display:none"><polyline points="20 6 9 17 4 12"/></svg>
+              </button>
+            </div>
           </div>
-          <div class="code-line cmd">
-            <span class="code-prompt">$</span>
-            <span>cd clawdbot && <span class="pm-cmd">npm</span> install && <span class="pm-cmd">npm</span> run build</span>
-            <button class="copy-line-btn" data-cmd="build" title="Copy">
-              <svg class="copy-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
-              <svg class="check-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="display:none"><polyline points="20 6 9 17 4 12"/></svg>
-            </button>
-          </div>
-          <div class="code-line comment"># Start setup</div>
-          <div class="code-line cmd">
-            <span class="code-prompt">$</span>
-            <span><span class="pm-cmd">npm</span> run clawdbot onboard</span>
-            <button class="copy-line-btn" data-cmd="hackable-onboard" title="Copy">
-              <svg class="copy-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
-              <svg class="check-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="display:none"><polyline points="20 6 9 17 4 12"/></svg>
-            </button>
+          <div id="hackable-pnpm-content" style="display: none;">
+            <div class="code-line comment"># Clone and build from source</div>
+            <div class="code-line cmd">
+              <span class="code-prompt">$</span>
+              <span>git clone https://github.com/clawdbot/clawdbot.git</span>
+              <button class="copy-line-btn" data-cmd="clone" title="Copy">
+                <svg class="copy-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+                <svg class="check-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="display:none"><polyline points="20 6 9 17 4 12"/></svg>
+              </button>
+            </div>
+            <div class="code-line cmd">
+              <span class="code-prompt">$</span>
+              <span>cd clawdbot && pnpm install && pnpm run build</span>
+              <button class="copy-line-btn" data-cmd="build" title="Copy">
+                <svg class="copy-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+                <svg class="check-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="display:none"><polyline points="20 6 9 17 4 12"/></svg>
+              </button>
+            </div>
+            <div class="code-line comment"># Start setup</div>
+            <div class="code-line cmd">
+              <span class="code-prompt">$</span>
+              <span>pnpm run clawdbot onboard</span>
+              <button class="copy-line-btn" data-cmd="hackable-onboard" title="Copy">
+                <svg class="copy-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+                <svg class="check-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="display:none"><polyline points="20 6 9 17 4 12"/></svg>
+              </button>
+            </div>
           </div>
         </div>
         <div id="code-macos" class="code-content" style="display: none;">
@@ -263,6 +282,7 @@ const duration2 = (row2.length / 2 * pixelsPerItem) / pixelsPerSecond;
 
       let currentPm = 'npm';
       let currentMode = 'oneliner';
+      let currentHackable = 'installer';
       let osPickerExpanded = false;
 
       // Auto-detect OS
@@ -271,9 +291,11 @@ const duration2 = (row2.length / 2 * pixelsPerItem) / pixelsPerSecond;
       let currentOs = isWindows ? 'windows' : 'unix';
 
       const pmBtns = document.querySelectorAll('.pm-btn');
+      const hackableBtns = document.querySelectorAll('.hackable-btn');
       const osBtns = document.querySelectorAll('.os-btn');
       const modeBtns = document.querySelectorAll('.mode-btn');
       const pmSwitch = document.getElementById('pm-switch');
+      const hackableSwitch = document.getElementById('hackable-switch');
       const osSwitch = document.getElementById('os-switch');
       const osIndicator = document.getElementById('os-indicator');
       const osDetected = document.getElementById('os-detected');
@@ -282,6 +304,8 @@ const duration2 = (row2.length / 2 * pixelsPerItem) / pixelsPerSecond;
       const codeQuick = document.getElementById('code-quick');
       const codeHackable = document.getElementById('code-hackable');
       const codeMacos = document.getElementById('code-macos');
+      const hackableInstallerContent = document.getElementById('hackable-installer-content');
+      const hackablePnpmContent = document.getElementById('hackable-pnpm-content');
 
       function updateCommands() {
         // Update hackable mode commands
@@ -290,8 +314,18 @@ const duration2 = (row2.length / 2 * pixelsPerItem) / pixelsPerSecond;
         document.querySelectorAll('.pm-install').forEach(cmd => cmd.textContent = installCmds[currentPm]);
         // Update one-liner OS command
         document.querySelectorAll('.os-cmd').forEach(cmd => cmd.textContent = osCmds[currentOs]);
+        // Update hackable OS command for installer mode
+        const hackableOsCmd = currentOs === 'unix'
+          ? 'curl -fsSL https://clawd.bot/install.sh | bash -s -- --install-method git'
+          : 'iwr -useb https://clawd.bot/install.ps1 | iex -args "--install-method git"';
+        document.querySelectorAll('.os-cmd-hackable').forEach(cmd => cmd.textContent = hackableOsCmd);
         // Update OS indicator text
         osDetected.textContent = osLabels[currentOs];
+        // Update hackable content visibility
+        if (currentMode === 'hackable') {
+          hackableInstallerContent.style.display = currentHackable === 'installer' ? 'block' : 'none';
+          hackablePnpmContent.style.display = currentHackable === 'pnpm' ? 'block' : 'none';
+        }
       }
 
       function updateVisibility() {
@@ -300,13 +334,15 @@ const duration2 = (row2.length / 2 * pixelsPerItem) / pixelsPerSecond;
         codeHackable.style.display = currentMode === 'hackable' ? 'block' : 'none';
         codeMacos.style.display = currentMode === 'macos' ? 'block' : 'none';
 
-        // Show OS indicator for one-liner, PM switch for quick/hackable, nothing for macos
+        // Show OS indicator for one-liner, PM switch for quick, hackable switch for hackable, nothing for macos
         const showOsControls = currentMode === 'oneliner';
-        const showPmControls = currentMode === 'quick' || currentMode === 'hackable';
+        const showPmControls = currentMode === 'quick';
+        const showHackableControls = currentMode === 'hackable';
 
         osIndicator.style.display = showOsControls && !osPickerExpanded ? 'flex' : 'none';
         osSwitch.style.display = showOsControls && osPickerExpanded ? 'flex' : 'none';
         pmSwitch.style.display = showPmControls ? 'flex' : 'none';
+        hackableSwitch.style.display = showHackableControls ? 'flex' : 'none';
       }
 
       // OS change toggle
@@ -319,6 +355,15 @@ const duration2 = (row2.length / 2 * pixelsPerItem) / pixelsPerSecond;
         btn.addEventListener('click', () => {
           currentPm = btn.dataset.pm;
           pmBtns.forEach(b => b.classList.remove('active'));
+          btn.classList.add('active');
+          updateCommands();
+        });
+      });
+
+      hackableBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+          currentHackable = btn.dataset.hackable;
+          hackableBtns.forEach(b => b.classList.remove('active'));
           btn.classList.add('active');
           updateCommands();
         });
@@ -357,9 +402,12 @@ const duration2 = (row2.length / 2 * pixelsPerItem) / pixelsPerSecond;
           : 'iwr -useb https://clawd.bot/install.ps1 | iex',
         'install': () => currentPm === 'npm' ? 'npm i -g clawdbot' : 'pnpm add -g clawdbot',
         'onboard': () => 'clawdbot onboard',
+        'hackable-installer': () => currentOs === 'unix'
+          ? 'curl -fsSL https://clawd.bot/install.sh | bash -s -- --install-method git'
+          : 'iwr -useb https://clawd.bot/install.ps1 | iex -args "--install-method git"',
         'clone': () => 'git clone https://github.com/clawdbot/clawdbot.git',
-        'build': () => `cd clawdbot && ${currentPm} install && ${currentPm} run build`,
-        'hackable-onboard': () => `${currentPm} run clawdbot onboard`,
+        'build': () => 'cd clawdbot && pnpm install && pnpm run build',
+        'hackable-onboard': () => 'pnpm run clawdbot onboard',
       };
 
       document.querySelectorAll('.copy-line-btn').forEach(btn => {
@@ -1047,6 +1095,7 @@ const duration2 = (row2.length / 2 * pixelsPerItem) / pixelsPerSecond;
 
   .mode-switch,
   .pm-switch,
+  .hackable-switch,
   .os-switch {
     display: flex;
     gap: 4px;
@@ -1056,12 +1105,14 @@ const duration2 = (row2.length / 2 * pixelsPerItem) / pixelsPerSecond;
   }
 
   .pm-switch,
+  .hackable-switch,
   .os-switch {
     margin-left: auto;
   }
 
   .mode-btn,
   .pm-btn,
+  .hackable-btn,
   .os-btn {
     font-family: var(--font-mono);
     font-size: 0.7rem;
@@ -1076,11 +1127,13 @@ const duration2 = (row2.length / 2 * pixelsPerItem) / pixelsPerSecond;
 
   .mode-btn:hover,
   .pm-btn:hover,
+  .hackable-btn:hover,
   .os-btn:hover {
     color: var(--text-secondary);
   }
 
   .pm-btn.active,
+  .hackable-btn.active,
   .os-btn.active {
     background: var(--coral-bright);
     color: var(--bg-deep);
