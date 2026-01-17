@@ -174,6 +174,7 @@ const duration2 = (row2.length / 2 * pixelsPerItem) / pixelsPerSecond;
               <span class="beta-text">Beta</span>
             </button>
           </div>
+          <div class="switch-placeholder" id="switch-placeholder" aria-hidden="true"></div>
         </div>
         <div id="code-oneliner" class="code-content">
           <div class="code-line comment" id="oneliner-comment"># Works everywhere. Installs everything. You're welcome. 🦞</div>
@@ -309,6 +310,7 @@ const duration2 = (row2.length / 2 * pixelsPerItem) / pixelsPerSecond;
       const osChangeBtn = document.getElementById('os-change-btn');
       const betaSwitch = document.getElementById('beta-switch');
       const betaBtn = document.getElementById('beta-btn');
+      const switchPlaceholder = document.getElementById('switch-placeholder');
       const codeOneliner = document.getElementById('code-oneliner');
       const codeQuick = document.getElementById('code-quick');
       const codeHackable = document.getElementById('code-hackable');
@@ -392,6 +394,9 @@ const duration2 = (row2.length / 2 * pixelsPerItem) / pixelsPerSecond;
         pmSwitch.style.display = showPmControls ? 'flex' : 'none';
         hackableSwitch.style.display = showHackableControls ? 'flex' : 'none';
         betaSwitch.style.display = showBetaControls ? 'flex' : 'none';
+        // Show placeholder when no switches visible (macOS mode) to prevent layout shift
+        const noSwitchesVisible = !showOsControls && !showPmControls && !showHackableControls && !showBetaControls;
+        switchPlaceholder.style.display = noSwitchesVisible ? 'block' : 'none';
       }
 
       // OS change toggle
@@ -1213,6 +1218,13 @@ const duration2 = (row2.length / 2 * pixelsPerItem) / pixelsPerSecond;
     margin-left: 8px;
   }
 
+  /* Placeholder to prevent layout shift when no switches visible */
+  .switch-placeholder {
+    display: none;
+    height: 26px; /* Match switch button height */
+    margin-left: auto;
+  }
+
   .beta-btn {
     display: flex;
     align-items: center;
@@ -1583,7 +1595,6 @@ const duration2 = (row2.length / 2 * pixelsPerItem) / pixelsPerSecond;
     .code-header {
       flex-wrap: wrap;
       gap: 8px;
-      min-height: 72px; /* Prevent layout shift when switches are hidden */
     }
 
     .code-dot {
@@ -1595,7 +1606,8 @@ const duration2 = (row2.length / 2 * pixelsPerItem) / pixelsPerSecond;
     .os-switch,
     .pm-switch,
     .hackable-switch,
-    .beta-switch {
+    .beta-switch,
+    .switch-placeholder {
       order: 1;
       margin-left: auto;
     }
