@@ -4,7 +4,7 @@
 $ErrorActionPreference = "Stop"
 
 Write-Host ""
-Write-Host "  🦞 Clawdbot Installer" -ForegroundColor Cyan
+Write-Host "  Clawdbot Installer" -ForegroundColor Cyan
 Write-Host ""
 
 # Check if running in PowerShell
@@ -13,7 +13,7 @@ if ($PSVersionTable.PSVersion.Major -lt 5) {
     exit 1
 }
 
-Write-Host "✓ Windows detected" -ForegroundColor Green
+Write-Host "[OK] Windows detected" -ForegroundColor Green
 
 # Check for Node.js
 function Check-Node {
@@ -22,15 +22,15 @@ function Check-Node {
         if ($nodeVersion) {
             $version = [int]($nodeVersion -replace 'v(\d+)\..*', '$1')
             if ($version -ge 22) {
-                Write-Host "✓ Node.js $nodeVersion found" -ForegroundColor Green
+                Write-Host "[OK] Node.js $nodeVersion found" -ForegroundColor Green
                 return $true
             } else {
-                Write-Host "→ Node.js $nodeVersion found, but v22+ required" -ForegroundColor Yellow
+                Write-Host "[!] Node.js $nodeVersion found, but v22+ required" -ForegroundColor Yellow
                 return $false
             }
         }
     } catch {
-        Write-Host "→ Node.js not found" -ForegroundColor Yellow
+        Write-Host "[!] Node.js not found" -ForegroundColor Yellow
         return $false
     }
     return $false
@@ -38,7 +38,7 @@ function Check-Node {
 
 # Install Node.js
 function Install-Node {
-    Write-Host "→ Installing Node.js..." -ForegroundColor Yellow
+    Write-Host "[*] Installing Node.js..." -ForegroundColor Yellow
 
     # Try winget first (Windows 11 / Windows 10 with App Installer)
     if (Get-Command winget -ErrorAction SilentlyContinue) {
@@ -47,7 +47,7 @@ function Install-Node {
 
         # Refresh PATH
         $env:Path = [System.Environment]::GetEnvironmentVariable("Path","Machine") + ";" + [System.Environment]::GetEnvironmentVariable("Path","User")
-        Write-Host "✓ Node.js installed via winget" -ForegroundColor Green
+        Write-Host "[OK] Node.js installed via winget" -ForegroundColor Green
         return
     }
 
@@ -58,7 +58,7 @@ function Install-Node {
 
         # Refresh PATH
         $env:Path = [System.Environment]::GetEnvironmentVariable("Path","Machine") + ";" + [System.Environment]::GetEnvironmentVariable("Path","User")
-        Write-Host "✓ Node.js installed via Chocolatey" -ForegroundColor Green
+        Write-Host "[OK] Node.js installed via Chocolatey" -ForegroundColor Green
         return
     }
 
@@ -66,7 +66,7 @@ function Install-Node {
     if (Get-Command scoop -ErrorAction SilentlyContinue) {
         Write-Host "  Using Scoop..." -ForegroundColor Gray
         scoop install nodejs-lts
-        Write-Host "✓ Node.js installed via Scoop" -ForegroundColor Green
+        Write-Host "[OK] Node.js installed via Scoop" -ForegroundColor Green
         return
     }
 
@@ -85,8 +85,8 @@ function Install-Node {
 function Check-ExistingClawdbot {
     try {
         $null = Get-Command clawdbot -ErrorAction Stop
-        Write-Host "→ Existing Clawdbot installation detected" -ForegroundColor Yellow
-        return $true
+    Write-Host "[*] Existing Clawdbot installation detected" -ForegroundColor Yellow
+    return $true
     } catch {
         return $false
     }
@@ -94,20 +94,26 @@ function Check-ExistingClawdbot {
 
 # Install Clawdbot
 function Install-Clawdbot {
-    Write-Host "→ Installing Clawdbot..." -ForegroundColor Yellow
-    npm install -g clawdbot@latest
-    Write-Host "✓ Clawdbot installed" -ForegroundColor Green
+    Write-Host "[*] Installing Clawdbot..." -ForegroundColor Yellow
+    $prevLogLevel = $env:NPM_CONFIG_LOGLEVEL
+    $env:NPM_CONFIG_LOGLEVEL = "error"
+    try {
+        npm install -g clawdbot@latest
+    } finally {
+        $env:NPM_CONFIG_LOGLEVEL = $prevLogLevel
+    }
+    Write-Host "[OK] Clawdbot installed" -ForegroundColor Green
 }
 
 # Run doctor for migrations (safe, non-interactive)
 function Run-Doctor {
-    Write-Host "→ Running doctor to migrate settings..." -ForegroundColor Yellow
+    Write-Host "[*] Running doctor to migrate settings..." -ForegroundColor Yellow
     try {
         clawdbot doctor --non-interactive
     } catch {
         # Ignore errors from doctor
     }
-    Write-Host "✓ Migration complete" -ForegroundColor Green
+    Write-Host "[OK] Migration complete" -ForegroundColor Green
 }
 
 # Main installation flow
@@ -137,7 +143,7 @@ function Main {
     }
 
     Write-Host ""
-    Write-Host "🦞 Clawdbot installed successfully!" -ForegroundColor Green
+    Write-Host "Clawdbot installed successfully!" -ForegroundColor Green
     Write-Host ""
 
     if ($isUpgrade) {
