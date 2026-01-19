@@ -531,5 +531,15 @@
     "quote": "Clawdbot is now my primary interface to the digital world. All of my notes, emails, projects, questions, plans, and specs flow through a central system with Discord as the interface. This eliminates tons of friction to go from idea to execution. I don't have to orchestrate a bunch of independent tools anymore. It's just a single interface.",
     "category": "productivity",
     "likes": 1
+  },
+  {
+    "id": "2013158851194085388",
+    "author": "bangkokbuild",
+    "quote": "@clawdbot made a heat map with all my exercises after the data from Garmin was loaded.\n\n• Took 2 prompts\n• 2nd one was to get a better map and navigation, including a slider and clearer index cards\n• Signed up for a map API\n• Can zoom out and check all my runs around the world on the map",
+    "category": "personal",
+    "likes": 0,
+    "images": [
+      "https://pbs.twimg.com/media/G_AtTRsWIAA9vdL.jpg"
+    ]
   }
 ]
