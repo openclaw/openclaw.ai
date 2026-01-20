@@ -28,9 +28,7 @@ jobs:
       - name: install.cmd dry run
         if: runner.os == 'Windows'
         shell: cmd
-        env:
-          CLAWDBOT_INSTALL_PS1_URL: https://raw.githubusercontent.com/${{ github.repository }}/${{ github.sha }}/public/install.ps1
-        run: .\\public\\install.cmd --dry-run --no-onboard --npm
+        run: set "CLAWDBOT_INSTALL_PS1_URL=%GITHUB_WORKSPACE%\\public\\install.ps1" && .\\public\\install.cmd --dry-run --no-onboard --npm
 
   shellcheck:
     runs-on: ubuntu-latest

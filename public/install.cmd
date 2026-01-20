@@ -65,7 +65,11 @@ REM TMP may include spaces; always quote "%TMP%" when used.
 if not "%CLAWDBOT_INSTALL_PS1_URL%"=="" set "INSTALL_PS1_URL=%CLAWDBOT_INSTALL_PS1_URL%"
 if "%INSTALL_PS1_URL%"=="" set "INSTALL_PS1_URL=https://clawd.bot/install.ps1"
 
-curl -fsSL "%INSTALL_PS1_URL%" -o "%TMP%"
+if exist "%INSTALL_PS1_URL%" (
+  copy /Y "%INSTALL_PS1_URL%" "%TMP%" >nul
+) else (
+  curl -fsSL "%INSTALL_PS1_URL%" -o "%TMP%"
+)
 if %ERRORLEVEL% neq 0 (
   echo Failed to download install.ps1 >&2
   exit /b 1
