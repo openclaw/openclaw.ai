@@ -37,39 +37,42 @@ const { title, description = "Clawdbot — The AI that actually does things. You
     <meta name="twitter:description" content={description} />
     <meta name="twitter:image" content="https://clawd.bot/og-image.png" />
 
-    <!-- Fonts: Clash Display + Satoshi from Fontshare -->
-    <link href="https://api.fontshare.com/v2/css?f[]=clash-display@700,600,500&f[]=satoshi@400,500,700&display=swap" rel="stylesheet">
+    <!-- Fonts: Satoshi from Fontshare -->
+    <link href="https://api.fontshare.com/v2/css?f[]=satoshi@400,500,600,700&display=swap" rel="stylesheet">
 
     <title>{title}</title>
 
     <style is:global>
       :root {
-        /* Deep space palette with lobster accents */
-        --bg-deep: #050810;
-        --bg-surface: #0a0f1a;
-        --bg-elevated: #111827;
+        /* Terminal black palette */
+        --bg-deep: #000000;
+        --bg-surface: #0a0a0a;
+        --bg-elevated: #141414;
 
-        /* Lobster coral spectrum */
-        --coral-bright: #ff4d4d;
-        --coral-mid: #e63946;
-        --coral-dark: #991b1b;
+        /* Bright orange accent */
+        --accent: #FF6B00;
+        --accent-dim: #CC5500;
+        --accent-glow: rgba(255, 107, 0, 0.4);
 
-        /* Bioluminescent cyan */
-        --cyan-bright: #00e5cc;
-        --cyan-mid: #14b8a6;
-        --cyan-glow: rgba(0, 229, 204, 0.4);
+        /* Legacy aliases for compatibility */
+        --coral-bright: var(--accent);
+        --coral-mid: var(--accent-dim);
+        --coral-dark: var(--accent-dim);
+        --cyan-bright: var(--accent);
+        --cyan-mid: var(--accent-dim);
+        --cyan-glow: var(--accent-glow);
 
         /* Text */
-        --text-primary: #f0f4ff;
-        --text-secondary: #8892b0;
-        --text-muted: #5a6480;
+        --text-primary: #E5E5E5;
+        --text-secondary: #999999;
+        --text-muted: #666666;
 
         /* Borders */
-        --border-subtle: rgba(136, 146, 176, 0.15);
-        --border-accent: rgba(255, 77, 77, 0.3);
+        --border-subtle: #333333;
+        --border-accent: rgba(255, 107, 0, 0.5);
 
         /* Fonts */
-        --font-display: 'Clash Display', system-ui, sans-serif;
+        --font-display: 'Satoshi', system-ui, sans-serif;
         --font-body: 'Satoshi', system-ui, sans-serif;
         --font-mono: 'SF Mono', 'Fira Code', 'JetBrains Mono', monospace;
       }
@@ -95,7 +98,7 @@ const { title, description = "Clawdbot — The AI that actually does things. You
       }
 
       ::selection {
-        background: var(--coral-bright);
+        background: var(--accent);
         color: var(--bg-deep);
       }
     </style>
