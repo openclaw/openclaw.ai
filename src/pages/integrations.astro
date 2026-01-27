@@ -3,7 +3,7 @@ import Layout from '../layouts/Layout.astro';
 import Icon from '../components/Icon.astro';
 import {
   siWhatsapp, siTelegram, siDiscord, siSignal, siApple, siMatrix, siNextcloud, siZalo,
-  siAnthropic, siGoogle, siOllama, siMistralai, siPerplexity, siHuggingface,
+  siAnthropic, siGoogle, siOllama, siMistralai, siPerplexity, siHuggingface, siDocker,
   siNotion, siObsidian, siTrello, siGithub,
   siSpotify, siSonos, siShazam,
   siPhilipshue, siHomeassistant,
@@ -80,6 +80,7 @@ const modelProviders = [
   { name: 'Perplexity', icon: siIcon(siPerplexity), color: '#20B8CD', desc: 'Search-augmented AI', docs: 'https://docs.molt.bot/models' },
   { name: 'Hugging Face', icon: siIcon(siHuggingface), color: '#FFD21E', desc: 'Open-source models', docs: 'https://docs.molt.bot/models' },
   { name: 'Local Models', icon: siIcon(siOllama), color: '#FFFFFF', desc: 'Ollama, LM Studio', docs: 'https://docs.molt.bot/models' },
+  { name: 'Docker', icon: siIcon(siDocker), color: '#2496ED', desc: 'Local models via Docker', docs: 'https://docs.molt.bot/providers/docker' },
 ];
 
 const companionApps = [
