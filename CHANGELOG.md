@@ -3,6 +3,7 @@
 ## 2026-01-27
 
 - Home page: keep testimonial links clickable while skipping keyboard focus (#18, thanks @wilfriedladenhauf).
+- Fonts: preconnect to Fontshare API/CDN for faster font loading (#16, thanks @wilfriedladenhauf).
 
 ## 2026-01-16
 
