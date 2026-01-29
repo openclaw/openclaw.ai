@@ -1,0 +1,12 @@
+---
+import LandingPage from "../../components/templates/LandingPage.astro";
+import { locales } from "../../paraglide/runtime";
+
+export function getStaticPaths() {
+    return locales
+        .filter((lang) => lang !== "en")
+        .map((lang) => ({ params: { lang } }));
+}
+---
+
+<LandingPage />

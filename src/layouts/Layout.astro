@@ -1,6 +1,7 @@
 ---
 import Analytics from '@vercel/analytics/astro';
 import SpeedInsights from '@vercel/speed-insights/astro';
+import { getLocale } from '../paraglide/runtime';
 
 interface Props {
   title: string;
@@ -8,10 +9,11 @@ interface Props {
 }
 
 const { title, description = "Moltbot — The AI that actually does things. Your personal assistant on any platform." } = Astro.props;
+const locale = getLocale();
 ---
 
 <!doctype html>
-<html lang="en">
+<html lang={locale}>
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -104,6 +106,52 @@ const { title, description = "Moltbot — The AI that actually does things. Your
   </head>
   <body>
     <slot />
+    
+    <!-- Language Switcher -->
+    <div class="language-switcher">
+      <a href="/" class={locale === 'en' ? 'active' : ''} aria-current={locale === 'en' ? 'page' : undefined}>EN</a>
+      <span class="separator">/</span>
+      <a href="/pt-br" class={locale === 'pt-br' ? 'active' : ''} aria-current={locale === 'pt-br' ? 'page' : undefined}>PT</a>
+    </div>
+
+    <style>
+      .language-switcher {
+        position: fixed;
+        bottom: 24px;
+        right: 24px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        background: rgba(10, 15, 26, 0.8);
+        backdrop-filter: blur(8px);
+        padding: 8px 16px;
+        border-radius: 100px;
+        border: 1px solid var(--border-subtle);
+        z-index: 100;
+        font-family: var(--font-display);
+        font-size: 14px;
+        font-weight: 600;
+      }
+
+      .language-switcher a {
+        color: var(--text-secondary);
+        text-decoration: none;
+        transition: color 0.2s ease;
+      }
+
+      .language-switcher a:hover {
+        color: var(--coral-bright);
+      }
+
+      .language-switcher a.active {
+        color: var(--coral-bright);
+      }
+
+      .language-switcher .separator {
+        color: var(--text-muted);
+      }
+    </style>
+
     <Analytics />
     <SpeedInsights />
   </body>

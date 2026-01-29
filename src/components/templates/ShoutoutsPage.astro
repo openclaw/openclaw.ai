@@ -1,0 +1,344 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import * as m from "../../paraglide/messages";
+import { getLocale } from "../../paraglide/runtime";
+import testimonials from "../../data/testimonials.json";
+import extraTestimonials from "../../data/testimonials-extra.json";
+
+// Combine all testimonials - strongest first, then extras (no randomization)
+interface Testimonial {
+    quote: string;
+    author: string;
+    url: string;
+    avatar?: string;
+}
+
+const allTestimonials: Testimonial[] = [...testimonials, ...extraTestimonials];
+---
+
+<Layout title={`${m.shoutouts_title()} — Moltbot`}>
+    <div class="stars"></div>
+    <div class="nebula"></div>
+
+    <main class="container">
+        <header class="header">
+            <a
+                href={`/${getLocale() === "en" ? "" : getLocale()}`}
+                class="back-link">← {m.back_to_home()}</a
+            >
+            <h1 class="title">
+                <span class="claw-accent">⟩</span>
+                {m.shoutouts_title()}
+            </h1>
+            <p class="subtitle">{m.shoutouts_subtitle()}</p>
+        </header>
+
+        <div class="shoutouts-grid">
+            {
+                allTestimonials.map((t) => (
+                    <a
+                        href={t.url}
+                        target="_blank"
+                        rel="noopener"
+                        class="shoutout-card"
+                    >
+                        <img
+                            src={
+                                t.avatar || `https://unavatar.io/x/${t.author}`
+                            }
+                            alt={t.author}
+                            class="shoutout-avatar"
+                            loading="lazy"
+                            onerror={`this.src='https://ui-avatars.com/api/?name=${t.author}&background=FF4D4D&color=fff&size=96'`}
+                        />
+                        <div class="shoutout-content">
+                            <p class="shoutout-quote">"{t.quote}"</p>
+                            <span class="shoutout-author">@{t.author}</span>
+                        </div>
+                    </a>
+                ))
+            }
+        </div>
+
+        <footer class="footer">
+            <nav class="footer-nav">
+                <a href={`/${getLocale() === "en" ? "" : getLocale()}`}>Home</a>
+                <span class="footer-separator">·</span>
+                <a
+                    href={`/${getLocale() === "en" ? "showcase" : `${getLocale()}/showcase`}`}
+                    >Showcase</a
+                >
+                <span class="footer-separator">·</span>
+                <a
+                    href={`/${getLocale() === "en" ? "integrations" : `${getLocale()}/integrations`}`}
+                    >{m.integrations_title()}</a
+                >
+            </nav>
+            <p>
+                {m.footer_built_by_prefix()}
+                <a href="https://molty.me" target="_blank" rel="noopener"
+                    >Molty</a
+                >{m.footer_built_by_middle1()}
+                <a href="https://soul.md" target="_blank" rel="noopener">soul</a
+                >{m.footer_built_by_middle2()}
+                <a href="https://steipete.me" target="_blank" rel="noopener"
+                    >Peter Steinberger</a
+                >{m.footer_built_by_middle3()}
+                <a
+                    href="https://github.com/moltbot/moltbot#community"
+                    target="_blank"
+                    rel="noopener">{m.footer_community()}</a
+                >{m.footer_built_by_suffix()}
+            </p>
+        </footer>
+    </main>
+</Layout>
+
+<style>
+    /* Starfield Background */
+    .stars {
+        position: fixed;
+        inset: 0;
+        background-image:
+            radial-gradient(
+                2px 2px at 20px 30px,
+                rgba(255, 255, 255, 0.8),
+                transparent
+            ),
+            radial-gradient(
+                2px 2px at 40px 70px,
+                rgba(255, 255, 255, 0.5),
+                transparent
+            ),
+            radial-gradient(
+                1px 1px at 90px 40px,
+                rgba(255, 255, 255, 0.6),
+                transparent
+            ),
+            radial-gradient(
+                2px 2px at 130px 80px,
+                rgba(255, 255, 255, 0.4),
+                transparent
+            ),
+            radial-gradient(
+                1px 1px at 160px 120px,
+                rgba(255, 255, 255, 0.7),
+                transparent
+            ),
+            radial-gradient(
+                2px 2px at 200px 60px,
+                rgba(0, 229, 204, 0.6),
+                transparent
+            ),
+            radial-gradient(
+                1px 1px at 250px 150px,
+                rgba(255, 255, 255, 0.5),
+                transparent
+            ),
+            radial-gradient(
+                2px 2px at 300px 40px,
+                rgba(255, 77, 77, 0.4),
+                transparent
+            );
+        background-size: 350px 200px;
+        animation: twinkle 8s ease-in-out infinite alternate;
+        pointer-events: none;
+        z-index: 0;
+    }
+
+    @keyframes twinkle {
+        0% {
+            opacity: 0.4;
+        }
+        100% {
+            opacity: 0.7;
+        }
+    }
+
+    /* Nebula Gradient */
+    .nebula {
+        position: fixed;
+        inset: 0;
+        background:
+            radial-gradient(
+                ellipse 80% 50% at 20% 20%,
+                rgba(255, 77, 77, 0.12),
+                transparent 50%
+            ),
+            radial-gradient(
+                ellipse 60% 60% at 80% 30%,
+                rgba(0, 229, 204, 0.08),
+                transparent 50%
+            ),
+            radial-gradient(
+                ellipse 90% 70% at 50% 90%,
+                rgba(255, 77, 77, 0.06),
+                transparent 50%
+            );
+        pointer-events: none;
+        z-index: 0;
+    }
+
+    .container {
+        position: relative;
+        z-index: 1;
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 40px 24px;
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .header {
+        text-align: center;
+        margin-bottom: 48px;
+        animation: fadeInUp 0.6s ease-out;
+    }
+
+    @keyframes fadeInUp {
+        from {
+            opacity: 0;
+            transform: translateY(20px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    .back-link {
+        display: inline-block;
+        margin-bottom: 24px;
+        color: var(--text-muted);
+        text-decoration: none;
+        font-size: 0.9rem;
+        transition: color 0.2s ease;
+    }
+
+    .back-link:hover {
+        color: var(--coral-bright);
+    }
+
+    .title {
+        font-family: var(--font-display);
+        font-size: clamp(2rem, 6vw, 3rem);
+        font-weight: 700;
+        margin-bottom: 12px;
+        color: var(--text-primary);
+    }
+
+    .claw-accent {
+        color: var(--coral-bright);
+    }
+
+    .subtitle {
+        color: var(--text-secondary);
+        font-size: 1.1rem;
+    }
+
+    .shoutouts-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+        gap: 20px;
+        animation: fadeInUp 0.6s ease-out 0.15s both;
+    }
+
+    .shoutout-card {
+        display: flex;
+        align-items: flex-start;
+        gap: 14px;
+        padding: 20px;
+        border-radius: 14px;
+        border: 1px solid var(--border-subtle);
+        background: rgba(10, 15, 26, 0.7);
+        backdrop-filter: blur(8px);
+        text-decoration: none;
+        color: var(--text-primary);
+        transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .shoutout-card:hover {
+        border-color: var(--coral-bright);
+        transform: translateY(-3px);
+        box-shadow: 0 12px 32px rgba(255, 77, 77, 0.15);
+    }
+
+    .shoutout-avatar {
+        width: 48px;
+        height: 48px;
+        border-radius: 50%;
+        flex-shrink: 0;
+        border: 2px solid var(--border-subtle);
+        background: var(--bg-elevated);
+    }
+
+    .shoutout-content {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+        min-width: 0;
+    }
+
+    .shoutout-quote {
+        font-size: 0.95rem;
+        line-height: 1.55;
+        color: var(--text-secondary);
+    }
+
+    .shoutout-author {
+        font-size: 0.85rem;
+        font-weight: 600;
+        color: var(--coral-bright);
+    }
+
+    .footer {
+        margin-top: auto;
+        padding-top: 48px;
+        text-align: center;
+        font-size: 0.9rem;
+        color: var(--text-muted);
+    }
+
+    .footer-nav {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 12px;
+        margin-bottom: 16px;
+        font-size: 0.95rem;
+    }
+
+    .footer-separator {
+        color: var(--text-muted);
+    }
+
+    .footer a {
+        color: var(--coral-bright);
+        text-decoration: none;
+        transition: color 0.2s ease;
+    }
+
+    .footer a:hover {
+        color: var(--cyan-bright);
+    }
+
+    @media (max-width: 480px) {
+        .container {
+            padding: 24px 16px;
+        }
+
+        .shoutouts-grid {
+            grid-template-columns: 1fr;
+        }
+
+        .shoutout-card {
+            padding: 16px;
+        }
+
+        .shoutout-avatar {
+            width: 40px;
+            height: 40px;
+        }
+    }
+</style>

@@ -1,0 +1,2574 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import Icon from "../../components/Icon.astro";
+import testimonials from "../../data/testimonials.json";
+import * as m from "../../paraglide/messages";
+import { getLocale } from "../../paraglide/runtime";
+import {
+  siWhatsapp,
+  siTelegram,
+  siDiscord,
+  siSignal,
+  siApple,
+  siAnthropic,
+  siSpotify,
+  siObsidian,
+  siGithub,
+  siGooglechrome,
+  siGmail,
+  siX,
+  siPhilipshue,
+} from "simple-icons";
+
+const siIcon = (icon: any) => icon.path;
+
+// Integration pills with icons
+const integrationPills = [
+  { name: "WhatsApp", icon: siIcon(siWhatsapp), color: "#25D366" },
+  { name: "Telegram", icon: siIcon(siTelegram), color: "#26A5E4" },
+  { name: "Discord", icon: siIcon(siDiscord), color: "#5865F2" },
+  { name: "Slack", icon: "lucide:hash", color: "#E01E5A" },
+  { name: "Signal", icon: siIcon(siSignal), color: "#3A76F0" },
+  { name: "iMessage", icon: siIcon(siApple), color: "#007AFF" },
+  { name: "Claude", icon: siIcon(siAnthropic), color: "#D4A574" },
+  { name: "GPT", icon: "lucide:bot", color: "#00A67E" },
+  { name: "Spotify", icon: siIcon(siSpotify), color: "#1DB954" },
+  { name: "Hue", icon: siIcon(siPhilipshue), color: "#0065D3" },
+  { name: "Obsidian", icon: siIcon(siObsidian), color: "#7C3AED" },
+  { name: "Twitter", icon: siIcon(siX), color: "#FFFFFF" },
+  { name: "Browser", icon: siIcon(siGooglechrome), color: "#4285F4" },
+  { name: "Gmail", icon: siIcon(siGmail), color: "#EA4335" },
+  { name: "GitHub", icon: siIcon(siGithub), color: "#FFFFFF" },
+];
+
+// Split top 30 into two rows for carousel
+const half = Math.ceil(testimonials.length / 2);
+const topRow = testimonials.slice(0, half);
+const bottomRow = testimonials.slice(half);
+
+// Duplicate for seamless loop
+const row1 = [...topRow, ...topRow];
+const row2 = [...bottomRow, ...bottomRow];
+
+// Calculate animation duration based on content length for constant speed
+// Each card is ~336px (320px min-width + 16px gap), speed = 50px/s
+const pixelsPerItem = 336;
+const pixelsPerSecond = 50;
+const duration1 = ((row1.length / 2) * pixelsPerItem) / pixelsPerSecond;
+const duration2 = ((row2.length / 2) * pixelsPerItem) / pixelsPerSecond;
+
+const comments = {
+  oneliner: {
+    stable: m.install_comment_oneliner_stable(),
+    beta: m.install_comment_oneliner_beta(),
+  },
+  quickInstall: {
+    stable: m.install_comment_quick_install_stable(),
+    beta: m.install_comment_quick_install_beta(),
+  },
+  quickOnboard: {
+    stable: m.install_comment_quick_onboard_stable(),
+    beta: m.install_comment_quick_onboard_beta(),
+  },
+};
+
+const currentLocale = getLocale();
+const localePrefix = currentLocale === "en" ? "" : `/${currentLocale}`;
+const taglineEasterEgg = m.tagline_easter_egg();
+---
+
+<Layout title={`Moltbot — ${m.tagline()}`}>
+  <div class="stars"></div>
+  <div class="nebula"></div>
+
+  <main class="container">
+    <!-- Hero Section -->
+    <header class="hero">
+      <div class="lobster-icon" aria-hidden="true">
+        <svg
+          viewBox="0 0 120 120"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <!-- Lobster Claw Silhouette -->
+          <path
+            d="M60 10 C30 10 15 35 15 55 C15 75 30 95 45 100 L45 110 L55 110 L55 100 C55 100 60 102 65 100 L65 110 L75 110 L75 100 C90 95 105 75 105 55 C105 35 90 10 60 10Z"
+            fill="url(#lobster-gradient)"
+            class="claw-body"></path>
+          <!-- Left Claw -->
+          <path
+            d="M20 45 C5 40 0 50 5 60 C10 70 20 65 25 55 C28 48 25 45 20 45Z"
+            fill="url(#lobster-gradient)"
+            class="claw-left"></path>
+          <!-- Right Claw -->
+          <path
+            d="M100 45 C115 40 120 50 115 60 C110 70 100 65 95 55 C92 48 95 45 100 45Z"
+            fill="url(#lobster-gradient)"
+            class="claw-right"></path>
+          <!-- Antenna -->
+          <path
+            d="M45 15 Q35 5 30 8"
+            stroke="var(--coral-bright)"
+            stroke-width="2"
+            stroke-linecap="round"
+            class="antenna"></path>
+          <path
+            d="M75 15 Q85 5 90 8"
+            stroke="var(--coral-bright)"
+            stroke-width="2"
+            stroke-linecap="round"
+            class="antenna"></path>
+          <!-- Eyes -->
+          <circle cx="45" cy="35" r="6" fill="var(--bg-deep)" class="eye"
+          ></circle>
+          <circle cx="75" cy="35" r="6" fill="var(--bg-deep)" class="eye"
+          ></circle>
+          <circle
+            cx="46"
+            cy="34"
+            r="2"
+            fill="var(--cyan-bright)"
+            class="eye-glow"></circle>
+          <circle
+            cx="76"
+            cy="34"
+            r="2"
+            fill="var(--cyan-bright)"
+            class="eye-glow"></circle>
+          <defs>
+            <linearGradient
+              id="lobster-gradient"
+              x1="0%"
+              y1="0%"
+              x2="100%"
+              y2="100%"
+            >
+              <stop offset="0%" stop-color="var(--coral-bright)"></stop>
+              <stop offset="100%" stop-color="var(--coral-dark)"></stop>
+            </linearGradient>
+          </defs>
+        </svg>
+      </div>
+
+      <h1 class="title">
+        <span class="title-main">Moltbot</span>
+      </h1>
+
+      <p class="tagline" id="tagline">{m.tagline()}</p>
+
+      <p class="description">
+        {m.description()}
+      </p>
+    </header>
+
+    <!-- Testimonials (moved up for social proof) -->
+    <section class="testimonials">
+      <div class="section-header">
+        <h2 class="section-title">
+          <span class="claw-accent">⟩</span>
+          {m.testimonials_title()}
+        </h2>
+        <a href={`${localePrefix}/shoutouts`} class="section-link"
+          >{m.view_all()}
+          <span class="sr-only">community shoutouts</span>
+          <span aria-hidden="true">→</span>
+        </a>
+      </div>
+      <div class="testimonials-track">
+        <div class="testimonials-row row-1" style={`--duration: ${duration1}s`}>
+          {
+            row1.map((t) => (
+              <a
+                href={t.url}
+                target="_blank"
+                rel="noopener"
+                class="testimonial-card"
+                tabindex="-1"
+              >
+                <img
+                  src={`https://unavatar.io/x/${t.author}`}
+                  alt={t.author}
+                  class="testimonial-avatar"
+                  loading="lazy"
+                  onerror={`this.src='https://ui-avatars.com/api/?name=${t.author}&background=FF4D4D&color=fff&size=88'`}
+                />
+                <div class="testimonial-content">
+                  <p class="testimonial-quote">"{t.quote}"</p>
+                  <span class="testimonial-author">@{t.author}</span>
+                </div>
+              </a>
+            ))
+          }
+        </div>
+        <div class="testimonials-row row-2" style={`--duration: ${duration2}s`}>
+          {
+            row2.map((t) => (
+              <a
+                href={t.url}
+                target="_blank"
+                rel="noopener"
+                class="testimonial-card"
+              >
+                <img
+                  src={`https://unavatar.io/x/${t.author}`}
+                  alt={t.author}
+                  class="testimonial-avatar"
+                  loading="lazy"
+                  onerror={`this.src='https://ui-avatars.com/api/?name=${t.author}&background=FF4D4D&color=fff&size=88'`}
+                />
+                <div class="testimonial-content">
+                  <p class="testimonial-quote">"{t.quote}"</p>
+                  <span class="testimonial-author">@{t.author}</span>
+                </div>
+              </a>
+            ))
+          }
+        </div>
+      </div>
+    </section>
+
+    <!-- Quick Start -->
+    <section class="quickstart">
+      <h2 class="section-title">
+        <span class="claw-accent">⟩</span>
+        {m.quick_start_title()}
+      </h2>
+      <div class="code-block">
+        <div class="code-header">
+          <span class="code-dot"></span>
+          <span class="code-dot"></span>
+          <span class="code-dot"></span>
+          <div class="mode-switch">
+            <button class="mode-btn active" data-mode="oneliner"
+              >One-liner</button
+            >
+            <button class="mode-btn" data-mode="quick">npm</button>
+            <button class="mode-btn" data-mode="hackable">Hackable</button>
+            <button class="mode-btn" data-mode="macos">macOS</button>
+          </div>
+          <div class="pm-switch" id="pm-switch" style="display: none;">
+            <button class="pm-btn active" data-pm="npm">npm</button>
+            <button class="pm-btn" data-pm="pnpm">pnpm</button>
+          </div>
+          <div
+            class="hackable-switch"
+            id="hackable-switch"
+            style="display: none;"
+          >
+            <button class="hackable-btn active" data-hackable="installer"
+              >installer</button
+            >
+            <button class="hackable-btn" data-hackable="pnpm">pnpm</button>
+          </div>
+          <div class="os-indicator" id="os-indicator">
+            <span class="os-detected" id="os-detected">macOS/Linux</span>
+            <button class="os-change-btn" id="os-change-btn">change</button>
+          </div>
+          <div class="os-switch" id="os-switch" style="display: none;">
+            <button class="os-btn active" data-os="unix">macOS/Linux</button>
+            <button class="os-btn" data-os="windows">Windows</button>
+          </div>
+          <div
+            class="win-shell-switch"
+            id="win-shell-switch"
+            style="display: none;"
+          >
+            <button class="win-shell-btn active" data-shell="powershell"
+              >PowerShell</button
+            >
+            <button class="win-shell-btn" data-shell="cmd">CMD</button>
+          </div>
+          <div class="beta-switch" id="beta-switch">
+            <button class="beta-btn" id="beta-btn" data-beta="false">
+              <span class="beta-label">β</span>
+              <span class="beta-text">Beta</span>
+            </button>
+          </div>
+          <div
+            class="switch-placeholder"
+            id="switch-placeholder"
+            aria-hidden="true"
+          >
+          </div>
+        </div>
+        <div id="code-oneliner" class="code-content">
+          <div class="code-line comment" id="oneliner-comment">
+            {m.install_comment_oneliner_stable()}
+          </div>
+          <div class="code-line cmd">
+            <span class="code-prompt">$</span>
+            <span class="os-cmd"
+              >curl -fsSL https://molt.bot/install.sh | bash</span
+            >
+            <button class="copy-line-btn" data-cmd="oneliner" title="Copy">
+              <svg
+                class="copy-icon"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                ><rect x="9" y="9" width="13" height="13" rx="2"></rect><path
+                  d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"
+                ></path></svg
+              >
+              <svg
+                class="check-icon"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                style="display:none"
+                ><polyline points="20 6 9 17 4 12"></polyline></svg
+              >
+            </button>
+          </div>
+        </div>
+        <div id="code-quick" class="code-content" style="display: none;">
+          <div class="code-line comment" id="quick-comment-install">
+            {m.install_comment_quick_install_stable()}
+          </div>
+          <div class="code-line cmd">
+            <span class="code-prompt">$</span>
+            <span class="pm-install">npm i -g clawdbot</span>
+            <button class="copy-line-btn" data-cmd="install" title="Copy">
+              <svg
+                class="copy-icon"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                ><rect x="9" y="9" width="13" height="13" rx="2"></rect><path
+                  d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"
+                ></path></svg
+              >
+              <svg
+                class="check-icon"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                style="display:none"
+                ><polyline points="20 6 9 17 4 12"></polyline></svg
+              >
+            </button>
+          </div>
+          <div class="code-line comment" id="quick-comment-onboard">
+            {m.install_comment_quick_onboard_stable()}
+          </div>
+          <div class="code-line cmd">
+            <span class="code-prompt">$</span>
+            <span>clawdbot onboard</span>
+            <button class="copy-line-btn" data-cmd="onboard" title="Copy">
+              <svg
+                class="copy-icon"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                ><rect x="9" y="9" width="13" height="13" rx="2"></rect><path
+                  d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"
+                ></path></svg
+              >
+              <svg
+                class="check-icon"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                style="display:none"
+                ><polyline points="20 6 9 17 4 12"></polyline></svg
+              >
+            </button>
+          </div>
+        </div>
+        <div id="code-hackable" class="code-content" style="display: none;">
+          <div id="hackable-installer-content">
+            <div class="code-line comment">
+              {m.install_comment_hackable_installer()}
+            </div>
+            <div class="code-line cmd">
+              <span class="code-prompt">$</span>
+              <span class="os-cmd-hackable"
+                >curl -fsSL https://molt.bot/install.sh | bash -s --
+                --install-method git</span
+              >
+              <button
+                class="copy-line-btn"
+                data-cmd="hackable-installer"
+                title="Copy"
+              >
+                <svg
+                  class="copy-icon"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  ><rect x="9" y="9" width="13" height="13" rx="2"></rect><path
+                    d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"
+                  ></path></svg
+                >
+                <svg
+                  class="check-icon"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  style="display:none"
+                  ><polyline points="20 6 9 17 4 12"></polyline></svg
+                >
+              </button>
+            </div>
+          </div>
+          <div id="hackable-pnpm-content" style="display: none;">
+            <div class="code-line comment">
+              {m.install_comment_hackable_pnpm()}
+            </div>
+            <div class="code-line cmd">
+              <span class="code-prompt">$</span>
+              <span>git clone https://github.com/moltbot/moltbot.git</span>
+              <button class="copy-line-btn" data-cmd="clone" title="Copy">
+                <svg
+                  class="copy-icon"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  ><rect x="9" y="9" width="13" height="13" rx="2"></rect><path
+                    d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"
+                  ></path></svg
+                >
+                <svg
+                  class="check-icon"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  style="display:none"
+                  ><polyline points="20 6 9 17 4 12"></polyline></svg
+                >
+              </button>
+            </div>
+            <div class="code-line cmd">
+              <span class="code-prompt">$</span>
+              <span>cd moltbot && pnpm install && pnpm run build</span>
+              <button class="copy-line-btn" data-cmd="build" title="Copy">
+                <svg
+                  class="copy-icon"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  ><rect x="9" y="9" width="13" height="13" rx="2"></rect><path
+                    d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"
+                  ></path></svg
+                >
+                <svg
+                  class="check-icon"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  style="display:none"
+                  ><polyline points="20 6 9 17 4 12"></polyline></svg
+                >
+              </button>
+            </div>
+            <div class="code-line comment">
+              {m.install_comment_hackable_build()}
+            </div>
+            <div class="code-line cmd">
+              <span class="code-prompt">$</span>
+              <span>pnpm run clawdbot onboard</span>
+              <button
+                class="copy-line-btn"
+                data-cmd="hackable-onboard"
+                title="Copy"
+              >
+                <svg
+                  class="copy-icon"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  ><rect x="9" y="9" width="13" height="13" rx="2"></rect><path
+                    d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"
+                  ></path></svg
+                >
+                <svg
+                  class="check-icon"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  style="display:none"
+                  ><polyline points="20 6 9 17 4 12"></polyline></svg
+                >
+              </button>
+            </div>
+          </div>
+        </div>
+        <div id="code-macos" class="code-content" style="display: none;">
+          <div class="macos-app-content">
+            <div class="macos-description">
+              <span class="macos-tagline">{m.macos_app_beta_tag()}</span>
+              <span class="macos-subtitle">{m.macos_app_desc()}</span>
+            </div>
+            <a
+              href="https://github.com/moltbot/moltbot/releases/latest"
+              class="macos-download-btn"
+              target="_blank"
+              rel="noopener"
+            >
+              <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
+                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                <polyline points="7 10 12 15 17 10"></polyline>
+                <line x1="12" y1="15" x2="12" y2="3"></line>
+              </svg>
+              {m.macos_download_btn()}
+            </a>
+            <span class="macos-meta">{m.macos_requirements()}</span>
+          </div>
+        </div>
+      </div>
+      <p class="quickstart-note">
+        {m.quickstart_note()}
+      </p>
+    </section>
+
+    <script define:vars={{ comments, taglineEasterEgg }}>
+      const installCmds = {
+        npm: "npm i -g clawdbot",
+        pnpm: "pnpm add -g clawdbot",
+      };
+
+      const windowsPsCmd = "iwr -useb https://molt.bot/install.ps1 | iex";
+      const windowsPsBetaCmd =
+        "& ([scriptblock]::Create((iwr -useb https://molt.bot/install.ps1))) -Tag beta";
+      const windowsCmdCmd =
+        "curl -fsSL https://molt.bot/install.cmd -o install.cmd && install.cmd && del install.cmd";
+      const windowsCmdBetaCmd =
+        "curl -fsSL https://molt.bot/install.cmd -o install.cmd && install.cmd --tag beta && del install.cmd";
+      const osCmds = {
+        unix: "curl -fsSL https://molt.bot/install.sh | bash",
+        windows: windowsPsCmd,
+      };
+
+      const osLabels = {
+        unix: "macOS/Linux",
+        windows: "Windows",
+      };
+
+      let currentPm = "npm";
+      let currentMode = "oneliner";
+      let currentHackable = "installer";
+      let currentBeta = false;
+      let osPickerExpanded = false;
+      let currentWinShell = "powershell";
+
+      // Auto-detect OS
+      const isWindows =
+        navigator.platform.toLowerCase().includes("win") ||
+        navigator.userAgent.toLowerCase().includes("windows");
+      let currentOs = isWindows ? "windows" : "unix";
+
+      const pmBtns = document.querySelectorAll(".pm-btn");
+      const hackableBtns = document.querySelectorAll(".hackable-btn");
+      const osBtns = document.querySelectorAll(".os-btn");
+      const winShellBtns = document.querySelectorAll(".win-shell-btn");
+      const modeBtns = document.querySelectorAll(".mode-btn");
+      const pmSwitch = document.getElementById("pm-switch");
+      const hackableSwitch = document.getElementById("hackable-switch");
+      const osSwitch = document.getElementById("os-switch");
+      const winShellSwitch = document.getElementById("win-shell-switch");
+      const osIndicator = document.getElementById("os-indicator");
+      const osDetected = document.getElementById("os-detected");
+      const osChangeBtn = document.getElementById("os-change-btn");
+      const betaSwitch = document.getElementById("beta-switch");
+      const betaBtn = document.getElementById("beta-btn");
+      const switchPlaceholder = document.getElementById("switch-placeholder");
+      const codeOneliner = document.getElementById("code-oneliner");
+      const codeQuick = document.getElementById("code-quick");
+      const codeHackable = document.getElementById("code-hackable");
+      const codeMacos = document.getElementById("code-macos");
+      const hackableInstallerContent = document.getElementById(
+        "hackable-installer-content",
+      );
+      const hackablePnpmContent = document.getElementById(
+        "hackable-pnpm-content",
+      );
+      const onelinerComment = document.getElementById("oneliner-comment");
+      const quickCommentInstall = document.getElementById(
+        "quick-comment-install",
+      );
+      const quickCommentOnboard = document.getElementById(
+        "quick-comment-onboard",
+      );
+
+      function updateCommands() {
+        // Update hackable mode commands
+        document
+          .querySelectorAll(".pm-cmd")
+          .forEach((cmd) => (cmd.textContent = currentPm));
+        // Update quick mode install command (with beta support)
+        const betaSuffix = currentBeta ? "@beta" : "";
+        const installCmd =
+          currentPm === "npm"
+            ? `npm i -g clawdbot${betaSuffix}`
+            : `pnpm add -g clawdbot${betaSuffix}`;
+        document
+          .querySelectorAll(".pm-install")
+          .forEach((cmd) => (cmd.textContent = installCmd));
+        // Update one-liner OS command (with beta and shell support)
+        let onelinerCmd;
+        if (currentOs === "unix") {
+          onelinerCmd = currentBeta
+            ? "curl -fsSL https://molt.bot/install.sh | bash -s -- --beta"
+            : "curl -fsSL https://molt.bot/install.sh | bash";
+        } else if (currentWinShell === "cmd") {
+          onelinerCmd = currentBeta ? windowsCmdBetaCmd : windowsCmdCmd;
+        } else {
+          onelinerCmd = currentBeta ? windowsPsBetaCmd : windowsPsCmd;
+        }
+        document
+          .querySelectorAll(".os-cmd")
+          .forEach((cmd) => (cmd.textContent = onelinerCmd));
+        // Update hackable OS command for installer mode
+        const hackableOsCmd =
+          "curl -fsSL https://molt.bot/install.sh | bash -s -- --install-method git";
+        document
+          .querySelectorAll(".os-cmd-hackable")
+          .forEach((cmd) => (cmd.textContent = hackableOsCmd));
+        // Update OS indicator text
+        osDetected.textContent = osLabels[currentOs];
+        // Update hackable content visibility
+        if (currentMode === "hackable") {
+          hackableInstallerContent.style.display =
+            currentHackable === "installer" ? "block" : "none";
+          hackablePnpmContent.style.display =
+            currentHackable === "pnpm" ? "block" : "none";
+        }
+        // Update beta button state
+        betaBtn.classList.toggle("active", currentBeta);
+        betaBtn.dataset.beta = currentBeta.toString();
+        // Update comment texts based on beta state
+        const mode = currentBeta ? "beta" : "stable";
+        onelinerComment.textContent = comments.oneliner[mode];
+        quickCommentInstall.textContent = comments.quickInstall[mode];
+        quickCommentOnboard.textContent = comments.quickOnboard[mode];
+      }
+
+      function updateVisibility() {
+        codeOneliner.style.display =
+          currentMode === "oneliner" ? "block" : "none";
+        codeQuick.style.display = currentMode === "quick" ? "block" : "none";
+        codeHackable.style.display =
+          currentMode === "hackable" ? "block" : "none";
+        codeMacos.style.display = currentMode === "macos" ? "block" : "none";
+
+        // Show OS indicator for one-liner, PM switch for quick, hackable switch for hackable, nothing for macos
+        const showOsControls = currentMode === "oneliner";
+        const showPmControls = currentMode === "quick";
+        const showHackableControls = currentMode === "hackable";
+        // Beta only applies to oneliner and npm modes (git always gets main branch)
+        const showBetaControls =
+          currentMode === "oneliner" || currentMode === "quick";
+        // Show Windows shell toggle when Windows is selected in one-liner mode
+        const showWinShellControls = showOsControls && currentOs === "windows";
+
+        osIndicator.style.display =
+          showOsControls && !osPickerExpanded ? "flex" : "none";
+        osSwitch.style.display =
+          showOsControls && osPickerExpanded ? "flex" : "none";
+        winShellSwitch.style.display = showWinShellControls ? "flex" : "none";
+        pmSwitch.style.display = showPmControls ? "flex" : "none";
+        hackableSwitch.style.display = showHackableControls ? "flex" : "none";
+        betaSwitch.style.display = showBetaControls ? "flex" : "none";
+        // Show placeholder when no switches visible (macOS mode) to prevent layout shift
+        const noSwitchesVisible =
+          !showOsControls &&
+          !showPmControls &&
+          !showHackableControls &&
+          !showBetaControls;
+        switchPlaceholder.style.display = noSwitchesVisible ? "block" : "none";
+      }
+
+      // OS change toggle
+      osChangeBtn.addEventListener("click", () => {
+        osPickerExpanded = true;
+        updateVisibility();
+      });
+
+      // Beta toggle
+      betaBtn.addEventListener("click", () => {
+        currentBeta = !currentBeta;
+        updateCommands();
+      });
+
+      pmBtns.forEach((btn) => {
+        btn.addEventListener("click", () => {
+          currentPm = btn.dataset.pm;
+          pmBtns.forEach((b) => b.classList.remove("active"));
+          btn.classList.add("active");
+          updateCommands();
+        });
+      });
+
+      hackableBtns.forEach((btn) => {
+        btn.addEventListener("click", () => {
+          currentHackable = btn.dataset.hackable;
+          hackableBtns.forEach((b) => b.classList.remove("active"));
+          btn.classList.add("active");
+          updateCommands();
+        });
+      });
+
+      osBtns.forEach((btn) => {
+        btn.addEventListener("click", () => {
+          currentOs = btn.dataset.os;
+          osBtns.forEach((b) => b.classList.remove("active"));
+          btn.classList.add("active");
+          osPickerExpanded = false; // Collapse after selection
+          updateCommands();
+          updateVisibility();
+        });
+      });
+
+      winShellBtns.forEach((btn) => {
+        btn.addEventListener("click", () => {
+          currentWinShell = btn.dataset.shell;
+          winShellBtns.forEach((b) => b.classList.remove("active"));
+          btn.classList.add("active");
+          updateCommands();
+        });
+      });
+
+      modeBtns.forEach((btn) => {
+        btn.addEventListener("click", () => {
+          currentMode = btn.dataset.mode;
+          modeBtns.forEach((b) => b.classList.remove("active"));
+          btn.classList.add("active");
+          osPickerExpanded = false; // Reset when switching modes
+          updateVisibility();
+        });
+      });
+
+      // Initialize UI based on detected OS
+      osBtns.forEach((b) =>
+        b.classList.toggle("active", b.dataset.os === currentOs),
+      );
+      updateCommands();
+      updateVisibility();
+
+      // Copy button functionality
+      const copyCommands = {
+        oneliner: () => {
+          if (currentOs === "unix") {
+            return currentBeta
+              ? "curl -fsSL https://molt.bot/install.sh | bash -s -- --beta"
+              : "curl -fsSL https://molt.bot/install.sh | bash";
+          } else if (currentWinShell === "cmd") {
+            return currentBeta ? windowsCmdBetaCmd : windowsCmdCmd;
+          } else {
+            return currentBeta ? windowsPsBetaCmd : windowsPsCmd;
+          }
+        },
+        install: () => {
+          const betaSuffix = currentBeta ? "@beta" : "";
+          return currentPm === "npm"
+            ? `npm i -g clawdbot${betaSuffix}`
+            : `pnpm add -g clawdbot${betaSuffix}`;
+        },
+        onboard: () => "clawdbot onboard",
+        "hackable-installer": () =>
+          "curl -fsSL https://molt.bot/install.sh | bash -s -- --install-method git",
+        clone: () => "git clone https://github.com/moltbot/moltbot.git",
+        build: () => "cd moltbot && pnpm install && pnpm run build",
+        "hackable-onboard": () => "pnpm run clawdbot onboard",
+      };
+
+      document.querySelectorAll(".copy-line-btn").forEach((btn) => {
+        btn.addEventListener("click", async () => {
+          const cmdKey = btn.dataset.cmd;
+          const code = copyCommands[cmdKey]();
+          const copyIcon = btn.querySelector(".copy-icon");
+          const checkIcon = btn.querySelector(".check-icon");
+
+          try {
+            await navigator.clipboard.writeText(code);
+            btn.classList.add("copied");
+            copyIcon.style.display = "none";
+            checkIcon.style.display = "block";
+            setTimeout(() => {
+              btn.classList.remove("copied");
+              copyIcon.style.display = "block";
+              checkIcon.style.display = "none";
+            }, 2000);
+          } catch (err) {
+            console.error("Failed to copy:", err);
+          }
+        });
+      });
+
+      // Easter egg: Dalek mode on lobster hover
+      const lobsterIcon = document.querySelector(".lobster-icon");
+      const tagline = document.getElementById("tagline");
+      const originalTagline = tagline.textContent;
+      let isAnimating = false;
+
+      lobsterIcon.addEventListener("mouseenter", () => {
+        if (isAnimating) return;
+        isAnimating = true;
+
+        // Animate to Dalek text
+        tagline.style.transition = "opacity 0.2s ease";
+        tagline.style.opacity = "0";
+
+        setTimeout(() => {
+          tagline.textContent = taglineEasterEgg;
+          tagline.classList.add("dalek-mode");
+          tagline.style.opacity = "1";
+        }, 200);
+
+        // Revert after 2 seconds
+        setTimeout(() => {
+          tagline.style.opacity = "0";
+          setTimeout(() => {
+            tagline.textContent = originalTagline;
+            tagline.classList.remove("dalek-mode");
+            tagline.style.opacity = "1";
+            isAnimating = false;
+          }, 200);
+        }, 2000);
+      });
+    </script>
+
+    <!-- What It Does -->
+    <section class="features">
+      <h2 class="section-title">
+        <span class="claw-accent">⟩</span>
+        {m.feature_machine_title()}
+      </h2>
+      <div class="features-grid">
+        <a
+          href="https://docs.molt.bot/getting-started"
+          target="_blank"
+          rel="noopener"
+          class="feature-card"
+        >
+          <div class="feature-icon">
+            <Icon icon="lucide:home" color="var(--coral-bright)" size={28} />
+          </div>
+          <h3 class="feature-title">{m.feature_machine_title()}</h3>
+          <p class="feature-desc">{m.feature_machine_desc()}</p>
+        </a>
+        <a href={`${localePrefix}/integrations`} class="feature-card">
+          <div class="feature-icon">
+            <Icon
+              icon="lucide:message-circle"
+              color="var(--coral-bright)"
+              size={28}
+            />
+          </div>
+          <h3 class="feature-title">{m.feature_chat_title()}</h3>
+          <p class="feature-desc">{m.feature_chat_desc()}</p>
+        </a>
+        <a
+          href="https://docs.molt.bot/session"
+          target="_blank"
+          rel="noopener"
+          class="feature-card"
+        >
+          <div class="feature-icon">
+            <Icon icon="lucide:brain" color="var(--coral-bright)" size={28} />
+          </div>
+          <h3 class="feature-title">{m.feature_memory_title()}</h3>
+          <p class="feature-desc">{m.feature_memory_desc()}</p>
+        </a>
+        <a
+          href="https://docs.molt.bot/browser"
+          target="_blank"
+          rel="noopener"
+          class="feature-card"
+        >
+          <div class="feature-icon">
+            <Icon icon="lucide:globe" color="var(--coral-bright)" size={28} />
+          </div>
+          <h3 class="feature-title">{m.feature_browser_title()}</h3>
+          <p class="feature-desc">{m.feature_browser_desc()}</p>
+        </a>
+        <a
+          href="https://docs.molt.bot/bash"
+          target="_blank"
+          rel="noopener"
+          class="feature-card"
+        >
+          <div class="feature-icon">
+            <Icon
+              icon="lucide:terminal"
+              color="var(--coral-bright)"
+              size={28}
+            />
+          </div>
+          <h3 class="feature-title">{m.feature_system_title()}</h3>
+          <p class="feature-desc">{m.feature_system_desc()}</p>
+        </a>
+        <a
+          href="https://docs.molt.bot/skills"
+          target="_blank"
+          rel="noopener"
+          class="feature-card"
+        >
+          <div class="feature-icon">
+            <Icon icon="lucide:puzzle" color="var(--coral-bright)" size={28} />
+          </div>
+          <h3 class="feature-title">{m.feature_skills_title()}</h3>
+          <p class="feature-desc">{m.feature_skills_desc()}</p>
+        </a>
+      </div>
+    </section>
+
+    <!-- Integrations Preview -->
+    <section class="integrations-preview">
+      <h2 class="section-title">
+        <span class="claw-accent">⟩</span>
+        {m.works_with_title()}
+      </h2>
+      <div class="integrations-row">
+        {
+          integrationPills.map((p) => (
+            <span class="integration-pill">
+              <Icon icon={p.icon} color={p.color} size={16} />
+              <span>{p.name}</span>
+            </span>
+          ))
+        }
+      </div>
+      <div class="integrations-links">
+        <a href={`${localePrefix}/integrations`} class="integrations-link"
+          >{m.integrations_view_all_count()}</a
+        >
+        <span class="link-separator">·</span>
+        <a href={`${localePrefix}/showcase`} class="integrations-link"
+          >{m.integrations_see_built()}</a
+        >
+      </div>
+    </section>
+
+    <!-- Press Section -->
+    <section class="press-section">
+      <h2 class="section-title">
+        <span class="claw-accent">⟩</span>
+        {m.featured_in_title()}
+      </h2>
+      <div class="press-grid">
+        <a
+          href="https://www.macstories.net/stories/clawdbot-showed-me-what-the-future-of-personal-ai-assistants-looks-like/"
+          target="_blank"
+          rel="noopener"
+          class="press-card press-featured"
+        >
+          <div class="press-logo">
+            <svg viewBox="0 0 24 24" fill="currentColor" class="press-icon">
+              <path
+                d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.81-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"
+              ></path>
+            </svg>
+            <span class="press-name">MacStories</span>
+          </div>
+          <blockquote class="press-quote">
+            "{m.press_macstories_quote()}"
+          </blockquote>
+          <span class="press-author">Federico Viticci</span>
+        </a>
+        <a
+          href="https://www.starryhope.com/minipcs/clawdbot-mac-mini-ai-agent-trend/"
+          target="_blank"
+          rel="noopener"
+          class="press-card"
+        >
+          <div class="press-logo">
+            <svg viewBox="0 0 24 24" fill="currentColor" class="press-icon">
+              <polygon
+                points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"
+              ></polygon>
+            </svg>
+            <span class="press-name">StarryHope</span>
+          </div>
+          <blockquote class="press-quote">
+            "{m.press_starryhope_quote()}"
+          </blockquote>
+          <span class="press-author">Jim Mendenhall</span>
+        </a>
+      </div>
+    </section>
+
+    <!-- CTA Grid -->
+    <nav class="cta-grid">
+      <a
+        href="https://discord.com/invite/clawd"
+        class="cta cta-discord"
+        target="_blank"
+        rel="noopener"
+      >
+        <svg class="cta-icon" viewBox="0 0 24 24" fill="currentColor">
+          <path
+            d="M20.317 4.37a19.791 19.791 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057a.082.082 0 0 0 .031.057 19.9 19.9 0 0 0 5.993 3.03.078.078 0 0 0 .084-.028 14.09 14.09 0 0 0 1.226-1.994.076.076 0 0 0-.041-.106 13.107 13.107 0 0 1-1.872-.892.077.077 0 0 1-.008-.128 10.2 10.2 0 0 0 .372-.292.074.074 0 0 1 .077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 0 1 .078.01c.12.098.246.198.373.292a.077.077 0 0 1-.006.127 12.299 12.299 0 0 1-1.873.892.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028 19.839 19.839 0 0 0 6.002-3.03.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.03zM8.02 15.33c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.956-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.956 2.418-2.157 2.418zm7.975 0c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.955-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.946 2.418-2.157 2.418z"
+          ></path>
+        </svg>
+        <span class="cta-label">Discord</span>
+        <span class="cta-sub">{m.cta_discord_sub()}</span>
+      </a>
+
+      <a
+        href="https://docs.molt.bot/getting-started"
+        class="cta cta-docs"
+        target="_blank"
+        rel="noopener"
+      >
+        <svg
+          class="cta-icon"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
+          <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path>
+          <path
+            d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"
+          ></path>
+          <line x1="8" y1="7" x2="16" y2="7"></line>
+          <line x1="8" y1="11" x2="14" y2="11"></line>
+        </svg>
+        <span class="cta-label">{m.cta_documentation()}</span>
+        <span class="cta-sub">{m.cta_docs_sub()}</span>
+      </a>
+
+      <a
+        href="https://github.com/moltbot/moltbot"
+        class="cta cta-github"
+        target="_blank"
+        rel="noopener"
+      >
+        <svg class="cta-icon" viewBox="0 0 24 24" fill="currentColor">
+          <path
+            d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"
+          ></path>
+        </svg>
+        <span class="cta-label">GitHub</span>
+        <span class="cta-sub">{m.cta_github_sub()}</span>
+      </a>
+
+      <a
+        href="https://clawdhub.com"
+        class="cta cta-skills"
+        target="_blank"
+        rel="noopener"
+      >
+        <svg
+          class="cta-icon"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
+          <polygon
+            points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"
+          ></polygon>
+        </svg>
+        <span class="cta-label">ClawdHub</span>
+        <span class="cta-sub">{m.cta_skills_sub()}</span>
+      </a>
+    </nav>
+
+    <!-- Newsletter Signup -->
+    <section class="newsletter">
+      <div class="newsletter-content">
+        <h2 class="newsletter-title">
+          <span class="claw-accent">⟩</span>
+          {m.newsletter_title()}
+        </h2>
+        <p class="newsletter-desc">{m.newsletter_desc()}</p>
+        <form
+          class="newsletter-form"
+          action="https://buttondown.com/api/emails/embed-subscribe/steipete"
+          method="post"
+          target="_blank"
+        >
+          <input type="hidden" name="tag" value="clawdbot" />
+          <input
+            type="email"
+            name="email"
+            placeholder={m.newsletter_placeholder()}
+            required
+            class="newsletter-input"
+            aria-label="Email address"
+          />
+          <button type="submit" class="newsletter-btn">
+            {m.newsletter_button()}
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <line x1="5" y1="12" x2="19" y2="12"></line>
+              <polyline points="12 5 19 12 12 19"></polyline>
+            </svg>
+          </button>
+        </form>
+      </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+      <p>
+        {m.footer_built_by_prefix()}
+        <a href="https://molty.me" target="_blank" rel="noopener">Molty</a>{
+          m.footer_built_by_middle1()
+        }
+        <a href="https://soul.md" target="_blank" rel="noopener">soul</a>{
+          m.footer_built_by_middle2()
+        }
+        <a href="https://steipete.me" target="_blank" rel="noopener"
+          >Peter Steinberger</a
+        >{m.footer_built_by_middle3()}
+        <a
+          href="https://github.com/moltbot/moltbot#community"
+          target="_blank"
+          rel="noopener">{m.footer_community()}</a
+        >{m.footer_built_by_suffix()}
+      </p>
+      <p class="disclaimer">{m.footer_disclaimer()}</p>
+    </footer>
+  </main>
+</Layout>
+
+<style>
+  /* Starfield Background */
+  .stars {
+    position: fixed;
+    inset: 0;
+    background-image:
+      radial-gradient(
+        2px 2px at 20px 30px,
+        rgba(255, 255, 255, 0.8),
+        transparent
+      ),
+      radial-gradient(
+        2px 2px at 40px 70px,
+        rgba(255, 255, 255, 0.5),
+        transparent
+      ),
+      radial-gradient(
+        1px 1px at 90px 40px,
+        rgba(255, 255, 255, 0.6),
+        transparent
+      ),
+      radial-gradient(
+        2px 2px at 130px 80px,
+        rgba(255, 255, 255, 0.4),
+        transparent
+      ),
+      radial-gradient(
+        1px 1px at 160px 120px,
+        rgba(255, 255, 255, 0.7),
+        transparent
+      ),
+      radial-gradient(
+        2px 2px at 200px 60px,
+        rgba(0, 229, 204, 0.6),
+        transparent
+      ),
+      radial-gradient(
+        1px 1px at 250px 150px,
+        rgba(255, 255, 255, 0.5),
+        transparent
+      ),
+      radial-gradient(
+        2px 2px at 300px 40px,
+        rgba(255, 77, 77, 0.4),
+        transparent
+      );
+    background-size: 350px 200px;
+    animation: twinkle 8s ease-in-out infinite alternate;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  @keyframes twinkle {
+    0% {
+      opacity: 0.4;
+    }
+    100% {
+      opacity: 0.7;
+    }
+  }
+
+  /* Nebula Gradient */
+  .nebula {
+    position: fixed;
+    inset: 0;
+    background:
+      radial-gradient(
+        ellipse 80% 50% at 20% 20%,
+        rgba(255, 77, 77, 0.12),
+        transparent 50%
+      ),
+      radial-gradient(
+        ellipse 60% 60% at 80% 30%,
+        rgba(0, 229, 204, 0.08),
+        transparent 50%
+      ),
+      radial-gradient(
+        ellipse 90% 70% at 50% 90%,
+        rgba(255, 77, 77, 0.06),
+        transparent 50%
+      );
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .container {
+    position: relative;
+    z-index: 1;
+    max-width: 860px;
+    margin: 0 auto;
+    padding: 60px 24px 40px;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* Hero */
+  .hero {
+    text-align: center;
+    margin-bottom: 56px;
+    animation: fadeInUp 0.8s ease-out;
+  }
+
+  @keyframes fadeInUp {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  .lobster-icon {
+    width: 100px;
+    height: 100px;
+    margin: 0 auto 24px;
+    animation: float 4s ease-in-out infinite;
+    cursor: pointer;
+    transition: transform 0.3s ease;
+  }
+
+  .lobster-icon:hover {
+    transform: scale(1.1);
+    animation: none;
+  }
+
+  .lobster-icon svg {
+    width: 100%;
+    height: 100%;
+    filter: drop-shadow(0 0 20px rgba(255, 77, 77, 0.4));
+    transition: filter 0.3s ease;
+  }
+
+  .lobster-icon:hover svg {
+    filter: drop-shadow(0 0 30px rgba(0, 229, 204, 0.6));
+  }
+
+  .lobster-icon .eye-glow {
+    animation: blink 3s ease-in-out infinite;
+  }
+
+  .lobster-icon .antenna {
+    animation: wiggle 2s ease-in-out infinite;
+    transform-origin: center;
+  }
+
+  .lobster-icon .claw-left {
+    animation: clawSnap 4s ease-in-out infinite;
+    transform-origin: right center;
+  }
+
+  .lobster-icon .claw-right {
+    animation: clawSnap 4s ease-in-out infinite 0.2s;
+    transform-origin: left center;
+  }
+
+  @keyframes float {
+    0%,
+    100% {
+      transform: translateY(0);
+    }
+    50% {
+      transform: translateY(-8px);
+    }
+  }
+
+  @keyframes blink {
+    0%,
+    90%,
+    100% {
+      opacity: 1;
+    }
+    95% {
+      opacity: 0.3;
+    }
+  }
+
+  @keyframes wiggle {
+    0%,
+    100% {
+      transform: rotate(0deg);
+    }
+    25% {
+      transform: rotate(-3deg);
+    }
+    75% {
+      transform: rotate(3deg);
+    }
+  }
+
+  @keyframes clawSnap {
+    0%,
+    85%,
+    100% {
+      transform: rotate(0deg);
+    }
+    90% {
+      transform: rotate(-8deg);
+    }
+    95% {
+      transform: rotate(0deg);
+    }
+  }
+
+  .title {
+    font-family: var(--font-display);
+    font-size: clamp(3rem, 10vw, 4.5rem);
+    font-weight: 700;
+    letter-spacing: -0.03em;
+    line-height: 1;
+    margin-bottom: 12px;
+  }
+
+  .title-main {
+    background: linear-gradient(
+      135deg,
+      var(--text-primary) 0%,
+      var(--coral-bright) 50%,
+      var(--cyan-bright) 100%
+    );
+    background-size: 200% 200%;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    animation: gradientShift 6s ease infinite;
+  }
+
+  @keyframes gradientShift {
+    0%,
+    100% {
+      background-position: 0% 50%;
+    }
+    50% {
+      background-position: 100% 50%;
+    }
+  }
+
+  .tagline {
+    font-family: var(--font-display);
+    font-size: 1.1rem;
+    font-weight: 500;
+    color: var(--coral-bright);
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    margin-bottom: 20px;
+    animation: fadeInUp 0.8s ease-out 0.15s both;
+  }
+
+  .tagline.dalek-mode {
+    color: var(--cyan-bright);
+    animation: shake 0.1s ease-in-out infinite;
+    text-shadow: 0 0 10px var(--cyan-glow);
+  }
+
+  @keyframes shake {
+    0%,
+    100% {
+      transform: translateX(0);
+    }
+    25% {
+      transform: translateX(-2px);
+    }
+    75% {
+      transform: translateX(2px);
+    }
+  }
+
+  .description {
+    font-size: 1.1rem;
+    color: var(--text-secondary);
+    max-width: 780px;
+    margin: 0 auto;
+    line-height: 1.7;
+    animation: fadeInUp 0.8s ease-out 0.3s both;
+  }
+
+  /* CTA Grid */
+  .cta-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+    margin-bottom: 56px;
+    animation: fadeInUp 0.8s ease-out 0.45s both;
+  }
+
+  @media (min-width: 640px) {
+    .cta-grid {
+      grid-template-columns: repeat(4, 1fr);
+    }
+  }
+
+  .cta {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    padding: 24px 16px;
+    border-radius: 16px;
+    border: 1px solid var(--border-subtle);
+    background: rgba(10, 15, 26, 0.6);
+    backdrop-filter: blur(12px);
+    text-decoration: none;
+    color: var(--text-primary);
+    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .cta:hover {
+    transform: translateY(-4px);
+    border-color: var(--border-accent);
+    box-shadow:
+      0 12px 40px rgba(255, 77, 77, 0.15),
+      inset 0 1px 0 rgba(255, 255, 255, 0.05);
+  }
+
+  .cta-icon {
+    width: 28px;
+    height: 28px;
+    color: var(--coral-bright);
+    transition: transform 0.25s ease;
+  }
+
+  .cta:hover .cta-icon {
+    transform: scale(1.1);
+  }
+
+  .cta-discord:hover {
+    border-color: #5865f2;
+    box-shadow: 0 12px 40px rgba(88, 101, 242, 0.2);
+  }
+  .cta-discord:hover .cta-icon {
+    color: #5865f2;
+  }
+
+  .cta-docs:hover {
+    border-color: var(--cyan-bright);
+    box-shadow: 0 12px 40px rgba(0, 229, 204, 0.15);
+  }
+  .cta-docs:hover .cta-icon {
+    color: var(--cyan-bright);
+  }
+
+  .cta-github:hover {
+    border-color: #f0f4ff;
+    box-shadow: 0 12px 40px rgba(240, 244, 255, 0.1);
+  }
+  .cta-github:hover .cta-icon {
+    color: #f0f4ff;
+  }
+
+  .cta-skills:hover {
+    border-color: #fbbf24;
+    box-shadow: 0 12px 40px rgba(251, 191, 36, 0.15);
+  }
+  .cta-skills:hover .cta-icon {
+    color: #fbbf24;
+  }
+
+  .cta-label {
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: 1rem;
+  }
+
+  .cta-sub {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+  }
+
+  /* Newsletter */
+  .newsletter {
+    margin-bottom: 56px;
+    animation: fadeInUp 0.8s ease-out 0.7s both;
+  }
+
+  .newsletter-content {
+    text-align: center;
+    padding: 40px 32px;
+    border-radius: 20px;
+    border: 1px solid var(--border-subtle);
+    background: linear-gradient(
+      135deg,
+      rgba(255, 77, 77, 0.05) 0%,
+      rgba(10, 15, 26, 0.8) 50%,
+      rgba(0, 229, 204, 0.03) 100%
+    );
+    backdrop-filter: blur(12px);
+  }
+
+  .newsletter-title {
+    font-family: var(--font-display);
+    font-size: 1.4rem;
+    font-weight: 600;
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+  }
+
+  .newsletter-desc {
+    font-size: 0.95rem;
+    color: var(--text-secondary);
+    margin-bottom: 24px;
+    max-width: 400px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .newsletter-form {
+    display: flex;
+    gap: 12px;
+    max-width: 440px;
+    margin: 0 auto;
+  }
+
+  .newsletter-input {
+    flex: 1;
+    padding: 14px 18px;
+    border-radius: 12px;
+    border: 1px solid var(--border-subtle);
+    background: rgba(10, 15, 26, 0.8);
+    color: var(--text-primary);
+    font-family: var(--font-body);
+    font-size: 0.95rem;
+    outline: none;
+    transition: all 0.25s ease;
+  }
+
+  .newsletter-input::placeholder {
+    color: var(--text-muted);
+  }
+
+  .newsletter-input:focus {
+    border-color: var(--coral-bright);
+    box-shadow: 0 0 0 3px rgba(255, 77, 77, 0.15);
+  }
+
+  .newsletter-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 14px 24px;
+    border-radius: 12px;
+    border: none;
+    background: linear-gradient(
+      135deg,
+      var(--coral-bright) 0%,
+      var(--coral-dark) 100%
+    );
+    color: white;
+    font-family: var(--font-display);
+    font-size: 0.95rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 4px 20px rgba(255, 77, 77, 0.25);
+  }
+
+  .newsletter-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 30px rgba(255, 77, 77, 0.35);
+  }
+
+  .newsletter-btn:active {
+    transform: translateY(0);
+  }
+
+  .newsletter-btn svg {
+    width: 18px;
+    height: 18px;
+    transition: transform 0.2s ease;
+  }
+
+  .newsletter-btn:hover svg {
+    transform: translateX(3px);
+  }
+
+  @media (max-width: 480px) {
+    .newsletter-content {
+      padding: 28px 20px;
+    }
+
+    .newsletter-form {
+      flex-direction: column;
+    }
+
+    .newsletter-input {
+      width: 100%;
+    }
+
+    .newsletter-btn {
+      width: 100%;
+      justify-content: center;
+    }
+  }
+
+  /* Features */
+  .features {
+    margin-bottom: 56px;
+    animation: fadeInUp 0.8s ease-out 0.55s both;
+  }
+
+  .features-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+  }
+
+  @media (min-width: 640px) {
+    .features-grid {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+
+  .feature-card {
+    display: block;
+    padding: 20px;
+    border-radius: 14px;
+    border: 1px solid var(--border-subtle);
+    background: rgba(10, 15, 26, 0.6);
+    backdrop-filter: blur(12px);
+    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    text-decoration: none;
+    color: inherit;
+    cursor: pointer;
+  }
+
+  .feature-card:hover {
+    transform: translateY(-4px);
+    border-color: var(--coral-bright);
+    box-shadow: 0 12px 40px
+      color-mix(in srgb, var(--coral-bright) 20%, transparent);
+  }
+
+  .feature-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 12px;
+  }
+
+  .feature-icon :global(svg) {
+    width: 28px;
+    height: 28px;
+  }
+
+  .feature-title {
+    font-family: var(--font-display);
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin-bottom: 6px;
+  }
+
+  .feature-desc {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    line-height: 1.5;
+  }
+
+  /* Integrations Preview */
+  .integrations-preview {
+    margin-bottom: 56px;
+    animation: fadeInUp 0.8s ease-out 0.6s both;
+  }
+
+  .integrations-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    justify-content: center;
+    margin-bottom: 16px;
+  }
+
+  .integration-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 14px;
+    border-radius: 20px;
+    border: 1px solid var(--border-subtle);
+    background: rgba(10, 15, 26, 0.6);
+    backdrop-filter: blur(8px);
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    cursor: default;
+  }
+
+  .integration-pill :global(svg) {
+    width: 16px;
+    height: 16px;
+    flex-shrink: 0;
+    transition: all 0.2s ease;
+  }
+
+  .integration-pill:hover {
+    border-color: var(--coral-bright);
+    transform: translateY(-4px);
+    box-shadow: 0 8px 24px
+      color-mix(in srgb, var(--coral-bright) 20%, transparent);
+  }
+
+  .integrations-links {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+
+  .integrations-link {
+    color: var(--coral-bright);
+    text-decoration: none;
+    font-size: 0.9rem;
+    font-weight: 500;
+    transition: color 0.2s ease;
+  }
+
+  .integrations-link:hover {
+    color: var(--cyan-bright);
+  }
+
+  .link-separator {
+    color: var(--text-muted);
+    font-size: 0.9rem;
+  }
+
+  /* Press Section */
+  .press-section {
+    margin-bottom: 56px;
+    animation: fadeInUp 0.8s ease-out 0.65s both;
+  }
+
+  .press-section .section-title {
+    margin-bottom: 20px;
+  }
+
+  .press-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+  }
+
+  @media (max-width: 640px) {
+    .press-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  .press-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
+    padding: 24px 28px;
+    border-radius: 16px;
+    border: 1px solid var(--border-subtle);
+    background: rgba(10, 15, 26, 0.7);
+    backdrop-filter: blur(12px);
+    text-decoration: none;
+    color: var(--text-primary);
+    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    text-align: center;
+  }
+
+  .press-card:hover {
+    transform: translateY(-4px);
+    border-color: var(--coral-bright);
+    box-shadow: 0 12px 40px rgba(255, 77, 77, 0.15);
+  }
+
+  .press-logo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .press-icon {
+    width: 28px;
+    height: 28px;
+    color: var(--text-muted);
+  }
+
+  .press-name {
+    font-family: var(--font-display);
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: var(--text-secondary);
+    letter-spacing: 0.02em;
+  }
+
+  .press-quote {
+    font-family: var(--font-display);
+    font-size: 1rem;
+    font-weight: 500;
+    line-height: 1.5;
+    color: var(--text-primary);
+    margin: 0;
+    font-style: italic;
+  }
+
+  .press-author {
+    font-size: 0.9rem;
+    color: var(--coral-bright);
+    font-weight: 500;
+  }
+
+  .press-featured {
+    border-color: rgba(255, 77, 77, 0.3);
+    background: linear-gradient(
+      135deg,
+      rgba(255, 77, 77, 0.05) 0%,
+      rgba(10, 15, 26, 0.7) 100%
+    );
+  }
+
+  /* Quick Start */
+  .quickstart {
+    margin-bottom: 56px;
+    animation: fadeInUp 0.8s ease-out 0.6s both;
+  }
+
+  .section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+  }
+
+  .section-title {
+    font-family: var(--font-display);
+    font-size: 1.4rem;
+    font-weight: 600;
+    margin-bottom: 0;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .section-link {
+    font-size: 0.9rem;
+    color: var(--coral-bright);
+    text-decoration: none;
+    font-weight: 500;
+    transition: color 0.2s ease;
+  }
+
+  .section-link:hover {
+    color: var(--cyan-bright);
+  }
+
+  .claw-accent {
+    color: var(--coral-bright);
+    font-weight: 700;
+  }
+
+  .code-block {
+    background: var(--bg-elevated);
+    border: 1px solid var(--border-subtle);
+    border-radius: 12px;
+    overflow: hidden;
+  }
+
+  .code-header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 12px 16px;
+    background: rgba(0, 0, 0, 0.3);
+    border-bottom: 1px solid var(--border-subtle);
+  }
+
+  .code-content {
+    padding: 16px 20px;
+    font-family: "SF Mono", "Fira Code", "Consolas", monospace;
+    font-size: 0.9rem;
+    line-height: 1.6;
+  }
+
+  .code-line {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 4px 0;
+  }
+
+  .code-line.comment {
+    color: var(--text-muted);
+    font-style: italic;
+  }
+
+  .code-line.cmd {
+    color: var(--text-primary);
+  }
+
+  .copy-line-btn {
+    opacity: 0.6;
+    margin-left: auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 28px;
+    height: 28px;
+    border: none;
+    border-radius: 6px;
+    background: rgba(255, 255, 255, 0.1);
+    color: var(--text-muted);
+    cursor: pointer;
+    transition: all 0.2s ease;
+    flex-shrink: 0;
+  }
+
+  .code-line:hover .copy-line-btn {
+    opacity: 1;
+  }
+
+  .copy-line-btn:hover {
+    background: rgba(255, 255, 255, 0.2);
+    color: var(--text-primary);
+  }
+
+  .copy-line-btn.copied {
+    opacity: 1;
+    background: rgba(0, 229, 204, 0.2);
+    color: var(--cyan-bright);
+  }
+
+  .copy-line-btn svg {
+    width: 14px;
+    height: 14px;
+  }
+
+  .code-dot {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: var(--text-muted);
+  }
+
+  .code-dot:nth-child(1) {
+    background: #ff5f57;
+  }
+  .code-dot:nth-child(2) {
+    background: #febc2e;
+  }
+  .code-dot:nth-child(3) {
+    background: #28c840;
+  }
+
+  .code-title {
+    margin-left: auto;
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    font-family: var(--font-mono);
+  }
+
+  .mode-switch,
+  .pm-switch,
+  .hackable-switch,
+  .os-switch,
+  .win-shell-switch {
+    display: flex;
+    gap: 4px;
+    background: rgba(0, 0, 0, 0.3);
+    padding: 3px;
+    border-radius: 6px;
+  }
+
+  .pm-switch,
+  .hackable-switch,
+  .os-switch,
+  .win-shell-switch {
+    margin-left: auto;
+  }
+
+  .win-shell-switch {
+    margin-left: 8px;
+  }
+
+  .mode-btn,
+  .pm-btn,
+  .hackable-btn,
+  .os-btn,
+  .win-shell-btn {
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    padding: 4px 10px;
+    border: none;
+    border-radius: 4px;
+    background: transparent;
+    color: var(--text-muted);
+    cursor: pointer;
+    transition: all 0.15s ease;
+  }
+
+  .mode-btn:hover,
+  .pm-btn:hover,
+  .hackable-btn:hover,
+  .os-btn:hover,
+  .win-shell-btn:hover {
+    color: var(--text-secondary);
+  }
+
+  .pm-btn.active,
+  .hackable-btn.active,
+  .os-btn.active,
+  .win-shell-btn.active {
+    background: var(--coral-bright);
+    color: var(--bg-deep);
+    font-weight: 600;
+  }
+
+  .mode-btn.active {
+    background: var(--cyan-bright);
+    color: var(--bg-deep);
+    font-weight: 600;
+  }
+
+  /* Beta Switch */
+  .beta-switch {
+    margin-left: 8px;
+  }
+
+  /* Placeholder to prevent layout shift when no switches visible */
+  .switch-placeholder {
+    display: none;
+    height: 26px; /* Match switch button height */
+    margin-left: auto;
+  }
+
+  .beta-btn {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    padding: 4px 10px;
+    border: 1px solid var(--border-subtle);
+    border-radius: 4px;
+    background: transparent;
+    color: var(--text-muted);
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+
+  .beta-btn:hover {
+    border-color: var(--cyan-bright);
+    color: var(--cyan-bright);
+  }
+
+  .beta-btn.active {
+    background: rgba(0, 229, 204, 0.15);
+    border-color: var(--cyan-bright);
+    color: var(--cyan-bright);
+  }
+
+  .beta-label {
+    font-weight: 700;
+    font-size: 0.8rem;
+  }
+
+  .beta-text {
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  .pm-cmd,
+  .pm-install {
+    color: var(--cyan-bright);
+  }
+
+  .code-block pre {
+    padding: 20px;
+    overflow-x: auto;
+  }
+
+  .code-block code {
+    font-family: var(--font-mono);
+    font-size: 0.9rem;
+    line-height: 1.7;
+    color: var(--text-secondary);
+  }
+
+  .code-comment {
+    color: var(--text-muted);
+  }
+
+  .code-prompt {
+    color: var(--coral-bright);
+    user-select: none;
+  }
+
+  .quickstart-note {
+    margin-top: 16px;
+    font-size: 0.9rem;
+    color: var(--text-muted);
+    text-align: center;
+  }
+
+  /* OS Indicator */
+  .os-indicator {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-left: auto;
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    color: var(--text-muted);
+  }
+
+  .os-detected {
+    color: var(--text-secondary);
+  }
+
+  .os-change-btn {
+    background: none;
+    border: none;
+    color: var(--coral-bright);
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    cursor: pointer;
+    padding: 2px 6px;
+    border-radius: 4px;
+    transition: all 0.15s ease;
+  }
+
+  .os-change-btn:hover {
+    background: rgba(255, 77, 77, 0.15);
+    color: var(--cyan-bright);
+  }
+
+  /* macOS App Download Section */
+  .macos-app-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
+    padding: 24px 16px;
+    text-align: center;
+  }
+
+  .macos-description {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .macos-tagline {
+    font-family: var(--font-display);
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: var(--text-primary);
+  }
+
+  .macos-subtitle {
+    font-size: 0.9rem;
+    color: var(--text-muted);
+  }
+
+  .macos-download-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 14px 28px;
+    background: linear-gradient(
+      135deg,
+      var(--coral-bright) 0%,
+      var(--coral-dark) 100%
+    );
+    border: none;
+    border-radius: 12px;
+    color: white;
+    font-family: var(--font-display);
+    font-size: 1rem;
+    font-weight: 600;
+    text-decoration: none;
+    cursor: pointer;
+    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 4px 20px rgba(255, 77, 77, 0.3);
+  }
+
+  .macos-download-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 30px rgba(255, 77, 77, 0.4);
+  }
+
+  .macos-download-btn svg {
+    width: 20px;
+    height: 20px;
+  }
+
+  .macos-meta {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+  }
+
+  /* Footer */
+  .footer {
+    margin-top: auto;
+    padding-top: 40px;
+    text-align: center;
+    font-size: 0.9rem;
+    color: var(--text-muted);
+    animation: fadeInUp 0.8s ease-out 0.75s both;
+  }
+
+  .footer-nav {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 16px;
+    font-size: 0.95rem;
+  }
+
+  .footer-separator {
+    color: var(--text-muted);
+  }
+
+  .footer a {
+    color: var(--coral-bright);
+    text-decoration: none;
+    transition: color 0.2s ease;
+  }
+
+  .footer a:hover {
+    color: var(--cyan-bright);
+  }
+
+  .footer .disclaimer {
+    margin-top: 12px;
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    opacity: 0.7;
+  }
+
+  /* Testimonials */
+  .testimonials {
+    margin-bottom: 56px;
+    animation: fadeInUp 0.8s ease-out 0.75s both;
+    overflow: hidden;
+    margin-left: -24px;
+    margin-right: -24px;
+    padding: 0 24px;
+  }
+
+  .testimonials .section-header {
+    padding: 0 24px;
+  }
+
+  .testimonials-track {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-left: -24px;
+    margin-right: -24px;
+    overflow: hidden;
+    mask-image: linear-gradient(
+      to right,
+      transparent,
+      black 5%,
+      black 95%,
+      transparent
+    );
+    -webkit-mask-image: linear-gradient(
+      to right,
+      transparent,
+      black 5%,
+      black 95%,
+      transparent
+    );
+  }
+
+  .testimonials-track:focus-within .testimonials-row {
+    animation-play-state: paused;
+  }
+
+  .testimonials-row {
+    display: flex;
+    gap: 16px;
+    width: max-content;
+    padding: 8px 0;
+  }
+
+  .row-1 {
+    animation: scroll-left var(--duration, 80s) linear infinite;
+  }
+
+  .row-2 {
+    animation: scroll-right var(--duration, 90s) linear infinite;
+  }
+
+  @keyframes scroll-left {
+    from {
+      transform: translateX(0);
+    }
+    to {
+      transform: translateX(-50%);
+    }
+  }
+
+  @keyframes scroll-right {
+    from {
+      transform: translateX(-50%);
+    }
+    to {
+      transform: translateX(0);
+    }
+  }
+
+  .testimonial-card {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 16px;
+    min-width: 320px;
+    max-width: 400px;
+    border-radius: 12px;
+    border: 1px solid var(--border-subtle);
+    background: rgba(10, 15, 26, 0.7);
+    backdrop-filter: blur(8px);
+    text-decoration: none;
+    color: var(--text-primary);
+    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    flex-shrink: 0;
+  }
+
+  .testimonial-card:hover {
+    border-color: var(--coral-bright);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(255, 77, 77, 0.15);
+  }
+
+  .testimonials-row:hover {
+    animation-play-state: paused;
+  }
+
+  .testimonial-avatar {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    flex-shrink: 0;
+    border: 2px solid var(--border-subtle);
+    background: var(--bg-elevated);
+  }
+
+  .testimonial-content {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    min-width: 0;
+  }
+
+  .testimonial-quote {
+    font-size: 0.9rem;
+    line-height: 1.5;
+    color: var(--text-secondary);
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  .testimonial-author {
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: var(--coral-bright);
+  }
+
+  /* Responsive */
+  @media (max-width: 480px) {
+    .container {
+      padding: 40px 16px 32px;
+    }
+
+    .lobster-icon {
+      width: 80px;
+      height: 80px;
+    }
+
+    .cta {
+      padding: 20px 12px;
+    }
+
+    .cta-label {
+      font-size: 0.9rem;
+    }
+
+    .testimonials {
+      margin-left: -16px;
+      margin-right: -16px;
+      padding: 0 16px;
+    }
+
+    .testimonials .section-title {
+      padding-left: 16px;
+    }
+
+    .testimonials-track {
+      margin-left: -16px;
+      margin-right: -16px;
+    }
+
+    .testimonial-card {
+      min-width: 280px;
+      max-width: 320px;
+      padding: 12px;
+    }
+
+    .testimonial-avatar {
+      width: 36px;
+      height: 36px;
+    }
+
+    .testimonial-quote {
+      font-size: 0.85rem;
+    }
+
+    /* Quick Start mobile layout */
+    .code-header {
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .code-dot {
+      order: 0;
+    }
+
+    /* Contextual switches appear first (after dots), right-aligned */
+    .os-indicator,
+    .os-switch,
+    .win-shell-switch,
+    .pm-switch,
+    .hackable-switch,
+    .beta-switch,
+    .switch-placeholder {
+      order: 1;
+      margin-left: auto;
+    }
+
+    .win-shell-switch {
+      margin-left: 4px;
+    }
+
+    /* Mode tabs appear last */
+    .mode-switch {
+      order: 2;
+      width: 100%;
+      justify-content: center;
+      margin-top: 4px;
+    }
+
+    .mode-btn {
+      padding: 6px 8px;
+      font-size: 0.65rem;
+    }
+
+    .os-btn,
+    .pm-btn,
+    .win-shell-btn {
+      padding: 4px 8px;
+      font-size: 0.65rem;
+    }
+
+    .code-content {
+      padding: 12px 14px;
+      font-size: 0.65rem;
+    }
+
+    .code-line {
+      gap: 6px;
+    }
+
+    .macos-download-btn {
+      padding: 12px 20px;
+      font-size: 0.9rem;
+    }
+  }
+
+  /* Accessibility Utilities */
+
+  /* Hides content visually but keeps it available for screen readers */
+  .sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border-width: 0;
+  }
+
+  /* Global Focus State: Replaces the default browser ring with your theme colors */
+  :focus-visible {
+    outline: 3px solid var(--cyan-bright);
+    outline-offset: 4px;
+    border-radius: 4px;
+  }
+
+  /* Respect user's system settings for reduced motion */
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    ::before,
+    ::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
+</style>
