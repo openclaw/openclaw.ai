@@ -675,6 +675,11 @@ ensure_clawdbot_bin_link() {
         ln -sf "$npm_root/clawdbot/dist/entry.js" "${npm_bin}/clawdbot"
         echo -e "${WARN}→${NC} Installed clawdbot bin link at ${INFO}${npm_bin}/clawdbot${NC}"
     fi
+    # Create moltbot symlink so both commands work
+    if [[ ! -x "${npm_bin}/moltbot" ]]; then
+        ln -sf "$npm_root/clawdbot/dist/entry.js" "${npm_bin}/moltbot"
+        echo -e "${WARN}→${NC} Installed moltbot bin link at ${INFO}${npm_bin}/moltbot${NC}"
+    fi
     return 0
 }
 
