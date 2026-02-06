@@ -9,7 +9,7 @@ authors:
     handle: "theonejvo"
   - name: "Bernardo Quintero"
     handle: "bquintero"
-draft: true
+draft: false
 tags: ["security", "announcement", "clawhub"]
 image: "/blog/openclaw-virustotal.svg"
 ---
