@@ -124,6 +124,65 @@ echo "==> case: warn_openclaw_not_found (smoke)"
   assert_nonempty "$out" "warn_openclaw_not_found output"
 )
 
+echo "==> case: has_existing_openclaw_config (none)"
+(
+  root="${TMP_DIR}/case-config-none"
+  home_dir="${root}/home"
+  mkdir -p "${home_dir}"
+
+  export HOME="${home_dir}"
+  unset OPENCLAW_CONFIG_PATH
+
+  if has_existing_openclaw_config; then
+    fail "has_existing_openclaw_config should be false when no config exists"
+  fi
+)
+
+echo "==> case: has_existing_openclaw_config (legacy config)"
+(
+  root="${TMP_DIR}/case-config-legacy"
+  home_dir="${root}/home"
+  mkdir -p "${home_dir}/.moltbot"
+  : > "${home_dir}/.moltbot/moltbot.json"
+
+  export HOME="${home_dir}"
+  unset OPENCLAW_CONFIG_PATH
+
+  if ! has_existing_openclaw_config; then
+    fail "has_existing_openclaw_config should detect legacy config files"
+  fi
+)
+
+echo "==> case: should_run_setup_after_install (upgrade without config)"
+(
+  root="${TMP_DIR}/case-setup-needed"
+  home_dir="${root}/home"
+  mkdir -p "${home_dir}"
+
+  export HOME="${home_dir}"
+  NO_ONBOARD=0
+  unset OPENCLAW_CONFIG_PATH
+
+  if ! should_run_setup_after_install; then
+    fail "should_run_setup_after_install should be true when config is missing"
+  fi
+)
+
+echo "==> case: should_run_setup_after_install (no-onboard)"
+(
+  root="${TMP_DIR}/case-setup-skip"
+  home_dir="${root}/home"
+  mkdir -p "${home_dir}"
+
+  export HOME="${home_dir}"
+  NO_ONBOARD=1
+  unset OPENCLAW_CONFIG_PATH
+
+  if should_run_setup_after_install; then
+    fail "should_run_setup_after_install should be false when NO_ONBOARD=1"
+  fi
+)
+
 echo "==> case: ensure_pnpm (existing pnpm command)"
 (
   root="${TMP_DIR}/case-pnpm-existing"

@@ -1610,13 +1610,52 @@ resolve_workspace_dir() {
     fi
 }
 
+has_existing_openclaw_config() {
+    local config_path="${OPENCLAW_CONFIG_PATH:-$HOME/.openclaw/openclaw.json}"
+    [[ -f "${config_path}" || -f "$HOME/.clawdbot/clawdbot.json" || -f "$HOME/.moltbot/moltbot.json" || -f "$HOME/.moldbot/moldbot.json" ]]
+}
+
+should_run_setup_after_install() {
+    if [[ "${NO_ONBOARD}" == "1" ]]; then
+        return 1
+    fi
+    if has_existing_openclaw_config; then
+        return 1
+    fi
+    return 0
+}
+
+run_interactive_onboarding() {
+    local start_message="${1:-Starting setup}"
+    ui_info "$start_message"
+    echo ""
+
+    if [[ ! -r /dev/tty || ! -w /dev/tty ]]; then
+        ui_info "No TTY; run openclaw onboard to finish setup"
+        return 0
+    fi
+
+    local claw="${OPENCLAW_BIN:-}"
+    if [[ -z "$claw" ]]; then
+        claw="$(resolve_openclaw_bin || true)"
+    fi
+    if [[ -z "$claw" ]]; then
+        ui_info "Skipping onboarding (openclaw not on PATH yet)"
+        warn_openclaw_not_found
+        return 0
+    fi
+
+    if ! "$claw" onboard </dev/tty; then
+        ui_error "Onboarding failed; run openclaw onboard to retry"
+    fi
+}
+
 run_bootstrap_onboarding_if_needed() {
     if [[ "${NO_ONBOARD}" == "1" ]]; then
         return
     fi
 
-    local config_path="${OPENCLAW_CONFIG_PATH:-$HOME/.openclaw/openclaw.json}"
-    if [[ -f "${config_path}" || -f "$HOME/.clawdbot/clawdbot.json" || -f "$HOME/.moltbot/moltbot.json" || -f "$HOME/.moldbot/moldbot.json" ]]; then
+    if has_existing_openclaw_config; then
         return
     fi
 
@@ -1924,35 +1963,23 @@ main() {
         else
             ui_info "No TTY; run openclaw doctor and openclaw plugins update --all manually"
         fi
+        if should_run_setup_after_install; then
+            run_interactive_onboarding "No config found yet; starting setup"
+        fi
     else
         if [[ "$NO_ONBOARD" == "1" || "$skip_onboard" == "true" ]]; then
             ui_info "Skipping onboard (requested); run openclaw onboard later"
         else
-            local config_path="${OPENCLAW_CONFIG_PATH:-$HOME/.openclaw/openclaw.json}"
-            if [[ -f "${config_path}" || -f "$HOME/.clawdbot/clawdbot.json" || -f "$HOME/.moltbot/moltbot.json" || -f "$HOME/.moldbot/moldbot.json" ]]; then
+            if has_existing_openclaw_config; then
                 ui_info "Config already present; running doctor"
                 run_doctor
                 should_open_dashboard=true
                 ui_info "Config already present; skipping onboarding"
                 skip_onboard=true
             fi
-            ui_info "Starting setup"
-            echo ""
-            if [[ -r /dev/tty && -w /dev/tty ]]; then
-                local claw="${OPENCLAW_BIN:-}"
-                if [[ -z "$claw" ]]; then
-                    claw="$(resolve_openclaw_bin || true)"
-                fi
-                if [[ -z "$claw" ]]; then
-                    ui_info "Skipping onboarding (openclaw not on PATH yet)"
-                    warn_openclaw_not_found
-                    return 0
-                fi
-                exec </dev/tty
-                exec "$claw" onboard
+            if should_run_setup_after_install; then
+                run_interactive_onboarding "Starting setup"
             fi
-            ui_info "No TTY; run openclaw onboard to finish setup"
-            return 0
         fi
     fi
 
