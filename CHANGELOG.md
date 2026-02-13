@@ -2,6 +2,7 @@
 
 ## 2026-02-13
 
+- Installer: preinstall Linux native build toolchain before NodeSource setup to reduce npm native-module failures (`make`, `g++`, `cmake`, `python3`) (#45, thanks @wtfloris).
 - Installer: auto-detect missing native build toolchain from npm logs, attempt OS-specific install, and retry package install instead of failing early (#49, thanks @knocte).
 - Installer: render gum choose header on two lines (real newline, not literal `\n`) for checkout detection prompt (#55, thanks @echoja).
 
