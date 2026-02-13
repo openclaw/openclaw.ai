@@ -2,7 +2,7 @@
 import Layout from '../layouts/Layout.astro';
 import showcaseData from '../data/showcase.json';
 
-// Use JSON order directly (pre-sorted into uniform rows: SHORT, MED, LONG groups)
+// Use JSON order directly.
 const sortedShowcase = showcaseData;
 
 const categoryLabels: Record<string, string> = {
@@ -176,7 +176,7 @@ const categoryLabels: Record<string, string> = {
   }
 
   .showcase-grid {
-    column-count: 3;
+    column-width: 340px;
     column-gap: 20px;
     margin-bottom: 56px;
   }
@@ -193,7 +193,9 @@ const categoryLabels: Record<string, string> = {
     text-decoration: none;
     color: var(--text-primary);
     transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
-    break-inside: avoid;
+    -webkit-column-break-inside: avoid;
+    page-break-inside: avoid;
+    break-inside: avoid-column;
     margin-bottom: 20px;
   }
 
@@ -398,18 +400,13 @@ const categoryLabels: Record<string, string> = {
     color: var(--cyan-bright);
   }
 
-  @media (max-width: 1024px) {
-    .showcase-grid {
-      column-count: 2;
-    }
-  }
-
   @media (max-width: 640px) {
     .container {
       padding: 24px 16px;
     }
 
     .showcase-grid {
+      column-width: auto;
       column-count: 1;
     }
 
