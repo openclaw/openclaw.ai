@@ -21,7 +21,7 @@ const {
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="description" content={description} />
-    <meta name="color-scheme" content="dark" />
+    <meta name="color-scheme" content="light dark" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png" />
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
@@ -50,6 +50,16 @@ const {
 
     <title>{title}</title>
 
+    <script is:inline>
+      (() => {
+        const key = 'oc-theme';
+        const saved = localStorage.getItem(key);
+        const theme = saved === 'light' || saved === 'dark' ? saved : 'dark';
+        document.documentElement.dataset.theme = theme;
+        document.documentElement.style.colorScheme = theme;
+      })();
+    </script>
+
     <style is:global>
       :root {
         /* Deep space palette with lobster accents */
@@ -76,10 +86,91 @@ const {
         --border-subtle: rgba(136, 146, 176, 0.15);
         --border-accent: rgba(255, 77, 77, 0.3);
 
+        --surface-card: rgba(10, 15, 26, 0.65);
+        --surface-card-strong: rgba(10, 15, 26, 0.8);
+        --surface-overlay: rgba(0, 0, 0, 0.3);
+        --surface-interactive: rgba(255, 255, 255, 0.1);
+        --surface-interactive-hover: rgba(255, 255, 255, 0.2);
+        --surface-cyan-soft: rgba(0, 229, 204, 0.15);
+        --surface-coral-soft: rgba(255, 77, 77, 0.15);
+        --surface-inset-highlight: rgba(255, 255, 255, 0.05);
+        --newsletter-gradient:
+          linear-gradient(
+            135deg,
+            rgba(255, 77, 77, 0.05) 0%,
+            rgba(10, 15, 26, 0.8) 50%,
+            rgba(0, 229, 204, 0.03) 100%
+          );
+        --press-featured-gradient:
+          linear-gradient(135deg, rgba(255, 77, 77, 0.05) 0%, rgba(10, 15, 26, 0.7) 100%);
+        --shadow-coral-soft: rgba(255, 77, 77, 0.15);
+        --shadow-coral-mid: rgba(255, 77, 77, 0.25);
+        --shadow-coral-strong: rgba(255, 77, 77, 0.35);
+        --shadow-cyan-soft: rgba(0, 229, 204, 0.15);
+        --shadow-github-soft: rgba(240, 244, 255, 0.1);
+        --github-hover-color: #f0f4ff;
+        --hero-title-start: #f0f4ff;
+        --hero-title-end: #00e5cc;
+        --logo-gradient-start: #ff4d4d;
+        --logo-gradient-end: #991b1b;
+        --logo-glow: rgba(255, 77, 77, 0.4);
+        --logo-glow-hover: rgba(0, 229, 204, 0.6);
+
         /* Fonts */
         --font-display: 'Clash Display', system-ui, sans-serif;
         --font-body: 'Satoshi', system-ui, sans-serif;
         --font-mono: 'SF Mono', 'Fira Code', 'JetBrains Mono', monospace;
+      }
+
+      html[data-theme='light'] {
+        --bg-deep: #fcfeff;
+        --bg-surface: #ffffff;
+        --bg-elevated: #f5f9ff;
+
+        --coral-bright: #ef4b58;
+        --coral-mid: #de3f4d;
+        --coral-dark: #c43645;
+
+        --cyan-bright: #008f87;
+        --cyan-mid: #00766e;
+        --cyan-glow: rgba(0, 143, 135, 0.24);
+
+        --text-primary: #0b1220;
+        --text-secondary: #2e405c;
+        --text-muted: #5f7290;
+
+        --border-subtle: rgba(15, 23, 42, 0.16);
+        --border-accent: rgba(239, 75, 88, 0.34);
+
+        --surface-card: rgba(255, 255, 255, 0.88);
+        --surface-card-strong: rgba(255, 255, 255, 0.95);
+        --surface-overlay: rgba(160, 174, 194, 0.26);
+        --surface-interactive: rgba(15, 23, 42, 0.1);
+        --surface-interactive-hover: rgba(15, 23, 42, 0.16);
+        --surface-cyan-soft: rgba(0, 143, 135, 0.16);
+        --surface-coral-soft: rgba(239, 75, 88, 0.16);
+        --surface-inset-highlight: rgba(15, 23, 42, 0.06);
+        --newsletter-gradient:
+          linear-gradient(
+            135deg,
+            rgba(239, 75, 88, 0.11) 0%,
+            rgba(255, 255, 255, 0.98) 52%,
+            rgba(0, 143, 135, 0.12) 100%
+          );
+        --press-featured-gradient:
+          linear-gradient(135deg, rgba(239, 75, 88, 0.13) 0%, rgba(255, 255, 255, 0.96) 100%);
+        --shadow-coral-soft: rgba(239, 75, 88, 0.19);
+        --shadow-coral-mid: rgba(239, 75, 88, 0.27);
+        --shadow-coral-strong: rgba(239, 75, 88, 0.33);
+        --shadow-cyan-soft: rgba(0, 143, 135, 0.22);
+        --shadow-github-soft: rgba(11, 18, 32, 0.2);
+        --github-hover-color: #0b1220;
+        --hero-title-start: #c93342;
+        --hero-title-end: #f04d5a;
+        --logo-gradient-start: #ff7079;
+        --logo-gradient-end: #ea4c59;
+        --logo-glow: rgba(239, 75, 88, 0.2);
+        --logo-glow-hover: rgba(0, 143, 135, 0.35);
       }
 
       *, *::before, *::after {
@@ -98,19 +189,119 @@ const {
         color: var(--text-primary);
         line-height: 1.6;
         min-height: 100vh;
+        transition: background-color 0.25s ease, color 0.25s ease;
         -webkit-font-smoothing: antialiased;
         -moz-osx-font-smoothing: grayscale;
+      }
+
+      html[data-theme='light'] body {
+        background:
+          radial-gradient(1200px circle at 12% -10%, rgba(224, 53, 67, 0.04), transparent 58%),
+          radial-gradient(900px circle at 88% -12%, rgba(0, 143, 135, 0.05), transparent 56%),
+          var(--bg-deep);
       }
 
       ::selection {
         background: var(--coral-bright);
         color: var(--bg-deep);
       }
+
+      html[data-theme='light'] .stars {
+        opacity: 0.28;
+        filter: saturate(0.6);
+      }
+
+      html[data-theme='light'] .nebula {
+        opacity: 0.45;
+      }
+
+      .theme-toggle {
+        position: fixed;
+        top: 16px;
+        right: 16px;
+        z-index: 999;
+        width: 40px;
+        height: 40px;
+        display: grid;
+        place-items: center;
+        padding: 0;
+        border-radius: 999px;
+        border: 1px solid var(--border-subtle);
+        background: var(--surface-card-strong);
+        cursor: pointer;
+        backdrop-filter: blur(10px);
+        transition: all 0.2s ease;
+      }
+
+      .theme-toggle:hover {
+        border-color: var(--border-accent);
+        transform: translateY(-1px);
+        box-shadow: 0 10px 24px color-mix(in srgb, var(--coral-bright) 20%, transparent);
+      }
+
+      .theme-toggle:focus-visible {
+        outline: 2px solid var(--cyan-bright);
+        outline-offset: 2px;
+      }
+
+      .theme-toggle-icon {
+        font-size: 1.05rem;
+        line-height: 1;
+        color: var(--text-secondary);
+        transition: transform 0.2s ease, color 0.2s ease;
+      }
+
+      .theme-toggle:hover .theme-toggle-icon {
+        color: var(--text-primary);
+        transform: rotate(10deg) scale(1.04);
+      }
+
+      @media (max-width: 640px) {
+        .theme-toggle {
+          top: 10px;
+          right: 10px;
+          width: 36px;
+          height: 36px;
+        }
+      }
     </style>
   </head>
   <body>
+    <button class="theme-toggle" type="button" data-theme-toggle aria-label="Switch color theme">
+      <span class="theme-toggle-icon" data-theme-icon aria-hidden="true"></span>
+    </button>
     <slot />
     <Analytics />
     <SpeedInsights />
+
+    <script is:inline>
+      (() => {
+        const key = 'oc-theme';
+        const root = document.documentElement;
+        const toggle = document.querySelector('[data-theme-toggle]');
+        const icon = document.querySelector('[data-theme-icon]');
+        if (!toggle || !icon) return;
+
+        const applyTheme = (theme, persist = true) => {
+          root.dataset.theme = theme;
+          root.style.colorScheme = theme;
+          const isDark = theme === 'dark';
+          icon.textContent = isDark ? '☀' : '☾';
+          toggle.setAttribute('aria-label', isDark ? 'Switch to light mode' : 'Switch to dark mode');
+          toggle.setAttribute('title', isDark ? 'Switch to light mode' : 'Switch to dark mode');
+          if (persist) {
+            localStorage.setItem(key, theme);
+          }
+        };
+
+        toggle.addEventListener('click', () => {
+          const next = root.dataset.theme === 'light' ? 'dark' : 'light';
+          applyTheme(next);
+        });
+
+        const current = root.dataset.theme === 'light' ? 'light' : 'dark';
+        applyTheme(current, false);
+      })();
+    </script>
   </body>
 </html>

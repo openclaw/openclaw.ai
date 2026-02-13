@@ -190,7 +190,7 @@ const categoryLabels: Record<string, string> = {
     padding: 24px;
     border-radius: 16px;
     border: 1px solid var(--border-subtle);
-    background: rgba(10, 15, 26, 0.7);
+    background: var(--surface-card-strong);
     backdrop-filter: blur(8px);
     text-decoration: none;
     color: var(--text-primary);
@@ -204,7 +204,7 @@ const categoryLabels: Record<string, string> = {
   .showcase-card:hover {
     border-color: var(--coral-bright);
     transform: translateY(-4px);
-    box-shadow: 0 16px 48px rgba(255, 77, 77, 0.15);
+    box-shadow: 0 16px 48px var(--shadow-coral-soft);
   }
 
   .card-header {
@@ -286,7 +286,7 @@ const categoryLabels: Record<string, string> = {
     padding: 48px 24px;
     border-radius: 20px;
     border: 1px solid var(--border-subtle);
-    background: rgba(10, 15, 26, 0.7);
+    background: var(--surface-card-strong);
     backdrop-filter: blur(12px);
     margin-bottom: 48px;
   }
@@ -327,7 +327,7 @@ const categoryLabels: Record<string, string> = {
   .cta-primary {
     background: linear-gradient(135deg, var(--coral-bright) 0%, var(--coral-dark) 100%);
     color: white;
-    box-shadow: 0 4px 20px rgba(255, 77, 77, 0.3);
+    box-shadow: 0 4px 20px var(--shadow-coral-mid);
   }
 
   .cta-primary:hover {
@@ -336,7 +336,7 @@ const categoryLabels: Record<string, string> = {
   }
 
   .cta-hub {
-    background: rgba(0, 229, 204, 0.15);
+    background: var(--surface-cyan-soft);
     border: 1px solid var(--cyan-bright);
     color: var(--cyan-bright);
   }

@@ -75,8 +75,8 @@ const duration2 = (row2.length / 2 * pixelsPerItem) / pixelsPerSecond;
           <circle cx="76" cy="34" r="2" fill="var(--cyan-bright)" class="eye-glow"/>
           <defs>
             <linearGradient id="lobster-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
-              <stop offset="0%" stop-color="var(--coral-bright)"/>
-              <stop offset="100%" stop-color="var(--coral-dark)"/>
+              <stop offset="0%" stop-color="var(--logo-gradient-start)"/>
+              <stop offset="100%" stop-color="var(--logo-gradient-end)"/>
             </linearGradient>
           </defs>
         </svg>
@@ -877,12 +877,12 @@ const duration2 = (row2.length / 2 * pixelsPerItem) / pixelsPerSecond;
   .lobster-icon svg {
     width: 100%;
     height: 100%;
-    filter: drop-shadow(0 0 20px rgba(255, 77, 77, 0.4));
+    filter: drop-shadow(0 0 20px var(--logo-glow));
     transition: filter 0.3s ease;
   }
 
   .lobster-icon:hover svg {
-    filter: drop-shadow(0 0 30px rgba(0, 229, 204, 0.6));
+    filter: drop-shadow(0 0 30px var(--logo-glow-hover));
   }
 
   .lobster-icon .eye-glow {
@@ -936,7 +936,7 @@ const duration2 = (row2.length / 2 * pixelsPerItem) / pixelsPerSecond;
   }
 
   .title-main {
-    background: linear-gradient(135deg, var(--text-primary) 0%, var(--coral-bright) 50%, var(--cyan-bright) 100%);
+    background: linear-gradient(135deg, var(--hero-title-start) 0%, var(--coral-bright) 52%, var(--hero-title-end) 100%);
     background-size: 200% 200%;
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
@@ -1004,7 +1004,7 @@ const duration2 = (row2.length / 2 * pixelsPerItem) / pixelsPerSecond;
     padding: 24px 16px;
     border-radius: 16px;
     border: 1px solid var(--border-subtle);
-    background: rgba(10, 15, 26, 0.6);
+    background: var(--surface-card);
     backdrop-filter: blur(12px);
     text-decoration: none;
     color: var(--text-primary);
@@ -1015,8 +1015,8 @@ const duration2 = (row2.length / 2 * pixelsPerItem) / pixelsPerSecond;
     transform: translateY(-4px);
     border-color: var(--border-accent);
     box-shadow:
-      0 12px 40px rgba(255, 77, 77, 0.15),
-      inset 0 1px 0 rgba(255, 255, 255, 0.05);
+      0 12px 40px var(--shadow-coral-soft),
+      inset 0 1px 0 var(--surface-inset-highlight);
   }
 
   .cta-icon {
@@ -1033,11 +1033,11 @@ const duration2 = (row2.length / 2 * pixelsPerItem) / pixelsPerSecond;
   .cta-discord:hover { border-color: #5865F2; box-shadow: 0 12px 40px rgba(88, 101, 242, 0.2); }
   .cta-discord:hover .cta-icon { color: #5865F2; }
 
-  .cta-docs:hover { border-color: var(--cyan-bright); box-shadow: 0 12px 40px rgba(0, 229, 204, 0.15); }
+  .cta-docs:hover { border-color: var(--cyan-bright); box-shadow: 0 12px 40px var(--shadow-cyan-soft); }
   .cta-docs:hover .cta-icon { color: var(--cyan-bright); }
 
-  .cta-github:hover { border-color: #f0f4ff; box-shadow: 0 12px 40px rgba(240, 244, 255, 0.1); }
-  .cta-github:hover .cta-icon { color: #f0f4ff; }
+  .cta-github:hover { border-color: var(--github-hover-color); box-shadow: 0 12px 40px var(--shadow-github-soft); }
+  .cta-github:hover .cta-icon { color: var(--github-hover-color); }
 
   .cta-skills:hover { border-color: #fbbf24; box-shadow: 0 12px 40px rgba(251, 191, 36, 0.15); }
   .cta-skills:hover .cta-icon { color: #fbbf24; }
@@ -1064,7 +1064,7 @@ const duration2 = (row2.length / 2 * pixelsPerItem) / pixelsPerSecond;
     padding: 40px 32px;
     border-radius: 20px;
     border: 1px solid var(--border-subtle);
-    background: linear-gradient(135deg, rgba(255, 77, 77, 0.05) 0%, rgba(10, 15, 26, 0.8) 50%, rgba(0, 229, 204, 0.03) 100%);
+    background: var(--newsletter-gradient);
     backdrop-filter: blur(12px);
   }
 
@@ -1100,7 +1100,7 @@ const duration2 = (row2.length / 2 * pixelsPerItem) / pixelsPerSecond;
     padding: 14px 18px;
     border-radius: 12px;
     border: 1px solid var(--border-subtle);
-    background: rgba(10, 15, 26, 0.8);
+    background: var(--surface-card-strong);
     color: var(--text-primary);
     font-family: var(--font-body);
     font-size: 0.95rem;
@@ -1114,7 +1114,7 @@ const duration2 = (row2.length / 2 * pixelsPerItem) / pixelsPerSecond;
 
   .newsletter-input:focus {
     border-color: var(--coral-bright);
-    box-shadow: 0 0 0 3px rgba(255, 77, 77, 0.15);
+    box-shadow: 0 0 0 3px color-mix(in srgb, var(--coral-bright) 22%, transparent);
   }
 
   .newsletter-btn {
@@ -1131,12 +1131,12 @@ const duration2 = (row2.length / 2 * pixelsPerItem) / pixelsPerSecond;
     font-weight: 600;
     cursor: pointer;
     transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
-    box-shadow: 0 4px 20px rgba(255, 77, 77, 0.25);
+    box-shadow: 0 4px 20px var(--shadow-coral-mid);
   }
 
   .newsletter-btn:hover {
     transform: translateY(-2px);
-    box-shadow: 0 8px 30px rgba(255, 77, 77, 0.35);
+    box-shadow: 0 8px 30px var(--shadow-coral-strong);
   }
 
   .newsletter-btn:active {
@@ -1195,7 +1195,7 @@ const duration2 = (row2.length / 2 * pixelsPerItem) / pixelsPerSecond;
     padding: 20px;
     border-radius: 14px;
     border: 1px solid var(--border-subtle);
-    background: rgba(10, 15, 26, 0.6);
+    background: var(--surface-card);
     backdrop-filter: blur(12px);
     transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
     text-decoration: none;
@@ -1256,7 +1256,7 @@ const duration2 = (row2.length / 2 * pixelsPerItem) / pixelsPerSecond;
     padding: 8px 14px;
     border-radius: 20px;
     border: 1px solid var(--border-subtle);
-    background: rgba(10, 15, 26, 0.6);
+    background: var(--surface-card);
     backdrop-filter: blur(8px);
     font-size: 0.85rem;
     color: var(--text-secondary);
@@ -1332,7 +1332,7 @@ const duration2 = (row2.length / 2 * pixelsPerItem) / pixelsPerSecond;
     padding: 24px 28px;
     border-radius: 16px;
     border: 1px solid var(--border-subtle);
-    background: rgba(10, 15, 26, 0.7);
+    background: var(--surface-card-strong);
     backdrop-filter: blur(12px);
     text-decoration: none;
     color: var(--text-primary);
@@ -1343,7 +1343,7 @@ const duration2 = (row2.length / 2 * pixelsPerItem) / pixelsPerSecond;
   .press-card:hover {
     transform: translateY(-4px);
     border-color: var(--coral-bright);
-    box-shadow: 0 12px 40px rgba(255, 77, 77, 0.15);
+    box-shadow: 0 12px 40px var(--shadow-coral-soft);
   }
 
   .press-logo {
@@ -1383,8 +1383,8 @@ const duration2 = (row2.length / 2 * pixelsPerItem) / pixelsPerSecond;
   }
 
   .press-featured {
-    border-color: rgba(255, 77, 77, 0.3);
-    background: linear-gradient(135deg, rgba(255, 77, 77, 0.05) 0%, rgba(10, 15, 26, 0.7) 100%);
+    border-color: var(--border-accent);
+    background: var(--press-featured-gradient);
   }
 
   /* Quick Start */
@@ -1439,7 +1439,7 @@ const duration2 = (row2.length / 2 * pixelsPerItem) / pixelsPerSecond;
     align-items: center;
     gap: 8px;
     padding: 12px 16px;
-    background: rgba(0, 0, 0, 0.3);
+    background: var(--surface-overlay);
     border-bottom: 1px solid var(--border-subtle);
   }
 
@@ -1476,7 +1476,7 @@ const duration2 = (row2.length / 2 * pixelsPerItem) / pixelsPerSecond;
     height: 28px;
     border: none;
     border-radius: 6px;
-    background: rgba(255, 255, 255, 0.1);
+    background: var(--surface-interactive);
     color: var(--text-muted);
     cursor: pointer;
     transition: all 0.2s ease;
@@ -1488,13 +1488,13 @@ const duration2 = (row2.length / 2 * pixelsPerItem) / pixelsPerSecond;
   }
 
   .copy-line-btn:hover {
-    background: rgba(255, 255, 255, 0.2);
+    background: var(--surface-interactive-hover);
     color: var(--text-primary);
   }
 
   .copy-line-btn.copied {
     opacity: 1;
-    background: rgba(0, 229, 204, 0.2);
+    background: var(--surface-cyan-soft);
     color: var(--cyan-bright);
   }
 
@@ -1528,7 +1528,7 @@ const duration2 = (row2.length / 2 * pixelsPerItem) / pixelsPerSecond;
   .win-shell-switch {
     display: flex;
     gap: 4px;
-    background: rgba(0, 0, 0, 0.3);
+    background: var(--surface-overlay);
     padding: 3px;
     border-radius: 6px;
   }
@@ -1616,7 +1616,7 @@ const duration2 = (row2.length / 2 * pixelsPerItem) / pixelsPerSecond;
   }
 
   .beta-btn.active {
-    background: rgba(0, 229, 204, 0.15);
+    background: var(--surface-cyan-soft);
     border-color: var(--cyan-bright);
     color: var(--cyan-bright);
   }
@@ -1692,7 +1692,7 @@ const duration2 = (row2.length / 2 * pixelsPerItem) / pixelsPerSecond;
   }
 
   .os-change-btn:hover {
-    background: rgba(255, 77, 77, 0.15);
+    background: var(--surface-coral-soft);
     color: var(--cyan-bright);
   }
 
@@ -1739,12 +1739,12 @@ const duration2 = (row2.length / 2 * pixelsPerItem) / pixelsPerSecond;
     text-decoration: none;
     cursor: pointer;
     transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
-    box-shadow: 0 4px 20px rgba(255, 77, 77, 0.3);
+    box-shadow: 0 4px 20px var(--shadow-coral-mid);
   }
 
   .macos-download-btn:hover {
     transform: translateY(-2px);
-    box-shadow: 0 8px 30px rgba(255, 77, 77, 0.4);
+    box-shadow: 0 8px 30px var(--shadow-coral-strong);
   }
 
   .macos-download-btn svg {
@@ -1810,7 +1810,7 @@ const duration2 = (row2.length / 2 * pixelsPerItem) / pixelsPerSecond;
     gap: 12px;
     padding: 10px 20px;
     border-radius: 50px;
-    background: rgba(10, 15, 26, 0.8);
+    background: var(--surface-card-strong);
     border: 1px solid var(--border-subtle);
     text-decoration: none;
     transition: all 0.3s ease;
@@ -1818,7 +1818,7 @@ const duration2 = (row2.length / 2 * pixelsPerItem) / pixelsPerSecond;
 
   .latest-post-card:hover {
     border-color: var(--coral-bright);
-    box-shadow: 0 4px 20px rgba(255, 77, 77, 0.2);
+    box-shadow: 0 4px 20px var(--shadow-coral-mid);
   }
 
   .latest-post-badge {
@@ -1921,7 +1921,7 @@ const duration2 = (row2.length / 2 * pixelsPerItem) / pixelsPerSecond;
     max-width: 400px;
     border-radius: 12px;
     border: 1px solid var(--border-subtle);
-    background: rgba(10, 15, 26, 0.7);
+    background: var(--surface-card-strong);
     backdrop-filter: blur(8px);
     text-decoration: none;
     color: var(--text-primary);
@@ -1932,7 +1932,7 @@ const duration2 = (row2.length / 2 * pixelsPerItem) / pixelsPerSecond;
   .testimonial-card:hover {
     border-color: var(--coral-bright);
     transform: translateY(-2px);
-    box-shadow: 0 8px 24px rgba(255, 77, 77, 0.15);
+    box-shadow: 0 8px 24px var(--shadow-coral-soft);
   }
 
   .testimonials-row:hover {
