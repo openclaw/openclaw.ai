@@ -1,8 +1,8 @@
-# clawd.bot
+# openclaw.ai
 
-Landing page for [Moltbot](https://github.com/moltbot/moltbot) — your personal AI assistant.
+Landing page for [OpenClaw](https://github.com/openclaw/openclaw) — your personal AI assistant.
 
-**Live**: [clawd.bot](https://clawd.bot)
+**Live**: [openclaw.ai](https://openclaw.ai)
 
 ## Pages
 
@@ -38,19 +38,24 @@ Automatically deployed to GitHub Pages on push to `main`.
 
 The landing page hosts installer scripts:
 
-- **macOS/Linux**: `curl -fsSL --proto '=https' --tlsv1.2 https://clawd.bot/install.sh | bash`
-- **macOS/Linux (CLI only, no onboarding)**: `curl -fsSL --proto '=https' --tlsv1.2 https://clawd.bot/install-cli.sh | bash`
-- **Windows**: `iwr -useb https://clawd.bot/install.ps1 | iex`
+- **macOS/Linux**: `curl -fsSL --proto '=https' --tlsv1.2 https://openclaw.ai/install.sh | bash`
+- **macOS/Linux (CLI only, no onboarding)**: `curl -fsSL --proto '=https' --tlsv1.2 https://openclaw.ai/install-cli.sh | bash`
+- **Windows**: `iwr -useb https://openclaw.ai/install.ps1 | iex`
+
+Installer UI controls (macOS/Linux `install.sh`):
+- Pass `--gum` to force gum UI when supported, or `--no-gum` to disable gum output.
+- Set `OPENCLAW_USE_GUM=auto|1|0` to control gum behavior in automation.
+- Compatibility alias: `CLAWDBOT_USE_GUM` (mapped to `OPENCLAW_USE_GUM`).
 
 These scripts:
 1. Install Homebrew (macOS) or detect package managers (Windows)
 2. Install Node.js 22+ if needed
-3. Install clawdbot globally via npm
-4. Run `clawdbot doctor --non-interactive` for migrations (upgrades only)
-5. Prompt to run `clawdbot onboard` (new installs)
+3. Install openclaw globally via npm
+4. Run `openclaw doctor --non-interactive` for migrations (upgrades only)
+5. Prompt to run `openclaw onboard` (new installs)
 
 ## Related
 
-- [Moltbot](https://github.com/moltbot/moltbot) — Main repository
-- [Docs](https://docs.clawd.bot) — Documentation
-- [Discord](https://discord.gg/clawd) — Community
+- [OpenClaw](https://github.com/openclaw/openclaw) — Main repository
+- [Docs](https://docs.openclaw.ai) — Documentation
+- [Discord](https://discord.gg/openclaw) — Community

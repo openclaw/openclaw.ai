@@ -1,0 +1,51 @@
+name: Install Matrix
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+  workflow_dispatch:
+    inputs:
+      mode:
+        description: Matrix mode
+        required: true
+        default: dry-run
+        type: choice
+        options:
+          - dry-run
+          - full
+      gum:
+        description: Enable gum UI in matrix runs (may produce control codes in logs)
+        required: true
+        default: false
+        type: boolean
+
+jobs:
+  linux-install-matrix:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        image:
+          - ubuntu:22.04
+          - ubuntu:24.04
+          - debian:12
+          - fedora:40
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v4
+
+      - name: Run matrix (push/pr)
+        if: github.event_name != 'workflow_dispatch'
+        run: bash scripts/test-install-matrix.sh --mode dry-run --image "${{ matrix.image }}" --no-gum
+
+      - name: Run matrix (manual)
+        if: github.event_name == 'workflow_dispatch'
+        run: |
+          if [[ "${{ inputs.gum }}" == "true" ]]; then
+            GUM_FLAG="--gum"
+          else
+            GUM_FLAG="--no-gum"
+          fi
+          bash scripts/test-install-matrix.sh --mode "${{ inputs.mode }}" --image "${{ matrix.image }}" "$GUM_FLAG"

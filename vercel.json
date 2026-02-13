@@ -1,26 +1,26 @@
 {
-  "redirects": [
+  "routes": [
     {
-      "source": "/(.*)",
-      "destination": "https://openclaw.ai/$1",
-      "permanent": true,
-      "has": [
-        {
-          "type": "host",
-          "value": "clawd.bot"
-        }
-      ]
+      "src": "^/$",
+      "has": [{ "type": "host", "value": "trust.openclaw.ai" }],
+      "dest": "/trust"
     },
     {
-      "source": "/(.*)",
-      "destination": "https://openclaw.ai/$1",
-      "permanent": true,
-      "has": [
-        {
-          "type": "host",
-          "value": "www.clawd.bot"
-        }
-      ]
+      "src": "^/(.+)$",
+      "has": [{ "type": "host", "value": "trust.openclaw.ai" }],
+      "dest": "/trust/$1"
+    },
+    {
+      "src": "^/(.*)$",
+      "has": [{ "type": "host", "value": "clawd.bot" }],
+      "status": 308,
+      "headers": { "Location": "https://openclaw.ai/$1" }
+    },
+    {
+      "src": "^/(.*)$",
+      "has": [{ "type": "host", "value": "www.clawd.bot" }],
+      "status": 308,
+      "headers": { "Location": "https://openclaw.ai/$1" }
     }
   ]
 }

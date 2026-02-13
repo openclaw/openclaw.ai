@@ -213,7 +213,7 @@ const duration2 = (row2.length / 2 * pixelsPerItem) / pixelsPerSecond;
           <div class="code-line comment" id="quick-comment-install"># Install OpenClaw</div>
           <div class="code-line cmd">
             <span class="code-prompt">$</span>
-            <span class="pm-install">npm i -g clawdbot</span>
+            <span class="pm-install">npm i -g openclaw</span>
             <button class="copy-line-btn" data-cmd="install" title="Copy">
               <svg class="copy-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
               <svg class="check-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="display:none"><polyline points="20 6 9 17 4 12"/></svg>
@@ -253,7 +253,7 @@ const duration2 = (row2.length / 2 * pixelsPerItem) / pixelsPerSecond;
             </div>
             <div class="code-line cmd">
               <span class="code-prompt">$</span>
-              <span>cd moltbot && pnpm install && pnpm run build</span>
+              <span>cd openclaw && pnpm install && pnpm run build</span>
               <button class="copy-line-btn" data-cmd="build" title="Copy">
                 <svg class="copy-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
                 <svg class="check-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="display:none"><polyline points="20 6 9 17 4 12"/></svg>
@@ -295,8 +295,8 @@ const duration2 = (row2.length / 2 * pixelsPerItem) / pixelsPerSecond;
 
     <script>
       const installCmds = {
-        npm: 'npm i -g clawdbot',
-        pnpm: 'pnpm add -g clawdbot'
+        npm: 'npm i -g openclaw',
+        pnpm: 'pnpm add -g openclaw'
       };
 
       const windowsPsCmd = 'iwr -useb https://openclaw.ai/install.ps1 | iex';
@@ -371,8 +371,8 @@ const duration2 = (row2.length / 2 * pixelsPerItem) / pixelsPerSecond;
         // Update quick mode install command (with beta support)
         const betaSuffix = currentBeta ? '@beta' : '';
         const installCmd = currentPm === 'npm'
-          ? `npm i -g clawdbot${betaSuffix}`
-          : `pnpm add -g clawdbot${betaSuffix}`;
+          ? `npm i -g openclaw${betaSuffix}`
+          : `pnpm add -g openclaw${betaSuffix}`;
         document.querySelectorAll('.pm-install').forEach(cmd => cmd.textContent = installCmd);
         // Update one-liner OS command (with beta and shell support)
         let onelinerCmd;
@@ -512,12 +512,12 @@ const duration2 = (row2.length / 2 * pixelsPerItem) / pixelsPerSecond;
         },
         'install': () => {
           const betaSuffix = currentBeta ? '@beta' : '';
-          return currentPm === 'npm' ? `npm i -g clawdbot${betaSuffix}` : `pnpm add -g clawdbot${betaSuffix}`;
+          return currentPm === 'npm' ? `npm i -g openclaw${betaSuffix}` : `pnpm add -g openclaw${betaSuffix}`;
         },
         'onboard': () => 'openclaw onboard',
         'hackable-installer': () => "curl -fsSL https://openclaw.ai/install.sh | bash -s -- --install-method git",
         'clone': () => 'git clone https://github.com/openclaw/openclaw.git',
-        'build': () => 'cd moltbot && pnpm install && pnpm run build',
+        'build': () => 'cd openclaw && pnpm install && pnpm run build',
         'hackable-onboard': () => 'pnpm run openclaw onboard',
       };
 
@@ -745,6 +745,8 @@ const duration2 = (row2.length / 2 * pixelsPerItem) / pixelsPerSecond;
         <a href="/shoutouts">Shoutouts</a>
         <span class="footer-separator">·</span>
         <a href="/integrations">Integrations</a>
+        <span class="footer-separator">·</span>
+        <a href="https://trust.openclaw.ai/">Trust</a>
       </nav>
       <p>Built by <a href="https://molty.me" target="_blank" rel="noopener">Molty</a> 🦞, a space lobster AI with a <a href="https://soul.md" target="_blank" rel="noopener">soul</a>, by <a href="https://steipete.me" target="_blank" rel="noopener">Peter Steinberger</a> & <a href="https://github.com/openclaw/openclaw#community" target="_blank" rel="noopener">community</a>.</p>
       <p class="disclaimer">Formerly known as Clawdbot and Moltbot. Independent project, not affiliated with Anthropic.</p>

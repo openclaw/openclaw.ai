@@ -31,3 +31,6 @@ yarn-debug.log*
 yarn-error.log*
 .vercel
 .env*.local
+
+# Local files
+.local/

@@ -1,0 +1,879 @@
+---
+import yaml from 'js-yaml';
+import threatsYaml from '../../../i18n/ko/threats.yaml?raw';
+import t from '../../../i18n/ko/threatmodel.json';
+
+const isSubdomain = Astro.url.hostname === 'trust.openclaw.ai';
+const trustHref = isSubdomain ? '/ko' : '/trust/ko';
+const threatModelHref = isSubdomain ? '/ko/threatmodel' : '/trust/ko/threatmodel';
+
+const langLinks = {
+  en: isSubdomain ? '/threatmodel' : '/trust/threatmodel',
+  'zh-cn': isSubdomain ? '/zh-cn/threatmodel' : '/trust/zh-cn/threatmodel',
+  ko: isSubdomain ? '/ko/threatmodel' : '/trust/ko/threatmodel',
+  ja: isSubdomain ? '/ja/threatmodel' : '/trust/ja/threatmodel',
+};
+
+interface Threat { id: string; name: string; tactic: string; atlas: string; risk: string; category: string; description: string; attackVector: string; affected: string; mitigations: string; residualRisk: string; recommendations: string; }
+interface Tactic { id: string; name: string; atlas: string; color: string; }
+interface AttackChain { name: string; steps: string[]; description: string; }
+interface TrustBoundary { id: number; name: string; zone: string; phase: string; adjacent?: number; controls: string[]; }
+interface ThreatData { tactics: Tactic[]; threats: Threat[]; attack_chains: AttackChain[]; trust_boundaries: TrustBoundary[]; }
+
+function getRiskColor(risk: string): string {
+  switch (risk) {
+    case 'Critical': return '#ef4444';
+    case 'High': return '#f97316';
+    case 'Medium': return '#eab308';
+    case 'Low': return '#22c55e';
+    default: return '#6b7280';
+  }
+}
+
+let data: ThreatData | null = null;
+try {
+  data = yaml.load(threatsYaml) as ThreatData;
+} catch { data = null; }
+
+const threats = data?.threats ?? [];
+const tactics = data?.tactics ?? [];
+const attackChains = data?.attack_chains ?? [];
+const trustBoundaries = data?.trust_boundaries ?? [];
+
+const criticalCount = threats.filter(t => t.risk === 'Critical').length;
+const highCount = threats.filter(t => t.risk === 'High').length;
+const mediumCount = threats.filter(t => t.risk === 'Medium').length;
+const lowCount = threats.filter(t => t.risk === 'Low').length;
+
+type BoundaryItem = { type: 'solo'; boundary: TrustBoundary } | { type: 'adjacent'; pair: TrustBoundary[] };
+const boundaryItems: BoundaryItem[] = [];
+const seenIds = new Set<number>();
+for (const b of trustBoundaries) {
+  if (b.adjacent && !seenIds.has(b.id)) {
+    const partner = trustBoundaries.find(x => x.id === b.adjacent);
+    if (partner) { seenIds.add(b.id); seenIds.add(partner.id); }
+  }
+}
+let adjacentRendered = false;
+for (const b of trustBoundaries) {
+  if (seenIds.has(b.id)) {
+    if (!adjacentRendered) { adjacentRendered = true; boundaryItems.push({ type: 'adjacent', pair: trustBoundaries.filter(x => seenIds.has(x.id)) }); }
+  } else { boundaryItems.push({ type: 'solo', boundary: b }); }
+}
+---
+
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>{t.meta.title}</title>
+  <meta name="description" content={t.meta.description} />
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400&family=Fragment+Mono:ital@0;1&display=swap" rel="stylesheet">
+  <style is:inline>
+    :root {
+      --primary: #ff5a36;
+      --primary-light: #ff8a6b;
+      --bg: #ffffff;
+      --gray-50: rgb(250,245,244);
+      --gray-100: rgb(245,240,239);
+      --gray-200: rgb(230,225,224);
+      --gray-300: rgb(213,208,207);
+      --gray-400: rgb(166,161,160);
+      --gray-500: rgb(119,114,113);
+      --gray-600: rgb(87,82,81);
+      --gray-700: rgb(70,65,64);
+      --gray-800: rgb(45,40,38);
+      --gray-900: rgb(30,25,24);
+      --gray-950: rgb(17,12,11);
+      --heading: "DM Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif;
+      --body: "Fragment Mono", -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { height: 100%; scroll-behavior: smooth; }
+
+    body {
+      min-height: 100%;
+      font-family: var(--body);
+      color: var(--gray-500);
+      background: var(--bg);
+      -webkit-font-smoothing: antialiased;
+      line-height: 1.6;
+      font-size: 14px;
+    }
+
+    ::selection { background: var(--primary); color: #fff; }
+
+    a { color: var(--gray-500); text-decoration: none; }
+    a:hover { color: var(--gray-900); }
+
+    /* Topbar */
+    .topbar {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: var(--bg);
+      border-bottom: 1px solid var(--gray-200);
+    }
+
+    .topbar-inner {
+      max-width: 1800px;
+      margin: 0 auto;
+      padding: 0 24px;
+      height: 52px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .topbar-brand {
+      display: flex;
+      align-items: center;
+      text-decoration: none;
+      color: var(--gray-900);
+    }
+
+    .topbar-brand:hover { color: var(--gray-900); }
+
+    .topbar-brand img {
+      height: 28px;
+      width: auto;
+    }
+
+    .topbar-nav {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .topbar-link {
+      padding: 6px 14px;
+      border-radius: 8px;
+      font-family: var(--heading);
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--gray-500);
+      transition: color 0.15s, background 0.15s;
+    }
+
+    .topbar-link:hover {
+      color: var(--gray-900);
+      background: var(--gray-50);
+    }
+
+    .topbar-link.active {
+      color: var(--primary);
+      font-weight: 600;
+    }
+
+    .lang-switcher {
+      display: flex;
+      align-items: center;
+      gap: 2px;
+      margin-left: 8px;
+      padding-left: 8px;
+      border-left: 1px solid var(--gray-200);
+    }
+
+    .lang-link {
+      padding: 4px 8px;
+      border-radius: 6px;
+      font-family: var(--heading);
+      font-size: 12px;
+      font-weight: 500;
+      color: var(--gray-400);
+      transition: color 0.15s, background 0.15s;
+    }
+
+    .lang-link:hover {
+      color: var(--gray-700);
+      background: var(--gray-50);
+    }
+
+    .lang-link.active {
+      color: var(--primary);
+      font-weight: 600;
+    }
+
+    .tm-container {
+      max-width: 1800px;
+      margin: 0 auto;
+      padding: 40px 24px;
+    }
+
+    .article-title {
+      font-family: var(--heading);
+      font-size: clamp(1.75rem, 5vw, 2.5rem);
+      font-weight: 700;
+      color: var(--gray-900);
+      margin-bottom: 6px;
+    }
+
+    .subtitle {
+      font-size: 14px;
+      color: var(--gray-500);
+      margin-bottom: 12px;
+    }
+
+    .header-badges {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 36px;
+    }
+
+    .header-badge {
+      display: inline-flex;
+      align-items: center;
+      height: 24px;
+      padding: 0 10px;
+      border-radius: 9999px;
+      font-size: 11px;
+      font-weight: 600;
+    }
+
+    .badge-version {
+      background: rgba(255,90,54,0.08);
+      color: var(--primary);
+    }
+
+    .badge-atlas {
+      background: var(--gray-100);
+      color: var(--gray-600);
+    }
+
+    /* Stats */
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+      gap: 12px;
+      margin-bottom: 36px;
+    }
+
+    .stat-card {
+      background: var(--bg);
+      border: 1px solid var(--gray-200);
+      border-radius: 12px;
+      padding: 16px;
+      text-align: center;
+    }
+
+    .stat-value {
+      font-family: var(--heading);
+      font-size: 28px;
+      font-weight: 700;
+      color: var(--gray-900);
+    }
+
+    .stat-value.critical { color: #ef4444; }
+    .stat-value.high { color: #f97316; }
+    .stat-value.medium { color: #ca8a04; }
+    .stat-value.low { color: #16a34a; }
+
+    .stat-label {
+      font-size: 12px;
+      color: var(--gray-400);
+      margin-top: 2px;
+    }
+
+    .risk-legend {
+      display: flex;
+      gap: 16px;
+      margin-bottom: 28px;
+      flex-wrap: wrap;
+    }
+
+    .legend-item {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 12px;
+      color: var(--gray-500);
+    }
+
+    .legend-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 3px;
+    }
+
+    .section-title {
+      font-family: var(--heading);
+      font-size: 20px;
+      font-weight: 700;
+      color: var(--gray-900);
+      margin-bottom: 16px;
+    }
+
+    /* Matrix */
+    .matrix-section { margin-bottom: 40px; position: relative; }
+
+    .matrix-container {
+      overflow-x: auto;
+      padding-bottom: 8px;
+      -webkit-overflow-scrolling: touch;
+      mask-image: linear-gradient(to right, black calc(100% - 24px), transparent);
+      -webkit-mask-image: linear-gradient(to right, black calc(100% - 24px), transparent);
+    }
+
+    /* Remove fade once scrolled to end */
+    .matrix-container.scrolled-end {
+      mask-image: none;
+      -webkit-mask-image: none;
+    }
+
+    .matrix { display: flex; gap: 10px; min-width: max-content; }
+
+    .tactic-column { width: 180px; flex-shrink: 0; }
+
+    .tactic-header {
+      padding: 10px 12px;
+      border-radius: 10px 10px 0 0;
+      text-align: center;
+    }
+
+    .tactic-name {
+      font-family: var(--heading);
+      font-size: 13px;
+      font-weight: 600;
+      color: #fff;
+    }
+
+    .tactic-atlas {
+      font-size: 10px;
+      opacity: 0.7;
+      margin-top: 2px;
+      color: #fff;
+    }
+
+    .threat-list {
+      background: var(--gray-50);
+      border: 1px solid var(--gray-200);
+      border-top: none;
+      border-radius: 0 0 10px 10px;
+      padding: 6px;
+      min-height: 180px;
+    }
+
+    .threat-card {
+      background: var(--bg);
+      border-radius: 8px;
+      padding: 10px;
+      margin-bottom: 6px;
+      border-left: 3px solid;
+      cursor: pointer;
+      transition: background 0.15s;
+      border-right: 1px solid var(--gray-200);
+      border-top: 1px solid var(--gray-200);
+      border-bottom: 1px solid var(--gray-200);
+    }
+
+    .threat-card:hover { background: var(--gray-50); }
+    .threat-card.selected { outline: 2px solid var(--primary); outline-offset: -2px; }
+    .threat-card:last-child { margin-bottom: 0; }
+
+    .threat-id {
+      font-size: 10px;
+      font-weight: 600;
+      color: var(--gray-400);
+      margin-bottom: 3px;
+    }
+
+    .threat-name {
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--gray-800);
+      margin-bottom: 6px;
+      line-height: 1.3;
+    }
+
+    .threat-meta { display: flex; gap: 5px; flex-wrap: wrap; }
+
+    .atlas-tag {
+      font-size: 10px;
+      padding: 1px 6px;
+      background: var(--gray-100);
+      border-radius: 4px;
+      color: var(--gray-500);
+    }
+
+    .risk-tag {
+      font-size: 10px;
+      padding: 1px 6px;
+      border-radius: 4px;
+      font-weight: 600;
+    }
+
+    /* Detail overlay */
+    .detail-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.4);
+      z-index: 200;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+      backdrop-filter: blur(4px);
+    }
+
+    .detail-overlay.active { display: flex; }
+
+    .detail-panel {
+      background: var(--bg);
+      border-radius: 16px;
+      max-width: 680px;
+      width: 100%;
+      max-height: 90vh;
+      overflow-y: auto;
+      border: 1px solid var(--gray-200);
+      box-shadow: 0 25px 50px -12px rgba(0,0,0,0.15);
+    }
+
+    .detail-header {
+      padding: 20px 24px;
+      border-bottom: 1px solid var(--gray-200);
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      position: sticky;
+      top: 0;
+      background: var(--bg);
+      border-radius: 16px 16px 0 0;
+    }
+
+    .detail-id { font-size: 12px; color: var(--gray-400); margin-bottom: 4px; }
+
+    .detail-title {
+      font-family: var(--heading);
+      font-size: 18px;
+      font-weight: 600;
+      color: var(--gray-900);
+      margin-bottom: 8px;
+    }
+
+    .detail-badges { display: flex; gap: 6px; flex-wrap: wrap; }
+
+    .detail-badge {
+      font-size: 11px;
+      padding: 3px 8px;
+      border-radius: 6px;
+      font-weight: 600;
+    }
+
+    .close-btn {
+      background: none;
+      border: 1px solid var(--gray-200);
+      color: var(--gray-400);
+      font-size: 20px;
+      cursor: pointer;
+      padding: 2px 8px;
+      line-height: 1;
+      border-radius: 8px;
+    }
+
+    .close-btn:hover { color: var(--gray-700); border-color: var(--gray-300); }
+
+    .detail-body { padding: 20px 24px; }
+    .detail-section { margin-bottom: 16px; }
+    .detail-section:last-child { margin-bottom: 0; }
+
+    .detail-label {
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--primary);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 4px;
+    }
+
+    .detail-value { font-size: 13px; color: var(--gray-600); line-height: 1.6; }
+
+    .atlas-link { color: var(--primary); }
+    .atlas-link:hover { text-decoration: underline; }
+
+    /* Chains */
+    .chains-section { margin-bottom: 40px; }
+
+    .chains-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 12px;
+    }
+
+    .chain-card {
+      background: var(--bg);
+      border-radius: 12px;
+      padding: 16px;
+      border: 1px solid var(--gray-200);
+    }
+
+    .chain-name {
+      font-family: var(--heading);
+      font-size: 15px;
+      font-weight: 600;
+      color: var(--gray-900);
+      margin-bottom: 10px;
+    }
+
+    .chain-flow {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      margin-bottom: 10px;
+      flex-wrap: wrap;
+    }
+
+    .chain-step {
+      font-size: 11px;
+      font-weight: 600;
+      padding: 3px 8px;
+      background: rgba(255,90,54,0.08);
+      color: var(--primary);
+      border-radius: 4px;
+      cursor: pointer;
+      transition: background 0.15s;
+    }
+
+    .chain-step:hover { background: rgba(255,90,54,0.15); }
+
+    .chain-arrow { color: var(--gray-300); font-size: 13px; }
+    .chain-desc { font-size: 12px; color: var(--gray-500); line-height: 1.5; }
+
+    /* Trust boundaries */
+    .boundaries-section { margin-bottom: 40px; }
+
+    .boundaries-flow {
+      display: flex;
+      align-items: stretch;
+      gap: 0;
+      overflow-x: auto;
+      padding-bottom: 8px;
+    }
+
+    .boundary-arrow-h {
+      display: flex;
+      align-items: center;
+      padding: 0 6px;
+      color: var(--gray-300);
+      flex-shrink: 0;
+    }
+
+    .boundary-card {
+      min-width: 200px;
+      flex: 1;
+      background: var(--bg);
+      border: 1px solid var(--gray-200);
+      border-radius: 12px;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .boundary-adjacent {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      min-width: 200px;
+      flex: 1;
+    }
+
+    .boundary-adjacent .boundary-card { min-width: unset; }
+
+    .boundary-card-header {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 12px 14px;
+      border-bottom: 1px solid var(--gray-200);
+      background: var(--gray-50);
+    }
+
+    .boundary-num {
+      width: 28px;
+      height: 28px;
+      border-radius: 8px;
+      display: grid;
+      place-items: center;
+      font-weight: 800;
+      font-size: 12px;
+      font-family: var(--heading);
+      color: #fff;
+      background: var(--primary);
+      flex: 0 0 auto;
+    }
+
+    .boundary-card-name {
+      font-family: var(--heading);
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--gray-900);
+      line-height: 1.2;
+    }
+
+    .boundary-card-zone {
+      font-size: 11px;
+      color: var(--gray-400);
+    }
+
+    .boundary-controls {
+      list-style: none;
+      padding: 10px 14px;
+      margin: 0;
+      flex: 1;
+    }
+
+    .boundary-controls li {
+      padding: 2px 0 2px 14px;
+      position: relative;
+      font-size: 12px;
+      color: var(--gray-600);
+      line-height: 1.5;
+    }
+
+    .boundary-controls li::before {
+      content: '';
+      position: absolute;
+      left: 2px;
+      top: 9px;
+      width: 4px;
+      height: 4px;
+      border-radius: 50%;
+      background: var(--primary);
+    }
+
+    /* Footer */
+    .tm-footer {
+      padding: 28px 0;
+      margin-top: 12px;
+      border-top: 1px solid var(--gray-200);
+      text-align: center;
+      font-size: 12px;
+      color: var(--gray-400);
+    }
+
+    .tm-footer a { color: var(--primary); }
+    .footer-atlas { margin-bottom: 12px; }
+    .footer-atlas p { margin-bottom: 3px; }
+    .footer-atlas-sub { font-size: 11px; }
+
+    .footer-links {
+      margin-bottom: 12px;
+      display: flex;
+      justify-content: center;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .footer-sep { color: var(--gray-200); }
+    .footer-contact { margin-bottom: 10px; }
+    .footer-version { font-size: 10px; opacity: 0.5; }
+
+    @media (max-width: 900px) {
+      .boundaries-flow { flex-direction: column; }
+      .boundary-arrow-h { justify-content: center; padding: 4px 0; transform: rotate(90deg); }
+      .boundary-adjacent { flex-direction: row; gap: 8px; }
+    }
+
+    @media (max-width: 540px) {
+      .boundary-adjacent { flex-direction: column; }
+    }
+
+    @media (max-width: 480px) {
+      .tm-container { padding: 24px 16px; }
+      .topbar-inner { padding: 0 16px; }
+    }
+  </style>
+</head>
+<body>
+  <nav class="topbar">
+    <div class="topbar-inner">
+      <a href="https://openclaw.ai" class="topbar-brand">
+        <img src="/openclaw-logo-text-dark.png" alt="OpenClaw" />
+      </a>
+      <div class="topbar-nav">
+        <a href={trustHref} class="topbar-link">{t.nav.trust}</a>
+        <a href={threatModelHref} class="topbar-link active">{t.nav.threatModel}</a>
+        <div class="lang-switcher">
+          <a href={langLinks.en} class="lang-link">EN</a>
+          <a href={langLinks['zh-cn']} class="lang-link">中文</a>
+          <a href={langLinks.ko} class="lang-link active">한국어</a>
+          <a href={langLinks.ja} class="lang-link">日本語</a>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <main class="tm-container">
+    <h1 class="article-title">{t.header.title}</h1>
+    <p class="subtitle">{t.header.subtitle}</p>
+    <div class="header-badges">
+      <span class="header-badge badge-version">{t.header.badgeVersion}</span>
+      <span class="header-badge badge-atlas">{t.header.badgeAtlas}</span>
+    </div>
+
+    {data ? (
+      <>
+        <div class="stats-grid">
+          <div class="stat-card"><div class="stat-value">{threats.length}</div><div class="stat-label">{t.stats.totalThreats}</div></div>
+          <div class="stat-card"><div class="stat-value critical">{criticalCount}</div><div class="stat-label">{t.stats.criticalRisk}</div></div>
+          <div class="stat-card"><div class="stat-value high">{highCount}</div><div class="stat-label">{t.stats.highRisk}</div></div>
+          <div class="stat-card"><div class="stat-value medium">{mediumCount}</div><div class="stat-label">{t.stats.mediumRisk}</div></div>
+          <div class="stat-card"><div class="stat-value low">{lowCount}</div><div class="stat-label">{t.stats.lowRisk}</div></div>
+        </div>
+
+        <div class="risk-legend">
+          <div class="legend-item"><div class="legend-dot" style="background:#ef4444"></div><span>{t.legend.critical}</span></div>
+          <div class="legend-item"><div class="legend-dot" style="background:#f97316"></div><span>{t.legend.high}</span></div>
+          <div class="legend-item"><div class="legend-dot" style="background:#eab308"></div><span>{t.legend.medium}</span></div>
+          <div class="legend-item"><div class="legend-dot" style="background:#22c55e"></div><span>{t.legend.low}</span></div>
+        </div>
+
+        <section class="matrix-section">
+          <h2 class="section-title">{t.sections.threatMatrix}</h2>
+          <div class="matrix-container">
+            <div class="matrix">
+              {tactics.map(tactic => {
+                const tacticThreats = threats.filter(t => t.category === tactic.id);
+                return (
+                  <div class="tactic-column">
+                    <div class="tactic-header" style={`background: ${tactic.color}`}>
+                      <div class="tactic-name">{tactic.name}</div>
+                      <div class="tactic-atlas">{tactic.atlas}</div>
+                    </div>
+                    <div class="threat-list">
+                      {tacticThreats.map(t => (
+                        <div class="threat-card" data-threat-id={t.id} data-risk={t.risk} style={`border-left-color: ${getRiskColor(t.risk)}`}>
+                          <div class="threat-id">{t.id}</div>
+                          <div class="threat-name">{t.name}</div>
+                          <div class="threat-meta">
+                            <span class="atlas-tag">{t.atlas}</span>
+                            <span class="risk-tag" style={`background: ${getRiskColor(t.risk)}12; color: ${getRiskColor(t.risk)}`}>{t.risk}</span>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        </section>
+
+        <section class="chains-section">
+          <h2 class="section-title">{t.sections.attackChains}</h2>
+          <div class="chains-grid">
+            {attackChains.map(chain => (
+              <div class="chain-card">
+                <div class="chain-name">{chain.name}</div>
+                <div class="chain-flow">
+                  {chain.steps.map((step, i) => (
+                    <><span class="chain-step" data-threat-id={step}>{step}</span>{i < chain.steps.length - 1 && <span class="chain-arrow">&rarr;</span>}</>
+                  ))}
+                </div>
+                <div class="chain-desc">{chain.description}</div>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        <section class="boundaries-section">
+          <h2 class="section-title">{t.sections.trustBoundaries}</h2>
+          <div class="boundaries-flow">
+            {boundaryItems.map((item, i) => (
+              <>
+                {i > 0 && <div class="boundary-arrow-h"><svg width="24" height="16" viewBox="0 0 24 16"><path d="M0 8h20M16 3l5 5-5 5" stroke="currentColor" stroke-width="2" fill="none"/></svg></div>}
+                {item.type === 'solo' ? (
+                  <div class="boundary-card">
+                    <div class="boundary-card-header">
+                      <span class="boundary-num">{item.boundary.id}</span>
+                      <div><div class="boundary-card-name">{item.boundary.name}</div><div class="boundary-card-zone">{item.boundary.zone}</div></div>
+                    </div>
+                    <ul class="boundary-controls">{item.boundary.controls.map((c: string) => <li>{c}</li>)}</ul>
+                  </div>
+                ) : (
+                  <div class="boundary-adjacent">
+                    {item.pair.map((b: any) => (
+                      <div class="boundary-card">
+                        <div class="boundary-card-header">
+                          <span class="boundary-num">{b.id}</span>
+                          <div><div class="boundary-card-name">{b.name}</div><div class="boundary-card-zone">{b.zone}</div></div>
+                        </div>
+                        <ul class="boundary-controls">{b.controls.map((c: string) => <li>{c}</li>)}</ul>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </>
+            ))}
+          </div>
+        </section>
+
+        <div class="detail-overlay" id="detailOverlay">
+          <div class="detail-panel">
+            <div class="detail-header">
+              <div><div class="detail-id" id="detailId"></div><div class="detail-title" id="detailTitle"></div><div class="detail-badges" id="detailBadges"></div></div>
+              <button class="close-btn" id="closeBtn">&times;</button>
+            </div>
+            <div class="detail-body" id="detailBody"></div>
+          </div>
+        </div>
+
+        <footer class="tm-footer">
+          <div class="footer-atlas">
+            <p>{t.footer.builtOn}: <a href="https://atlas.mitre.org/" target="_blank">{t.footer.atlasFullName}</a></p>
+            <p class="footer-atlas-sub">{t.footer.maintainedBy}</p>
+          </div>
+          <div class="footer-links">
+            <a href="https://atlas.mitre.org/techniques/" target="_blank">{t.footer.atlasTechniques}</a><span class="footer-sep">|</span>
+            <a href="https://atlas.mitre.org/tactics/" target="_blank">{t.footer.atlasTactics}</a><span class="footer-sep">|</span>
+            <a href="https://github.com/openclaw/trust" target="_blank">{t.footer.contribute}</a>
+          </div>
+          <div class="footer-contact"><p>{t.footer.reportIssues}: <a href="mailto:security@openclaw.ai">security@openclaw.ai</a></p></div>
+          <p class="footer-version">{t.footer.version}</p>
+        </footer>
+      </>
+    ) : (
+      <p>{t.error.loadFailed} <a href="https://github.com/openclaw/trust/blob/main/threats.yaml" target="_blank">{t.error.viewOnGithub}</a>.</p>
+    )}
+  </main>
+
+  <script define:vars={{ threats, detailLabels: { description: t.detail.description, attackVector: t.detail.attackVector, affected: t.detail.affected, mitigations: t.detail.mitigations, residualRisk: t.detail.residualRisk, recommendations: t.detail.recommendations, riskSuffix: t.detail.riskSuffix } }}>
+    function getRiskColor(risk) {
+      switch (risk) { case 'Critical': return '#ef4444'; case 'High': return '#f97316'; case 'Medium': return '#eab308'; case 'Low': return '#22c55e'; default: return '#6b7280'; }
+    }
+    function showThreatDetail(threatId) {
+      var threat = threats.find(function(t) { return t.id === threatId; });
+      if (!threat) return;
+      document.getElementById('detailId').textContent = threat.id + ' \u2022 ' + threat.tactic;
+      document.getElementById('detailTitle').textContent = threat.name;
+      var rc = getRiskColor(threat.risk);
+      document.getElementById('detailBadges').innerHTML = '<span class="detail-badge" style="background:' + rc + '12;color:' + rc + '">' + threat.risk + ' ' + detailLabels.riskSuffix + '</span><a href="https://atlas.mitre.org/techniques/' + threat.atlas + '" target="_blank" class="detail-badge atlas-link" style="background:rgba(255,90,54,0.08)">' + threat.atlas + '</a>';
+      document.getElementById('detailBody').innerHTML = '<div class="detail-section"><div class="detail-label">' + detailLabels.description + '</div><div class="detail-value">' + threat.description + '</div></div><div class="detail-section"><div class="detail-label">' + detailLabels.attackVector + '</div><div class="detail-value">' + threat.attackVector + '</div></div><div class="detail-section"><div class="detail-label">' + detailLabels.affected + '</div><div class="detail-value">' + threat.affected + '</div></div><div class="detail-section"><div class="detail-label">' + detailLabels.mitigations + '</div><div class="detail-value">' + threat.mitigations + '</div></div><div class="detail-section"><div class="detail-label">' + detailLabels.residualRisk + '</div><div class="detail-value">' + threat.residualRisk + '</div></div><div class="detail-section"><div class="detail-label">' + detailLabels.recommendations + '</div><div class="detail-value">' + threat.recommendations + '</div></div>';
+      document.getElementById('detailOverlay').classList.add('active');
+      document.querySelectorAll('.threat-card').forEach(function(c) { c.classList.remove('selected'); });
+      var sel = document.querySelector('[data-threat-id="' + threatId + '"]');
+      if (sel) sel.classList.add('selected');
+    }
+    function closeDetail() { document.getElementById('detailOverlay').classList.remove('active'); document.querySelectorAll('.threat-card').forEach(function(c) { c.classList.remove('selected'); }); }
+    document.querySelectorAll('.threat-card').forEach(function(c) { c.addEventListener('click', function() { showThreatDetail(c.dataset.threatId); }); });
+    document.querySelectorAll('.chain-step').forEach(function(s) { s.addEventListener('click', function() { showThreatDetail(s.dataset.threatId); }); });
+    var overlay = document.getElementById('detailOverlay');
+    if (overlay) overlay.addEventListener('click', function(e) { if (e.target === overlay) closeDetail(); });
+    var closeBtn = document.getElementById('closeBtn');
+    if (closeBtn) closeBtn.addEventListener('click', closeDetail);
+    document.addEventListener('keydown', function(e) { if (e.key === 'Escape') closeDetail(); });
+
+    // Fade hint: remove right fade when scrolled to end
+    var mc = document.querySelector('.matrix-container');
+    if (mc) {
+      mc.addEventListener('scroll', function() {
+        var atEnd = mc.scrollLeft + mc.clientWidth >= mc.scrollWidth - 4;
+        mc.classList.toggle('scrolled-end', atEnd);
+      });
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,905 @@
+# OpenClaw 威胁模型
+# 基于 MITRE ATLAS 框架（AI 系统对抗性威胁态势）
+# 版本: 1.0-draft
+# 最后更新: 2026-02-04
+# 方法论: MITRE ATLAS + 数据流图
+#
+# 参与贡献: 请参阅 CONTRIBUTING.md
+# 报告安全问题: security@openclaw.ai
+
+metadata:
+  version: "1.0-draft"
+  last_updated: "2026-02-04"
+  methodology: MITRE ATLAS + 数据流图
+  framework: MITRE ATLAS（AI 系统对抗性威胁态势）
+  framework_url: https://atlas.mitre.org/
+  atlas_resources:
+    - name: ATLAS 技术库
+      url: https://atlas.mitre.org/techniques/
+    - name: ATLAS 战术库
+      url: https://atlas.mitre.org/tactics/
+    - name: ATLAS 案例研究
+      url: https://atlas.mitre.org/studies/
+    - name: ATLAS GitHub
+      url: https://github.com/mitre-atlas/atlas-data
+    - name: 参与 ATLAS 贡献
+      url: https://atlas.mitre.org/resources/contribute
+
+scope:
+  included:
+    - component: OpenClaw Agent Runtime
+      notes: 核心代理执行、工具调用、会话
+    - component: Gateway
+      notes: 身份验证、路由、渠道集成
+    - component: Channel Integrations
+      notes: WhatsApp、Telegram、Discord、Signal、Slack 等
+    - component: ClawHub Marketplace
+      notes: 技能发布、审核、分发
+    - component: MCP Servers
+      notes: 外部工具提供方
+    - component: User Devices
+      notes: 移动应用、桌面客户端（部分）
+  out_of_scope: 本威胁模型没有明确排除任何内容。
+
+tactics:
+  - id: recon
+    name: 侦察
+    atlas: AML.TA0002
+    color: "#6b7280"
+  - id: access
+    name: 初始访问
+    atlas: AML.TA0004
+    color: "#8b5cf6"
+  - id: execution
+    name: 执行
+    atlas: AML.TA0005
+    color: "#ef4444"
+  - id: persistence
+    name: 持久化
+    atlas: AML.TA0006
+    color: "#f97316"
+  - id: evasion
+    name: 防御规避
+    atlas: AML.TA0007
+    color: "#eab308"
+  - id: discovery
+    name: 发现
+    atlas: AML.TA0008
+    color: "#22c55e"
+  - id: exfil
+    name: 数据窃取
+    atlas: AML.TA0010
+    color: "#3b82f6"
+  - id: impact
+    name: 影响
+    atlas: AML.TA0011
+    color: "#ec4899"
+
+threats:
+  # ── 侦察 (AML.TA0002) ────────────────────────────────
+  - id: T-RECON-001
+    name: 代理端点发现
+    tactic: Reconnaissance
+    atlas: AML.T0006
+    risk: Medium
+    category: recon
+    description: 攻击者扫描暴露的 OpenClaw 网关端点
+    attackVector: 网络扫描、Shodan 查询、DNS 枚举
+    affected: 网关、暴露的 API 端点
+    mitigations: Tailscale 认证选项、默认绑定回环地址
+    residualRisk: 公开网关可被发现
+    recommendations: 编写安全部署文档，在发现端点上添加速率限制
+
+  - id: T-RECON-002
+    name: 渠道集成探测
+    tactic: Reconnaissance
+    atlas: AML.T0006
+    risk: Low
+    category: recon
+    description: 攻击者探测消息渠道以识别 AI 管理的账户
+    attackVector: 发送测试消息、观察响应模式
+    affected: 所有渠道集成
+    mitigations: 无特定措施
+    residualRisk: 仅凭发现本身价值有限
+    recommendations: 考虑响应时间随机化
+
+  - id: T-RECON-003
+    name: 技能能力侦察
+    tactic: Reconnaissance
+    atlas: AML.T0006
+    risk: Low
+    category: recon
+    description: 攻击者分析 ClawHub 以识别高价值目标和热门技能
+    attackVector: 浏览 ClawHub、分析下载统计、识别拥有敏感权限的技能
+    affected: ClawHub 公开列表
+    mitigations: 无 - 公开性为设计初衷
+    residualRisk: 攻击者可确定攻击优先级
+    recommendations: 监控可疑浏览行为，对 API 访问进行速率限制
+
+  # ── 初始访问 (AML.TA0004) ────────────────────────────
+  - id: T-ACCESS-001
+    name: 配对码拦截
+    tactic: Initial Access
+    atlas: AML.T0040
+    risk: Medium
+    category: access
+    description: 攻击者在 30 秒有效期内拦截配对码
+    attackVector: 窥屏、网络嗅探、社会工程
+    affected: 设备配对系统
+    mitigations: 30 秒过期、通过现有渠道发送验证码
+    residualRisk: 有效期窗口可被利用
+    recommendations: 缩短有效期、增加确认步骤
+
+  - id: T-ACCESS-002
+    name: AllowFrom 欺骗
+    tactic: Initial Access
+    atlas: AML.T0040
+    risk: Medium
+    category: access
+    description: 攻击者在渠道中伪造允许的发送者身份
+    attackVector: 电话号码伪造、用户名冒充（取决于渠道）
+    affected: 各渠道的 AllowFrom 验证
+    mitigations: 特定渠道的身份验证
+    residualRisk: 部分渠道容易受到欺骗攻击
+    recommendations: 记录特定渠道风险，尽可能添加加密验证
+
+  - id: T-ACCESS-003
+    name: 令牌窃取
+    tactic: Initial Access
+    atlas: AML.T0040
+    risk: High
+    category: access
+    description: 攻击者从配置文件中窃取身份验证令牌
+    attackVector: 恶意软件、未授权设备访问、配置备份泄露
+    affected: ~/.openclaw/credentials/、配置存储
+    mitigations: 文件权限控制
+    residualRisk: 令牌以明文存储
+    recommendations: 实现令牌静态加密、添加令牌轮换机制
+
+  - id: T-ACCESS-004
+    name: 恶意技能作为入口点
+    tactic: Initial Access
+    atlas: AML.T0010.001
+    risk: Critical
+    category: access
+    description: 用户从 ClawHub 安装恶意技能，使攻击者获得初始访问权限
+    attackVector: 社会工程、域名抢注、伪造热门技能、SEO 操纵
+    affected: ClawHub 发现机制、技能安装流程
+    mitigations: GitHub 账户注册时间验证、下载统计可见性
+    residualRisk: 用户可能未验证即安装
+    recommendations: 显著的安全警告、经过验证的发布者徽章、安装确认
+
+  - id: T-ACCESS-005
+    name: 受损的技能更新
+    tactic: Initial Access
+    atlas: AML.T0010.001
+    risk: High
+    category: access
+    description: 攻击者入侵合法技能并向现有用户推送恶意更新
+    attackVector: 技能发布者账户被盗、社会工程、凭据窃取
+    affected: ClawHub 更新机制、已安装的技能
+    mitigations: 版本指纹识别
+    residualRisk: 受信任的技能变为攻击载体
+    recommendations: 更新签名、发布者双因素认证要求、更新差异审查
+
+  - id: T-ACCESS-006
+    name: 通过渠道进行提示词注入
+    tactic: Initial Access
+    atlas: AML.T0051.000
+    risk: High
+    category: access
+    description: 攻击者通过消息渠道发送恶意提示词获得初始访问
+    attackVector: 向代理管理的渠道（WhatsApp、Telegram、Discord）发送直接消息
+    affected: 所有渠道集成
+    mitigations: AllowFrom 列表、配对要求
+    residualRisk: 允许列表配置错误、通过社会工程被添加
+    recommendations: 默认拒绝渠道访问、新发送者审计日志
+
+  # ── 执行 (AML.TA0005) ─────────────────────────────────
+  - id: T-EXEC-001
+    name: 直接提示词注入
+    tactic: Execution
+    atlas: AML.T0051.000
+    risk: Critical
+    category: execution
+    description: 攻击者发送精心构造的提示词来操纵代理行为
+    attackVector: 包含对抗性指令的渠道消息
+    affected: 代理 LLM、所有输入接口
+    mitigations: 模式检测、外部内容包装
+    residualRisk: "仅检测不拦截；复杂攻击可绕过"
+    recommendations: 实施多层防御、输出验证、敏感操作用户确认
+
+  - id: T-EXEC-002
+    name: 间接提示词注入
+    tactic: Execution
+    atlas: AML.T0051.001
+    risk: High
+    category: execution
+    description: 攻击者在获取的内容中嵌入恶意指令
+    attackVector: 恶意 URL、被污染的邮件、受损的 Webhook
+    affected: web_fetch、邮件摄取、外部数据源
+    mitigations: 使用 XML 标签和安全提示进行内容包装
+    residualRisk: LLM 可能忽略包装指令
+    recommendations: 实施内容净化、分离执行上下文
+
+  - id: T-EXEC-003
+    name: 工具参数注入
+    tactic: Execution
+    atlas: AML.T0051.000
+    risk: High
+    category: execution
+    description: 攻击者通过提示词注入操纵工具参数
+    attackVector: 构造影响工具参数值的提示词
+    affected: 所有工具调用
+    mitigations: 危险命令的执行审批
+    residualRisk: 依赖用户判断
+    recommendations: 实施参数验证、参数化工具调用
+
+  - id: T-EXEC-004
+    name: 执行审批绕过
+    tactic: Execution
+    atlas: AML.T0043
+    risk: High
+    category: execution
+    description: 攻击者构造绕过审批允许列表的命令
+    attackVector: 命令混淆、别名利用、路径操纵
+    affected: exec-approvals.ts、命令允许列表
+    mitigations: 允许列表 + 询问模式
+    residualRisk: 无命令净化
+    recommendations: 实施命令规范化、扩展阻止列表
+
+  - id: T-EXEC-005
+    name: 恶意技能代码执行
+    tactic: Execution
+    atlas: AML.T0010.001
+    risk: Critical
+    category: execution
+    description: 恶意技能在被代理加载时执行任意代码
+    attackVector: 技能包含混淆的恶意代码，在加载或调用时运行
+    affected: 技能运行时、代理进程、宿主系统
+    mitigations: 基于模式的审核（易被绕过）
+    residualRisk: 技能以完整代理权限执行，无沙箱隔离
+    recommendations: VirusTotal Code Insight、技能沙箱化、基于能力的权限控制
+
+  - id: T-EXEC-006
+    name: MCP 服务器命令注入
+    tactic: Execution
+    atlas: AML.T0051.000
+    risk: High
+    category: execution
+    description: 攻击者利用 MCP 服务器通过工具调用执行命令
+    attackVector: 提示词注入导致代理使用恶意参数调用 MCP 工具
+    affected: MCP 服务器集成、外部工具提供方
+    mitigations: 工具策略执行
+    residualRisk: MCP 服务器可能拥有广泛权限
+    recommendations: MCP 服务器允许列表、参数验证、最小权限 MCP 配置
+
+  # ── 持久化 (AML.TA0006) ───────────────────────────────
+  - id: T-PERSIST-001
+    name: 基于技能的持久化
+    tactic: Persistence
+    atlas: AML.T0010.001
+    risk: Critical
+    category: persistence
+    description: 恶意技能保持安装状态，在代理重启后继续执行
+    attackVector: 技能持久存在于用户配置中，在代理启动时自动加载
+    affected: 技能安装、代理启动
+    mitigations: 无 - 技能持久化为设计特性
+    residualRisk: 恶意技能在重启和更新后仍能存活
+    recommendations: 加载时进行技能完整性验证、定期重新扫描、提供移除工具
+
+  - id: T-PERSIST-002
+    name: 被污染的技能更新持久化
+    tactic: Persistence
+    atlas: AML.T0010.001
+    risk: High
+    category: persistence
+    description: 对合法技能的恶意更新维持持久访问
+    attackVector: 自动更新拉取受损版本，跨会话持久化
+    affected: ClawHub 版本管理、自动更新流程
+    mitigations: 版本指纹识别
+    residualRisk: 受信任的技能变为持久后门
+    recommendations: 更新签名、版本锁定、更新通知
+
+  - id: T-PERSIST-003
+    name: 代理配置篡改
+    tactic: Persistence
+    atlas: AML.T0010.002
+    risk: Medium
+    category: persistence
+    description: 攻击者修改代理配置以维持持久访问
+    attackVector: 配置文件修改、通过受损技能注入设置
+    affected: 代理配置、工具策略、允许列表
+    mitigations: 文件权限控制
+    residualRisk: 需要本地访问或先前入侵
+    recommendations: 配置完整性验证、配置变更审计日志
+
+  - id: T-PERSIST-004
+    name: 被盗令牌持久化
+    tactic: Persistence
+    atlas: AML.T0040
+    risk: High
+    category: persistence
+    description: 攻击者使用被盗的身份验证令牌维持访问
+    attackVector: 通过 T-ACCESS-003 窃取的令牌用于持续访问
+    affected: 网关身份验证、API 访问
+    mitigations: "无 - 令牌默认不过期"
+    residualRisk: 攻击者在令牌被手动撤销前保持访问权限
+    recommendations: 令牌过期机制、轮换策略、异常检测
+
+  - id: T-PERSIST-005
+    name: 提示词注入记忆污染
+    tactic: Persistence
+    atlas: AML.T0051.000
+    risk: Medium
+    category: persistence
+    description: 攻击者注入持久存在于代理记忆/上下文中的指令
+    attackVector: 注入修改后续交互中代理行为的提示词
+    affected: 会话上下文、代理记忆系统
+    mitigations: 按发送者隔离会话
+    residualRisk: 会话内持久化可能发生
+    recommendations: 上下文净化、记忆边界、会话超时
+
+  # ── 防御规避 (AML.TA0007) ───────────────────────────
+  - id: T-EVADE-001
+    name: 审核模式绕过
+    tactic: Defense Evasion
+    atlas: AML.T0043
+    risk: High
+    category: evasion
+    description: 攻击者构造技能内容以规避审核模式
+    attackVector: Unicode 同形字、编码技巧、动态加载、代码混淆
+    affected: ClawHub moderation.ts
+    mitigations: 基于模式的 FLAG_RULES
+    residualRisk: 简单正则表达式易被绕过
+    recommendations: 添加行为分析（VirusTotal Code Insight）、基于 AST 的检测
+
+  - id: T-EVADE-002
+    name: 内容包装逃逸
+    tactic: Defense Evasion
+    atlas: AML.T0043
+    risk: Medium
+    category: evasion
+    description: 攻击者构造逃逸 XML 包装上下文的内容
+    attackVector: 标签操纵、上下文混淆、指令覆盖
+    affected: 外部内容包装
+    mitigations: XML 标签 + 安全提示
+    residualRisk: 新的逃逸方法不断被发现
+    recommendations: 多层包装、输出侧验证
+
+  - id: T-EVADE-003
+    name: 审批提示操纵
+    tactic: Defense Evasion
+    atlas: AML.T0043
+    risk: Medium
+    category: evasion
+    description: 攻击者构造在审批提示中看起来无害的请求
+    attackVector: 误导性命令描述、在长命令中隐藏恶意参数
+    affected: 执行审批界面、用户决策
+    mitigations: 审批提示显示完整命令
+    residualRisk: 用户可能未仔细审查即批准
+    recommendations: 高亮危险参数、命令摘要、风险评分
+
+  - id: T-EVADE-004
+    name: 分阶段载荷投递
+    tactic: Defense Evasion
+    atlas: AML.T0043
+    risk: High
+    category: evasion
+    description: 技能通过初始扫描后下载恶意载荷
+    attackVector: 干净的技能通过审核，然后在运行时获取恶意代码
+    affected: ClawHub 扫描、技能运行时
+    mitigations: 无 - 运行时获取未被监控
+    residualRisk: 扫描仅检查初始代码
+    recommendations: 运行时网络监控、限制技能的出站获取
+
+  # ── 发现 (AML.TA0008) ─────────────────────────────────
+  - id: T-DISC-001
+    name: 工具枚举
+    tactic: Discovery
+    atlas: AML.T0040
+    risk: Low
+    category: discovery
+    description: 攻击者通过提示词枚举可用工具
+    attackVector: "'你有哪些工具？' 类型的查询"
+    affected: 代理工具注册表
+    mitigations: 无特定措施
+    residualRisk: 工具通常已公开文档
+    recommendations: 考虑工具可见性控制
+
+  - id: T-DISC-002
+    name: 会话数据提取
+    tactic: Discovery
+    atlas: AML.T0040
+    risk: Medium
+    category: discovery
+    description: 攻击者从会话上下文中提取敏感数据
+    attackVector: "'我们之前讨论了什么？' 类型的查询、上下文探测"
+    affected: 会话记录、上下文窗口
+    mitigations: 按发送者隔离会话
+    residualRisk: 会话内数据可被访问
+    recommendations: 在上下文中实施敏感数据脱敏
+
+  - id: T-DISC-003
+    name: 系统提示词提取
+    tactic: Discovery
+    atlas: AML.T0040
+    risk: Medium
+    category: discovery
+    description: 攻击者提取系统提示词以了解代理的能力和限制
+    attackVector: 提示词注入要求代理泄露指令
+    affected: 代理系统提示词、安全策略
+    mitigations: LLM 指令遵循
+    residualRisk: 系统提示词通常可通过创造性提示被提取
+    recommendations: 系统提示词加固、提取检测
+
+  - id: T-DISC-004
+    name: 环境枚举
+    tactic: Discovery
+    atlas: AML.T0040
+    risk: Medium
+    category: discovery
+    description: 攻击者枚举环境变量和系统配置
+    attackVector: 提示词注入导致代理运行 env、printenv 或读取配置文件
+    affected: 宿主环境、环境变量中的凭据
+    mitigations: 执行审批
+    residualRisk: 已批准的命令可能泄露敏感信息
+    recommendations: 敏感环境变量过滤、输出脱敏
+
+  # ── 数据窃取 (AML.TA0010) ──────────────────────────────
+  - id: T-EXFIL-001
+    name: 通过 web_fetch 窃取数据
+    tactic: Exfiltration
+    atlas: AML.T0009
+    risk: High
+    category: exfil
+    description: 攻击者通过指示代理向外部 URL 发送数据来窃取信息
+    attackVector: 提示词注入导致代理将数据 POST 到攻击者服务器
+    affected: web_fetch 工具
+    mitigations: 内部网络的 SSRF 阻止
+    residualRisk: 外部 URL 被允许
+    recommendations: 实施 URL 允许列表、数据分类感知
+
+  - id: T-EXFIL-002
+    name: 未授权消息发送
+    tactic: Exfiltration
+    atlas: AML.T0009
+    risk: Medium
+    category: exfil
+    description: 攻击者使代理发送包含敏感数据的消息
+    attackVector: 提示词注入导致代理向攻击者发消息
+    affected: 消息工具、渠道集成
+    mitigations: 出站消息门控
+    residualRisk: 门控可能被绕过
+    recommendations: 对新接收者要求明确确认
+
+  - id: T-EXFIL-003
+    name: 通过技能窃取凭据
+    tactic: Exfiltration
+    atlas: AML.T0009
+    risk: Critical
+    category: exfil
+    description: 恶意技能从代理上下文和环境中收集凭据
+    attackVector: 技能代码读取环境变量、配置文件、API 密钥
+    affected: 技能执行环境、~/.openclaw/
+    mitigations: 无针对技能的特定措施
+    residualRisk: 技能以代理权限运行
+    recommendations: 技能沙箱化、凭据隔离、基于能力的访问控制
+
+  - id: T-EXFIL-004
+    name: 对话记录窃取
+    tactic: Exfiltration
+    atlas: AML.T0009
+    risk: High
+    category: exfil
+    description: 攻击者窃取包含敏感数据的对话记录
+    attackVector: 技能或提示词注入读取并发送对话记录文件
+    affected: 会话记录、~/.openclaw/sessions/
+    mitigations: 文件权限控制
+    residualRisk: 技能可读取对话记录文件
+    recommendations: 对话记录加密、技能文件系统隔离
+
+  # ── 影响 (AML.TA0011) ────────────────────────────────
+  - id: T-IMPACT-001
+    name: 未授权命令执行
+    tactic: Impact
+    atlas: AML.T0031
+    risk: Critical
+    category: impact
+    description: 攻击者在用户系统上执行任意命令
+    attackVector: 提示词注入结合执行审批绕过
+    affected: Bash 工具、命令执行、宿主系统
+    mitigations: 执行审批、Docker 沙箱选项
+    residualRisk: 无沙箱的宿主执行
+    recommendations: 默认使用沙箱、改善审批用户体验
+
+  - id: T-IMPACT-002
+    name: 资源耗尽（拒绝服务）
+    tactic: Impact
+    atlas: AML.T0031
+    risk: High
+    category: impact
+    description: 攻击者耗尽 API 额度或计算资源
+    attackVector: 自动化消息洪泛、高开销工具调用、无限循环
+    affected: 网关、代理会话、API 提供方、用户账单
+    mitigations: 无
+    residualRisk: 无速率限制
+    recommendations: 实施按发送者的速率限制、费用预算、熔断器
+
+  - id: T-IMPACT-003
+    name: 声誉损害
+    tactic: Impact
+    atlas: AML.T0031
+    risk: Medium
+    category: impact
+    description: 攻击者使代理发送有害/攻击性内容
+    attackVector: 提示词注入导致向联系人发送不当回复
+    affected: 输出生成、渠道消息、用户声誉
+    mitigations: LLM 提供方内容策略
+    residualRisk: 提供方过滤器不完善
+    recommendations: 输出过滤层、用户控制、消息审核队列
+
+  - id: T-IMPACT-004
+    name: 数据销毁
+    tactic: Impact
+    atlas: AML.T0031
+    risk: High
+    category: impact
+    description: 攻击者使代理删除或损坏用户数据
+    attackVector: 提示词注入导致执行 rm、格式化或破坏性数据库操作
+    affected: 用户文件、数据库、配置
+    mitigations: 破坏性命令的执行审批
+    residualRisk: 已批准的破坏性命令可能被伪装
+    recommendations: 破坏性命令确认、备份建议、撤销功能
+
+  - id: T-IMPACT-005
+    name: 通过代理进行金融欺诈
+    tactic: Impact
+    atlas: AML.T0031
+    risk: High
+    category: impact
+    description: 攻击者利用代理执行未授权的金融交易
+    attackVector: 提示词注入导致代理与金融 API 或服务交互
+    affected: 金融集成、支付工具
+    mitigations: 特定工具策略
+    residualRisk: 代理可能有权访问金融工具
+    recommendations: 金融操作确认、交易限额、独立审批流程
+
+attack_chains:
+  - name: 恶意技能完整攻击链
+    steps: [T-RECON-003, T-EVADE-001, T-ACCESS-004, T-EXEC-005, T-PERSIST-001, T-EXFIL-003]
+    description: "侦察 ClawHub \u2192 构造规避性技能 \u2192 用户安装 \u2192 代码执行 \u2192 持久化 \u2192 窃取凭据"
+
+  - name: 技能供应链攻击
+    steps: [T-ACCESS-005, T-EVADE-004, T-EXEC-005, T-PERSIST-002, T-EXFIL-004]
+    description: "入侵发布者 \u2192 推送分阶段载荷 \u2192 更新时执行 \u2192 维持持久化 \u2192 窃取对话记录"
+
+  - name: 提示词注入到远程代码执行
+    steps: [T-ACCESS-006, T-EXEC-001, T-EVADE-003, T-EXEC-004, T-IMPACT-001]
+    description: "通过渠道访问 \u2192 注入提示词 \u2192 操纵审批 \u2192 绕过检查 \u2192 执行命令"
+
+  - name: 间接注入数据窃取
+    steps: [T-EXEC-002, T-DISC-004, T-EXFIL-001]
+    description: "污染获取的内容 \u2192 枚举环境 \u2192 通过 web_fetch 窃取数据"
+
+  - name: 令牌窃取持久访问
+    steps: [T-ACCESS-003, T-PERSIST-004, T-DISC-002, T-EXFIL-002]
+    description: "窃取令牌 \u2192 维持访问 \u2192 提取会话数据 \u2192 通过消息窃取"
+
+  - name: 金融欺诈链
+    steps: [T-ACCESS-006, T-EXEC-001, T-DISC-001, T-IMPACT-005]
+    description: "获取渠道访问 \u2192 注入提示词 \u2192 枚举金融工具 \u2192 执行欺诈"
+
+trust_boundaries:
+  # 顺序遵循实际用户/数据流:
+  # 供应链（安装前）→ 渠道访问（消息输入）→ 会话（路由）→ 执行 + 外部内容（相邻）
+  - id: 1
+    name: 供应链
+    zone: ClawHub
+    phase: pre-install
+    controls:
+      - 技能发布（语义版本、SKILL.md 必需）
+      - 基于模式的审核标记
+      - VirusTotal Code Insight
+      - GitHub 账户注册时间验证
+
+  - id: 2
+    name: 渠道访问控制
+    zone: Gateway
+    phase: message-flow
+    controls:
+      - 设备配对（30 秒有效期）
+      - AllowFrom / AllowList 验证
+      - 令牌/密码/Tailscale 认证
+
+  - id: 3
+    name: 会话隔离
+    zone: Agent Sessions
+    phase: message-flow
+    controls:
+      - "会话密钥 = agent:channel:peer"
+      - 每个代理的工具策略
+      - 对话记录日志
+
+  - id: 4
+    name: 工具执行
+    zone: Execution Sandbox
+    phase: execution
+    adjacent: 5
+    controls:
+      - Docker 沙箱或宿主（执行审批）
+      - Node 远程执行
+      - SSRF 保护（DNS 固定 + IP 阻止）
+
+  - id: 5
+    name: 外部内容
+    zone: Fetched URLs / Emails / Webhooks
+    phase: execution
+    adjacent: 4
+    controls:
+      - 外部内容包装（XML 标签）
+      - 安全提示注入
+
+data_flows:
+  - id: F1
+    source: Channel
+    destination: Gateway
+    data: 用户消息
+    protection: TLS、AllowFrom
+  - id: F2
+    source: Gateway
+    destination: Agent
+    data: 路由消息
+    protection: 会话隔离
+  - id: F3
+    source: Agent
+    destination: Tools
+    data: 工具调用
+    protection: 策略执行
+  - id: F4
+    source: Agent
+    destination: External
+    data: web_fetch 请求
+    protection: SSRF 阻止
+  - id: F5
+    source: ClawHub
+    destination: Agent
+    data: 技能代码
+    protection: 审核、扫描
+  - id: F6
+    source: Agent
+    destination: Channel
+    data: 响应
+    protection: 输出过滤
+
+supply_chain:
+  current_controls:
+    - control: GitHub 账户注册时间
+      implementation: requireGitHubAccountAge()
+      effectiveness: 中等 - 提高了新攻击者的门槛
+    - control: 路径净化
+      implementation: sanitizePath()
+      effectiveness: 高 - 防止路径遍历
+    - control: 文件类型验证
+      implementation: isTextFile()
+      effectiveness: 中等 - 仅限文本文件，但仍可能包含恶意内容
+    - control: 大小限制
+      implementation: 50MB 总包大小
+      effectiveness: 高 - 防止资源耗尽
+    - control: 必需的 SKILL.md
+      implementation: 强制性说明文档
+      effectiveness: 安全价值低 - 仅提供信息
+    - control: 模式审核
+      implementation: moderation.ts 中的 FLAG_RULES
+      effectiveness: 低 - 容易被绕过
+    - control: 审核状态
+      implementation: moderationStatus 字段
+      effectiveness: 中等 - 可进行人工审核
+
+  moderation_patterns:
+    description: moderation.ts 中的当前模式
+    patterns:
+      - name: 已知恶意标识符
+        regex: "/(keepcold131\\/ClawdAuthenticatorTool|ClawdAuthenticatorTool)/i"
+      - name: 可疑关键词
+        regex: "/(malware|stealer|phish|phishing|keylogger)/i"
+      - name: 凭据关键词
+        regex: "/(api[-_ ]?key|token|password|private key|secret)/i"
+      - name: 金融关键词
+        regex: "/(wallet|seed phrase|mnemonic|crypto)/i"
+      - name: 可疑 URL
+        regex: "/(discord\\.gg|webhook|hooks\\.slack)/i"
+      - name: 远程代码执行
+        regex: "/(curl[^\\n]+\\|\\s*(sh|bash))/i"
+      - name: URL 短链接
+        regex: "/(bit\\.ly|tinyurl\\.com|t\\.co|goo\\.gl|is\\.gd)/i"
+    limitations:
+      - 仅检查 slug、displayName、summary、frontmatter、metadata、文件路径
+      - 不分析实际技能代码内容
+      - 简单正则表达式通过混淆即可轻松绕过
+      - 无行为分析
+
+  planned_improvements:
+    - improvement: VirusTotal 集成
+      status: 进行中
+      impact: 高 - Code Insight 行为分析
+    - improvement: 社区举报
+      status: 部分完成（skillReports 表已存在）
+      impact: 中等
+    - improvement: 审计日志
+      status: 部分完成（auditLogs 表已存在）
+      impact: 中等
+    - improvement: 徽章系统
+      status: 已实现
+      impact: "中等 - highlighted、official、deprecated、redactionApproved"
+
+risk_matrix:
+  - threat: T-EXEC-001
+    likelihood: High
+    impact: Critical
+    risk_level: Critical
+    priority: P0
+  - threat: T-PERSIST-001
+    likelihood: High
+    impact: Critical
+    risk_level: Critical
+    priority: P0
+  - threat: T-EXFIL-003
+    likelihood: Medium
+    impact: Critical
+    risk_level: Critical
+    priority: P0
+  - threat: T-IMPACT-001
+    likelihood: Medium
+    impact: Critical
+    risk_level: High
+    priority: P1
+  - threat: T-EXEC-002
+    likelihood: High
+    impact: High
+    risk_level: High
+    priority: P1
+  - threat: T-EXEC-004
+    likelihood: Medium
+    impact: High
+    risk_level: High
+    priority: P1
+  - threat: T-ACCESS-003
+    likelihood: Medium
+    impact: High
+    risk_level: High
+    priority: P1
+  - threat: T-EXFIL-001
+    likelihood: Medium
+    impact: High
+    risk_level: High
+    priority: P1
+  - threat: T-IMPACT-002
+    likelihood: High
+    impact: Medium
+    risk_level: High
+    priority: P1
+  - threat: T-EVADE-001
+    likelihood: High
+    impact: Medium
+    risk_level: Medium
+    priority: P2
+  - threat: T-ACCESS-001
+    likelihood: Low
+    impact: High
+    risk_level: Medium
+    priority: P2
+  - threat: T-ACCESS-002
+    likelihood: Low
+    impact: High
+    risk_level: Medium
+    priority: P2
+  - threat: T-PERSIST-002
+    likelihood: Low
+    impact: High
+    risk_level: Medium
+    priority: P2
+
+recommendations:
+  immediate_p0:
+    - id: R-001
+      recommendation: 完成 VirusTotal 集成
+      addresses: [T-PERSIST-001, T-EVADE-001]
+    - id: R-002
+      recommendation: 实施技能沙箱化
+      addresses: [T-PERSIST-001, T-EXFIL-003]
+    - id: R-003
+      recommendation: 为敏感操作添加输出验证
+      addresses: [T-EXEC-001, T-EXEC-002]
+
+  short_term_p1:
+    - id: R-004
+      recommendation: 实施速率限制
+      addresses: [T-IMPACT-002]
+    - id: R-005
+      recommendation: 添加令牌静态加密
+      addresses: [T-ACCESS-003]
+    - id: R-006
+      recommendation: 改善执行审批用户体验和验证
+      addresses: [T-EXEC-004]
+    - id: R-007
+      recommendation: 为 web_fetch 实施 URL 允许列表
+      addresses: [T-EXFIL-001]
+
+  medium_term_p2:
+    - id: R-008
+      recommendation: 尽可能添加加密渠道验证
+      addresses: [T-ACCESS-002]
+    - id: R-009
+      recommendation: 实施配置完整性验证
+      addresses: [T-PERSIST-003]
+    - id: R-010
+      recommendation: 添加更新签名和版本锁定
+      addresses: [T-PERSIST-002]
+
+atlas_technique_mapping:
+  - atlas_id: AML.T0006
+    name: 主动扫描
+    threats: [T-RECON-001, T-RECON-002, T-RECON-003]
+  - atlas_id: AML.T0009
+    name: 信息收集
+    threats: [T-EXFIL-001, T-EXFIL-002, T-EXFIL-003, T-EXFIL-004]
+  - atlas_id: AML.T0010.001
+    name: "供应链: AI 软件"
+    threats: [T-ACCESS-004, T-ACCESS-005, T-EXEC-005, T-PERSIST-001, T-PERSIST-002]
+  - atlas_id: AML.T0010.002
+    name: "供应链: 数据"
+    threats: [T-PERSIST-003]
+  - atlas_id: AML.T0031
+    name: 侵蚀 AI 模型完整性
+    threats: [T-IMPACT-001, T-IMPACT-002, T-IMPACT-003, T-IMPACT-004, T-IMPACT-005]
+  - atlas_id: AML.T0040
+    name: AI 模型推理 API 访问
+    threats: [T-ACCESS-001, T-ACCESS-002, T-ACCESS-003, T-PERSIST-004, T-DISC-001, T-DISC-002, T-DISC-003, T-DISC-004]
+  - atlas_id: AML.T0043
+    name: 构造对抗性数据
+    threats: [T-EXEC-004, T-EVADE-001, T-EVADE-002, T-EVADE-003, T-EVADE-004]
+  - atlas_id: AML.T0051.000
+    name: "LLM 提示词注入: 直接"
+    threats: [T-ACCESS-006, T-EXEC-001, T-EXEC-003, T-EXEC-006, T-PERSIST-005]
+  - atlas_id: AML.T0051.001
+    name: "LLM 提示词注入: 间接"
+    threats: [T-EXEC-002]
+
+key_security_files:
+  - path: src/infra/exec-approvals.ts
+    purpose: 命令审批逻辑
+    risk_level: Critical
+  - path: src/gateway/auth.ts
+    purpose: 网关身份验证
+    risk_level: Critical
+  - path: src/web/inbound/access-control.ts
+    purpose: 渠道访问控制
+    risk_level: Critical
+  - path: src/infra/net/ssrf.ts
+    purpose: SSRF 保护
+    risk_level: Critical
+  - path: src/security/external-content.ts
+    purpose: 提示词注入缓解
+    risk_level: Critical
+  - path: src/agents/sandbox/tool-policy.ts
+    purpose: 工具策略执行
+    risk_level: Critical
+  - path: convex/lib/moderation.ts
+    purpose: ClawHub 审核
+    risk_level: High
+  - path: convex/lib/skillPublish.ts
+    purpose: 技能发布流程
+    risk_level: High
+  - path: src/routing/resolve-route.ts
+    purpose: 会话隔离
+    risk_level: Medium
+
+glossary:
+  ATLAS: "MITRE 的 AI 系统对抗性威胁态势框架"
+  ClawHub: "OpenClaw 的技能市场"
+  Gateway: "OpenClaw 的消息路由和身份验证层"
+  MCP: 模型上下文协议 - 工具提供方接口
+  Prompt Injection: 在输入中嵌入恶意指令的攻击方式
+  Skill: OpenClaw 代理的可下载扩展
+  SSRF: 服务端请求伪造

@@ -1,0 +1,57 @@
+{
+  "meta": {
+    "title": "위협 모델 - OpenClaw Trust",
+    "description": "MITRE ATLAS 프레임워크 기반 OpenClaw 위협 모델 - AI 에이전트 시스템에 대한 적대적 위협."
+  },
+  "nav": {
+    "trust": "신뢰",
+    "threatModel": "위협 모델"
+  },
+  "header": {
+    "title": "위협 모델",
+    "subtitle": "AI 에이전트 보안을 위한 MITRE ATLAS 프레임워크",
+    "badgeVersion": "v1.0-draft",
+    "badgeAtlas": "MITRE ATLAS 2025"
+  },
+  "stats": {
+    "totalThreats": "총 위협 수",
+    "criticalRisk": "치명적 위험",
+    "highRisk": "높은 위험",
+    "mediumRisk": "보통 위험",
+    "lowRisk": "낮은 위험"
+  },
+  "legend": {
+    "critical": "치명적",
+    "high": "높음",
+    "medium": "보통",
+    "low": "낮음"
+  },
+  "sections": {
+    "threatMatrix": "ATLAS 전술별 위협 매트릭스",
+    "attackChains": "치명적 공격 체인",
+    "trustBoundaries": "신뢰 경계"
+  },
+  "detail": {
+    "description": "설명",
+    "attackVector": "공격 벡터",
+    "affected": "영향을 받는 구성 요소",
+    "mitigations": "현재 완화 조치",
+    "residualRisk": "잔여 위험",
+    "recommendations": "권장 사항",
+    "riskSuffix": "위험"
+  },
+  "footer": {
+    "builtOn": "기반 프레임워크",
+    "atlasFullName": "MITRE ATLAS (Adversarial Threat Landscape for AI Systems)",
+    "maintainedBy": "ATLAS는 AI 보안 커뮤니티와 협력하여 MITRE가 관리합니다",
+    "atlasTechniques": "ATLAS 기법",
+    "atlasTactics": "ATLAS 전술",
+    "contribute": "기여하기",
+    "reportIssues": "보안 이슈 보고 대상",
+    "version": "OpenClaw 위협 모델 v1.0-draft"
+  },
+  "error": {
+    "loadFailed": "위협 모델을 불러올 수 없습니다.",
+    "viewOnGithub": "GitHub에서 보기"
+  }
+}

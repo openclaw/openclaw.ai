@@ -1,0 +1,807 @@
+---
+import t from '../../../i18n/ja/trust.json';
+
+const isSubdomain = Astro.url.hostname === 'trust.openclaw.ai';
+const trustHref = isSubdomain ? '/ja' : '/trust/ja';
+const threatModelHref = isSubdomain ? '/ja/threatmodel' : '/trust/ja/threatmodel';
+
+const langLinks = {
+  en: { label: 'EN', trust: isSubdomain ? '/' : '/trust', threatmodel: isSubdomain ? '/threatmodel' : '/trust/threatmodel' },
+  'zh-cn': { label: '\u4e2d\u6587', trust: isSubdomain ? '/zh-cn' : '/trust/zh-cn', threatmodel: isSubdomain ? '/zh-cn/threatmodel' : '/trust/zh-cn/threatmodel' },
+  ko: { label: '\ud55c\uad6d\uc5b4', trust: isSubdomain ? '/ko' : '/trust/ko', threatmodel: isSubdomain ? '/ko/threatmodel' : '/trust/ko/threatmodel' },
+  ja: { label: '\u65e5\u672c\u8a9e', trust: isSubdomain ? '/ja' : '/trust/ja', threatmodel: isSubdomain ? '/ja/threatmodel' : '/trust/ja/threatmodel' },
+};
+---
+
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>{t.meta.title}</title>
+  <meta name="description" content={t.meta.description} />
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400&family=Fragment+Mono:ital@0;1&display=swap" rel="stylesheet">
+  <style is:inline>
+    :root {
+      --primary: #ff5a36;
+      --primary-light: #ff8a6b;
+      --bg: #ffffff;
+      --gray-50: rgb(250,245,244);
+      --gray-100: rgb(245,240,239);
+      --gray-200: rgb(230,225,224);
+      --gray-300: rgb(213,208,207);
+      --gray-400: rgb(166,161,160);
+      --gray-500: rgb(119,114,113);
+      --gray-600: rgb(87,82,81);
+      --gray-700: rgb(70,65,64);
+      --gray-800: rgb(45,40,38);
+      --gray-900: rgb(30,25,24);
+      --gray-950: rgb(17,12,11);
+      --heading: "DM Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif;
+      --body: "Fragment Mono", -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { height: 100%; scroll-behavior: smooth; }
+
+    body {
+      min-height: 100%;
+      font-family: var(--body);
+      color: var(--gray-500);
+      background: var(--bg);
+      -webkit-font-smoothing: antialiased;
+      line-height: 1.6;
+      font-size: 14px;
+    }
+
+    ::selection { background: var(--primary); color: #fff; }
+
+    a { color: var(--gray-500); text-decoration: none; }
+    a:hover { color: var(--gray-900); }
+
+    /* Topbar */
+    .topbar {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: var(--bg);
+      border-bottom: 1px solid var(--gray-200);
+    }
+
+    .topbar-inner {
+      max-width: 720px;
+      margin: 0 auto;
+      padding: 0 24px;
+      height: 52px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .topbar-brand {
+      display: flex;
+      align-items: center;
+      text-decoration: none;
+      color: var(--gray-900);
+    }
+
+    .topbar-brand:hover { color: var(--gray-900); }
+
+    .topbar-brand img {
+      height: 28px;
+      width: auto;
+    }
+
+    .topbar-nav {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .topbar-link {
+      padding: 6px 14px;
+      border-radius: 8px;
+      font-family: var(--heading);
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--gray-500);
+      transition: color 0.15s, background 0.15s;
+    }
+
+    .topbar-link:hover {
+      color: var(--gray-900);
+      background: var(--gray-50);
+    }
+
+    .topbar-link.active {
+      color: var(--primary);
+      font-weight: 600;
+    }
+
+    .lang-sep {
+      color: var(--gray-200);
+      font-size: 13px;
+      margin: 0 2px;
+      user-select: none;
+    }
+
+    .lang-switcher {
+      display: flex;
+      align-items: center;
+      gap: 2px;
+      margin-left: 8px;
+      padding-left: 10px;
+      border-left: 1px solid var(--gray-200);
+    }
+
+    .lang-link {
+      padding: 4px 8px;
+      border-radius: 6px;
+      font-family: var(--heading);
+      font-size: 12px;
+      font-weight: 500;
+      color: var(--gray-400);
+      transition: color 0.15s, background 0.15s;
+    }
+
+    .lang-link:hover {
+      color: var(--gray-900);
+      background: var(--gray-50);
+    }
+
+    .lang-link.active {
+      color: var(--primary);
+      font-weight: 600;
+    }
+
+    .container {
+      max-width: 720px;
+      margin: 0 auto;
+      padding: 40px 24px;
+      min-height: 100vh;
+    }
+
+    .article-header {
+      margin-bottom: 32px;
+    }
+
+    .article-title {
+      font-family: var(--heading);
+      font-size: clamp(2rem, 6vw, 3rem);
+      font-weight: 700;
+      color: var(--gray-900);
+      line-height: 1.2;
+      margin-bottom: 0;
+    }
+
+    .article-content {
+      line-height: 1.8;
+      color: var(--gray-600);
+    }
+
+    .article-content p:first-child {
+      font-size: 1.15rem;
+      line-height: 1.7;
+      color: var(--gray-800);
+      margin-bottom: 16px;
+    }
+
+    .article-content p {
+      margin-bottom: 20px;
+    }
+
+    .article-content .section {
+      margin-top: 28px;
+    }
+
+    .article-content h2 {
+      font-family: var(--heading);
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--gray-900);
+      margin-top: 32px;
+      margin-bottom: 4px;
+    }
+
+    .article-content h3 {
+      margin-top: 24px;
+      margin-bottom: 4px;
+      font-family: var(--heading);
+      font-size: 1.25rem;
+      font-weight: 600;
+      color: var(--gray-900);
+    }
+
+    .article-content h4 {
+      margin-top: 20px;
+      margin-bottom: 4px;
+      font-family: var(--heading);
+      font-size: 1.05rem;
+      font-weight: 600;
+      color: var(--gray-800);
+    }
+
+    .article-content ul,
+    .article-content ol {
+      margin-bottom: 12px;
+      padding-left: 24px;
+    }
+
+    .article-content li {
+      margin-bottom: 4px;
+      padding-left: 8px;
+    }
+
+    .article-content li::marker { color: var(--primary); }
+
+    .article-content strong {
+      color: var(--gray-800);
+      font-weight: 600;
+    }
+
+    .article-content a {
+      color: var(--primary);
+      text-decoration: underline;
+      text-underline-offset: 3px;
+    }
+
+    .article-content a:hover { color: var(--gray-900); }
+
+    .article-content code {
+      font-family: var(--body);
+      font-size: 0.9em;
+      padding: 2px 6px;
+      border-radius: 4px;
+      background: var(--gray-100);
+      color: var(--primary);
+    }
+
+    .article-content pre {
+      padding: 20px;
+      border-radius: 12px;
+      background: var(--gray-950);
+      color: var(--gray-100);
+      border: 1px solid var(--gray-200);
+      overflow-x: auto;
+      margin-bottom: 24px;
+    }
+
+    .article-content pre code {
+      padding: 0;
+      background: transparent;
+      color: inherit;
+    }
+
+    .article-content .phases {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 14px;
+      margin-top: 14px;
+    }
+
+    @media (max-width: 820px) {
+      .article-content .phases { grid-template-columns: 1fr; }
+    }
+
+    .article-content .phase {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      padding: 16px;
+      border-radius: 12px;
+      background: var(--bg);
+      border: 1px solid var(--gray-200);
+    }
+
+    .article-content .phase-num {
+      width: 38px;
+      height: 38px;
+      border-radius: 12px;
+      display: grid;
+      place-items: center;
+      font-weight: 900;
+      color: #fff;
+      background: var(--primary);
+      flex: 0 0 auto;
+    }
+
+    .article-content .table-wrap {
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      margin-top: 12px;
+      margin-bottom: 20px;
+    }
+
+    .article-content .table-wrap table {
+      min-width: 640px;
+    }
+
+    .article-content table {
+      width: 100%;
+      border-collapse: collapse;
+      border-radius: 12px;
+      border: 1px solid var(--gray-200);
+      background: var(--bg);
+      overflow: hidden;
+    }
+
+    .article-content th,
+    .article-content td {
+      padding: 10px 12px;
+      border-bottom: 1px solid var(--gray-200);
+      vertical-align: top;
+      color: var(--gray-600);
+      font-size: 0.95rem;
+    }
+
+    .article-content th {
+      text-align: left;
+      color: var(--gray-900);
+      font-weight: 600;
+      background: var(--gray-50);
+    }
+
+    .article-content .report-box {
+      margin-top: 12px;
+      padding: 18px;
+      border-radius: 12px;
+      border-left: 3px solid var(--primary);
+      background: rgba(255,90,54,0.04);
+    }
+
+    .article-content .email-display {
+      display: inline-block;
+      margin-top: 12px;
+      padding: 10px 12px;
+      border-radius: 8px;
+      background: var(--gray-950);
+      border: 1px solid var(--gray-200);
+      font-family: var(--body);
+      color: var(--primary);
+      font-weight: 600;
+    }
+
+    .article-content .fields {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 12px;
+    }
+
+    .article-content .field {
+      padding: 6px 10px;
+      border-radius: 999px;
+      border: 1px solid var(--gray-200);
+      background: var(--bg);
+      color: var(--gray-600);
+      font-size: 0.85rem;
+      white-space: nowrap;
+    }
+
+    .article-content .checks {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+      margin-top: 12px;
+      margin-bottom: 12px;
+    }
+
+    @media (max-width: 820px) {
+      .article-content .checks { grid-template-columns: 1fr; }
+    }
+
+    .article-content .check {
+      display: flex;
+      gap: 12px;
+      padding: 14px;
+      border-radius: 12px;
+      border: 1px solid var(--gray-200);
+      background: var(--bg);
+    }
+
+    .article-content .check-icon {
+      width: 32px;
+      height: 32px;
+      border-radius: 10px;
+      background: var(--primary);
+      display: grid;
+      place-items: center;
+      flex: 0 0 auto;
+    }
+
+    .article-content .check-icon svg {
+      width: 18px;
+      height: 18px;
+      stroke: #fff !important;
+    }
+
+    .article-content .faq-item {
+      padding: 14px;
+      border-radius: 12px;
+      border: 1px solid var(--gray-200);
+      background: var(--bg);
+      margin-top: 12px;
+    }
+
+    .article-content .faq-q {
+      color: var(--gray-900);
+      font-weight: 700;
+      letter-spacing: -0.01em;
+    }
+
+    .article-content .faq-a { margin-top: 8px; }
+
+    .article-content .cta {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-top: 18px;
+    }
+
+    .article-content .btn {
+      padding: 10px 16px;
+      border-radius: 10px;
+      font-size: 0.9rem;
+      font-weight: 600;
+      text-decoration: none;
+      transition: all 0.2s ease;
+      border: 1px solid var(--gray-200);
+      background: var(--bg);
+      color: var(--gray-900);
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .article-content .btn:hover {
+      background: var(--gray-50);
+      border-color: var(--gray-300);
+      transform: translateY(-1px);
+    }
+
+    .article-content .btn-primary {
+      background: rgba(255,90,54,0.06);
+      border-color: rgba(255,90,54,0.25);
+    }
+
+    .article-content .btn-primary:hover {
+      border-color: var(--primary);
+    }
+
+    .article-content footer {
+      margin-top: 24px;
+      padding-top: 18px;
+      border-top: 1px solid var(--gray-200);
+      text-align: center;
+      color: var(--gray-400);
+      font-size: 0.9rem;
+    }
+
+    .article-content footer a {
+      color: var(--primary);
+    }
+
+    @media (max-width: 480px) {
+      .container { padding: 24px 16px; }
+      .topbar-inner { padding: 0 16px; }
+      .article-content p:first-child { font-size: 1.1rem; }
+    }
+  </style>
+</head>
+<body>
+  <nav class="topbar">
+    <div class="topbar-inner">
+      <a href="https://openclaw.ai" class="topbar-brand">
+        <img src="/openclaw-logo-text-dark.png" alt="OpenClaw" />
+      </a>
+      <div class="topbar-nav">
+        <a href={trustHref} class="topbar-link active">{t.nav.trust}</a>
+        <a href={threatModelHref} class="topbar-link">{t.nav.threatModel}</a>
+        <div class="lang-switcher">
+          <a href={langLinks.en.trust} class="lang-link">{langLinks.en.label}</a>
+          <a href={langLinks['zh-cn'].trust} class="lang-link">{langLinks['zh-cn'].label}</a>
+          <a href={langLinks.ko.trust} class="lang-link">{langLinks.ko.label}</a>
+          <a href={langLinks.ja.trust} class="lang-link active">{langLinks.ja.label}</a>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <main class="container">
+    <article class="article">
+      <header class="article-header">
+        <h1 class="article-title">{t.header.title}</h1>
+      </header>
+
+      <div class="article-content">
+        <p>
+          {t.intro}
+        </p>
+
+        <section class="section">
+          <h2>{t.newEra.heading}</h2>
+          {t.newEra.paragraphs.map(p => <p set:html={p} />)}
+        </section>
+
+        <section class="section">
+          <h2>{t.context.heading}</h2>
+          <p>{t.context.intro}</p>
+          <ul>
+            {t.context.capabilities.map(cap => <li>{cap}</li>)}
+          </ul>
+          <p>{t.context.capabilityNote}</p>
+          <p>{t.context.risksIntro}</p>
+          <ol>
+            {t.context.risks.map(r => <li><strong>{r.term}</strong> - {r.desc}</li>)}
+          </ol>
+          <p>{t.context.risksNote}</p>
+        </section>
+
+        <section class="section">
+          <h2>{t.scope.heading}</h2>
+          <p set:html={t.scope.intro} />
+
+          {t.scope.sections.map(sec => (
+            <>
+              <h4>{sec.title}</h4>
+              <ul>
+                {sec.items.map(item => <li set:html={item} />)}
+              </ul>
+            </>
+          ))}
+        </section>
+
+        <section class="section">
+          <h2>{t.programOverview.heading}</h2>
+          <p>{t.programOverview.intro}</p>
+
+          <div class="phases">
+            {t.programOverview.phases.map((phase, i) => (
+              <div class="phase">
+                <div class="phase-num">{i + 1}</div>
+                <div class="phase-content">
+                  <h4>{phase.title}</h4>
+                  <p>{phase.desc}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        <section class="section">
+          <h2>{t.phase1.heading}</h2>
+
+          <h3>{t.phase1.goal.title}</h3>
+          <p>{t.phase1.goal.text}</p>
+
+          <h3>{t.phase1.why.title}</h3>
+          <p>{t.phase1.why.text}</p>
+          <ul>
+            {t.phase1.why.items.map(item => <li>{item}</li>)}
+          </ul>
+          <p>{t.phase1.why.closing}</p>
+
+          <h3>{t.phase1.coverage.title}</h3>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  {t.phase1.coverage.headers.map(h => <th>{h}</th>)}
+                </tr>
+              </thead>
+              <tbody>
+                {t.phase1.coverage.rows.map(row => (
+                  <tr>
+                    {row.map(cell => <td set:html={cell} />)}
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+
+          <h3>{t.phase1.tmScope.title}</h3>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  {t.phase1.tmScope.headers.map(h => <th>{h}</th>)}
+                </tr>
+              </thead>
+              <tbody>
+                {t.phase1.tmScope.rows.map(row => (
+                  <tr>
+                    {row.map(cell => <td>{cell}</td>)}
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+
+          {t.phase1.closing.map(p => <p set:html={p} />)}
+        </section>
+
+        <section class="section">
+          <h2>{t.phase2.heading}</h2>
+
+          <h3>{t.phase2.goal.title}</h3>
+          <p>{t.phase2.goal.text}</p>
+
+          <h3>{t.phase2.table.title}</h3>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  {t.phase2.table.headers.map(h => <th>{h}</th>)}
+                </tr>
+              </thead>
+              <tbody>
+                {t.phase2.table.groups.map(group => (
+                  group.rows.map((row, ri) => (
+                    <tr>
+                      {ri === 0 && <td rowspan={group.rows.length} set:html={group.category} />}
+                      {row.map(cell => <td>{cell}</td>)}
+                    </tr>
+                  ))
+                ))}
+              </tbody>
+            </table>
+          </div>
+
+          <p>{t.phase2.closing}</p>
+        </section>
+
+        <section class="section">
+          <h2>{t.phase3.heading}</h2>
+
+          <h3>{t.phase3.goal.title}</h3>
+          <p>{t.phase3.goal.text}</p>
+
+          <h3>{t.phase3.scope.title}</h3>
+          <p>{t.phase3.scope.intro}</p>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  {t.phase3.scope.headers.map(h => <th>{h}</th>)}
+                </tr>
+              </thead>
+              <tbody>
+                {t.phase3.scope.rows.map(row => (
+                  <tr>
+                    {row.map(cell => <td set:html={cell} />)}
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+
+          <h3>{t.phase3.approach.title}</h3>
+          <ol>
+            {t.phase3.approach.items.map(item => (
+              <li><strong>{item.term}</strong> - {item.desc}</li>
+            ))}
+          </ol>
+
+          <h3>{t.phase3.disclosure.title}</h3>
+          <ul>
+            {t.phase3.disclosure.items.map(item => <li>{item}</li>)}
+          </ul>
+        </section>
+
+        <section class="section">
+          <h2>{t.phase4.heading}</h2>
+
+          <h3>{t.phase4.goal.title}</h3>
+          <p>{t.phase4.goal.text}</p>
+
+          <div class="report-box">
+            <h4>{t.phase4.reportBox.title}</h4>
+            <p>{t.phase4.reportBox.intro}</p>
+            <ul style="margin-top: 12px; margin-bottom: 12px;">
+              {t.phase4.reportBox.repos.map(repo => (
+                <li><strong>{repo.label}</strong> - <a href={repo.url}>{repo.name}</a></li>
+              ))}
+            </ul>
+            <p set:html={t.phase4.reportBox.fallback} />
+
+            <h4 style="margin-top: 24px;">{t.phase4.reportBox.fieldsTitle}</h4>
+            <div class="fields">
+              {t.phase4.reportBox.fields.map(f => <span class="field">{f}</span>)}
+            </div>
+            <p style="margin-top: 16px; font-size: 14px;">{t.phase4.reportBox.fieldsNote}</p>
+          </div>
+
+          <h3>{t.phase4.sla.title}</h3>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  {t.phase4.sla.headers.map(h => <th>{h}</th>)}
+                </tr>
+              </thead>
+              <tbody>
+                {t.phase4.sla.rows.map(row => (
+                  <tr>
+                    {row.map(cell => <td set:html={cell} />)}
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+
+          <h3>{t.phase4.commitments.title}</h3>
+          <ul>
+            {t.phase4.commitments.items.map(item => <li>{item}</li>)}
+          </ul>
+        </section>
+
+        <section class="section">
+          <h2>{t.securityTrust.heading}</h2>
+          <p set:html={t.securityTrust.bio} />
+          <p set:html={t.securityTrust.bioDetail} />
+
+          <h3>{t.securityTrust.responsibilitiesTitle}</h3>
+          <ul>
+            {t.securityTrust.responsibilities.map(r => <li>{r}</li>)}
+          </ul>
+        </section>
+
+        <section class="section">
+          <h2>{t.posture.heading}</h2>
+          <p>{t.posture.intro}</p>
+
+          <h3>{t.posture.defaultsTitle}</h3>
+          <div class="checks">
+            {t.posture.checks.map(check => (
+              <div class="check">
+                <div class="check-icon"><svg viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="3"><path d="M5 12l5 5L19 7"/></svg></div>
+                <div>
+                  <strong>{check.title}</strong>
+                  <p style="margin: 4px 0 0; font-size: 14px;">{check.desc}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+
+          <h3>{t.posture.verifyTitle}</h3>
+          <pre><code>{t.posture.verifyCommand}</code></pre>
+          <p>{t.posture.verifyIntro}</p>
+          <ul>
+            {t.posture.verifyItems.map(item => <li set:html={item} />)}
+          </ul>
+        </section>
+
+        <section class="section">
+          <h2>{t.timeline.heading}</h2>
+          <pre>{t.timeline.content}</pre>
+        </section>
+
+        <section class="section">
+          <h2>{t.faq.heading}</h2>
+
+          {t.faq.items.map(item => (
+            <div class="faq-item">
+              <div class="faq-q">{item.q}</div>
+              <div class="faq-a" set:html={item.a} />
+            </div>
+          ))}
+        </section>
+
+        <div class="cta">
+          <a href="https://github.com/openclaw/openclaw/labels/security" class="btn btn-primary">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/></svg>
+            {t.cta.roadmapLabel}
+          </a>
+          <a href="https://docs.openclaw.ai/security" class="btn btn-secondary">{t.cta.docsLabel}</a>
+        </div>
+
+        <footer>
+          <p>{t.footer.text} · <a href="https://openclaw.ai">openclaw.ai</a> · <a href="https://clawhub.ai">clawhub.ai</a></p>
+        </footer>
+      </div>
+    </article>
+  </main>
+</body>
+</html>

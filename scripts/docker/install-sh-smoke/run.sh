@@ -132,7 +132,7 @@ touch "$TMP_REPO/pnpm-workspace.yaml"
     cat /tmp/repo-detect.out >&2
     exit 1
   fi
-  if ! sed -r 's/\x1b\[[0-9;]*m//g' /tmp/repo-detect.out | grep -q "Install method: npm"; then
+  if ! sed -r 's/\x1b\[[0-9;]*m//g' /tmp/repo-detect.out | grep -Eq "Install method([[:space:]]*:)?[[:space:]]+npm"; then
     echo "ERROR: expected repo-detect dry-run to default to npm install" >&2
     cat /tmp/repo-detect.out >&2
     exit 1
