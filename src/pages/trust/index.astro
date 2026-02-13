@@ -1,0 +1,1124 @@
+---
+const isSubdomain = Astro.url.hostname === 'trust.openclaw.ai';
+const trustHref = isSubdomain ? '/' : '/trust';
+const threatModelHref = isSubdomain ? '/threatmodel' : '/trust/threatmodel';
+
+const langLinks = {
+  en: { label: 'EN', trust: trustHref, threatmodel: threatModelHref },
+  'zh-cn': { label: '中文', trust: isSubdomain ? '/zh-cn' : '/trust/zh-cn', threatmodel: isSubdomain ? '/zh-cn/threatmodel' : '/trust/zh-cn/threatmodel' },
+  ko: { label: '한국어', trust: isSubdomain ? '/ko' : '/trust/ko', threatmodel: isSubdomain ? '/ko/threatmodel' : '/trust/ko/threatmodel' },
+  ja: { label: '日本語', trust: isSubdomain ? '/ja' : '/trust/ja', threatmodel: isSubdomain ? '/ja/threatmodel' : '/trust/ja/threatmodel' },
+};
+---
+
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Trust - OpenClaw</title>
+  <meta name="description" content="OpenClaw Security Program - formal security initiative for AI agents that take real-world actions." />
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400&family=Fragment+Mono:ital@0;1&display=swap" rel="stylesheet">
+  <style is:inline>
+    :root {
+      --primary: #ff5a36;
+      --primary-light: #ff8a6b;
+      --bg: #ffffff;
+      --gray-50: rgb(250,245,244);
+      --gray-100: rgb(245,240,239);
+      --gray-200: rgb(230,225,224);
+      --gray-300: rgb(213,208,207);
+      --gray-400: rgb(166,161,160);
+      --gray-500: rgb(119,114,113);
+      --gray-600: rgb(87,82,81);
+      --gray-700: rgb(70,65,64);
+      --gray-800: rgb(45,40,38);
+      --gray-900: rgb(30,25,24);
+      --gray-950: rgb(17,12,11);
+      --heading: "DM Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif;
+      --body: "Fragment Mono", -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { height: 100%; scroll-behavior: smooth; }
+
+    body {
+      min-height: 100%;
+      font-family: var(--body);
+      color: var(--gray-500);
+      background: var(--bg);
+      -webkit-font-smoothing: antialiased;
+      line-height: 1.6;
+      font-size: 14px;
+    }
+
+    ::selection { background: var(--primary); color: #fff; }
+
+    a { color: var(--gray-500); text-decoration: none; }
+    a:hover { color: var(--gray-900); }
+
+    /* Topbar */
+    .topbar {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: var(--bg);
+      border-bottom: 1px solid var(--gray-200);
+    }
+
+    .topbar-inner {
+      max-width: 720px;
+      margin: 0 auto;
+      padding: 0 24px;
+      height: 52px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .topbar-brand {
+      display: flex;
+      align-items: center;
+      text-decoration: none;
+      color: var(--gray-900);
+    }
+
+    .topbar-brand:hover { color: var(--gray-900); }
+
+    .topbar-brand img {
+      height: 28px;
+      width: auto;
+    }
+
+    .topbar-nav {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .topbar-link {
+      padding: 6px 14px;
+      border-radius: 8px;
+      font-family: var(--heading);
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--gray-500);
+      transition: color 0.15s, background 0.15s;
+    }
+
+    .topbar-link:hover {
+      color: var(--gray-900);
+      background: var(--gray-50);
+    }
+
+    .topbar-link.active {
+      color: var(--primary);
+      font-weight: 600;
+    }
+
+    .lang-switcher {
+      display: flex;
+      align-items: center;
+      gap: 2px;
+      margin-left: 8px;
+      padding-left: 10px;
+      border-left: 1px solid var(--gray-200);
+    }
+
+    .lang-link {
+      padding: 4px 8px;
+      border-radius: 6px;
+      font-family: var(--heading);
+      font-size: 12px;
+      font-weight: 500;
+      color: var(--gray-400);
+      transition: color 0.15s, background 0.15s;
+    }
+
+    .lang-link:hover {
+      color: var(--gray-900);
+      background: var(--gray-50);
+    }
+
+    .lang-link.active {
+      color: var(--primary);
+      font-weight: 600;
+    }
+
+    .container {
+      max-width: 720px;
+      margin: 0 auto;
+      padding: 40px 24px;
+      min-height: 100vh;
+    }
+
+    .article-header {
+      margin-bottom: 32px;
+    }
+
+    .article-title {
+      font-family: var(--heading);
+      font-size: clamp(2rem, 6vw, 3rem);
+      font-weight: 700;
+      color: var(--gray-900);
+      line-height: 1.2;
+      margin-bottom: 0;
+    }
+
+    .article-content {
+      line-height: 1.8;
+      color: var(--gray-600);
+    }
+
+    .article-content p:first-child {
+      font-size: 1.15rem;
+      line-height: 1.7;
+      color: var(--gray-800);
+      margin-bottom: 16px;
+    }
+
+    .article-content p {
+      margin-bottom: 20px;
+    }
+
+    .article-content .section {
+      margin-top: 28px;
+    }
+
+    .article-content h2 {
+      font-family: var(--heading);
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--gray-900);
+      margin-top: 32px;
+      margin-bottom: 4px;
+    }
+
+    .article-content h3 {
+      margin-top: 24px;
+      margin-bottom: 4px;
+      font-family: var(--heading);
+      font-size: 1.25rem;
+      font-weight: 600;
+      color: var(--gray-900);
+    }
+
+    .article-content h4 {
+      margin-top: 20px;
+      margin-bottom: 4px;
+      font-family: var(--heading);
+      font-size: 1.05rem;
+      font-weight: 600;
+      color: var(--gray-800);
+    }
+
+    .article-content ul,
+    .article-content ol {
+      margin-bottom: 12px;
+      padding-left: 24px;
+    }
+
+    .article-content li {
+      margin-bottom: 4px;
+      padding-left: 8px;
+    }
+
+    .article-content li::marker { color: var(--primary); }
+
+    .article-content strong {
+      color: var(--gray-800);
+      font-weight: 600;
+    }
+
+    .article-content a {
+      color: var(--primary);
+      text-decoration: underline;
+      text-underline-offset: 3px;
+    }
+
+    .article-content a:hover { color: var(--gray-900); }
+
+    .article-content code {
+      font-family: var(--body);
+      font-size: 0.9em;
+      padding: 2px 6px;
+      border-radius: 4px;
+      background: var(--gray-100);
+      color: var(--primary);
+    }
+
+    .article-content pre {
+      padding: 20px;
+      border-radius: 12px;
+      background: var(--gray-950);
+      color: var(--gray-100);
+      border: 1px solid var(--gray-200);
+      overflow-x: auto;
+      margin-bottom: 24px;
+    }
+
+    .article-content pre code {
+      padding: 0;
+      background: transparent;
+      color: inherit;
+    }
+
+    .article-content .phases {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 14px;
+      margin-top: 14px;
+    }
+
+    @media (max-width: 820px) {
+      .article-content .phases { grid-template-columns: 1fr; }
+    }
+
+    .article-content .phase {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      padding: 16px;
+      border-radius: 12px;
+      background: var(--bg);
+      border: 1px solid var(--gray-200);
+    }
+
+    .article-content .phase-num {
+      width: 38px;
+      height: 38px;
+      border-radius: 12px;
+      display: grid;
+      place-items: center;
+      font-weight: 900;
+      color: #fff;
+      background: var(--primary);
+      flex: 0 0 auto;
+    }
+
+    .article-content .table-wrap {
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      margin-top: 12px;
+      margin-bottom: 20px;
+    }
+
+    .article-content .table-wrap table {
+      min-width: 640px;
+    }
+
+    .article-content table {
+      width: 100%;
+      border-collapse: collapse;
+      border-radius: 12px;
+      border: 1px solid var(--gray-200);
+      background: var(--bg);
+      overflow: hidden;
+    }
+
+    .article-content th,
+    .article-content td {
+      padding: 10px 12px;
+      border-bottom: 1px solid var(--gray-200);
+      vertical-align: top;
+      color: var(--gray-600);
+      font-size: 0.95rem;
+    }
+
+    .article-content th {
+      text-align: left;
+      color: var(--gray-900);
+      font-weight: 600;
+      background: var(--gray-50);
+    }
+
+    .article-content .report-box {
+      margin-top: 12px;
+      padding: 18px;
+      border-radius: 12px;
+      border-left: 3px solid var(--primary);
+      background: rgba(255,90,54,0.04);
+    }
+
+    .article-content .email-display {
+      display: inline-block;
+      margin-top: 12px;
+      padding: 10px 12px;
+      border-radius: 8px;
+      background: var(--gray-950);
+      border: 1px solid var(--gray-200);
+      font-family: var(--body);
+      color: var(--primary);
+      font-weight: 600;
+    }
+
+    .article-content .fields {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 12px;
+    }
+
+    .article-content .field {
+      padding: 6px 10px;
+      border-radius: 999px;
+      border: 1px solid var(--gray-200);
+      background: var(--bg);
+      color: var(--gray-600);
+      font-size: 0.85rem;
+      white-space: nowrap;
+    }
+
+    .article-content .checks {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+      margin-top: 12px;
+      margin-bottom: 12px;
+    }
+
+    @media (max-width: 820px) {
+      .article-content .checks { grid-template-columns: 1fr; }
+    }
+
+    .article-content .check {
+      display: flex;
+      gap: 12px;
+      padding: 14px;
+      border-radius: 12px;
+      border: 1px solid var(--gray-200);
+      background: var(--bg);
+    }
+
+    .article-content .check-icon {
+      width: 32px;
+      height: 32px;
+      border-radius: 10px;
+      background: var(--primary);
+      display: grid;
+      place-items: center;
+      flex: 0 0 auto;
+    }
+
+    .article-content .check-icon svg {
+      width: 18px;
+      height: 18px;
+      stroke: #fff !important;
+    }
+
+    .article-content .faq-item {
+      padding: 14px;
+      border-radius: 12px;
+      border: 1px solid var(--gray-200);
+      background: var(--bg);
+      margin-top: 12px;
+    }
+
+    .article-content .faq-q {
+      color: var(--gray-900);
+      font-weight: 700;
+      letter-spacing: -0.01em;
+    }
+
+    .article-content .faq-a { margin-top: 8px; }
+
+    .article-content .cta {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-top: 18px;
+    }
+
+    .article-content .btn {
+      padding: 10px 16px;
+      border-radius: 10px;
+      font-size: 0.9rem;
+      font-weight: 600;
+      text-decoration: none;
+      transition: all 0.2s ease;
+      border: 1px solid var(--gray-200);
+      background: var(--bg);
+      color: var(--gray-900);
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .article-content .btn:hover {
+      background: var(--gray-50);
+      border-color: var(--gray-300);
+      transform: translateY(-1px);
+    }
+
+    .article-content .btn-primary {
+      background: rgba(255,90,54,0.06);
+      border-color: rgba(255,90,54,0.25);
+    }
+
+    .article-content .btn-primary:hover {
+      border-color: var(--primary);
+    }
+
+    .article-content footer {
+      margin-top: 24px;
+      padding-top: 18px;
+      border-top: 1px solid var(--gray-200);
+      text-align: center;
+      color: var(--gray-400);
+      font-size: 0.9rem;
+    }
+
+    .article-content footer a {
+      color: var(--primary);
+    }
+
+    @media (max-width: 480px) {
+      .container { padding: 24px 16px; }
+      .topbar-inner { padding: 0 16px; }
+      .article-content p:first-child { font-size: 1.1rem; }
+    }
+  </style>
+</head>
+<body>
+  <nav class="topbar">
+    <div class="topbar-inner">
+      <a href="https://openclaw.ai" class="topbar-brand">
+        <img src="/openclaw-logo-text-dark.png" alt="OpenClaw" />
+      </a>
+      <div class="topbar-nav">
+        <a href={trustHref} class="topbar-link active">Trust</a>
+        <a href={threatModelHref} class="topbar-link">Threat Model</a>
+        <div class="lang-switcher">
+          <a href={langLinks.en.trust} class="lang-link active">{langLinks.en.label}</a>
+          <a href={langLinks['zh-cn'].trust} class="lang-link">{langLinks['zh-cn'].label}</a>
+          <a href={langLinks.ko.trust} class="lang-link">{langLinks.ko.label}</a>
+          <a href={langLinks.ja.trust} class="lang-link">{langLinks.ja.label}</a>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <main class="container">
+    <article class="article">
+      <header class="article-header">
+        <h1 class="article-title">Trust</h1>
+      </header>
+
+      <div class="article-content">
+        <p>
+          Security posture, roadmap, and how we think about agents that can take real-world actions.
+        </p>
+
+        <section class="section">
+          <h2>A New Era in Computing Security</h2>
+          <p>For the past 20 years, security models have been built around locking devices and applications down - setting boundaries between inter-process communications, separating internet from local, sandboxing untrusted code. These principles remain important.</p>
+          <p>But AI agents represent a fundamental shift.</p>
+          <p>Unlike traditional software that does exactly what code tells it to do, AI agents interpret natural language and make decisions about actions. They blur the boundary between user intent and machine execution. They can be manipulated through language itself.</p>
+          <p>We understand that with the great utility of a tool like OpenClaw comes great responsibility. Done wrong, an AI agent is a liability. Done right, we can change personal computing for the better.</p>
+          <p><strong>This security program exists to get it right.</strong></p>
+        </section>
+
+        <section class="section">
+          <h2>Context</h2>
+          <p>OpenClaw is an AI agent platform. Unlike chatbots that only generate text, OpenClaw agents can:</p>
+          <ul>
+            <li>Execute shell commands on the host machine</li>
+            <li>Send messages through WhatsApp, Telegram, Discord, Slack, and other channels</li>
+            <li>Read and write files in the workspace</li>
+            <li>Fetch arbitrary URLs from the internet</li>
+            <li>Schedule automated tasks</li>
+            <li>Access connected services and APIs</li>
+          </ul>
+          <p>This capability is what makes OpenClaw useful. It's also what makes security critical.</p>
+          <p>AI agents that can take real-world actions introduce risks that traditional software doesn't have:</p>
+          <ol>
+            <li><strong>Prompt injection</strong> - Malicious users can craft messages that manipulate the AI into performing unintended actions</li>
+            <li><strong>Indirect injection</strong> - Malicious content in fetched URLs, emails, or documents can hijack agent behavior</li>
+            <li><strong>Tool abuse</strong> - Even without injection, misconfigured agents can cause damage through overly permissive settings</li>
+            <li><strong>Identity risks</strong> - Agents can send messages as you, potentially damaging relationships or reputation</li>
+          </ol>
+          <p>These aren't theoretical. They're documented attack patterns that affect all AI agent systems.</p>
+        </section>
+
+        <section class="section">
+          <h2>Scope</h2>
+          <p>This security program covers the entire OpenClaw ecosystem. <strong>Nothing is out of scope.</strong></p>
+
+          <h4>Core Platform</h4>
+          <ul>
+            <li>OpenClaw CLI and Gateway (<code>openclaw</code>)</li>
+            <li>Agent execution engine</li>
+            <li>Tool implementations</li>
+            <li>Channel integrations (WhatsApp, Telegram, Discord, Slack, Signal, etc.)</li>
+          </ul>
+
+          <h4>Applications</h4>
+          <ul>
+            <li>macOS desktop application</li>
+            <li>iOS mobile application</li>
+            <li>Android mobile application</li>
+            <li>Web interface</li>
+          </ul>
+
+          <h4>Services</h4>
+          <ul>
+            <li>ClawHub (clawhub.ai) - Skills marketplace and registry</li>
+            <li>Documentation (docs.openclaw.ai)</li>
+            <li>Any hosted infrastructure</li>
+          </ul>
+
+          <h4>Extensions</h4>
+          <ul>
+            <li>Official extensions (<code>extensions/</code>)</li>
+            <li>Plugin SDK and third-party plugins</li>
+            <li>Skills distributed through ClawHub</li>
+          </ul>
+
+          <h4>People</h4>
+          <ul>
+            <li>Core maintainers and contributors</li>
+            <li>Security processes and response procedures</li>
+            <li>Supply chain and dependency management</li>
+          </ul>
+        </section>
+
+        <section class="section">
+          <h2>Program Overview</h2>
+          <p>We're establishing a formal security function with four phases:</p>
+
+          <div class="phases">
+            <div class="phase">
+              <div class="phase-num">1</div>
+              <div class="phase-content">
+                <h4>Transparency</h4>
+                <p>Develop threat model openly with community contribution</p>
+              </div>
+            </div>
+            <div class="phase">
+              <div class="phase-num">2</div>
+              <div class="phase-content">
+                <h4>Product Security Roadmap</h4>
+                <p>Define defensive engineering goals and track publicly</p>
+              </div>
+            </div>
+            <div class="phase">
+              <div class="phase-num">3</div>
+              <div class="phase-content">
+                <h4>Code Review</h4>
+                <p>Manual security review of entire codebase</p>
+              </div>
+            </div>
+            <div class="phase">
+              <div class="phase-num">4</div>
+              <div class="phase-content">
+                <h4>Security Triage</h4>
+                <p>Formal process for handling vulnerability reports</p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="section">
+          <h2>Phase 1: Transparency</h2>
+
+          <h3>Goal</h3>
+          <p>Develop and publish our threat model openly, inviting community contribution, so users understand the risks and can make informed decisions about their deployments.</p>
+
+          <h3>Why</h3>
+          <p>Security through obscurity doesn't work. Attackers already know these techniques - they're documented in academic papers, security blogs, and conference talks. What's missing is clear communication to users about:</p>
+          <ul>
+            <li>What risks exist</li>
+            <li>What we're doing about them</li>
+            <li>What users should do to protect themselves</li>
+          </ul>
+          <p>By developing the threat model openly, we benefit from collective expertise and build trust through transparency.</p>
+
+          <h3>Threat Model Coverage</h3>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>Category</th>
+                  <th>Risks Covered</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><strong>A. Input Manipulation</strong></td>
+                  <td>Direct prompt injection, indirect injection, tool argument injection, context manipulation</td>
+                </tr>
+                <tr>
+                  <td><strong>B. Auth & Access</strong></td>
+                  <td>AllowFrom bypass, privilege escalation, cross-session access, API key exposure</td>
+                </tr>
+                <tr>
+                  <td><strong>C. Data Security</strong></td>
+                  <td>System prompt disclosure, workspace exposure, memory leakage, data exfiltration</td>
+                </tr>
+                <tr>
+                  <td><strong>D. Infrastructure</strong></td>
+                  <td>SSRF, gateway exposure, dependency vulnerabilities, file permissions</td>
+                </tr>
+                <tr>
+                  <td><strong>E. Operations</strong></td>
+                  <td>Logging sensitive data, insufficient monitoring, resource exhaustion, misconfiguration</td>
+                </tr>
+                <tr>
+                  <td><strong>F. Supply Chain</strong></td>
+                  <td>ClawHub skills integrity, extension security, dependency vulnerabilities</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <h3>Threat Model Scope</h3>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>Component</th>
+                  <th>Why It's Included</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Core platform (CLI, Gateway, agents, tools)</td>
+                  <td>Primary attack surface</td>
+                </tr>
+                <tr>
+                  <td>ClawHub (clawhub.ai)</td>
+                  <td>Skills marketplace - supply chain risk</td>
+                </tr>
+                <tr>
+                  <td>Mobile apps (iOS, Android)</td>
+                  <td>Agent control interface, credential storage</td>
+                </tr>
+                <tr>
+                  <td>Desktop app (macOS)</td>
+                  <td>Gateway host, system integration</td>
+                </tr>
+                <tr>
+                  <td>Extensions and plugins</td>
+                  <td>Third-party code execution</td>
+                </tr>
+                <tr>
+                  <td>Build and release pipeline</td>
+                  <td>Distribution integrity</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <p>Each risk in the threat model will include description and severity rating, attack examples, current mitigations, known gaps, and user recommendations.</p>
+          <p><strong>The threat model will be open for community contribution via pull requests.</strong></p>
+        </section>
+
+        <section class="section">
+          <h2>Phase 2: Product Security Roadmap</h2>
+
+          <h3>Goal</h3>
+          <p>Create a public product security roadmap defining defensive engineering goals, tracked as GitHub issues so the community can follow progress, provide input, and contribute.</p>
+
+          <h3>Defensive Engineering Goals</h3>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>Category</th>
+                  <th>Goal</th>
+                  <th>Description</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td rowspan="3"><strong>Prompt Injection Protection</strong></td>
+                  <td>Input validation</td>
+                  <td>Pattern detection and alerting for injection attempts</td>
+                </tr>
+                <tr>
+                  <td>Tool confirmation</td>
+                  <td>Require explicit approval for sensitive actions</td>
+                </tr>
+                <tr>
+                  <td>Context isolation</td>
+                  <td>Prevent cross-session contamination</td>
+                </tr>
+                <tr>
+                  <td rowspan="3"><strong>Privacy Enhancements</strong></td>
+                  <td>System prompt protection</td>
+                  <td>Prevent disclosure of system prompts</td>
+                </tr>
+                <tr>
+                  <td>Data minimization</td>
+                  <td>Reduce unnecessary data retention</td>
+                </tr>
+                <tr>
+                  <td>Audit logging</td>
+                  <td>Clear visibility into agent actions</td>
+                </tr>
+                <tr>
+                  <td rowspan="3"><strong>Access Control</strong></td>
+                  <td>Fine-grained permissions</td>
+                  <td>Per-tool, per-session access controls</td>
+                </tr>
+                <tr>
+                  <td>Rate limiting</td>
+                  <td>Prevent resource exhaustion</td>
+                </tr>
+                <tr>
+                  <td>Spending controls</td>
+                  <td>Hard limits on API costs</td>
+                </tr>
+                <tr>
+                  <td rowspan="3"><strong>Supply Chain</strong></td>
+                  <td>Skills verification</td>
+                  <td>Integrity checks for ClawHub skills</td>
+                </tr>
+                <tr>
+                  <td>Dependency auditing</td>
+                  <td>Automated vulnerability scanning</td>
+                </tr>
+                <tr>
+                  <td>Signed releases</td>
+                  <td>Cryptographic verification of updates</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <p>Specific priority issues will be identified through the Phase 3 code review and added to the public roadmap as they are discovered and triaged.</p>
+        </section>
+
+        <section class="section">
+          <h2>Phase 3: Code Review</h2>
+
+          <h3>Goal</h3>
+          <p>While the community is already working around the clock to find and address flaws - and we're grateful for every contribution - we recognize this is an open-source project where contributors provide their best effort. Phase 3 is a dedicated, comprehensive security assessment specifically designed to drive out deeply rooted systemic issues and improve overall code quality and user safety.</p>
+
+          <h3>Scope</h3>
+          <p>The code review covers the entire OpenClaw codebase and ecosystem:</p>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>Area</th>
+                  <th>Path</th>
+                  <th>Why</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr><td>Agent execution</td><td><code>src/agents/</code></td><td>Core attack surface - how agents run</td></tr>
+                <tr><td>Tool implementations</td><td><code>src/agents/tools/</code></td><td>What agents can do - exec, messaging, web</td></tr>
+                <tr><td>Message processing</td><td><code>src/auto-reply/</code></td><td>Entry point for all user input</td></tr>
+                <tr><td>Security utilities</td><td><code>src/security/</code></td><td>Existing security controls</td></tr>
+                <tr><td>Gateway server</td><td><code>src/gateway/</code></td><td>Network-exposed component</td></tr>
+                <tr><td>Authentication</td><td><code>src/*/auth*</code></td><td>Credential handling, API keys</td></tr>
+                <tr><td>Session management</td><td><code>src/config/sessions.ts</code></td><td>Cross-session isolation</td></tr>
+                <tr><td>Pairing and access control</td><td><code>src/pairing/</code>, <code>src/*/access-control*</code></td><td>DM and group gating</td></tr>
+                <tr><td>External content handling</td><td><code>src/security/external-content.ts</code></td><td>Injection defenses</td></tr>
+                <tr><td>macOS desktop app</td><td><code>apps/macos/</code></td><td>Gateway host, system integration</td></tr>
+                <tr><td>iOS mobile app</td><td><code>apps/ios/</code></td><td>Agent control, credential storage</td></tr>
+                <tr><td>Android mobile app</td><td><code>apps/android/</code></td><td>Agent control, credential storage</td></tr>
+                <tr><td>ClawHub</td><td>clawhub.ai</td><td>Skills registry - supply chain risk</td></tr>
+                <tr><td>Official extensions</td><td><code>extensions/</code></td><td>First-party plugins</td></tr>
+                <tr><td>Build and release pipeline</td><td>CI/CD, scripts</td><td>Distribution integrity, signing</td></tr>
+              </tbody>
+            </table>
+          </div>
+
+          <h3>Approach</h3>
+          <ol>
+            <li><strong>Manual code review</strong> - Human-in-the-loop analysis of security-critical paths</li>
+            <li><strong>Automated scanning</strong> - Static analysis, dependency auditing, secret detection</li>
+            <li><strong>Dynamic testing</strong> - Attempting documented attack patterns against running system</li>
+            <li><strong>Architecture review</strong> - Evaluating trust boundaries and data flows</li>
+          </ol>
+
+          <h3>Disclosure</h3>
+          <ul>
+            <li>All critical and high findings fixed before public disclosure</li>
+            <li>Findings summary published after remediation</li>
+            <li>Full report available on request</li>
+            <li>CVEs assigned where applicable</li>
+          </ul>
+        </section>
+
+        <section class="section">
+          <h2>Phase 4: Security Triage Function</h2>
+
+          <h3>Goal</h3>
+          <p>Establish a formal process for receiving, triaging, and responding to security vulnerability reports.</p>
+
+          <div class="report-box">
+            <h4>Report a Vulnerability</h4>
+            <p>We take security reports seriously. Report vulnerabilities directly to the repository where the issue lives:</p>
+            <ul style="margin-top: 12px; margin-bottom: 12px;">
+              <li><strong>Core CLI and gateway</strong> - <a href="https://github.com/openclaw/openclaw/security/advisories/new">openclaw/openclaw</a></li>
+              <li><strong>macOS desktop app</strong> - <a href="https://github.com/openclaw/openclaw/security/advisories/new">openclaw/openclaw</a> (apps/macos)</li>
+              <li><strong>iOS app</strong> - <a href="https://github.com/openclaw/openclaw/security/advisories/new">openclaw/openclaw</a> (apps/ios)</li>
+              <li><strong>Android app</strong> - <a href="https://github.com/openclaw/openclaw/security/advisories/new">openclaw/openclaw</a> (apps/android)</li>
+              <li><strong>ClawHub</strong> - <a href="https://github.com/openclaw/clawhub/security/advisories/new">openclaw/clawhub</a></li>
+              <li><strong>Trust and threat model</strong> - <a href="https://github.com/openclaw/trust/issues/new">openclaw/trust</a></li>
+            </ul>
+            <p>For issues that don't fit a specific repo, or if you're unsure, email <span class="email-display" style="display: inline; padding: 4px 8px; font-size: 13px;">security@openclaw.ai</span> and we'll route it.</p>
+
+            <h4 style="margin-top: 24px;">Required in Reports</h4>
+            <div class="fields">
+              <span class="field">Title</span>
+              <span class="field">Severity Assessment</span>
+              <span class="field">Impact</span>
+              <span class="field">Affected Component</span>
+              <span class="field">Technical Reproduction</span>
+              <span class="field">Demonstrated Impact</span>
+              <span class="field">Environment</span>
+              <span class="field">Remediation Advice</span>
+            </div>
+            <p style="margin-top: 16px; font-size: 14px;">Reports without reproduction steps, demonstrated impact, and remediation advice will be deprioritized. Given the volume of AI-generated scanner findings, we must ensure we're receiving vetted reports from researchers who understand the issues.</p>
+          </div>
+
+          <h3>Response SLAs</h3>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>Severity</th>
+                  <th>Definition</th>
+                  <th>First Response</th>
+                  <th>Triage</th>
+                  <th>Fix Target</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><strong>Critical</strong></td>
+                  <td>RCE, auth bypass, mass data exposure</td>
+                  <td>24 hours</td>
+                  <td>48 hours</td>
+                  <td>7 days</td>
+                </tr>
+                <tr>
+                  <td><strong>High</strong></td>
+                  <td>Significant impact, single-user scope</td>
+                  <td>48 hours</td>
+                  <td>5 days</td>
+                  <td>30 days</td>
+                </tr>
+                <tr>
+                  <td><strong>Medium</strong></td>
+                  <td>Limited impact, requires specific conditions</td>
+                  <td>5 days</td>
+                  <td>14 days</td>
+                  <td>90 days</td>
+                </tr>
+                <tr>
+                  <td><strong>Low</strong></td>
+                  <td>Minor issues, defense in depth</td>
+                  <td>14 days</td>
+                  <td>30 days</td>
+                  <td>Best effort</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <h3>Our Commitments</h3>
+          <ul>
+            <li>Acknowledge all complete reports within 48 hours</li>
+            <li>Provide status updates at least every 14 days</li>
+            <li>Credit researchers in advisories (unless anonymity requested)</li>
+            <li>Not pursue legal action against good-faith security research</li>
+            <li>Consider bounties for qualifying critical/high findings (case-by-case)</li>
+          </ul>
+        </section>
+
+        <section class="section">
+          <h2>Security & Trust</h2>
+          <p><strong>Jamieson O'Reilly</strong> (<a href="https://twitter.com/theonejvo">@theonejvo</a>) is Security & Trust at OpenClaw.</p>
+          <p>Jamieson is the founder of <a href="https://dvuln.com">Dvuln</a>, co-founder of <a href="https://tryaether.ai">Aether AI</a> (the world's most dangerous AI, in your corner), a member of the CREST Advisory Council, and brings extensive experience in offensive security, penetration testing, and security program development.</p>
+
+          <h3>Responsibilities</h3>
+          <ul>
+            <li>Lead threat modeling and risk assessment</li>
+            <li>Scope and oversee code review</li>
+            <li>Establish triage process and response procedures</li>
+            <li>Review security-critical code changes</li>
+            <li>Provide guidance on security architecture decisions</li>
+          </ul>
+        </section>
+
+        <section class="section">
+          <h2>Current Security Posture</h2>
+          <p>OpenClaw already has security controls in place. Understanding what exists helps users configure their deployments appropriately.</p>
+
+          <h3>Secure by Default</h3>
+          <div class="checks">
+            <div class="check">
+              <div class="check-icon"><svg viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="3"><path d="M5 12l5 5L19 7"/></svg></div>
+              <div>
+                <strong>DM Policy: Pairing</strong>
+                <p style="margin: 4px 0 0; font-size: 14px;">Unknown senders must complete pairing flow with expiring code</p>
+              </div>
+            </div>
+            <div class="check">
+              <div class="check-icon"><svg viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="3"><path d="M5 12l5 5L19 7"/></svg></div>
+              <div>
+                <strong>Exec Security: Deny</strong>
+                <p style="margin: 4px 0 0; font-size: 14px;">Commands not on allowlist are denied by default, user prompted for approval</p>
+              </div>
+            </div>
+            <div class="check">
+              <div class="check-icon"><svg viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="3"><path d="M5 12l5 5L19 7"/></svg></div>
+              <div>
+                <strong>Default AllowFrom: Self-only</strong>
+                <p style="margin: 4px 0 0; font-size: 14px;">If not configured, only your own number can DM the agent</p>
+              </div>
+            </div>
+            <div class="check">
+              <div class="check-icon"><svg viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="3"><path d="M5 12l5 5L19 7"/></svg></div>
+              <div>
+                <strong>Session Isolation</strong>
+                <p style="margin: 4px 0 0; font-size: 14px;">Conversations are isolated per session key</p>
+              </div>
+            </div>
+            <div class="check">
+              <div class="check-icon"><svg viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="3"><path d="M5 12l5 5L19 7"/></svg></div>
+              <div>
+                <strong>SSRF Protection</strong>
+                <p style="margin: 4px 0 0; font-size: 14px;">Internal IPs and localhost blocked in web_fetch</p>
+              </div>
+            </div>
+            <div class="check">
+              <div class="check-icon"><svg viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="3"><path d="M5 12l5 5L19 7"/></svg></div>
+              <div>
+                <strong>Gateway Auth Required</strong>
+                <p style="margin: 4px 0 0; font-size: 14px;">WebSocket connections must authenticate</p>
+              </div>
+            </div>
+          </div>
+
+          <h3>Verify Your Setup</h3>
+          <pre><code>openclaw security audit --deep</code></pre>
+          <p>Key items to verify:</p>
+          <ul>
+            <li>DM policy is <code>pairing</code> or <code>allowlist</code> (not <code>open</code>)</li>
+            <li><code>allowFrom</code> is configured for your channels</li>
+            <li>Exec security is not set to <code>full</code> unless intended</li>
+            <li>Gateway is bound to loopback or behind authentication</li>
+            <li>Workspace doesn't contain secrets</li>
+          </ul>
+        </section>
+
+        <section class="section">
+          <h2>Timeline</h2>
+          <pre>WEEK 1-2: Phase 1 - Transparency
+├── Threat model development begins (open for contribution)
+├── Security configuration guide drafted
+├── Visual overview created
+└── Announcement posted
+
+WEEK 3-4: Phase 2 - Product Security Roadmap
+├── GitHub issues created for defensive engineering goals
+├── Security label and milestone set up
+├── Community input period opens
+└── First security work begins
+
+WEEK 5-8: Phase 3 - Code Review Preparation
+├── Scope finalized (entire codebase)
+├── Review begins
+└── Initial findings
+
+WEEK 8-12: Phase 3 - Code Review Execution
+├── Manual review completed
+├── Findings documented
+├── Remediation for critical/high
+└── Verification completed
+
+WEEK 8+: Phase 4 - Triage Function
+├── security@openclaw.ai live
+├── PGP key published
+├── Disclosure policy published
+└── First advisories (if needed)
+
+ONGOING:
+├── Monthly security updates
+├── Continuous threat model refinement
+├── Regular dependency auditing
+└── Community engagement</pre>
+        </section>
+
+        <section class="section">
+          <h2>FAQ</h2>
+
+          <div class="faq-item">
+            <div class="faq-q">"Is OpenClaw safe to use right now?"</div>
+            <div class="faq-a">
+              <p>Yes, with proper configuration. OpenClaw has security controls enabled by default:</p>
+              <ul>
+                <li><strong>DM Policy</strong>: Defaults to <code>pairing</code> - unknown senders must complete a pairing flow with an expiring code</li>
+                <li><strong>Exec Security</strong>: Defaults to <code>deny</code> with <code>ask: on-miss</code> - dangerous commands require approval</li>
+                <li><strong>AllowFrom</strong>: If not configured, defaults to self-only</li>
+                <li><strong>Gateway Auth</strong>: Required by default</li>
+              </ul>
+              <p>Run <code>openclaw security audit --deep</code> to verify your setup. See <a href="https://docs.openclaw.ai/gateway/security">docs.openclaw.ai/gateway/security</a></p>
+            </div>
+          </div>
+
+          <div class="faq-item">
+            <div class="faq-q">"Why develop the threat model openly?"</div>
+            <div class="faq-a">
+              <p>These attack techniques are already public knowledge - documented in papers, blogs, and talks. Developing openly benefits from collective expertise, builds trust through transparency, and holds us accountable.</p>
+            </div>
+          </div>
+
+          <div class="faq-item">
+            <div class="faq-q">"Why require remediation advice in vulnerability reports?"</div>
+            <div class="faq-a">
+              <p>We receive reports from automated scanners and AI tools that flag theoretical issues without understanding them. By requiring reporters to propose a fix, we filter out scanner noise, get actionable reports from researchers who understand the issues, and speed up remediation with expert input.</p>
+            </div>
+          </div>
+
+          <div class="faq-item">
+            <div class="faq-q">"What about ClawHub?"</div>
+            <div class="faq-a">
+              <p>ClawHub (clawhub.ai) is in scope for the entire security program - threat model, code review, and ongoing monitoring. Skills are code that runs in your agent's context - supply chain security is critical.</p>
+            </div>
+          </div>
+
+          <div class="faq-item">
+            <div class="faq-q">"What about mobile apps and desktop?"</div>
+            <div class="faq-a">
+              <p>All applications are in scope. The iOS app, Android app, and macOS desktop app will all be covered by the code review and included in the threat model. Nothing is out of scope.</p>
+            </div>
+          </div>
+
+          <div class="faq-item">
+            <div class="faq-q">"Can I help?"</div>
+            <div class="faq-a">
+              <ul>
+                <li>Contribute to the threat model via pull request</li>
+                <li>Review and comment on security-labeled issues</li>
+                <li>Report vulnerabilities to the relevant repo (or security@openclaw.ai if unsure)</li>
+                <li>Help improve security documentation</li>
+              </ul>
+            </div>
+          </div>
+        </section>
+
+        <div class="cta">
+          <a href="https://github.com/openclaw/openclaw/labels/security" class="btn btn-primary">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/></svg>
+            View Security Roadmap
+          </a>
+          <a href="https://docs.openclaw.ai/security" class="btn btn-secondary">Read Full Documentation</a>
+        </div>
+
+        <footer>
+          <p>OpenClaw Security Program · <a href="https://openclaw.ai">openclaw.ai</a> · <a href="https://clawhub.ai">clawhub.ai</a></p>
+        </footer>
+      </div>
+    </article>
+  </main>
+</body>
+</html>

@@ -1,0 +1,905 @@
+# OpenClaw Threat Model
+# Based on MITRE ATLAS Framework (Adversarial Threat Landscape for AI Systems)
+# Version: 1.0-draft
+# Last Updated: 2026-02-04
+# Methodology: MITRE ATLAS + Data Flow Diagrams
+#
+# To contribute: see CONTRIBUTING.md
+# Report security issues: security@openclaw.ai
+
+metadata:
+  version: "1.0-draft"
+  last_updated: "2026-02-04"
+  methodology: MITRE ATLAS + Data Flow Diagrams
+  framework: MITRE ATLAS (Adversarial Threat Landscape for AI Systems)
+  framework_url: https://atlas.mitre.org/
+  atlas_resources:
+    - name: ATLAS Techniques
+      url: https://atlas.mitre.org/techniques/
+    - name: ATLAS Tactics
+      url: https://atlas.mitre.org/tactics/
+    - name: ATLAS Case Studies
+      url: https://atlas.mitre.org/studies/
+    - name: ATLAS GitHub
+      url: https://github.com/mitre-atlas/atlas-data
+    - name: Contributing to ATLAS
+      url: https://atlas.mitre.org/resources/contribute
+
+scope:
+  included:
+    - component: OpenClaw Agent Runtime
+      notes: Core agent execution, tool calls, sessions
+    - component: Gateway
+      notes: Authentication, routing, channel integration
+    - component: Channel Integrations
+      notes: WhatsApp, Telegram, Discord, Signal, Slack, etc.
+    - component: ClawHub Marketplace
+      notes: Skill publishing, moderation, distribution
+    - component: MCP Servers
+      notes: External tool providers
+    - component: User Devices
+      notes: Mobile apps, desktop clients (partial)
+  out_of_scope: Nothing is explicitly out of scope for this threat model.
+
+tactics:
+  - id: recon
+    name: Reconnaissance
+    atlas: AML.TA0002
+    color: "#6b7280"
+  - id: access
+    name: Initial Access
+    atlas: AML.TA0004
+    color: "#8b5cf6"
+  - id: execution
+    name: Execution
+    atlas: AML.TA0005
+    color: "#ef4444"
+  - id: persistence
+    name: Persistence
+    atlas: AML.TA0006
+    color: "#f97316"
+  - id: evasion
+    name: Defense Evasion
+    atlas: AML.TA0007
+    color: "#eab308"
+  - id: discovery
+    name: Discovery
+    atlas: AML.TA0008
+    color: "#22c55e"
+  - id: exfil
+    name: Exfiltration
+    atlas: AML.TA0010
+    color: "#3b82f6"
+  - id: impact
+    name: Impact
+    atlas: AML.TA0011
+    color: "#ec4899"
+
+threats:
+  # ── Reconnaissance (AML.TA0002) ────────────────────────────
+  - id: T-RECON-001
+    name: Agent Endpoint Discovery
+    tactic: Reconnaissance
+    atlas: AML.T0006
+    risk: Medium
+    category: recon
+    description: Attacker scans for exposed OpenClaw gateway endpoints
+    attackVector: Network scanning, shodan queries, DNS enumeration
+    affected: Gateway, exposed API endpoints
+    mitigations: Tailscale auth option, bind to loopback by default
+    residualRisk: Public gateways discoverable
+    recommendations: Document secure deployment, add rate limiting on discovery endpoints
+
+  - id: T-RECON-002
+    name: Channel Integration Probing
+    tactic: Reconnaissance
+    atlas: AML.T0006
+    risk: Low
+    category: recon
+    description: Attacker probes messaging channels to identify AI-managed accounts
+    attackVector: Sending test messages, observing response patterns
+    affected: All channel integrations
+    mitigations: None specific
+    residualRisk: Limited value from discovery alone
+    recommendations: Consider response timing randomization
+
+  - id: T-RECON-003
+    name: Skill Capability Reconnaissance
+    tactic: Reconnaissance
+    atlas: AML.T0006
+    risk: Low
+    category: recon
+    description: Attacker analyzes ClawHub to identify high-value targets and popular skills
+    attackVector: Browsing ClawHub, analyzing download stats, identifying skills with sensitive permissions
+    affected: ClawHub public listings
+    mitigations: None - public by design
+    residualRisk: Attackers can prioritize targets
+    recommendations: Monitor for suspicious browsing patterns, rate limit API access
+
+  # ── Initial Access (AML.TA0004) ────────────────────────────
+  - id: T-ACCESS-001
+    name: Pairing Code Interception
+    tactic: Initial Access
+    atlas: AML.T0040
+    risk: Medium
+    category: access
+    description: Attacker intercepts pairing code during 30s grace period
+    attackVector: Shoulder surfing, network sniffing, social engineering
+    affected: Device pairing system
+    mitigations: 30s expiry, codes sent via existing channel
+    residualRisk: Grace period exploitable
+    recommendations: Reduce grace period, add confirmation step
+
+  - id: T-ACCESS-002
+    name: AllowFrom Spoofing
+    tactic: Initial Access
+    atlas: AML.T0040
+    risk: Medium
+    category: access
+    description: Attacker spoofs allowed sender identity in channel
+    attackVector: Phone number spoofing, username impersonation (channel-dependent)
+    affected: AllowFrom validation per channel
+    mitigations: Channel-specific identity verification
+    residualRisk: Some channels vulnerable to spoofing
+    recommendations: Document channel-specific risks, add cryptographic verification where possible
+
+  - id: T-ACCESS-003
+    name: Token Theft
+    tactic: Initial Access
+    atlas: AML.T0040
+    risk: High
+    category: access
+    description: Attacker steals authentication tokens from config files
+    attackVector: Malware, unauthorized device access, config backup exposure
+    affected: ~/.openclaw/credentials/, config storage
+    mitigations: File permissions
+    residualRisk: Tokens stored in plaintext
+    recommendations: Implement token encryption at rest, add token rotation
+
+  - id: T-ACCESS-004
+    name: Malicious Skill as Entry Point
+    tactic: Initial Access
+    atlas: AML.T0010.001
+    risk: Critical
+    category: access
+    description: User installs malicious skill from ClawHub, granting attacker initial access
+    attackVector: Social engineering, typosquatting, fake popular skills, SEO manipulation
+    affected: ClawHub discovery, skill installation flow
+    mitigations: GitHub account age verification, download stats visibility
+    residualRisk: Users may install without verification
+    recommendations: Prominent security warnings, verified publisher badges, install confirmations
+
+  - id: T-ACCESS-005
+    name: Compromised Skill Update
+    tactic: Initial Access
+    atlas: AML.T0010.001
+    risk: High
+    category: access
+    description: Attacker compromises legitimate skill and pushes malicious update to existing users
+    attackVector: Account takeover of skill publisher, social engineering, credential theft
+    affected: ClawHub update mechanism, existing skill installations
+    mitigations: Version fingerprinting
+    residualRisk: Trusted skills become attack vectors
+    recommendations: Update signing, publisher 2FA requirement, update diff review
+
+  - id: T-ACCESS-006
+    name: Prompt Injection via Channel
+    tactic: Initial Access
+    atlas: AML.T0051.000
+    risk: High
+    category: access
+    description: Attacker gains initial access by sending malicious prompts through messaging channel
+    attackVector: Direct messages to agent-managed channels (WhatsApp, Telegram, Discord)
+    affected: All channel integrations
+    mitigations: AllowFrom lists, pairing requirements
+    residualRisk: Misconfigured allowlists, social engineering to get added
+    recommendations: Default-deny channel access, audit logging of new senders
+
+  # ── Execution (AML.TA0005) ─────────────────────────────────
+  - id: T-EXEC-001
+    name: Direct Prompt Injection
+    tactic: Execution
+    atlas: AML.T0051.000
+    risk: Critical
+    category: execution
+    description: Attacker sends crafted prompts to manipulate agent behavior
+    attackVector: Channel messages containing adversarial instructions
+    affected: Agent LLM, all input surfaces
+    mitigations: Pattern detection, external content wrapping
+    residualRisk: "Detection only, no blocking; sophisticated attacks bypass"
+    recommendations: Implement multi-layer defense, output validation, user confirmation for sensitive actions
+
+  - id: T-EXEC-002
+    name: Indirect Prompt Injection
+    tactic: Execution
+    atlas: AML.T0051.001
+    risk: High
+    category: execution
+    description: Attacker embeds malicious instructions in fetched content
+    attackVector: Malicious URLs, poisoned emails, compromised webhooks
+    affected: web_fetch, email ingestion, external data sources
+    mitigations: Content wrapping with XML tags and security notice
+    residualRisk: LLM may ignore wrapper instructions
+    recommendations: Implement content sanitization, separate execution contexts
+
+  - id: T-EXEC-003
+    name: Tool Argument Injection
+    tactic: Execution
+    atlas: AML.T0051.000
+    risk: High
+    category: execution
+    description: Attacker manipulates tool arguments through prompt injection
+    attackVector: Crafted prompts that influence tool parameter values
+    affected: All tool invocations
+    mitigations: Exec approvals for dangerous commands
+    residualRisk: Relies on user judgment
+    recommendations: Implement argument validation, parameterized tool calls
+
+  - id: T-EXEC-004
+    name: Exec Approval Bypass
+    tactic: Execution
+    atlas: AML.T0043
+    risk: High
+    category: execution
+    description: Attacker crafts commands that bypass approval allowlist
+    attackVector: Command obfuscation, alias exploitation, path manipulation
+    affected: exec-approvals.ts, command allowlist
+    mitigations: Allowlist + ask mode
+    residualRisk: No command sanitization
+    recommendations: Implement command normalization, expand blocklist
+
+  - id: T-EXEC-005
+    name: Malicious Skill Code Execution
+    tactic: Execution
+    atlas: AML.T0010.001
+    risk: Critical
+    category: execution
+    description: Malicious skill executes arbitrary code when loaded by agent
+    attackVector: Skill contains obfuscated malicious code that runs on load or invocation
+    affected: Skill runtime, agent process, host system
+    mitigations: Pattern-based moderation (easily bypassed)
+    residualRisk: Skills execute with full agent privileges, no sandbox
+    recommendations: VirusTotal Code Insight, skill sandboxing, capability-based permissions
+
+  - id: T-EXEC-006
+    name: MCP Server Command Injection
+    tactic: Execution
+    atlas: AML.T0051.000
+    risk: High
+    category: execution
+    description: Attacker exploits MCP server to execute commands via tool calls
+    attackVector: Prompt injection causes agent to invoke MCP tools with malicious arguments
+    affected: MCP server integrations, external tool providers
+    mitigations: Tool policy enforcement
+    residualRisk: MCP servers may have broad permissions
+    recommendations: MCP server allowlisting, argument validation, least-privilege MCP configs
+
+  # ── Persistence (AML.TA0006) ───────────────────────────────
+  - id: T-PERSIST-001
+    name: Skill-Based Persistence
+    tactic: Persistence
+    atlas: AML.T0010.001
+    risk: Critical
+    category: persistence
+    description: Malicious skill remains installed, re-executing across agent restarts
+    attackVector: Skill persists in user config, loads automatically on agent start
+    affected: Skill installation, agent startup
+    mitigations: None - skills persist by design
+    residualRisk: Malicious skills survive reboots, updates
+    recommendations: Skill integrity verification on load, periodic re-scanning, removal tools
+
+  - id: T-PERSIST-002
+    name: Poisoned Skill Update Persistence
+    tactic: Persistence
+    atlas: AML.T0010.001
+    risk: High
+    category: persistence
+    description: Malicious update to legitimate skill maintains persistent access
+    attackVector: Auto-update pulls compromised version, persists across sessions
+    affected: ClawHub versioning, auto-update flows
+    mitigations: Version fingerprinting
+    residualRisk: Trusted skill becomes persistent backdoor
+    recommendations: Update signing, version pinning, update notifications
+
+  - id: T-PERSIST-003
+    name: Agent Configuration Tampering
+    tactic: Persistence
+    atlas: AML.T0010.002
+    risk: Medium
+    category: persistence
+    description: Attacker modifies agent configuration to persist access
+    attackVector: Config file modification, settings injection via compromised skill
+    affected: Agent config, tool policies, allowlists
+    mitigations: File permissions
+    residualRisk: Requires local access or prior compromise
+    recommendations: Config integrity verification, audit logging for config changes
+
+  - id: T-PERSIST-004
+    name: Stolen Token Persistence
+    tactic: Persistence
+    atlas: AML.T0040
+    risk: High
+    category: persistence
+    description: Attacker maintains access using stolen authentication tokens
+    attackVector: Tokens stolen via T-ACCESS-003 used for ongoing access
+    affected: Gateway authentication, API access
+    mitigations: "None - tokens don't expire by default"
+    residualRisk: Attacker retains access until token manually revoked
+    recommendations: Token expiration, rotation policy, anomaly detection
+
+  - id: T-PERSIST-005
+    name: Prompt Injection Memory Poisoning
+    tactic: Persistence
+    atlas: AML.T0051.000
+    risk: Medium
+    category: persistence
+    description: Attacker injects instructions that persist in agent memory/context
+    attackVector: Inject prompts that modify agent behavior for subsequent interactions
+    affected: Session context, agent memory systems
+    mitigations: Session isolation per sender
+    residualRisk: Within-session persistence possible
+    recommendations: Context sanitization, memory boundaries, session timeouts
+
+  # ── Defense Evasion (AML.TA0007) ───────────────────────────
+  - id: T-EVADE-001
+    name: Moderation Pattern Bypass
+    tactic: Defense Evasion
+    atlas: AML.T0043
+    risk: High
+    category: evasion
+    description: Attacker crafts skill content to evade moderation patterns
+    attackVector: Unicode homoglyphs, encoding tricks, dynamic loading, code obfuscation
+    affected: ClawHub moderation.ts
+    mitigations: Pattern-based FLAG_RULES
+    residualRisk: Simple regex easily bypassed
+    recommendations: Add behavioral analysis (VirusTotal Code Insight), AST-based detection
+
+  - id: T-EVADE-002
+    name: Content Wrapper Escape
+    tactic: Defense Evasion
+    atlas: AML.T0043
+    risk: Medium
+    category: evasion
+    description: Attacker crafts content that escapes XML wrapper context
+    attackVector: Tag manipulation, context confusion, instruction override
+    affected: External content wrapping
+    mitigations: XML tags + security notice
+    residualRisk: Novel escapes discovered regularly
+    recommendations: Multiple wrapper layers, output-side validation
+
+  - id: T-EVADE-003
+    name: Approval Prompt Manipulation
+    tactic: Defense Evasion
+    atlas: AML.T0043
+    risk: Medium
+    category: evasion
+    description: Attacker crafts requests that appear benign in approval prompts
+    attackVector: Misleading command descriptions, hiding malicious flags in long commands
+    affected: Exec approval UI, user decision making
+    mitigations: Approval prompt shows full command
+    residualRisk: Users may approve without careful review
+    recommendations: Highlight dangerous flags, command summarization, risk scoring
+
+  - id: T-EVADE-004
+    name: Staged Payload Delivery
+    tactic: Defense Evasion
+    atlas: AML.T0043
+    risk: High
+    category: evasion
+    description: Skill downloads malicious payload after passing initial scan
+    attackVector: Clean skill passes moderation, then fetches malicious code at runtime
+    affected: ClawHub scanning, skill runtime
+    mitigations: None - runtime fetches not monitored
+    residualRisk: Scans only check initial code
+    recommendations: Runtime network monitoring, outbound fetch restrictions for skills
+
+  # ── Discovery (AML.TA0008) ─────────────────────────────────
+  - id: T-DISC-001
+    name: Tool Enumeration
+    tactic: Discovery
+    atlas: AML.T0040
+    risk: Low
+    category: discovery
+    description: Attacker enumerates available tools through prompting
+    attackVector: "'What tools do you have?' style queries"
+    affected: Agent tool registry
+    mitigations: None specific
+    residualRisk: Tools generally documented
+    recommendations: Consider tool visibility controls
+
+  - id: T-DISC-002
+    name: Session Data Extraction
+    tactic: Discovery
+    atlas: AML.T0040
+    risk: Medium
+    category: discovery
+    description: Attacker extracts sensitive data from session context
+    attackVector: "'What did we discuss?' queries, context probing"
+    affected: Session transcripts, context window
+    mitigations: Session isolation per sender
+    residualRisk: Within-session data accessible
+    recommendations: Implement sensitive data redaction in context
+
+  - id: T-DISC-003
+    name: System Prompt Extraction
+    tactic: Discovery
+    atlas: AML.T0040
+    risk: Medium
+    category: discovery
+    description: Attacker extracts system prompt to understand agent capabilities and restrictions
+    attackVector: Prompt injection asking agent to reveal instructions
+    affected: Agent system prompt, security policies
+    mitigations: LLM instruction following
+    residualRisk: System prompts often extractable with creative prompts
+    recommendations: System prompt hardening, extraction detection
+
+  - id: T-DISC-004
+    name: Environment Enumeration
+    tactic: Discovery
+    atlas: AML.T0040
+    risk: Medium
+    category: discovery
+    description: Attacker enumerates environment variables and system configuration
+    attackVector: Prompt injection causing agent to run env, printenv, or read config files
+    affected: Host environment, credentials in env vars
+    mitigations: Exec approvals
+    residualRisk: Approved commands may leak sensitive info
+    recommendations: Sensitive env var filtering, output redaction
+
+  # ── Exfiltration (AML.TA0010) ──────────────────────────────
+  - id: T-EXFIL-001
+    name: Data Theft via web_fetch
+    tactic: Exfiltration
+    atlas: AML.T0009
+    risk: High
+    category: exfil
+    description: Attacker exfiltrates data by instructing agent to send to external URL
+    attackVector: Prompt injection causing agent to POST data to attacker server
+    affected: web_fetch tool
+    mitigations: SSRF blocking for internal networks
+    residualRisk: External URLs permitted
+    recommendations: Implement URL allowlisting, data classification awareness
+
+  - id: T-EXFIL-002
+    name: Unauthorized Message Sending
+    tactic: Exfiltration
+    atlas: AML.T0009
+    risk: Medium
+    category: exfil
+    description: Attacker causes agent to send messages containing sensitive data
+    attackVector: Prompt injection causing agent to message attacker
+    affected: Message tool, channel integrations
+    mitigations: Outbound messaging gating
+    residualRisk: Gating may be bypassed
+    recommendations: Require explicit confirmation for new recipients
+
+  - id: T-EXFIL-003
+    name: Credential Harvesting via Skill
+    tactic: Exfiltration
+    atlas: AML.T0009
+    risk: Critical
+    category: exfil
+    description: Malicious skill harvests credentials from agent context and environment
+    attackVector: Skill code reads environment variables, config files, API keys
+    affected: Skill execution environment, ~/.openclaw/
+    mitigations: None specific to skills
+    residualRisk: Skills run with agent privileges
+    recommendations: Skill sandboxing, credential isolation, capability-based access
+
+  - id: T-EXFIL-004
+    name: Transcript Exfiltration
+    tactic: Exfiltration
+    atlas: AML.T0009
+    risk: High
+    category: exfil
+    description: Attacker exfiltrates conversation transcripts containing sensitive data
+    attackVector: Skill or prompt injection reads and sends transcript files
+    affected: Session transcripts, ~/.openclaw/sessions/
+    mitigations: File permissions
+    residualRisk: Skills can read transcript files
+    recommendations: Transcript encryption, skill filesystem isolation
+
+  # ── Impact (AML.TA0011) ────────────────────────────────────
+  - id: T-IMPACT-001
+    name: Unauthorized Command Execution
+    tactic: Impact
+    atlas: AML.T0031
+    risk: Critical
+    category: impact
+    description: Attacker executes arbitrary commands on user system
+    attackVector: Prompt injection combined with exec approval bypass
+    affected: Bash tool, command execution, host system
+    mitigations: Exec approvals, Docker sandbox option
+    residualRisk: Host execution without sandbox
+    recommendations: Default to sandbox, improve approval UX
+
+  - id: T-IMPACT-002
+    name: Resource Exhaustion (DoS)
+    tactic: Impact
+    atlas: AML.T0031
+    risk: High
+    category: impact
+    description: Attacker exhausts API credits or compute resources
+    attackVector: Automated message flooding, expensive tool calls, infinite loops
+    affected: Gateway, agent sessions, API provider, user billing
+    mitigations: None
+    residualRisk: No rate limiting
+    recommendations: Implement per-sender rate limits, cost budgets, circuit breakers
+
+  - id: T-IMPACT-003
+    name: Reputation Damage
+    tactic: Impact
+    atlas: AML.T0031
+    risk: Medium
+    category: impact
+    description: Attacker causes agent to send harmful/offensive content
+    attackVector: Prompt injection causing inappropriate responses to contacts
+    affected: Output generation, channel messaging, user reputation
+    mitigations: LLM provider content policies
+    residualRisk: Provider filters imperfect
+    recommendations: Output filtering layer, user controls, message review queue
+
+  - id: T-IMPACT-004
+    name: Data Destruction
+    tactic: Impact
+    atlas: AML.T0031
+    risk: High
+    category: impact
+    description: Attacker causes agent to delete or corrupt user data
+    attackVector: Prompt injection causing rm, format, or destructive database operations
+    affected: User files, databases, configurations
+    mitigations: Exec approvals for destructive commands
+    residualRisk: Approved destructive commands may be disguised
+    recommendations: Destructive command confirmation, backup recommendations, undo capability
+
+  - id: T-IMPACT-005
+    name: Financial Fraud via Agent
+    tactic: Impact
+    atlas: AML.T0031
+    risk: High
+    category: impact
+    description: Attacker uses agent to perform unauthorized financial transactions
+    attackVector: Prompt injection causes agent to interact with financial APIs or services
+    affected: Financial integrations, payment tools
+    mitigations: Tool-specific policies
+    residualRisk: Agents may have access to financial tools
+    recommendations: Financial operation confirmation, transaction limits, separate approval flow
+
+attack_chains:
+  - name: Malicious Skill Full Kill Chain
+    steps: [T-RECON-003, T-EVADE-001, T-ACCESS-004, T-EXEC-005, T-PERSIST-001, T-EXFIL-003]
+    description: "Recon ClawHub \u2192 Craft evasive skill \u2192 User installs \u2192 Code executes \u2192 Persists \u2192 Harvests credentials"
+
+  - name: Skill Supply Chain Attack
+    steps: [T-ACCESS-005, T-EVADE-004, T-EXEC-005, T-PERSIST-002, T-EXFIL-004]
+    description: "Compromise publisher \u2192 Push staged payload \u2192 Execute on update \u2192 Maintain persistence \u2192 Exfil transcripts"
+
+  - name: Prompt Injection to RCE
+    steps: [T-ACCESS-006, T-EXEC-001, T-EVADE-003, T-EXEC-004, T-IMPACT-001]
+    description: "Access via channel \u2192 Inject prompt \u2192 Manipulate approval \u2192 Bypass checks \u2192 Execute commands"
+
+  - name: Indirect Injection Data Theft
+    steps: [T-EXEC-002, T-DISC-004, T-EXFIL-001]
+    description: "Poison fetched content \u2192 Enumerate environment \u2192 Exfiltrate via web_fetch"
+
+  - name: Token Theft Persistent Access
+    steps: [T-ACCESS-003, T-PERSIST-004, T-DISC-002, T-EXFIL-002]
+    description: "Steal tokens \u2192 Maintain access \u2192 Extract session data \u2192 Exfil via messages"
+
+  - name: Financial Fraud Chain
+    steps: [T-ACCESS-006, T-EXEC-001, T-DISC-001, T-IMPACT-005]
+    description: "Gain channel access \u2192 Inject prompts \u2192 Enumerate financial tools \u2192 Execute fraud"
+
+trust_boundaries:
+  # Order follows actual user/data flow:
+  # Supply chain (pre-install) → Channel access (message in) → Session (routing) → Execution + External content (adjacent)
+  - id: 1
+    name: Supply Chain
+    zone: ClawHub
+    phase: pre-install
+    controls:
+      - Skill publishing (semver, SKILL.md required)
+      - Pattern-based moderation flags
+      - VirusTotal Code Insight
+      - GitHub account age verification
+
+  - id: 2
+    name: Channel Access Control
+    zone: Gateway
+    phase: message-flow
+    controls:
+      - Device Pairing (30s grace)
+      - AllowFrom / AllowList validation
+      - Token/Password/Tailscale auth
+
+  - id: 3
+    name: Session Isolation
+    zone: Agent Sessions
+    phase: message-flow
+    controls:
+      - "Session key = agent:channel:peer"
+      - Tool policies per agent
+      - Transcript logging
+
+  - id: 4
+    name: Tool Execution
+    zone: Execution Sandbox
+    phase: execution
+    adjacent: 5
+    controls:
+      - Docker sandbox OR Host (exec-approvals)
+      - Node remote execution
+      - SSRF protection (DNS pinning + IP blocking)
+
+  - id: 5
+    name: External Content
+    zone: Fetched URLs / Emails / Webhooks
+    phase: execution
+    adjacent: 4
+    controls:
+      - External content wrapping (XML tags)
+      - Security notice injection
+
+data_flows:
+  - id: F1
+    source: Channel
+    destination: Gateway
+    data: User messages
+    protection: TLS, AllowFrom
+  - id: F2
+    source: Gateway
+    destination: Agent
+    data: Routed messages
+    protection: Session isolation
+  - id: F3
+    source: Agent
+    destination: Tools
+    data: Tool invocations
+    protection: Policy enforcement
+  - id: F4
+    source: Agent
+    destination: External
+    data: web_fetch requests
+    protection: SSRF blocking
+  - id: F5
+    source: ClawHub
+    destination: Agent
+    data: Skill code
+    protection: Moderation, scanning
+  - id: F6
+    source: Agent
+    destination: Channel
+    data: Responses
+    protection: Output filtering
+
+supply_chain:
+  current_controls:
+    - control: GitHub Account Age
+      implementation: requireGitHubAccountAge()
+      effectiveness: Medium - Raises bar for new attackers
+    - control: Path Sanitization
+      implementation: sanitizePath()
+      effectiveness: High - Prevents path traversal
+    - control: File Type Validation
+      implementation: isTextFile()
+      effectiveness: Medium - Only text files, but can still be malicious
+    - control: Size Limits
+      implementation: 50MB total bundle
+      effectiveness: High - Prevents resource exhaustion
+    - control: Required SKILL.md
+      implementation: Mandatory readme
+      effectiveness: Low security value - Informational only
+    - control: Pattern Moderation
+      implementation: FLAG_RULES in moderation.ts
+      effectiveness: Low - Easily bypassed
+    - control: Moderation Status
+      implementation: moderationStatus field
+      effectiveness: Medium - Manual review possible
+
+  moderation_patterns:
+    description: Current patterns in moderation.ts
+    patterns:
+      - name: Known-bad identifiers
+        regex: "/(keepcold131\\/ClawdAuthenticatorTool|ClawdAuthenticatorTool)/i"
+      - name: Suspicious keywords
+        regex: "/(malware|stealer|phish|phishing|keylogger)/i"
+      - name: Credential keywords
+        regex: "/(api[-_ ]?key|token|password|private key|secret)/i"
+      - name: Financial keywords
+        regex: "/(wallet|seed phrase|mnemonic|crypto)/i"
+      - name: Suspicious URLs
+        regex: "/(discord\\.gg|webhook|hooks\\.slack)/i"
+      - name: Remote code execution
+        regex: "/(curl[^\\n]+\\|\\s*(sh|bash))/i"
+      - name: URL shorteners
+        regex: "/(bit\\.ly|tinyurl\\.com|t\\.co|goo\\.gl|is\\.gd)/i"
+    limitations:
+      - Only checks slug, displayName, summary, frontmatter, metadata, file paths
+      - Does not analyze actual skill code content
+      - Simple regex easily bypassed with obfuscation
+      - No behavioral analysis
+
+  planned_improvements:
+    - improvement: VirusTotal Integration
+      status: In Progress
+      impact: High - Code Insight behavioral analysis
+    - improvement: Community Reporting
+      status: Partial (skillReports table exists)
+      impact: Medium
+    - improvement: Audit Logging
+      status: Partial (auditLogs table exists)
+      impact: Medium
+    - improvement: Badge System
+      status: Implemented
+      impact: "Medium - highlighted, official, deprecated, redactionApproved"
+
+risk_matrix:
+  - threat: T-EXEC-001
+    likelihood: High
+    impact: Critical
+    risk_level: Critical
+    priority: P0
+  - threat: T-PERSIST-001
+    likelihood: High
+    impact: Critical
+    risk_level: Critical
+    priority: P0
+  - threat: T-EXFIL-003
+    likelihood: Medium
+    impact: Critical
+    risk_level: Critical
+    priority: P0
+  - threat: T-IMPACT-001
+    likelihood: Medium
+    impact: Critical
+    risk_level: High
+    priority: P1
+  - threat: T-EXEC-002
+    likelihood: High
+    impact: High
+    risk_level: High
+    priority: P1
+  - threat: T-EXEC-004
+    likelihood: Medium
+    impact: High
+    risk_level: High
+    priority: P1
+  - threat: T-ACCESS-003
+    likelihood: Medium
+    impact: High
+    risk_level: High
+    priority: P1
+  - threat: T-EXFIL-001
+    likelihood: Medium
+    impact: High
+    risk_level: High
+    priority: P1
+  - threat: T-IMPACT-002
+    likelihood: High
+    impact: Medium
+    risk_level: High
+    priority: P1
+  - threat: T-EVADE-001
+    likelihood: High
+    impact: Medium
+    risk_level: Medium
+    priority: P2
+  - threat: T-ACCESS-001
+    likelihood: Low
+    impact: High
+    risk_level: Medium
+    priority: P2
+  - threat: T-ACCESS-002
+    likelihood: Low
+    impact: High
+    risk_level: Medium
+    priority: P2
+  - threat: T-PERSIST-002
+    likelihood: Low
+    impact: High
+    risk_level: Medium
+    priority: P2
+
+recommendations:
+  immediate_p0:
+    - id: R-001
+      recommendation: Complete VirusTotal integration
+      addresses: [T-PERSIST-001, T-EVADE-001]
+    - id: R-002
+      recommendation: Implement skill sandboxing
+      addresses: [T-PERSIST-001, T-EXFIL-003]
+    - id: R-003
+      recommendation: Add output validation for sensitive actions
+      addresses: [T-EXEC-001, T-EXEC-002]
+
+  short_term_p1:
+    - id: R-004
+      recommendation: Implement rate limiting
+      addresses: [T-IMPACT-002]
+    - id: R-005
+      recommendation: Add token encryption at rest
+      addresses: [T-ACCESS-003]
+    - id: R-006
+      recommendation: Improve exec approval UX and validation
+      addresses: [T-EXEC-004]
+    - id: R-007
+      recommendation: Implement URL allowlisting for web_fetch
+      addresses: [T-EXFIL-001]
+
+  medium_term_p2:
+    - id: R-008
+      recommendation: Add cryptographic channel verification where possible
+      addresses: [T-ACCESS-002]
+    - id: R-009
+      recommendation: Implement config integrity verification
+      addresses: [T-PERSIST-003]
+    - id: R-010
+      recommendation: Add update signing and version pinning
+      addresses: [T-PERSIST-002]
+
+atlas_technique_mapping:
+  - atlas_id: AML.T0006
+    name: Active Scanning
+    threats: [T-RECON-001, T-RECON-002, T-RECON-003]
+  - atlas_id: AML.T0009
+    name: Collection
+    threats: [T-EXFIL-001, T-EXFIL-002, T-EXFIL-003, T-EXFIL-004]
+  - atlas_id: AML.T0010.001
+    name: "Supply Chain: AI Software"
+    threats: [T-ACCESS-004, T-ACCESS-005, T-EXEC-005, T-PERSIST-001, T-PERSIST-002]
+  - atlas_id: AML.T0010.002
+    name: "Supply Chain: Data"
+    threats: [T-PERSIST-003]
+  - atlas_id: AML.T0031
+    name: Erode AI Model Integrity
+    threats: [T-IMPACT-001, T-IMPACT-002, T-IMPACT-003, T-IMPACT-004, T-IMPACT-005]
+  - atlas_id: AML.T0040
+    name: AI Model Inference API Access
+    threats: [T-ACCESS-001, T-ACCESS-002, T-ACCESS-003, T-PERSIST-004, T-DISC-001, T-DISC-002, T-DISC-003, T-DISC-004]
+  - atlas_id: AML.T0043
+    name: Craft Adversarial Data
+    threats: [T-EXEC-004, T-EVADE-001, T-EVADE-002, T-EVADE-003, T-EVADE-004]
+  - atlas_id: AML.T0051.000
+    name: "LLM Prompt Injection: Direct"
+    threats: [T-ACCESS-006, T-EXEC-001, T-EXEC-003, T-EXEC-006, T-PERSIST-005]
+  - atlas_id: AML.T0051.001
+    name: "LLM Prompt Injection: Indirect"
+    threats: [T-EXEC-002]
+
+key_security_files:
+  - path: src/infra/exec-approvals.ts
+    purpose: Command approval logic
+    risk_level: Critical
+  - path: src/gateway/auth.ts
+    purpose: Gateway authentication
+    risk_level: Critical
+  - path: src/web/inbound/access-control.ts
+    purpose: Channel access control
+    risk_level: Critical
+  - path: src/infra/net/ssrf.ts
+    purpose: SSRF protection
+    risk_level: Critical
+  - path: src/security/external-content.ts
+    purpose: Prompt injection mitigation
+    risk_level: Critical
+  - path: src/agents/sandbox/tool-policy.ts
+    purpose: Tool policy enforcement
+    risk_level: Critical
+  - path: convex/lib/moderation.ts
+    purpose: ClawHub moderation
+    risk_level: High
+  - path: convex/lib/skillPublish.ts
+    purpose: Skill publishing flow
+    risk_level: High
+  - path: src/routing/resolve-route.ts
+    purpose: Session isolation
+    risk_level: Medium
+
+glossary:
+  ATLAS: "MITRE's Adversarial Threat Landscape for AI Systems"
+  ClawHub: "OpenClaw's skill marketplace"
+  Gateway: "OpenClaw's message routing and authentication layer"
+  MCP: Model Context Protocol - tool provider interface
+  Prompt Injection: Attack where malicious instructions are embedded in input
+  Skill: Downloadable extension for OpenClaw agents
+  SSRF: Server-Side Request Forgery

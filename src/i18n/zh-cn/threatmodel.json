@@ -1,0 +1,57 @@
+{
+  "meta": {
+    "title": "威胁模型 - OpenClaw 信任",
+    "description": "基于 MITRE ATLAS 框架的 OpenClaw 威胁模型 - AI 代理系统的对抗性威胁。"
+  },
+  "nav": {
+    "trust": "信任",
+    "threatModel": "威胁模型"
+  },
+  "header": {
+    "title": "威胁模型",
+    "subtitle": "AI 代理安全的 MITRE ATLAS 框架",
+    "badgeVersion": "v1.0-draft",
+    "badgeAtlas": "MITRE ATLAS 2025"
+  },
+  "stats": {
+    "totalThreats": "威胁总数",
+    "criticalRisk": "严重风险",
+    "highRisk": "高风险",
+    "mediumRisk": "中风险",
+    "lowRisk": "低风险"
+  },
+  "legend": {
+    "critical": "严重",
+    "high": "高",
+    "medium": "中",
+    "low": "低"
+  },
+  "sections": {
+    "threatMatrix": "按 ATLAS 战术分类的威胁矩阵",
+    "attackChains": "关键攻击链",
+    "trustBoundaries": "信任边界"
+  },
+  "detail": {
+    "description": "描述",
+    "attackVector": "攻击向量",
+    "affected": "受影响组件",
+    "mitigations": "当前缓解措施",
+    "residualRisk": "残余风险",
+    "recommendations": "建议",
+    "riskSuffix": "风险"
+  },
+  "footer": {
+    "builtOn": "基于",
+    "atlasFullName": "MITRE ATLAS（AI 系统对抗性威胁全景）",
+    "maintainedBy": "ATLAS 由 MITRE 与 AI 安全社区协作维护",
+    "atlasTechniques": "ATLAS 技术",
+    "atlasTactics": "ATLAS 战术",
+    "contribute": "参与贡献",
+    "reportIssues": "向以下地址报告安全问题",
+    "version": "OpenClaw 威胁模型 v1.0-draft"
+  },
+  "error": {
+    "loadFailed": "无法加载威胁模型。",
+    "viewOnGithub": "在 GitHub 上查看"
+  }
+}

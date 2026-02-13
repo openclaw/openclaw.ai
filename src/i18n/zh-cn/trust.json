@@ -1,0 +1,360 @@
+{
+  "meta": {
+    "title": "信任 - OpenClaw",
+    "description": "OpenClaw 安全计划 - 针对可执行真实操作的 AI 代理的正式安全倡议。"
+  },
+  "nav": {
+    "trust": "信任",
+    "threatModel": "威胁模型"
+  },
+  "header": {
+    "title": "信任"
+  },
+  "intro": "安全态势、路线图，以及我们对可执行真实操作的代理的思考。",
+  "newEra": {
+    "heading": "计算安全的新时代",
+    "paragraphs": [
+      "过去 20 年来，安全模型一直围绕着锁定设备和应用程序构建 - 在进程间通信之间设置边界、将互联网与本地隔离、对不受信任的代码进行沙盒化处理。这些原则仍然很重要。",
+      "但 AI 代理代表着一次根本性的转变。",
+      "与严格按照代码指令执行的传统软件不同，AI 代理能够理解自然语言并对操作做出决策。它们模糊了用户意图和机器执行之间的界限，甚至可以通过语言本身被操纵。",
+      "我们深知，像 OpenClaw 这样强大的工具伴随着巨大的责任。如果做得不好，AI 代理就是一种隐患。如果做得好，我们可以让个人计算变得更好。",
+      "<strong>这个安全计划的存在就是为了把它做好。</strong>"
+    ]
+  },
+  "context": {
+    "heading": "背景",
+    "intro": "OpenClaw 是一个 AI 代理平台。与仅生成文本的聊天机器人不同，OpenClaw 代理可以：",
+    "capabilities": [
+      "在主机上执行 Shell 命令",
+      "通过 WhatsApp、Telegram、Discord、Slack 及其他渠道发送消息",
+      "在工作区中读写文件",
+      "从互联网获取任意 URL",
+      "调度自动化任务",
+      "访问已连接的服务和 API"
+    ],
+    "capabilityNote": "这些能力正是 OpenClaw 有用之处，也正是安全至关重要的原因。",
+    "risksIntro": "能够执行真实操作的 AI 代理引入了传统软件所不具备的风险：",
+    "risks": [
+      { "term": "提示注入", "desc": "恶意用户可以精心构造消息来操纵 AI 执行非预期的操作" },
+      { "term": "间接注入", "desc": "获取的 URL、电子邮件或文档中的恶意内容可以劫持代理行为" },
+      { "term": "工具滥用", "desc": "即使没有注入攻击，配置不当的代理也可能因权限过于宽松而造成损害" },
+      { "term": "身份风险", "desc": "代理可以以您的身份发送消息，可能损害人际关系或声誉" }
+    ],
+    "risksNote": "这些不是理论上的风险，而是已被记录在案的攻击模式，影响所有 AI 代理系统。"
+  },
+  "scope": {
+    "heading": "范围",
+    "intro": "本安全计划覆盖整个 OpenClaw 生态系统。<strong>没有任何内容在范围之外。</strong>",
+    "sections": [
+      {
+        "title": "核心平台",
+        "items": [
+          "OpenClaw CLI 和 Gateway（<code>openclaw</code>）",
+          "代理执行引擎",
+          "工具实现",
+          "渠道集成（WhatsApp、Telegram、Discord、Slack、Signal 等）"
+        ]
+      },
+      {
+        "title": "应用程序",
+        "items": [
+          "macOS 桌面应用",
+          "iOS 移动应用",
+          "Android 移动应用",
+          "Web 界面"
+        ]
+      },
+      {
+        "title": "服务",
+        "items": [
+          "ClawHub (clawhub.ai) - 技能市场和注册中心",
+          "文档 (docs.openclaw.ai)",
+          "所有托管基础设施"
+        ]
+      },
+      {
+        "title": "扩展",
+        "items": [
+          "官方扩展（<code>extensions/</code>）",
+          "插件 SDK 和第三方插件",
+          "通过 ClawHub 分发的技能"
+        ]
+      },
+      {
+        "title": "人员",
+        "items": [
+          "核心维护者和贡献者",
+          "安全流程和响应程序",
+          "供应链和依赖管理"
+        ]
+      }
+    ]
+  },
+  "programOverview": {
+    "heading": "计划概述",
+    "intro": "我们正在建立一个包含四个阶段的正式安全职能：",
+    "phases": [
+      { "title": "透明度", "desc": "与社区共同公开开发威胁模型" },
+      { "title": "产品安全路线图", "desc": "定义防御工程目标并公开跟踪" },
+      { "title": "代码审查", "desc": "对整个代码库进行人工安全审查" },
+      { "title": "安全分诊", "desc": "建立处理漏洞报告的正式流程" }
+    ]
+  },
+  "phase1": {
+    "heading": "第一阶段：透明度",
+    "goal": {
+      "title": "目标",
+      "text": "公开开发并发布我们的威胁模型，邀请社区贡献，使用户了解风险并能就其部署做出明智的决策。"
+    },
+    "why": {
+      "title": "原因",
+      "text": "安全靠隐匿是行不通的。攻击者已经了解这些技术 - 它们被记录在学术论文、安全博客和会议演讲中。目前缺少的是向用户清晰传达以下信息：",
+      "items": [
+        "存在哪些风险",
+        "我们正在采取哪些措施",
+        "用户应如何保护自己"
+      ],
+      "closing": "通过公开开发威胁模型，我们可以受益于集体专业知识，并通过透明度建立信任。"
+    },
+    "coverage": {
+      "title": "威胁模型覆盖范围",
+      "headers": ["类别", "涵盖的风险"],
+      "rows": [
+        ["<strong>A. 输入操纵</strong>", "直接提示注入、间接注入、工具参数注入、上下文操纵"],
+        ["<strong>B. 认证与访问</strong>", "AllowFrom 绕过、权限提升、跨会话访问、API 密钥泄露"],
+        ["<strong>C. 数据安全</strong>", "系统提示泄露、工作区暴露、记忆泄漏、数据外泄"],
+        ["<strong>D. 基础设施</strong>", "SSRF、网关暴露、依赖漏洞、文件权限"],
+        ["<strong>E. 运维</strong>", "日志记录敏感数据、监控不足、资源耗尽、配置错误"],
+        ["<strong>F. 供应链</strong>", "ClawHub 技能完整性、扩展安全、依赖漏洞"]
+      ]
+    },
+    "tmScope": {
+      "title": "威胁模型范围",
+      "headers": ["组件", "纳入原因"],
+      "rows": [
+        ["核心平台（CLI、Gateway、代理、工具）", "主要攻击面"],
+        ["ClawHub (clawhub.ai)", "技能市场 - 供应链风险"],
+        ["移动应用（iOS、Android）", "代理控制界面、凭据存储"],
+        ["桌面应用（macOS）", "Gateway 宿主、系统集成"],
+        ["扩展和插件", "第三方代码执行"],
+        ["构建和发布流水线", "分发完整性"]
+      ]
+    },
+    "closing": [
+      "威胁模型中的每个风险都将包含描述和严重性评级、攻击示例、当前缓解措施、已知缺口以及用户建议。",
+      "<strong>威胁模型将通过 Pull Request 向社区开放贡献。</strong>"
+    ]
+  },
+  "phase2": {
+    "heading": "第二阶段：产品安全路线图",
+    "goal": {
+      "title": "目标",
+      "text": "创建公开的产品安全路线图，定义防御工程目标，以 GitHub Issues 形式跟踪，以便社区可以关注进展、提供意见并做出贡献。"
+    },
+    "table": {
+      "title": "防御工程目标",
+      "headers": ["类别", "目标", "描述"],
+      "groups": [
+        {
+          "category": "<strong>提示注入防护</strong>",
+          "rows": [
+            ["输入验证", "针对注入尝试的模式检测和告警"],
+            ["工具确认", "对敏感操作要求明确批准"],
+            ["上下文隔离", "防止跨会话污染"]
+          ]
+        },
+        {
+          "category": "<strong>隐私增强</strong>",
+          "rows": [
+            ["系统提示保护", "防止系统提示泄露"],
+            ["数据最小化", "减少不必要的数据保留"],
+            ["审计日志", "清晰查看代理操作记录"]
+          ]
+        },
+        {
+          "category": "<strong>访问控制</strong>",
+          "rows": [
+            ["细粒度权限", "按工具、按会话的访问控制"],
+            ["速率限制", "防止资源耗尽"],
+            ["支出控制", "API 费用硬性限额"]
+          ]
+        },
+        {
+          "category": "<strong>供应链</strong>",
+          "rows": [
+            ["技能验证", "ClawHub 技能的完整性检查"],
+            ["依赖审计", "自动化漏洞扫描"],
+            ["签名发布", "更新的加密验证"]
+          ]
+        }
+      ]
+    },
+    "closing": "具体的优先事项将通过第三阶段代码审查来识别，并在发现和分诊后添加到公开路线图中。"
+  },
+  "phase3": {
+    "heading": "第三阶段：代码审查",
+    "goal": {
+      "title": "目标",
+      "text": "虽然社区一直在持续不断地发现和修复缺陷 - 我们对每一份贡献都心怀感激 - 但我们也认识到这是一个由贡献者尽力而为的开源项目。第三阶段是一次专门的、全面的安全评估，旨在根除深层系统性问题，提高整体代码质量和用户安全。"
+    },
+    "scope": {
+      "title": "范围",
+      "intro": "代码审查覆盖整个 OpenClaw 代码库和生态系统：",
+      "headers": ["领域", "路径", "原因"],
+      "rows": [
+        ["代理执行", "<code>src/agents/</code>", "核心攻击面 - 代理的运行方式"],
+        ["工具实现", "<code>src/agents/tools/</code>", "代理的能力 - 执行、消息、Web"],
+        ["消息处理", "<code>src/auto-reply/</code>", "所有用户输入的入口"],
+        ["安全工具", "<code>src/security/</code>", "现有安全控制"],
+        ["Gateway 服务器", "<code>src/gateway/</code>", "网络暴露组件"],
+        ["认证", "<code>src/*/auth*</code>", "凭据处理、API 密钥"],
+        ["会话管理", "<code>src/config/sessions.ts</code>", "跨会话隔离"],
+        ["配对与访问控制", "<code>src/pairing/</code>, <code>src/*/access-control*</code>", "DM 和群组访问控制"],
+        ["外部内容处理", "<code>src/security/external-content.ts</code>", "注入防御"],
+        ["macOS 桌面应用", "<code>apps/macos/</code>", "Gateway 宿主、系统集成"],
+        ["iOS 移动应用", "<code>apps/ios/</code>", "代理控制、凭据存储"],
+        ["Android 移动应用", "<code>apps/android/</code>", "代理控制、凭据存储"],
+        ["ClawHub", "clawhub.ai", "技能注册中心 - 供应链风险"],
+        ["官方扩展", "<code>extensions/</code>", "第一方插件"],
+        ["构建和发布流水线", "CI/CD, scripts", "分发完整性、签名"]
+      ]
+    },
+    "approach": {
+      "title": "方法",
+      "items": [
+        { "term": "人工代码审查", "desc": "对安全关键路径进行人工参与分析" },
+        { "term": "自动化扫描", "desc": "静态分析、依赖审计、密钥检测" },
+        { "term": "动态测试", "desc": "对运行中的系统尝试已记录的攻击模式" },
+        { "term": "架构审查", "desc": "评估信任边界和数据流" }
+      ]
+    },
+    "disclosure": {
+      "title": "披露",
+      "items": [
+        "所有严重和高风险发现在公开披露前修复",
+        "修复后发布发现摘要",
+        "完整报告可按需提供",
+        "在适用的情况下分配 CVE 编号"
+      ]
+    }
+  },
+  "phase4": {
+    "heading": "第四阶段：安全分诊职能",
+    "goal": {
+      "title": "目标",
+      "text": "建立接收、分诊和响应安全漏洞报告的正式流程。"
+    },
+    "reportBox": {
+      "title": "报告漏洞",
+      "intro": "我们认真对待安全报告。请直接向问题所在的仓库报告漏洞：",
+      "repos": [
+        { "label": "核心 CLI 和 Gateway", "url": "https://github.com/openclaw/openclaw/security/advisories/new", "name": "openclaw/openclaw" },
+        { "label": "macOS 桌面应用", "url": "https://github.com/openclaw/openclaw/security/advisories/new", "name": "openclaw/openclaw (apps/macos)" },
+        { "label": "iOS 应用", "url": "https://github.com/openclaw/openclaw/security/advisories/new", "name": "openclaw/openclaw (apps/ios)" },
+        { "label": "Android 应用", "url": "https://github.com/openclaw/openclaw/security/advisories/new", "name": "openclaw/openclaw (apps/android)" },
+        { "label": "ClawHub", "url": "https://github.com/openclaw/clawhub/security/advisories/new", "name": "openclaw/clawhub" },
+        { "label": "信任与威胁模型", "url": "https://github.com/openclaw/trust/issues/new", "name": "openclaw/trust" }
+      ],
+      "fallback": "对于不适用于特定仓库的问题，或者如果您不确定，请发送邮件至 <span class=\"email-display\" style=\"display: inline; padding: 4px 8px; font-size: 13px;\">security@openclaw.ai</span>，我们会进行转发处理。",
+      "fieldsTitle": "报告必需内容",
+      "fields": ["标题", "严重性评估", "影响", "受影响组件", "技术复现步骤", "已证明的影响", "环境", "修复建议"],
+      "fieldsNote": "缺少复现步骤、已证明影响和修复建议的报告将被降低优先级。鉴于 AI 生成的扫描结果数量庞大，我们必须确保收到的是来自理解问题的研究人员的经过验证的报告。"
+    },
+    "sla": {
+      "title": "响应 SLA",
+      "headers": ["严重性", "定义", "首次响应", "分诊", "修复目标"],
+      "rows": [
+        ["<strong>严重</strong>", "RCE、认证绕过、大规模数据泄露", "24 小时", "48 小时", "7 天"],
+        ["<strong>高</strong>", "重大影响、单用户范围", "48 小时", "5 天", "30 天"],
+        ["<strong>中</strong>", "有限影响、需要特定条件", "5 天", "14 天", "90 天"],
+        ["<strong>低</strong>", "轻微问题、纵深防御", "14 天", "30 天", "尽力而为"]
+      ]
+    },
+    "commitments": {
+      "title": "我们的承诺",
+      "items": [
+        "在 48 小时内确认所有完整报告",
+        "至少每 14 天提供状态更新",
+        "在安全公告中致谢研究人员（除非要求匿名）",
+        "不对善意的安全研究采取法律行动",
+        "考虑对符合条件的严重/高风险发现给予奖励（视具体情况而定）"
+      ]
+    }
+  },
+  "securityTrust": {
+    "heading": "安全与信任",
+    "bio": "<strong>Jamieson O'Reilly</strong>（<a href=\"https://twitter.com/theonejvo\">@theonejvo</a>）负责 OpenClaw 的安全与信任事务。",
+    "bioDetail": "Jamieson 是 <a href=\"https://dvuln.com\">Dvuln</a> 的创始人、<a href=\"https://tryaether.ai\">Aether AI</a>（世界上最危险的 AI，站在你这边）的联合创始人、CREST 顾问委员会成员，在攻击性安全、渗透测试和安全计划制定方面拥有丰富的经验。",
+    "responsibilitiesTitle": "职责",
+    "responsibilities": [
+      "主导威胁建模和风险评估",
+      "确定代码审查范围并进行监督",
+      "建立分诊流程和响应程序",
+      "审查安全关键代码变更",
+      "为安全架构决策提供指导"
+    ]
+  },
+  "posture": {
+    "heading": "当前安全态势",
+    "intro": "OpenClaw 已经具备安全控制措施。了解现有控制有助于用户适当地配置其部署。",
+    "defaultsTitle": "默认安全",
+    "checks": [
+      { "title": "DM 策略：pairing", "desc": "未知发送者必须通过带有过期码的配对流程" },
+      { "title": "执行安全：deny", "desc": "不在白名单上的命令默认被拒绝，需用户批准" },
+      { "title": "默认 AllowFrom：仅自己", "desc": "如未配置，仅您自己的号码可以向代理发送私信" },
+      { "title": "会话隔离", "desc": "对话按会话密钥隔离" },
+      { "title": "SSRF 防护", "desc": "web_fetch 中阻止内部 IP 和 localhost" },
+      { "title": "Gateway 认证必需", "desc": "WebSocket 连接必须进行认证" }
+    ],
+    "verifyTitle": "验证您的配置",
+    "verifyCommand": "openclaw security audit --deep",
+    "verifyIntro": "需要验证的关键项目：",
+    "verifyItems": [
+      "DM 策略为 <code>pairing</code> 或 <code>allowlist</code>（不是 <code>open</code>）",
+      "已为您的渠道配置 <code>allowFrom</code>",
+      "除非有意为之，执行安全不应设置为 <code>full</code>",
+      "Gateway 绑定到回环地址或位于认证之后",
+      "工作区不包含密钥信息"
+    ]
+  },
+  "timeline": {
+    "heading": "时间线",
+    "content": "第 1-2 周：第一阶段 - 透明度\n\u251c\u2500\u2500 威胁模型开发开始（开放贡献）\n\u251c\u2500\u2500 安全配置指南草案完成\n\u251c\u2500\u2500 可视化概览创建\n\u2514\u2500\u2500 发布公告\n\n第 3-4 周：第二阶段 - 产品安全路线图\n\u251c\u2500\u2500 为防御工程目标创建 GitHub Issues\n\u251c\u2500\u2500 设置安全标签和里程碑\n\u251c\u2500\u2500 社区意见征集期开始\n\u2514\u2500\u2500 首批安全工作启动\n\n第 5-8 周：第三阶段 - 代码审查准备\n\u251c\u2500\u2500 范围最终确定（整个代码库）\n\u251c\u2500\u2500 审查开始\n\u2514\u2500\u2500 初步发现\n\n第 8-12 周：第三阶段 - 代码审查执行\n\u251c\u2500\u2500 人工审查完成\n\u251c\u2500\u2500 发现记录\n\u251c\u2500\u2500 严重/高风险项修复\n\u2514\u2500\u2500 验证完成\n\n第 8 周起：第四阶段 - 分诊职能\n\u251c\u2500\u2500 security@openclaw.ai 上线\n\u251c\u2500\u2500 PGP 密钥发布\n\u251c\u2500\u2500 披露政策发布\n\u2514\u2500\u2500 首批安全公告（如需要）\n\n持续进行：\n\u251c\u2500\u2500 每月安全更新\n\u251c\u2500\u2500 持续完善威胁模型\n\u251c\u2500\u2500 定期依赖审计\n\u2514\u2500\u2500 社区参与"
+  },
+  "faq": {
+    "heading": "常见问题",
+    "items": [
+      {
+        "q": "\"OpenClaw 现在安全吗？\"",
+        "a": "<p>是的，在正确配置的情况下。OpenClaw 默认启用了安全控制：</p><ul><li><strong>DM 策略</strong>：默认为 <code>pairing</code> - 未知发送者必须通过带有过期码的配对流程</li><li><strong>执行安全</strong>：默认为 <code>deny</code> 并启用 <code>ask: on-miss</code> - 危险命令需要批准</li><li><strong>AllowFrom</strong>：如未配置，默认仅限自己</li><li><strong>Gateway 认证</strong>：默认必需</li></ul><p>运行 <code>openclaw security audit --deep</code> 来验证您的配置。请参阅 <a href=\"https://docs.openclaw.ai/gateway/security\">docs.openclaw.ai/gateway/security</a></p>"
+      },
+      {
+        "q": "\"为什么要公开开发威胁模型？\"",
+        "a": "<p>这些攻击技术已经是公开知识 - 被记录在论文、博客和会议演讲中。公开开发可以受益于集体专业知识，通过透明度建立信任，并使我们对公众负责。</p>"
+      },
+      {
+        "q": "\"为什么要求漏洞报告中包含修复建议？\"",
+        "a": "<p>我们会收到来自自动化扫描器和 AI 工具的报告，这些报告会标记理论性问题而并不真正理解它们。通过要求报告者提出修复方案，我们可以过滤扫描器噪声，获得来自理解问题的研究人员的可操作报告，并通过专家意见加速修复。</p>"
+      },
+      {
+        "q": "\"ClawHub 怎么样？\"",
+        "a": "<p>ClawHub (clawhub.ai) 被纳入了整个安全计划的范围 - 包括威胁模型、代码审查和持续监控。技能是在您的代理上下文中运行的代码 - 供应链安全至关重要。</p>"
+      },
+      {
+        "q": "\"移动应用和桌面应用怎么样？\"",
+        "a": "<p>所有应用程序都在范围内。iOS 应用、Android 应用和 macOS 桌面应用都将被代码审查覆盖并纳入威胁模型。没有任何内容在范围之外。</p>"
+      },
+      {
+        "q": "\"我可以提供帮助吗？\"",
+        "a": "<ul><li>通过 Pull Request 为威胁模型做贡献</li><li>审查并评论带有安全标签的 Issues</li><li>向相关仓库报告漏洞（不确定时发送至 security@openclaw.ai）</li><li>帮助改善安全文档</li></ul>"
+      }
+    ]
+  },
+  "cta": {
+    "roadmapLabel": "查看安全路线图",
+    "docsLabel": "阅读完整文档"
+  },
+  "footer": {
+    "text": "OpenClaw 安全计划"
+  }
+}

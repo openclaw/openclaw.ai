@@ -1,0 +1,905 @@
+# OpenClaw 脅威モデル
+# MITRE ATLASフレームワーク（AIシステムに対する敵対的脅威ランドスケープ）に基づく
+# バージョン: 1.0-draft
+# 最終更新: 2026-02-04
+# 方法論: MITRE ATLAS + データフロー図
+#
+# コントリビュート方法: CONTRIBUTING.md を参照
+# セキュリティの問題を報告: security@openclaw.ai
+
+metadata:
+  version: "1.0-draft"
+  last_updated: "2026-02-04"
+  methodology: MITRE ATLAS + データフロー図
+  framework: MITRE ATLAS（AIシステムに対する敵対的脅威ランドスケープ）
+  framework_url: https://atlas.mitre.org/
+  atlas_resources:
+    - name: ATLASテクニックライブラリ
+      url: https://atlas.mitre.org/techniques/
+    - name: ATLAS戦術ライブラリ
+      url: https://atlas.mitre.org/tactics/
+    - name: ATLASケーススタディ
+      url: https://atlas.mitre.org/studies/
+    - name: ATLAS GitHub
+      url: https://github.com/mitre-atlas/atlas-data
+    - name: ATLASへのコントリビュート
+      url: https://atlas.mitre.org/resources/contribute
+
+scope:
+  included:
+    - component: OpenClaw Agent Runtime
+      notes: コアのエージェント実行、ツール呼び出し、セッション
+    - component: Gateway
+      notes: 認証、ルーティング、チャネル統合
+    - component: Channel Integrations
+      notes: WhatsApp、Telegram、Discord、Signal、Slackなど
+    - component: ClawHub Marketplace
+      notes: スキルの公開、モデレーション、配布
+    - component: MCP Servers
+      notes: 外部ツールプロバイダー
+    - component: User Devices
+      notes: モバイルアプリ、デスクトップクライアント（部分的）
+  out_of_scope: この脅威モデルでは明確にスコープ外とするものはありません。
+
+tactics:
+  - id: recon
+    name: 偵察
+    atlas: AML.TA0002
+    color: "#6b7280"
+  - id: access
+    name: 初期アクセス
+    atlas: AML.TA0004
+    color: "#8b5cf6"
+  - id: execution
+    name: 実行
+    atlas: AML.TA0005
+    color: "#ef4444"
+  - id: persistence
+    name: 永続化
+    atlas: AML.TA0006
+    color: "#f97316"
+  - id: evasion
+    name: 防御回避
+    atlas: AML.TA0007
+    color: "#eab308"
+  - id: discovery
+    name: 探索
+    atlas: AML.TA0008
+    color: "#22c55e"
+  - id: exfil
+    name: データ窃取
+    atlas: AML.TA0010
+    color: "#3b82f6"
+  - id: impact
+    name: 影響
+    atlas: AML.TA0011
+    color: "#ec4899"
+
+threats:
+  # ── 偵察 (AML.TA0002) ────────────────────────────────
+  - id: T-RECON-001
+    name: エージェントエンドポイントの発見
+    tactic: Reconnaissance
+    atlas: AML.T0006
+    risk: Medium
+    category: recon
+    description: 攻撃者が公開されたOpenClaw Gatewayエンドポイントをスキャンする
+    attackVector: ネットワークスキャン、Shodanクエリ、DNS列挙
+    affected: Gateway、公開されたAPIエンドポイント
+    mitigations: Tailscale認証オプション、デフォルトでループバックにバインド
+    residualRisk: 公開Gatewayは発見可能
+    recommendations: セキュアなデプロイメントを文書化、発見用エンドポイントにレート制限を追加
+
+  - id: T-RECON-002
+    name: チャネル統合のプロービング
+    tactic: Reconnaissance
+    atlas: AML.T0006
+    risk: Low
+    category: recon
+    description: 攻撃者がメッセージングチャネルを調査し、AI管理のアカウントを特定する
+    attackVector: テストメッセージの送信、レスポンスパターンの観察
+    affected: すべてのチャネル統合
+    mitigations: 特定の対策なし
+    residualRisk: 発見だけでは限定的な価値
+    recommendations: レスポンスタイミングのランダム化を検討
+
+  - id: T-RECON-003
+    name: スキル機能の偵察
+    tactic: Reconnaissance
+    atlas: AML.T0006
+    risk: Low
+    category: recon
+    description: 攻撃者がClawHubを分析し、高価値ターゲットや人気スキルを特定する
+    attackVector: ClawHubの閲覧、ダウンロード統計の分析、機密権限を持つスキルの特定
+    affected: ClawHubの公開リスティング
+    mitigations: なし - 公開はデザインによるもの
+    residualRisk: 攻撃者がターゲットの優先順位を決定可能
+    recommendations: 不審な閲覧パターンの監視、APIアクセスのレート制限
+
+  # ── 初期アクセス (AML.TA0004) ────────────────────────────
+  - id: T-ACCESS-001
+    name: ペアリングコードの傍受
+    tactic: Initial Access
+    atlas: AML.T0040
+    risk: Medium
+    category: access
+    description: 攻撃者が30秒の有効期間中にペアリングコードを傍受する
+    attackVector: 覗き見、ネットワークスニッフィング、ソーシャルエンジニアリング
+    affected: デバイスペアリングシステム
+    mitigations: 30秒の有効期限、既存チャネル経由でのコード送信
+    residualRisk: 有効期間は悪用可能
+    recommendations: 有効期間の短縮、確認ステップの追加
+
+  - id: T-ACCESS-002
+    name: AllowFromのなりすまし
+    tactic: Initial Access
+    atlas: AML.T0040
+    risk: Medium
+    category: access
+    description: 攻撃者がチャネル内で許可された送信者のアイデンティティをなりすます
+    attackVector: 電話番号のなりすまし、ユーザー名の偽装（チャネルに依存）
+    affected: チャネルごとのAllowFrom検証
+    mitigations: チャネル固有のアイデンティティ検証
+    residualRisk: 一部のチャネルはなりすましに脆弱
+    recommendations: チャネル固有のリスクを文書化、可能な場合は暗号学的検証を追加
+
+  - id: T-ACCESS-003
+    name: トークンの窃取
+    tactic: Initial Access
+    atlas: AML.T0040
+    risk: High
+    category: access
+    description: 攻撃者が設定ファイルから認証トークンを窃取する
+    attackVector: マルウェア、不正なデバイスアクセス、設定バックアップの漏洩
+    affected: ~/.openclaw/credentials/、設定ストレージ
+    mitigations: ファイルパーミッション
+    residualRisk: トークンが平文で保存されている
+    recommendations: トークンの保存時暗号化を実装、トークンローテーションを追加
+
+  - id: T-ACCESS-004
+    name: 悪意のあるスキルによるエントリポイント
+    tactic: Initial Access
+    atlas: AML.T0010.001
+    risk: Critical
+    category: access
+    description: ユーザーがClawHubから悪意のあるスキルをインストールし、攻撃者に初期アクセスを許可する
+    attackVector: ソーシャルエンジニアリング、タイポスクワッティング、人気スキルの偽造、SEO操作
+    affected: ClawHubのディスカバリー、スキルインストールフロー
+    mitigations: GitHubアカウント年齢の検証、ダウンロード統計の可視性
+    residualRisk: ユーザーが検証せずにインストールする可能性
+    recommendations: 目立つセキュリティ警告、認証済みパブリッシャーバッジ、インストール確認
+
+  - id: T-ACCESS-005
+    name: 侵害されたスキルのアップデート
+    tactic: Initial Access
+    atlas: AML.T0010.001
+    risk: High
+    category: access
+    description: 攻撃者が正規のスキルを侵害し、既存ユーザーに悪意のあるアップデートをプッシュする
+    attackVector: スキルパブリッシャーのアカウント乗っ取り、ソーシャルエンジニアリング、認証情報の窃取
+    affected: ClawHubのアップデートメカニズム、インストール済みスキル
+    mitigations: バージョンフィンガープリンティング
+    residualRisk: 信頼されたスキルが攻撃ベクトルになる
+    recommendations: アップデートの署名、パブリッシャーの2FA要件、アップデート差分レビュー
+
+  - id: T-ACCESS-006
+    name: チャネル経由のプロンプトインジェクション
+    tactic: Initial Access
+    atlas: AML.T0051.000
+    risk: High
+    category: access
+    description: 攻撃者がメッセージングチャネルを通じて悪意のあるプロンプトを送信し、初期アクセスを取得する
+    attackVector: エージェント管理のチャネル（WhatsApp、Telegram、Discord）へのダイレクトメッセージ
+    affected: すべてのチャネル統合
+    mitigations: AllowFromリスト、ペアリング要件
+    residualRisk: 許可リストの設定ミス、ソーシャルエンジニアリングによる追加
+    recommendations: デフォルト拒否のチャネルアクセス、新規送信者の監査ログ
+
+  # ── 実行 (AML.TA0005) ─────────────────────────────────
+  - id: T-EXEC-001
+    name: 直接プロンプトインジェクション
+    tactic: Execution
+    atlas: AML.T0051.000
+    risk: Critical
+    category: execution
+    description: 攻撃者が巧みに作成されたプロンプトを送信し、エージェントの動作を操作する
+    attackVector: 敵対的な指示を含むチャネルメッセージ
+    affected: エージェントLLM、すべての入力サーフェス
+    mitigations: パターン検出、外部コンテンツのラッピング
+    residualRisk: "検出のみでブロックなし。高度な攻撃はバイパス可能"
+    recommendations: 多層防御の実装、出力バリデーション、機密操作のユーザー確認
+
+  - id: T-EXEC-002
+    name: 間接プロンプトインジェクション
+    tactic: Execution
+    atlas: AML.T0051.001
+    risk: High
+    category: execution
+    description: 攻撃者が取得されたコンテンツに悪意のある指示を埋め込む
+    attackVector: 悪意のあるURL、汚染されたメール、侵害されたWebhook
+    affected: web_fetch、メール取り込み、外部データソース
+    mitigations: XMLタグとセキュリティ通知によるコンテンツのラッピング
+    residualRisk: LLMがラッパー指示を無視する可能性
+    recommendations: コンテンツのサニタイズを実装、実行コンテキストの分離
+
+  - id: T-EXEC-003
+    name: ツール引数インジェクション
+    tactic: Execution
+    atlas: AML.T0051.000
+    risk: High
+    category: execution
+    description: 攻撃者がプロンプトインジェクションを通じてツール引数を操作する
+    attackVector: ツールパラメータ値に影響を与える巧みなプロンプト
+    affected: すべてのツール呼び出し
+    mitigations: 危険なコマンドの実行承認
+    residualRisk: ユーザーの判断に依存
+    recommendations: 引数バリデーションの実装、パラメータ化されたツール呼び出し
+
+  - id: T-EXEC-004
+    name: 実行承認のバイパス
+    tactic: Execution
+    atlas: AML.T0043
+    risk: High
+    category: execution
+    description: 攻撃者が承認許可リストをバイパスするコマンドを作成する
+    attackVector: コマンドの難読化、エイリアスの悪用、パスの操作
+    affected: exec-approvals.ts、コマンド許可リスト
+    mitigations: 許可リスト + askモード
+    residualRisk: コマンドのサニタイズなし
+    recommendations: コマンドの正規化を実装、ブロックリストの拡充
+
+  - id: T-EXEC-005
+    name: 悪意のあるスキルコードの実行
+    tactic: Execution
+    atlas: AML.T0010.001
+    risk: Critical
+    category: execution
+    description: 悪意のあるスキルがエージェントによってロードされた際に任意のコードを実行する
+    attackVector: 難読化された悪意のあるコードを含むスキルがロードまたは呼び出し時に実行される
+    affected: スキルランタイム、エージェントプロセス、ホストシステム
+    mitigations: パターンベースのモデレーション（容易にバイパス可能）
+    residualRisk: スキルは完全なエージェント権限で実行され、サンドボックスなし
+    recommendations: VirusTotal Code Insight、スキルのサンドボックス化、ケイパビリティベースのパーミッション
+
+  - id: T-EXEC-006
+    name: MCPサーバーのコマンドインジェクション
+    tactic: Execution
+    atlas: AML.T0051.000
+    risk: High
+    category: execution
+    description: 攻撃者がMCPサーバーを悪用し、ツール呼び出しを通じてコマンドを実行する
+    attackVector: プロンプトインジェクションにより、エージェントが悪意のある引数でMCPツールを呼び出す
+    affected: MCPサーバー統合、外部ツールプロバイダー
+    mitigations: ツールポリシーの適用
+    residualRisk: MCPサーバーが広範な権限を持つ可能性
+    recommendations: MCPサーバーの許可リスト化、引数バリデーション、最小権限のMCP設定
+
+  # ── 永続化 (AML.TA0006) ───────────────────────────────
+  - id: T-PERSIST-001
+    name: スキルベースの永続化
+    tactic: Persistence
+    atlas: AML.T0010.001
+    risk: Critical
+    category: persistence
+    description: 悪意のあるスキルがインストールされたまま残り、エージェントの再起動をまたいで再実行される
+    attackVector: スキルがユーザー設定に永続化し、エージェント起動時に自動ロードされる
+    affected: スキルのインストール、エージェントの起動
+    mitigations: なし - スキルの永続化は設計上の仕様
+    residualRisk: 悪意のあるスキルが再起動やアップデート後も存続する
+    recommendations: ロード時のスキル完全性検証、定期的な再スキャン、削除ツール
+
+  - id: T-PERSIST-002
+    name: 汚染されたスキルアップデートの永続化
+    tactic: Persistence
+    atlas: AML.T0010.001
+    risk: High
+    category: persistence
+    description: 正規スキルへの悪意のあるアップデートが永続的アクセスを維持する
+    attackVector: 自動アップデートが侵害されたバージョンを取得し、セッションをまたいで永続化する
+    affected: ClawHubのバージョニング、自動アップデートフロー
+    mitigations: バージョンフィンガープリンティング
+    residualRisk: 信頼されたスキルが永続的なバックドアとなる
+    recommendations: アップデートの署名、バージョンピンニング、アップデート通知
+
+  - id: T-PERSIST-003
+    name: エージェント設定の改ざん
+    tactic: Persistence
+    atlas: AML.T0010.002
+    risk: Medium
+    category: persistence
+    description: 攻撃者がエージェント設定を変更してアクセスを永続化する
+    attackVector: 設定ファイルの変更、侵害されたスキルを通じた設定のインジェクション
+    affected: エージェント設定、ツールポリシー、許可リスト
+    mitigations: ファイルパーミッション
+    residualRisk: ローカルアクセスまたは事前の侵害が必要
+    recommendations: 設定の完全性検証、設定変更の監査ログ
+
+  - id: T-PERSIST-004
+    name: 窃取されたトークンの永続化
+    tactic: Persistence
+    atlas: AML.T0040
+    risk: High
+    category: persistence
+    description: 攻撃者が窃取された認証トークンを使用してアクセスを維持する
+    attackVector: T-ACCESS-003で窃取されたトークンが継続的アクセスに使用される
+    affected: Gateway認証、APIアクセス
+    mitigations: "なし - トークンはデフォルトで期限切れにならない"
+    residualRisk: トークンが手動で失効されるまで攻撃者がアクセスを保持
+    recommendations: トークンの有効期限、ローテーションポリシー、異常検出
+
+  - id: T-PERSIST-005
+    name: プロンプトインジェクションによるメモリ汚染
+    tactic: Persistence
+    atlas: AML.T0051.000
+    risk: Medium
+    category: persistence
+    description: 攻撃者がエージェントのメモリ/コンテキストに永続する指示を注入する
+    attackVector: 後続のインタラクションにおけるエージェントの動作を変更するプロンプトの注入
+    affected: セッションコンテキスト、エージェントのメモリシステム
+    mitigations: 送信者ごとのセッション分離
+    residualRisk: セッション内での永続化が発生する可能性
+    recommendations: コンテキストのサニタイズ、メモリの境界設定、セッションタイムアウト
+
+  # ── 防御回避 (AML.TA0007) ───────────────────────────
+  - id: T-EVADE-001
+    name: モデレーションパターンのバイパス
+    tactic: Defense Evasion
+    atlas: AML.T0043
+    risk: High
+    category: evasion
+    description: 攻撃者がモデレーションパターンを回避するスキルコンテンツを作成する
+    attackVector: Unicode同形文字、エンコーディングトリック、動的ロード、コードの難読化
+    affected: ClawHub moderation.ts
+    mitigations: パターンベースのFLAG_RULES
+    residualRisk: 単純な正規表現は容易にバイパス可能
+    recommendations: 振る舞い分析の追加（VirusTotal Code Insight）、ASTベースの検出
+
+  - id: T-EVADE-002
+    name: コンテンツラッパーの脱出
+    tactic: Defense Evasion
+    atlas: AML.T0043
+    risk: Medium
+    category: evasion
+    description: 攻撃者がXMLラッパーコンテキストを脱出するコンテンツを作成する
+    attackVector: タグの操作、コンテキストの混乱、指示のオーバーライド
+    affected: 外部コンテンツのラッピング
+    mitigations: XMLタグ + セキュリティ通知
+    residualRisk: 新しい脱出方法が定期的に発見される
+    recommendations: 多層ラッパー、出力側のバリデーション
+
+  - id: T-EVADE-003
+    name: 承認プロンプトの操作
+    tactic: Defense Evasion
+    atlas: AML.T0043
+    risk: Medium
+    category: evasion
+    description: 攻撃者が承認プロンプトで無害に見えるリクエストを作成する
+    attackVector: 誤解を招くコマンドの説明、長いコマンド内への悪意のあるフラグの隠蔽
+    affected: 実行承認のUI、ユーザーの意思決定
+    mitigations: 承認プロンプトに完全なコマンドを表示
+    residualRisk: ユーザーが慎重にレビューせずに承認する可能性
+    recommendations: 危険なフラグのハイライト、コマンドの要約、リスクスコアリング
+
+  - id: T-EVADE-004
+    name: 段階的ペイロード配信
+    tactic: Defense Evasion
+    atlas: AML.T0043
+    risk: High
+    category: evasion
+    description: スキルが初期スキャン通過後に悪意のあるペイロードをダウンロードする
+    attackVector: クリーンなスキルがモデレーションを通過し、ランタイム時に悪意のあるコードを取得する
+    affected: ClawHubスキャン、スキルランタイム
+    mitigations: なし - ランタイムの取得は監視されていない
+    residualRisk: スキャンは初期コードのみをチェック
+    recommendations: ランタイムのネットワーク監視、スキルのアウトバウンド取得の制限
+
+  # ── 探索 (AML.TA0008) ─────────────────────────────────
+  - id: T-DISC-001
+    name: ツールの列挙
+    tactic: Discovery
+    atlas: AML.T0040
+    risk: Low
+    category: discovery
+    description: 攻撃者がプロンプティングを通じて利用可能なツールを列挙する
+    attackVector: "'どんなツールがありますか？'のようなクエリ"
+    affected: エージェントのツールレジストリ
+    mitigations: 特定の対策なし
+    residualRisk: ツールは一般的に公開文書化されている
+    recommendations: ツールの可視性制御を検討
+
+  - id: T-DISC-002
+    name: セッションデータの抽出
+    tactic: Discovery
+    atlas: AML.T0040
+    risk: Medium
+    category: discovery
+    description: 攻撃者がセッションコンテキストから機密データを抽出する
+    attackVector: "'前に何を話しましたか？'のようなクエリ、コンテキストプロービング"
+    affected: セッションのトランスクリプト、コンテキストウィンドウ
+    mitigations: 送信者ごとのセッション分離
+    residualRisk: セッション内のデータはアクセス可能
+    recommendations: コンテキスト内の機密データマスキングを実装
+
+  - id: T-DISC-003
+    name: システムプロンプトの抽出
+    tactic: Discovery
+    atlas: AML.T0040
+    risk: Medium
+    category: discovery
+    description: 攻撃者がシステムプロンプトを抽出し、エージェントの機能と制限を把握する
+    attackVector: エージェントに指示を開示させるプロンプトインジェクション
+    affected: エージェントのシステムプロンプト、セキュリティポリシー
+    mitigations: LLMの指示追従
+    residualRisk: システムプロンプトは創造的なプロンプトで抽出可能なことが多い
+    recommendations: システムプロンプトの堅牢化、抽出検出
+
+  - id: T-DISC-004
+    name: 環境変数の列挙
+    tactic: Discovery
+    atlas: AML.T0040
+    risk: Medium
+    category: discovery
+    description: 攻撃者が環境変数とシステム設定を列挙する
+    attackVector: プロンプトインジェクションにより、エージェントがenv、printenvを実行するか、設定ファイルを読み取る
+    affected: ホスト環境、環境変数内の認証情報
+    mitigations: 実行承認
+    residualRisk: 承認されたコマンドが機密情報を漏洩する可能性
+    recommendations: 機密環境変数のフィルタリング、出力のマスキング
+
+  # ── データ窃取 (AML.TA0010) ──────────────────────────────
+  - id: T-EXFIL-001
+    name: web_fetchを介したデータ窃取
+    tactic: Exfiltration
+    atlas: AML.T0009
+    risk: High
+    category: exfil
+    description: 攻撃者がエージェントに外部URLへのデータ送信を指示してデータを窃取する
+    attackVector: プロンプトインジェクションにより、エージェントが攻撃者のサーバーにデータをPOSTする
+    affected: web_fetchツール
+    mitigations: 内部ネットワークに対するSSRFブロック
+    residualRisk: 外部URLは許可されている
+    recommendations: URL許可リストの実装、データ分類に基づく制御
+
+  - id: T-EXFIL-002
+    name: 不正なメッセージ送信
+    tactic: Exfiltration
+    atlas: AML.T0009
+    risk: Medium
+    category: exfil
+    description: 攻撃者がエージェントに機密データを含むメッセージを送信させる
+    attackVector: プロンプトインジェクションにより、エージェントが攻撃者にメッセージを送信する
+    affected: メッセージツール、チャネル統合
+    mitigations: アウトバウンドメッセージのゲーティング
+    residualRisk: ゲーティングがバイパスされる可能性
+    recommendations: 新規受信者への明示的な確認を要求
+
+  - id: T-EXFIL-003
+    name: スキルを介した認証情報の収集
+    tactic: Exfiltration
+    atlas: AML.T0009
+    risk: Critical
+    category: exfil
+    description: 悪意のあるスキルがエージェントのコンテキストと環境から認証情報を収集する
+    attackVector: スキルコードが環境変数、設定ファイル、APIキーを読み取る
+    affected: スキル実行環境、~/.openclaw/
+    mitigations: スキルに対する特定の対策なし
+    residualRisk: スキルはエージェント権限で実行される
+    recommendations: スキルのサンドボックス化、認証情報の分離、ケイパビリティベースのアクセス制御
+
+  - id: T-EXFIL-004
+    name: トランスクリプトの窃取
+    tactic: Exfiltration
+    atlas: AML.T0009
+    risk: High
+    category: exfil
+    description: 攻撃者が機密データを含む会話のトランスクリプトを窃取する
+    attackVector: スキルまたはプロンプトインジェクションがトランスクリプトファイルを読み取り、送信する
+    affected: セッションのトランスクリプト、~/.openclaw/sessions/
+    mitigations: ファイルパーミッション
+    residualRisk: スキルがトランスクリプトファイルを読み取り可能
+    recommendations: トランスクリプトの暗号化、スキルのファイルシステム分離
+
+  # ── 影響 (AML.TA0011) ────────────────────────────────
+  - id: T-IMPACT-001
+    name: 不正なコマンド実行
+    tactic: Impact
+    atlas: AML.T0031
+    risk: Critical
+    category: impact
+    description: 攻撃者がユーザーのシステム上で任意のコマンドを実行する
+    attackVector: プロンプトインジェクションと実行承認バイパスの組み合わせ
+    affected: Bashツール、コマンド実行、ホストシステム
+    mitigations: 実行承認、Dockerサンドボックスオプション
+    residualRisk: サンドボックスなしのホスト実行
+    recommendations: デフォルトでサンドボックスを使用、承認UXの改善
+
+  - id: T-IMPACT-002
+    name: リソース枯渇（DoS）
+    tactic: Impact
+    atlas: AML.T0031
+    risk: High
+    category: impact
+    description: 攻撃者がAPIクレジットまたは計算リソースを枯渇させる
+    attackVector: 自動化されたメッセージフラッディング、高コストなツール呼び出し、無限ループ
+    affected: Gateway、エージェントセッション、APIプロバイダー、ユーザーの課金
+    mitigations: なし
+    residualRisk: レート制限なし
+    recommendations: 送信者ごとのレート制限、費用バジェット、サーキットブレーカーの実装
+
+  - id: T-IMPACT-003
+    name: レピュテーションの毀損
+    tactic: Impact
+    atlas: AML.T0031
+    risk: Medium
+    category: impact
+    description: 攻撃者がエージェントに有害または攻撃的なコンテンツを送信させる
+    attackVector: プロンプトインジェクションにより、連絡先への不適切な返信が発生する
+    affected: 出力生成、チャネルメッセージ、ユーザーのレピュテーション
+    mitigations: LLMプロバイダーのコンテンツポリシー
+    residualRisk: プロバイダーのフィルターは完全ではない
+    recommendations: 出力フィルタリングレイヤー、ユーザーコントロール、メッセージレビューキュー
+
+  - id: T-IMPACT-004
+    name: データの破壊
+    tactic: Impact
+    atlas: AML.T0031
+    risk: High
+    category: impact
+    description: 攻撃者がエージェントにユーザーデータの削除や破損を行わせる
+    attackVector: プロンプトインジェクションにより、rm、フォーマット、破壊的なデータベース操作が実行される
+    affected: ユーザーファイル、データベース、設定
+    mitigations: 破壊的コマンドの実行承認
+    residualRisk: 承認された破壊的コマンドが偽装される可能性
+    recommendations: 破壊的コマンドの確認、バックアップの推奨、元に戻す機能
+
+  - id: T-IMPACT-005
+    name: エージェントを介した金融詐欺
+    tactic: Impact
+    atlas: AML.T0031
+    risk: High
+    category: impact
+    description: 攻撃者がエージェントを利用して不正な金融取引を実行する
+    attackVector: プロンプトインジェクションにより、エージェントが金融APIやサービスとインタラクションする
+    affected: 金融連携、決済ツール
+    mitigations: ツール固有のポリシー
+    residualRisk: エージェントが金融ツールへのアクセス権を持つ可能性
+    recommendations: 金融操作の確認、取引限度額、独立した承認フロー
+
+attack_chains:
+  - name: 悪意のあるスキルの完全キルチェーン
+    steps: [T-RECON-003, T-EVADE-001, T-ACCESS-004, T-EXEC-005, T-PERSIST-001, T-EXFIL-003]
+    description: "ClawHubを偵察 \u2192 回避的なスキルを作成 \u2192 ユーザーがインストール \u2192 コード実行 \u2192 永続化 \u2192 認証情報の収集"
+
+  - name: スキルサプライチェーン攻撃
+    steps: [T-ACCESS-005, T-EVADE-004, T-EXEC-005, T-PERSIST-002, T-EXFIL-004]
+    description: "パブリッシャーを侵害 \u2192 段階的ペイロードをプッシュ \u2192 アップデート時に実行 \u2192 永続化を維持 \u2192 トランスクリプトを窃取"
+
+  - name: プロンプトインジェクションからRCEへ
+    steps: [T-ACCESS-006, T-EXEC-001, T-EVADE-003, T-EXEC-004, T-IMPACT-001]
+    description: "チャネル経由でアクセス \u2192 プロンプトを注入 \u2192 承認を操作 \u2192 チェックをバイパス \u2192 コマンドを実行"
+
+  - name: 間接インジェクションによるデータ窃取
+    steps: [T-EXEC-002, T-DISC-004, T-EXFIL-001]
+    description: "取得コンテンツを汚染 \u2192 環境を列挙 \u2192 web_fetch経由で窃取"
+
+  - name: トークン窃取による永続的アクセス
+    steps: [T-ACCESS-003, T-PERSIST-004, T-DISC-002, T-EXFIL-002]
+    description: "トークンを窃取 \u2192 アクセスを維持 \u2192 セッションデータを抽出 \u2192 メッセージ経由で窃取"
+
+  - name: 金融詐欺チェーン
+    steps: [T-ACCESS-006, T-EXEC-001, T-DISC-001, T-IMPACT-005]
+    description: "チャネルアクセスを取得 \u2192 プロンプトを注入 \u2192 金融ツールを列挙 \u2192 詐欺を実行"
+
+trust_boundaries:
+  # 順序は実際のユーザー/データフローに従う:
+  # サプライチェーン（インストール前）→ チャネルアクセス（メッセージ受信）→ セッション（ルーティング）→ 実行 + 外部コンテンツ（隣接）
+  - id: 1
+    name: サプライチェーン
+    zone: ClawHub
+    phase: pre-install
+    controls:
+      - スキル公開（セマンティックバージョニング、SKILL.md必須）
+      - パターンベースのモデレーションフラグ
+      - VirusTotal Code Insight
+      - GitHubアカウント年齢の検証
+
+  - id: 2
+    name: チャネルアクセス制御
+    zone: Gateway
+    phase: message-flow
+    controls:
+      - デバイスペアリング（30秒の猶予期間）
+      - AllowFrom / AllowList検証
+      - トークン/パスワード/Tailscale認証
+
+  - id: 3
+    name: セッション分離
+    zone: Agent Sessions
+    phase: message-flow
+    controls:
+      - "セッションキー = agent:channel:peer"
+      - エージェントごとのツールポリシー
+      - トランスクリプトのログ記録
+
+  - id: 4
+    name: ツール実行
+    zone: Execution Sandbox
+    phase: execution
+    adjacent: 5
+    controls:
+      - Dockerサンドボックスまたはホスト（実行承認）
+      - Nodeリモート実行
+      - SSRF防御（DNSピンニング + IPブロック）
+
+  - id: 5
+    name: 外部コンテンツ
+    zone: Fetched URLs / Emails / Webhooks
+    phase: execution
+    adjacent: 4
+    controls:
+      - 外部コンテンツのラッピング（XMLタグ）
+      - セキュリティ通知のインジェクション
+
+data_flows:
+  - id: F1
+    source: Channel
+    destination: Gateway
+    data: ユーザーメッセージ
+    protection: TLS、AllowFrom
+  - id: F2
+    source: Gateway
+    destination: Agent
+    data: ルーティングされたメッセージ
+    protection: セッション分離
+  - id: F3
+    source: Agent
+    destination: Tools
+    data: ツール呼び出し
+    protection: ポリシーの適用
+  - id: F4
+    source: Agent
+    destination: External
+    data: web_fetchリクエスト
+    protection: SSRFブロック
+  - id: F5
+    source: ClawHub
+    destination: Agent
+    data: スキルコード
+    protection: モデレーション、スキャン
+  - id: F6
+    source: Agent
+    destination: Channel
+    data: レスポンス
+    protection: 出力フィルタリング
+
+supply_chain:
+  current_controls:
+    - control: GitHubアカウント年齢
+      implementation: requireGitHubAccountAge()
+      effectiveness: 中程度 - 新規攻撃者のハードルを引き上げる
+    - control: パスのサニタイズ
+      implementation: sanitizePath()
+      effectiveness: 高 - パストラバーサルを防止
+    - control: ファイルタイプの検証
+      implementation: isTextFile()
+      effectiveness: 中程度 - テキストファイルのみだが、悪意のあるコンテンツを含む可能性
+    - control: サイズ制限
+      implementation: 50MBのバンドル上限
+      effectiveness: 高 - リソース枯渇を防止
+    - control: 必須のSKILL.md
+      implementation: 必須のReadme
+      effectiveness: セキュリティ上の価値は低い - 情報提供のみ
+    - control: パターンモデレーション
+      implementation: moderation.tsのFLAG_RULES
+      effectiveness: 低 - 容易にバイパス可能
+    - control: モデレーションステータス
+      implementation: moderationStatusフィールド
+      effectiveness: 中程度 - 手動レビューが可能
+
+  moderation_patterns:
+    description: moderation.tsの現在のパターン
+    patterns:
+      - name: 既知の悪意ある識別子
+        regex: "/(keepcold131\\/ClawdAuthenticatorTool|ClawdAuthenticatorTool)/i"
+      - name: 不審なキーワード
+        regex: "/(malware|stealer|phish|phishing|keylogger)/i"
+      - name: 認証情報キーワード
+        regex: "/(api[-_ ]?key|token|password|private key|secret)/i"
+      - name: 金融キーワード
+        regex: "/(wallet|seed phrase|mnemonic|crypto)/i"
+      - name: 不審なURL
+        regex: "/(discord\\.gg|webhook|hooks\\.slack)/i"
+      - name: リモートコード実行
+        regex: "/(curl[^\\n]+\\|\\s*(sh|bash))/i"
+      - name: URL短縮サービス
+        regex: "/(bit\\.ly|tinyurl\\.com|t\\.co|goo\\.gl|is\\.gd)/i"
+    limitations:
+      - slug、displayName、summary、frontmatter、metadata、ファイルパスのみをチェック
+      - 実際のスキルコードの内容は分析しない
+      - 単純な正規表現は難読化で容易にバイパス可能
+      - 振る舞い分析なし
+
+  planned_improvements:
+    - improvement: VirusTotal統合
+      status: 進行中
+      impact: 高 - Code Insightによる振る舞い分析
+    - improvement: コミュニティ報告
+      status: 部分的に完了（skillReportsテーブルが存在）
+      impact: 中程度
+    - improvement: 監査ログ
+      status: 部分的に完了（auditLogsテーブルが存在）
+      impact: 中程度
+    - improvement: バッジシステム
+      status: 実装済み
+      impact: "中程度 - highlighted、official、deprecated、redactionApproved"
+
+risk_matrix:
+  - threat: T-EXEC-001
+    likelihood: High
+    impact: Critical
+    risk_level: Critical
+    priority: P0
+  - threat: T-PERSIST-001
+    likelihood: High
+    impact: Critical
+    risk_level: Critical
+    priority: P0
+  - threat: T-EXFIL-003
+    likelihood: Medium
+    impact: Critical
+    risk_level: Critical
+    priority: P0
+  - threat: T-IMPACT-001
+    likelihood: Medium
+    impact: Critical
+    risk_level: High
+    priority: P1
+  - threat: T-EXEC-002
+    likelihood: High
+    impact: High
+    risk_level: High
+    priority: P1
+  - threat: T-EXEC-004
+    likelihood: Medium
+    impact: High
+    risk_level: High
+    priority: P1
+  - threat: T-ACCESS-003
+    likelihood: Medium
+    impact: High
+    risk_level: High
+    priority: P1
+  - threat: T-EXFIL-001
+    likelihood: Medium
+    impact: High
+    risk_level: High
+    priority: P1
+  - threat: T-IMPACT-002
+    likelihood: High
+    impact: Medium
+    risk_level: High
+    priority: P1
+  - threat: T-EVADE-001
+    likelihood: High
+    impact: Medium
+    risk_level: Medium
+    priority: P2
+  - threat: T-ACCESS-001
+    likelihood: Low
+    impact: High
+    risk_level: Medium
+    priority: P2
+  - threat: T-ACCESS-002
+    likelihood: Low
+    impact: High
+    risk_level: Medium
+    priority: P2
+  - threat: T-PERSIST-002
+    likelihood: Low
+    impact: High
+    risk_level: Medium
+    priority: P2
+
+recommendations:
+  immediate_p0:
+    - id: R-001
+      recommendation: VirusTotal統合の完了
+      addresses: [T-PERSIST-001, T-EVADE-001]
+    - id: R-002
+      recommendation: スキルのサンドボックス化の実装
+      addresses: [T-PERSIST-001, T-EXFIL-003]
+    - id: R-003
+      recommendation: 機密操作に対する出力バリデーションの追加
+      addresses: [T-EXEC-001, T-EXEC-002]
+
+  short_term_p1:
+    - id: R-004
+      recommendation: レート制限の実装
+      addresses: [T-IMPACT-002]
+    - id: R-005
+      recommendation: トークンの保存時暗号化の追加
+      addresses: [T-ACCESS-003]
+    - id: R-006
+      recommendation: 実行承認のUXとバリデーションの改善
+      addresses: [T-EXEC-004]
+    - id: R-007
+      recommendation: web_fetchに対するURL許可リストの実装
+      addresses: [T-EXFIL-001]
+
+  medium_term_p2:
+    - id: R-008
+      recommendation: 可能な場合に暗号学的チャネル検証の追加
+      addresses: [T-ACCESS-002]
+    - id: R-009
+      recommendation: 設定の完全性検証の実装
+      addresses: [T-PERSIST-003]
+    - id: R-010
+      recommendation: アップデート署名とバージョンピンニングの追加
+      addresses: [T-PERSIST-002]
+
+atlas_technique_mapping:
+  - atlas_id: AML.T0006
+    name: アクティブスキャニング
+    threats: [T-RECON-001, T-RECON-002, T-RECON-003]
+  - atlas_id: AML.T0009
+    name: 情報収集
+    threats: [T-EXFIL-001, T-EXFIL-002, T-EXFIL-003, T-EXFIL-004]
+  - atlas_id: AML.T0010.001
+    name: "サプライチェーン: AIソフトウェア"
+    threats: [T-ACCESS-004, T-ACCESS-005, T-EXEC-005, T-PERSIST-001, T-PERSIST-002]
+  - atlas_id: AML.T0010.002
+    name: "サプライチェーン: データ"
+    threats: [T-PERSIST-003]
+  - atlas_id: AML.T0031
+    name: AIモデルの完全性の侵害
+    threats: [T-IMPACT-001, T-IMPACT-002, T-IMPACT-003, T-IMPACT-004, T-IMPACT-005]
+  - atlas_id: AML.T0040
+    name: AIモデル推論APIアクセス
+    threats: [T-ACCESS-001, T-ACCESS-002, T-ACCESS-003, T-PERSIST-004, T-DISC-001, T-DISC-002, T-DISC-003, T-DISC-004]
+  - atlas_id: AML.T0043
+    name: 敵対的データの作成
+    threats: [T-EXEC-004, T-EVADE-001, T-EVADE-002, T-EVADE-003, T-EVADE-004]
+  - atlas_id: AML.T0051.000
+    name: "LLMプロンプトインジェクション: 直接"
+    threats: [T-ACCESS-006, T-EXEC-001, T-EXEC-003, T-EXEC-006, T-PERSIST-005]
+  - atlas_id: AML.T0051.001
+    name: "LLMプロンプトインジェクション: 間接"
+    threats: [T-EXEC-002]
+
+key_security_files:
+  - path: src/infra/exec-approvals.ts
+    purpose: コマンド承認ロジック
+    risk_level: Critical
+  - path: src/gateway/auth.ts
+    purpose: Gateway認証
+    risk_level: Critical
+  - path: src/web/inbound/access-control.ts
+    purpose: チャネルアクセス制御
+    risk_level: Critical
+  - path: src/infra/net/ssrf.ts
+    purpose: SSRF防御
+    risk_level: Critical
+  - path: src/security/external-content.ts
+    purpose: プロンプトインジェクション緩和
+    risk_level: Critical
+  - path: src/agents/sandbox/tool-policy.ts
+    purpose: ツールポリシーの適用
+    risk_level: Critical
+  - path: convex/lib/moderation.ts
+    purpose: ClawHubモデレーション
+    risk_level: High
+  - path: convex/lib/skillPublish.ts
+    purpose: スキル公開フロー
+    risk_level: High
+  - path: src/routing/resolve-route.ts
+    purpose: セッション分離
+    risk_level: Medium
+
+glossary:
+  ATLAS: "MITREのAIシステムに対する敵対的脅威ランドスケープ"
+  ClawHub: "OpenClawのスキルマーケットプレイス"
+  Gateway: "OpenClawのメッセージルーティングおよび認証レイヤー"
+  MCP: モデルコンテキストプロトコル - ツールプロバイダーインターフェース
+  Prompt Injection: 入力に悪意のある指示を埋め込む攻撃
+  Skill: OpenClawエージェント用のダウンロード可能なエクステンション
+  SSRF: サーバーサイドリクエストフォージェリ

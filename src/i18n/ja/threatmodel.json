@@ -1,0 +1,57 @@
+{
+  "meta": {
+    "title": "脅威モデル - OpenClaw トラスト",
+    "description": "MITRE ATLASフレームワークに基づくOpenClaw脅威モデル - AIエージェントシステムに対する敵対的脅威。"
+  },
+  "nav": {
+    "trust": "トラスト",
+    "threatModel": "脅威モデル"
+  },
+  "header": {
+    "title": "脅威モデル",
+    "subtitle": "AIエージェントセキュリティのためのMITRE ATLASフレームワーク",
+    "badgeVersion": "v1.0-draft",
+    "badgeAtlas": "MITRE ATLAS 2025"
+  },
+  "stats": {
+    "totalThreats": "脅威の総数",
+    "criticalRisk": "クリティカルリスク",
+    "highRisk": "高リスク",
+    "mediumRisk": "中リスク",
+    "lowRisk": "低リスク"
+  },
+  "legend": {
+    "critical": "クリティカル",
+    "high": "高",
+    "medium": "中",
+    "low": "低"
+  },
+  "sections": {
+    "threatMatrix": "ATLAS戦術別脅威マトリクス",
+    "attackChains": "主要な攻撃チェーン",
+    "trustBoundaries": "信頼境界"
+  },
+  "detail": {
+    "description": "説明",
+    "attackVector": "攻撃ベクトル",
+    "affected": "影響を受けるコンポーネント",
+    "mitigations": "現在の緩和策",
+    "residualRisk": "残留リスク",
+    "recommendations": "推奨事項",
+    "riskSuffix": "リスク"
+  },
+  "footer": {
+    "builtOn": "ベース",
+    "atlasFullName": "MITRE ATLAS（AIシステムに対する敵対的脅威ランドスケープ）",
+    "maintainedBy": "ATLASはMITREとAIセキュリティコミュニティの協力により維持されています",
+    "atlasTechniques": "ATLASテクニック",
+    "atlasTactics": "ATLAS戦術",
+    "contribute": "コントリビュートする",
+    "reportIssues": "セキュリティの問題は以下に報告してください",
+    "version": "OpenClaw 脅威モデル v1.0-draft"
+  },
+  "error": {
+    "loadFailed": "脅威モデルの読み込みに失敗しました。",
+    "viewOnGithub": "GitHubで表示"
+  }
+}

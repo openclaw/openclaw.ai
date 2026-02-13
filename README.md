@@ -42,6 +42,11 @@ The landing page hosts installer scripts:
 - **macOS/Linux (CLI only, no onboarding)**: `curl -fsSL --proto '=https' --tlsv1.2 https://clawd.bot/install-cli.sh | bash`
 - **Windows**: `iwr -useb https://clawd.bot/install.ps1 | iex`
 
+Installer UI controls (macOS/Linux `install.sh`):
+- Pass `--gum` to force gum UI when supported, or `--no-gum` to disable gum output.
+- Set `OPENCLAW_USE_GUM=auto|1|0` to control gum behavior in automation.
+- Compatibility alias: `CLAWDBOT_USE_GUM` (mapped to `OPENCLAW_USE_GUM`).
+
 These scripts:
 1. Install Homebrew (macOS) or detect package managers (Windows)
 2. Install Node.js 22+ if needed
