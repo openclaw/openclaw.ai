@@ -138,22 +138,125 @@ cleanup_openclaw_bin_conflict() {
     return 1
 }
 
+npm_log_indicates_missing_build_tools() {
+    local log="$1"
+    if [[ -z "$log" || ! -f "$log" ]]; then
+        return 1
+    fi
+
+    grep -Eiq "(not found: make|make: command not found|cmake: command not found|CMAKE_MAKE_PROGRAM is not set|Could not find CMAKE|gyp ERR! find Python|no developer tools were found|is not able to compile a simple test program|Failed to build llama\\.cpp|It seems that \"make\" is not installed in your system|It seems that the used \"cmake\" doesn't work properly)" "$log"
+}
+
+install_build_tools_linux() {
+    require_sudo
+
+    if command -v apt-get &> /dev/null; then
+        maybe_sudo apt-get update -y
+        maybe_sudo apt-get install -y build-essential python3 make g++ cmake
+        return 0
+    fi
+
+    if command -v dnf &> /dev/null; then
+        maybe_sudo dnf install -y gcc gcc-c++ make cmake python3
+        return 0
+    fi
+
+    if command -v yum &> /dev/null; then
+        maybe_sudo yum install -y gcc gcc-c++ make cmake python3
+        return 0
+    fi
+
+    if command -v apk &> /dev/null; then
+        maybe_sudo apk add --no-cache build-base python3 cmake
+        return 0
+    fi
+
+    echo -e "${WARN}→${NC} Could not detect package manager for auto-installing build tools."
+    return 1
+}
+
+install_build_tools_macos() {
+    local ok=true
+
+    if ! xcode-select -p >/dev/null 2>&1; then
+        echo -e "${WARN}→${NC} Installing Xcode Command Line Tools..."
+        xcode-select --install >/dev/null 2>&1 || true
+        if ! xcode-select -p >/dev/null 2>&1; then
+            echo -e "${WARN}→${NC} Xcode Command Line Tools are not ready yet."
+            echo -e "${INFO}i${NC} Complete the installer dialog, then re-run this installer."
+            ok=false
+        fi
+    fi
+
+    if ! command -v cmake >/dev/null 2>&1; then
+        if command -v brew >/dev/null 2>&1; then
+            echo -e "${WARN}→${NC} Installing cmake..."
+            brew install cmake
+        else
+            echo -e "${WARN}→${NC} Homebrew not available; cannot auto-install cmake."
+            ok=false
+        fi
+    fi
+
+    if ! command -v make >/dev/null 2>&1; then
+        echo -e "${WARN}→${NC} make is still unavailable."
+        ok=false
+    fi
+    if ! command -v cmake >/dev/null 2>&1; then
+        echo -e "${WARN}→${NC} cmake is still unavailable."
+        ok=false
+    fi
+
+    [[ "$ok" == "true" ]]
+}
+
+auto_install_build_tools_for_npm_failure() {
+    local log="$1"
+    if ! npm_log_indicates_missing_build_tools "$log"; then
+        return 1
+    fi
+
+    echo -e "${WARN}→${NC} Detected missing native build tools; attempting automatic setup..."
+    if [[ "$OS" == "linux" ]]; then
+        install_build_tools_linux || return 1
+    elif [[ "$OS" == "macos" ]]; then
+        install_build_tools_macos || return 1
+    else
+        return 1
+    fi
+    echo -e "${SUCCESS}✓${NC} Build tools setup complete"
+    return 0
+}
+
+run_npm_global_install_once() {
+    local spec="$1"
+    local log="$2"
+
+    SHARP_IGNORE_GLOBAL_LIBVIPS="$SHARP_IGNORE_GLOBAL_LIBVIPS" npm --loglevel "$NPM_LOGLEVEL" ${NPM_SILENT_FLAG:+$NPM_SILENT_FLAG} --no-fund --no-audit install -g "$spec" 2>&1 | tee "$log"
+}
+
 install_openclaw_npm() {
     local spec="$1"
     local log
     log="$(mktempfile)"
-    if ! SHARP_IGNORE_GLOBAL_LIBVIPS="$SHARP_IGNORE_GLOBAL_LIBVIPS" npm --loglevel "$NPM_LOGLEVEL" ${NPM_SILENT_FLAG:+$NPM_SILENT_FLAG} --no-fund --no-audit install -g "$spec" 2>&1 | tee "$log"; then
+    if ! run_npm_global_install_once "$spec" "$log"; then
+        if auto_install_build_tools_for_npm_failure "$log"; then
+            echo -e "${WARN}→${NC} Retrying npm install after build tools setup..."
+            if run_npm_global_install_once "$spec" "$log"; then
+                return 0
+            fi
+        fi
         if grep -q "ENOTEMPTY: directory not empty, rename .*openclaw" "$log"; then
             echo -e "${WARN}→${NC} npm left a stale openclaw directory; cleaning and retrying..."
             cleanup_npm_openclaw_paths
-            SHARP_IGNORE_GLOBAL_LIBVIPS="$SHARP_IGNORE_GLOBAL_LIBVIPS" npm --loglevel "$NPM_LOGLEVEL" ${NPM_SILENT_FLAG:+$NPM_SILENT_FLAG} --no-fund --no-audit install -g "$spec"
+            run_npm_global_install_once "$spec" "$log"
             return $?
         fi
         if grep -q "EEXIST" "$log"; then
             local conflict=""
             conflict="$(extract_openclaw_conflict_path "$log" || true)"
             if [[ -n "$conflict" ]] && cleanup_openclaw_bin_conflict "$conflict"; then
-                SHARP_IGNORE_GLOBAL_LIBVIPS="$SHARP_IGNORE_GLOBAL_LIBVIPS" npm --loglevel "$NPM_LOGLEVEL" ${NPM_SILENT_FLAG:+$NPM_SILENT_FLAG} --no-fund --no-audit install -g "$spec"
+                run_npm_global_install_once "$spec" "$log"
                 return $?
             fi
             echo -e "${ERROR}npm failed because an openclaw binary already exists.${NC}"
@@ -580,26 +683,6 @@ check_git() {
     fi
     echo -e "${WARN}→${NC} Git not found"
     return 1
-}
-
-check_build_tools() {
-    local missing=()
-
-    if ! command -v make &> /dev/null; then
-        missing+=("make")
-    fi
-
-    if ! command -v cmake &> /dev/null; then
-        missing+=("cmake")
-    fi
-
-    if (( ${#missing[@]} )); then
-        echo -e "${ERROR}Error: Missing required build tools: ${missing[*]}${NC}"
-        echo "Please install them and re-run the installer."
-        exit 1
-    fi
-
-    echo -e "${SUCCESS}✓${NC} Build tools found (make, cmake)"
 }
 
 is_root() {
@@ -1204,9 +1287,6 @@ EOF
     fi
     local should_open_dashboard=false
     local skip_onboard=false
-
-    # Fail early if required build tools are missing (before any npm commands)
-    check_build_tools
 
     # Step 1: Homebrew (macOS only)
     install_homebrew
