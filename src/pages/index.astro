@@ -1,6 +1,7 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import Icon from '../components/Icon.astro';
+import SectionHeader from '../components/SectionHeader.astro';
 import testimonials from '../data/testimonials.json';
 import { getPublishedBlogPosts } from '../lib/blog';
 
@@ -107,14 +108,10 @@ const duration2 = (row2.length / 2 * pixelsPerItem) / pixelsPerSecond;
 
     <!-- Testimonials (moved up for social proof) -->
     <section class="testimonials">
-      <div class="section-header">
-        <h2 class="section-title">
-          <span class="claw-accent">⟩</span> What People Say
-        </h2>
-        <a href="/shoutouts" class="section-link">View all <span class="sr-only">community shoutouts</span>
-          <span aria-hidden="true">→</span>
-        </a>
-      </div>
+      <SectionHeader 
+        title="What People Say" 
+        link={{ href: "/shoutouts", text: "View all" }}
+      />
       <div class="testimonials-track">
         <div class="testimonials-row row-1" style={`--duration: ${duration1}s`}>
           {row1.map((t) => (
@@ -155,9 +152,7 @@ const duration2 = (row2.length / 2 * pixelsPerItem) / pixelsPerSecond;
 
     <!-- Quick Start -->
     <section class="quickstart">
-      <h2 class="section-title">
-        <span class="claw-accent">⟩</span> Quick Start
-      </h2>
+      <SectionHeader title="Quick Start" />
       <div class="code-block">
         <div class="code-header">
           <span class="code-dot"></span>
@@ -619,9 +614,7 @@ const duration2 = (row2.length / 2 * pixelsPerItem) / pixelsPerSecond;
 
     <!-- What It Does -->
     <section class="features">
-      <h2 class="section-title">
-        <span class="claw-accent">⟩</span> What It Does
-      </h2>
+      <SectionHeader title="What It Does" />
       <div class="features-grid">
         <a href="https://docs.openclaw.ai/getting-started" target="_blank" rel="noopener" class="feature-card">
           <div class="feature-icon"><Icon icon="lucide:home" color="var(--coral-bright)" size={28} /></div>
@@ -658,9 +651,7 @@ const duration2 = (row2.length / 2 * pixelsPerItem) / pixelsPerSecond;
 
     <!-- Integrations Preview -->
     <section class="integrations-preview">
-      <h2 class="section-title">
-        <span class="claw-accent">⟩</span> Works With Everything
-      </h2>
+      <SectionHeader title="Works With Everything" />
       <div class="integrations-row">
         {integrationPills.map((p) => (
           <span class="integration-pill">
@@ -678,9 +669,7 @@ const duration2 = (row2.length / 2 * pixelsPerItem) / pixelsPerSecond;
 
     <!-- Press Section -->
     <section class="press-section">
-      <h2 class="section-title">
-        <span class="claw-accent">⟩</span> Featured In
-      </h2>
+      <SectionHeader title="Featured In" />
       <div class="press-grid">
         <a href="https://www.macstories.net/stories/clawdbot-showed-me-what-the-future-of-personal-ai-assistants-looks-like/" target="_blank" rel="noopener" class="press-card press-featured">
           <div class="press-logo">
@@ -1079,6 +1068,11 @@ const duration2 = (row2.length / 2 * pixelsPerItem) / pixelsPerSecond;
     gap: 10px;
   }
 
+  .newsletter-title .claw-accent {
+    color: var(--coral-bright);
+    font-weight: 700;
+  }
+
   .newsletter-desc {
     font-size: 0.95rem;
     color: var(--text-secondary);
@@ -1308,9 +1302,6 @@ const duration2 = (row2.length / 2 * pixelsPerItem) / pixelsPerSecond;
     animation: fadeInUp 0.8s ease-out 0.65s both;
   }
 
-  .press-section .section-title {
-    margin-bottom: 20px;
-  }
 
   .press-grid {
     display: grid;
@@ -1393,39 +1384,6 @@ const duration2 = (row2.length / 2 * pixelsPerItem) / pixelsPerSecond;
     animation: fadeInUp 0.8s ease-out 0.6s both;
   }
 
-  .section-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 20px;
-  }
-
-  .section-title {
-    font-family: var(--font-display);
-    font-size: 1.4rem;
-    font-weight: 600;
-    margin-bottom: 0;
-    display: flex;
-    align-items: center;
-    gap: 10px;
-  }
-
-  .section-link {
-    font-size: 0.9rem;
-    color: var(--coral-bright);
-    text-decoration: none;
-    font-weight: 500;
-    transition: color 0.2s ease;
-  }
-
-  .section-link:hover {
-    color: var(--cyan-bright);
-  }
-
-  .claw-accent {
-    color: var(--coral-bright);
-    font-weight: 700;
-  }
 
   .code-block {
     background: var(--bg-elevated);
@@ -1856,7 +1814,7 @@ const duration2 = (row2.length / 2 * pixelsPerItem) / pixelsPerSecond;
     padding: 0 24px;
   }
 
-  .testimonials .section-header {
+  .testimonials :global(.section-header) {
     padding: 0 24px;
   }
 
@@ -1996,8 +1954,8 @@ const duration2 = (row2.length / 2 * pixelsPerItem) / pixelsPerSecond;
       padding: 0 16px;
     }
 
-    .testimonials .section-title {
-      padding-left: 16px;
+    .testimonials :global(.section-header) {
+      padding: 0 16px;
     }
 
     .testimonials-track {
