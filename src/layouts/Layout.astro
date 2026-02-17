@@ -267,11 +267,11 @@ const {
 
       /* ClawHub-style theme switcher - EXACT MATCH */
       .theme-switcher {
+        display: none;
         position: fixed;
         top: 16px;
         right: 16px;
         z-index: 999;
-        display: flex;
         gap: 2px;
         padding: 2px;
         border-radius: 9999px;
@@ -389,8 +389,9 @@ const {
             root.dataset.themePreference = preference;
             root.style.colorScheme = effectiveTheme;
             
-            // Update button states
-            buttons.forEach(btn => {
+            // Update all theme button states (fixed + navbar)
+            const allButtons = document.querySelectorAll('[data-theme-btn]');
+            allButtons.forEach(btn => {
               const btnTheme = btn.getAttribute('data-theme-btn');
               if (btnTheme === preference) {
                 btn.classList.add('active');
@@ -429,8 +430,9 @@ const {
           }
         };
 
-        // Listen for button clicks
-        buttons.forEach(btn => {
+        // Listen for button clicks (desktop + navbar)
+        const allThemeButtons = document.querySelectorAll('[data-theme-btn]');
+        allThemeButtons.forEach(btn => {
           btn.addEventListener('click', (e) => {
             const preference = btn.getAttribute('data-theme-btn');
             applyTheme(preference, e.currentTarget);

@@ -1,6 +1,7 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import Icon from '../components/Icon.astro';
+import LobsterLogo from '../components/LobsterLogo.astro';
 import testimonials from '../data/testimonials.json';
 import { getPublishedBlogPosts } from '../lib/blog';
 
@@ -54,30 +55,45 @@ const duration2 = (row2.length / 2 * pixelsPerItem) / pixelsPerSecond;
   <!-- Navbar -->
   <nav class="navbar" id="navbar">
     <div class="navbar-container">
-      <a href="/" class="navbar-logo">
-        <div class="navbar-logo-icon" aria-hidden="true">
-          <svg viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M20 3 C10 3 5 11 5 18 C5 25 10 31 15 33 L15 37 L18 37 L18 33 C18 33 20 34 22 33 L22 37 L25 37 L25 33 C30 31 35 25 35 18 C35 11 30 3 20 3Z" fill="currentColor" opacity="0.9"/>
-            <path d="M7 15 C2 13 0 17 2 20 C4 23 7 22 8 18 C9 16 8 15 7 15Z" fill="currentColor"/>
-            <path d="M33 15 C38 13 40 17 38 20 C36 23 33 22 32 18 C31 16 32 15 33 15Z" fill="currentColor"/>
-            <circle cx="15" cy="12" r="2" fill="var(--bg-deep)"/>
-            <circle cx="25" cy="12" r="2" fill="var(--bg-deep)"/>
-          </svg>
+      <div class="navbar-left">
+        <a href="/" class="navbar-logo" title="OpenClaw">
+          <div class="navbar-logo-icon" aria-hidden="true">
+            <LobsterLogo gradientId="navbar-lobster-gradient" />
+          </div>
+        </a>
+        
+        <div class="navbar-links">
+          <a href="#getting-started" class="navbar-link">Getting Started</a>
+          <a href="#features" class="navbar-link">Features</a>
+          <a href="/integrations" class="navbar-link">Integrations</a>
+          <a href="/blog" class="navbar-link">Blog</a>
         </div>
-        <span class="navbar-logo-text">OpenClaw</span>
-      </a>
-      
-      <div class="navbar-links">
-        <a href="#getting-started" class="navbar-link">Getting Started</a>
-        <a href="#features" class="navbar-link">Features</a>
-        <a href="/integrations" class="navbar-link">Integrations</a>
-        <a href="/blog" class="navbar-link">Blog</a>
       </div>
       
-      <a href="https://github.com/openclaw/openclaw" target="_blank" rel="noopener" class="navbar-github" title="View on GitHub">
-        <Icon icon={siIcon(siGithub)} size={20} />
-        <span class="navbar-github-text">GitHub</span>
-      </a>
+      <div class="navbar-right">
+        <div class="navbar-theme-switcher">
+          <button class="navbar-theme-btn" type="button" data-theme-btn="system" aria-label="System theme" title="System theme">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <rect width="20" height="14" x="2" y="3" rx="2"/><line x1="8" x2="16" y1="21" y2="21"/><line x1="12" x2="12" y1="17" y2="21"/>
+            </svg>
+          </button>
+          <button class="navbar-theme-btn" type="button" data-theme-btn="light" aria-label="Light theme" title="Light theme">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.93 4.93 1.41 1.41"/><path d="m17.66 17.66 1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="m6.34 17.66-1.41 1.41"/><path d="m19.07 4.93-1.41 1.41"/>
+            </svg>
+          </button>
+          <button class="navbar-theme-btn" type="button" data-theme-btn="dark" aria-label="Dark theme" title="Dark theme">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/>
+            </svg>
+          </button>
+        </div>
+        
+        <a href="https://github.com/openclaw/openclaw" target="_blank" rel="noopener" class="navbar-github" title="View on GitHub">
+          <Icon icon={siIcon(siGithub)} size={20} />
+          <span class="navbar-github-text">GitHub</span>
+        </a>
+      </div>
     </div>
   </nav>
 
@@ -88,28 +104,7 @@ const duration2 = (row2.length / 2 * pixelsPerItem) / pixelsPerSecond;
     <!-- Hero Section -->
     <header class="hero">
       <div class="lobster-icon" aria-hidden="true">
-        <svg viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <!-- Lobster Claw Silhouette -->
-          <path d="M60 10 C30 10 15 35 15 55 C15 75 30 95 45 100 L45 110 L55 110 L55 100 C55 100 60 102 65 100 L65 110 L75 110 L75 100 C90 95 105 75 105 55 C105 35 90 10 60 10Z" fill="url(#lobster-gradient)" class="claw-body"/>
-          <!-- Left Claw -->
-          <path d="M20 45 C5 40 0 50 5 60 C10 70 20 65 25 55 C28 48 25 45 20 45Z" fill="url(#lobster-gradient)" class="claw-left"/>
-          <!-- Right Claw -->
-          <path d="M100 45 C115 40 120 50 115 60 C110 70 100 65 95 55 C92 48 95 45 100 45Z" fill="url(#lobster-gradient)" class="claw-right"/>
-          <!-- Antenna -->
-          <path d="M45 15 Q35 5 30 8" stroke="var(--coral-bright)" stroke-width="2" stroke-linecap="round" class="antenna"/>
-          <path d="M75 15 Q85 5 90 8" stroke="var(--coral-bright)" stroke-width="2" stroke-linecap="round" class="antenna"/>
-          <!-- Eyes -->
-          <circle cx="45" cy="35" r="6" fill="var(--bg-deep)" class="eye"/>
-          <circle cx="75" cy="35" r="6" fill="var(--bg-deep)" class="eye"/>
-          <circle cx="46" cy="34" r="2" fill="var(--cyan-bright)" class="eye-glow"/>
-          <circle cx="76" cy="34" r="2" fill="var(--cyan-bright)" class="eye-glow"/>
-          <defs>
-            <linearGradient id="lobster-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
-              <stop offset="0%" stop-color="var(--logo-gradient-start)"/>
-              <stop offset="100%" stop-color="var(--logo-gradient-end)"/>
-            </linearGradient>
-          </defs>
-        </svg>
+        <LobsterLogo animated={true} gradientId="hero-lobster-gradient" />
       </div>
 
       <h1 class="title">
@@ -120,7 +115,13 @@ const duration2 = (row2.length / 2 * pixelsPerItem) / pixelsPerSecond;
 
       <p class="description">
         Clears your inbox, sends emails, manages your calendar, checks you in for flights.<br/>
-        All from WhatsApp, Telegram, or any chat app you already use.
+        All from 
+        <span class="app-badge" style="--app-color: #25D366;">
+          <Icon icon={siIcon(siWhatsapp)} size={14} />
+        </span> WhatsApp, 
+        <span class="app-badge" style="--app-color: #26A5E4;">
+          <Icon icon={siIcon(siTelegram)} size={14} />
+        </span> Telegram, or any chat app you already use.
       </p>
     </header>
 
@@ -888,7 +889,7 @@ const duration2 = (row2.length / 2 * pixelsPerItem) / pixelsPerSecond;
   }
 
   .navbar-container {
-    max-width: 1200px;
+    max-width: 1000px;
     margin: 0 auto;
     padding: 16px 24px;
     display: flex;
@@ -897,22 +898,23 @@ const duration2 = (row2.length / 2 * pixelsPerItem) / pixelsPerSecond;
     gap: 32px;
   }
 
-  @media (min-width: 1248px) {
-    .navbar-container {
-      padding-left: 24px;
-      padding-right: 24px;
-    }
+  .navbar-left {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+  }
+
+  .navbar-right {
+    display: flex;
+    align-items: center;
+    gap: 12px;
   }
 
   .navbar-logo {
     display: flex;
     align-items: center;
-    gap: 10px;
     text-decoration: none;
     color: var(--text-primary);
-    font-family: var(--font-display);
-    font-weight: 600;
-    font-size: 1.1rem;
     transition: all 0.2s ease;
   }
 
@@ -931,18 +933,51 @@ const duration2 = (row2.length / 2 * pixelsPerItem) / pixelsPerSecond;
     transform: rotate(-5deg) scale(1.05);
   }
 
-  .navbar-logo-text {
-    background: linear-gradient(135deg, var(--text-primary) 0%, var(--accent) 100%);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-  }
-
   .navbar-links {
     display: flex;
     align-items: center;
-    gap: 24px;
-    margin-left: auto;
+    gap: 20px;
+  }
+
+  /* Navbar theme switcher */
+  .navbar-theme-switcher {
+    display: flex;
+    gap: 2px;
+    padding: 2px;
+    border-radius: 9999px;
+    border: 1px solid var(--border-subtle);
+    background: var(--surface-card);
+    backdrop-filter: blur(12px);
+  }
+
+  .navbar-theme-btn {
+    width: 32px;
+    height: 32px;
+    display: grid;
+    place-items: center;
+    padding: 0;
+    border: none;
+    border-radius: 9999px;
+    background: transparent;
+    cursor: pointer;
+    transition: all 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+    color: var(--text-muted);
+  }
+
+  .navbar-theme-btn:hover:not(.active) {
+    background: var(--surface-interactive);
+    color: var(--text-secondary);
+  }
+
+  .navbar-theme-btn.active {
+    background: var(--accent);
+    color: white;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  }
+
+  .navbar-theme-btn svg {
+    width: 16px;
+    height: 16px;
   }
 
   .navbar-link {
@@ -979,7 +1014,7 @@ const duration2 = (row2.length / 2 * pixelsPerItem) / pixelsPerSecond;
     align-items: center;
     gap: 6px;
     padding: 8px 16px;
-    border-radius: 8px;
+    border-radius: 12px;
     background: var(--surface-interactive);
     border: 1px solid var(--border-subtle);
     color: var(--text-secondary);
@@ -1068,7 +1103,7 @@ const duration2 = (row2.length / 2 * pixelsPerItem) / pixelsPerSecond;
   .container {
     position: relative;
     z-index: 1;
-    max-width: 860px;
+    max-width: 1000px;
     margin: 0 auto;
     padding: 120px 24px 40px 24px;
     min-height: 100vh;
@@ -1108,32 +1143,32 @@ const duration2 = (row2.length / 2 * pixelsPerItem) / pixelsPerSecond;
     animation: none;
   }
 
-  .lobster-icon svg {
+  .lobster-icon :global(svg) {
     width: 100%;
     height: 100%;
     filter: drop-shadow(0 0 20px var(--logo-glow));
     transition: filter 0.3s ease;
   }
 
-  .lobster-icon:hover svg {
+  .lobster-icon:hover :global(svg) {
     filter: drop-shadow(0 0 30px var(--logo-glow-hover));
   }
 
-  .lobster-icon .eye-glow {
+  .lobster-icon :global(.eye-glow) {
     animation: blink 3s ease-in-out infinite;
   }
 
-  .lobster-icon .antenna {
+  .lobster-icon :global(.antenna) {
     animation: wiggle 2s ease-in-out infinite;
     transform-origin: center;
   }
 
-  .lobster-icon .claw-left {
+  .lobster-icon :global(.claw-left) {
     animation: clawSnap 4s ease-in-out infinite;
     transform-origin: right center;
   }
 
-  .lobster-icon .claw-right {
+  .lobster-icon :global(.claw-right) {
     animation: clawSnap 4s ease-in-out infinite 0.2s;
     transform-origin: left center;
   }
@@ -1213,6 +1248,30 @@ const duration2 = (row2.length / 2 * pixelsPerItem) / pixelsPerSecond;
     margin: 0 auto;
     line-height: 1.7;
     animation: fadeInUp 0.8s ease-out 0.3s both;
+  }
+
+  .app-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 22px;
+    height: 22px;
+    border-radius: 6px;
+    background: var(--app-color);
+    vertical-align: text-bottom;
+    margin: 0 3px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12);
+    transform: rotate(-2deg);
+    transition: transform 0.2s ease;
+  }
+
+  .app-badge:hover {
+    transform: rotate(-2deg) translateY(-1px);
+  }
+
+  .app-badge :global(svg) {
+    color: white;
+    filter: drop-shadow(0 1px 1px rgba(0, 0, 0, 0.2));
   }
 
   /* CTA Grid */
