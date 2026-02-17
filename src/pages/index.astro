@@ -1,5 +1,6 @@
 ---
 import Layout from '../layouts/Layout.astro';
+import Navbar from '../components/Navbar.astro';
 import Icon from '../components/Icon.astro';
 import LobsterLogo from '../components/LobsterLogo.astro';
 import testimonials from '../data/testimonials.json';
@@ -9,8 +10,8 @@ import { getPublishedBlogPosts } from '../lib/blog';
 const [latestPost] = await getPublishedBlogPosts();
 import {
   siWhatsapp, siTelegram, siDiscord, siSignal, siApple,
-  siAnthropic, siSpotify, siObsidian, siGithub, siGooglechrome, siGmail,
-  siX, siPhilipshue
+  siAnthropic, siGithub, siGooglechrome, siGmail,
+  siX, siNotion, siLinear, siTrello, siZoom
 } from 'simple-icons';
 
 const siIcon = (icon: any) => icon.path;
@@ -24,14 +25,11 @@ const integrationPills = [
   { name: 'Signal', icon: siIcon(siSignal), color: '#3A76F0' },
   { name: 'iMessage', icon: siIcon(siApple), color: '#007AFF' },
   { name: 'Claude', icon: siIcon(siAnthropic), color: '#D4A574' },
-  { name: 'GPT', icon: 'lucide:bot', color: '#00A67E' },
-  { name: 'Spotify', icon: siIcon(siSpotify), color: '#1DB954' },
-  { name: 'Hue', icon: siIcon(siPhilipshue), color: '#0065D3' },
-  { name: 'Obsidian', icon: siIcon(siObsidian), color: '#7C3AED' },
-  { name: 'Twitter', icon: siIcon(siX), color: 'currentColor' },
+  { name: 'ChatGPT', icon: 'lucide:bot', color: '#10a37f' },
   { name: 'Browser', icon: siIcon(siGooglechrome), color: '#4285F4' },
   { name: 'Gmail', icon: siIcon(siGmail), color: '#EA4335' },
-  { name: 'GitHub', icon: siIcon(siGithub), color: 'currentColor' },
+  { name: 'GitHub', icon: siIcon(siGithub), color: '#24292e' },
+  { name: 'Twitter', icon: siIcon(siX), color: '#000000' },
 ];
 
 // Split top 30 into two rows for carousel
@@ -52,50 +50,7 @@ const duration2 = (row2.length / 2 * pixelsPerItem) / pixelsPerSecond;
 ---
 
 <Layout title="OpenClaw — Personal AI Assistant">
-  <!-- Navbar -->
-  <nav class="navbar" id="navbar">
-    <div class="navbar-container">
-      <div class="navbar-left">
-        <a href="/" class="navbar-logo" title="OpenClaw">
-          <div class="navbar-logo-icon" aria-hidden="true">
-            <LobsterLogo gradientId="navbar-lobster-gradient" />
-          </div>
-        </a>
-        
-        <div class="navbar-links">
-          <a href="#getting-started" class="navbar-link">Getting Started</a>
-          <a href="#features" class="navbar-link">Features</a>
-          <a href="/integrations" class="navbar-link">Integrations</a>
-          <a href="/blog" class="navbar-link">Blog</a>
-        </div>
-      </div>
-      
-      <div class="navbar-right">
-        <div class="navbar-theme-switcher">
-          <button class="navbar-theme-btn" type="button" data-theme-btn="system" aria-label="System theme" title="System theme">
-            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <rect width="20" height="14" x="2" y="3" rx="2"/><line x1="8" x2="16" y1="21" y2="21"/><line x1="12" x2="12" y1="17" y2="21"/>
-            </svg>
-          </button>
-          <button class="navbar-theme-btn" type="button" data-theme-btn="light" aria-label="Light theme" title="Light theme">
-            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.93 4.93 1.41 1.41"/><path d="m17.66 17.66 1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="m6.34 17.66-1.41 1.41"/><path d="m19.07 4.93-1.41 1.41"/>
-            </svg>
-          </button>
-          <button class="navbar-theme-btn" type="button" data-theme-btn="dark" aria-label="Dark theme" title="Dark theme">
-            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/>
-            </svg>
-          </button>
-        </div>
-        
-        <a href="https://github.com/openclaw/openclaw" target="_blank" rel="noopener" class="navbar-github" title="View on GitHub">
-          <Icon icon={siIcon(siGithub)} size={20} />
-          <span class="navbar-github-text">GitHub</span>
-        </a>
-      </div>
-    </div>
-  </nav>
+  <Navbar />
 
   <div class="stars"></div>
   <div class="nebula"></div>
@@ -135,54 +90,6 @@ const duration2 = (row2.length / 2 * pixelsPerItem) / pixelsPerSecond;
         </a>
       </section>
     )}
-
-    <!-- Testimonials (moved up for social proof) -->
-    <section class="testimonials">
-      <div class="section-header">
-        <h2 class="section-title">
-          <span class="claw-accent">⟩</span> What People Say
-        </h2>
-        <a href="/shoutouts" class="section-link">View all <span class="sr-only">community shoutouts</span>
-          <span aria-hidden="true">→</span>
-        </a>
-      </div>
-      <div class="testimonials-track">
-        <div class="testimonials-row row-1" style={`--duration: ${duration1}s`}>
-          {row1.map((t) => (
-            <a href={t.url} target="_blank" rel="noopener" class="testimonial-card" tabindex="-1">
-              <img
-                src={`https://unavatar.io/x/${t.author}`}
-                alt={t.author}
-                class="testimonial-avatar"
-                loading="lazy"
-                onerror={`this.src='https://ui-avatars.com/api/?name=${t.author}&background=FF4D4D&color=fff&size=88'`}
-              />
-              <div class="testimonial-content">
-                <p class="testimonial-quote">"{t.quote}"</p>
-                <span class="testimonial-author">@{t.author}</span>
-              </div>
-            </a>
-          ))}
-        </div>
-        <div class="testimonials-row row-2" style={`--duration: ${duration2}s`}>
-          {row2.map((t) => (
-            <a href={t.url} target="_blank" rel="noopener" class="testimonial-card">
-              <img
-                src={`https://unavatar.io/x/${t.author}`}
-                alt={t.author}
-                class="testimonial-avatar"
-                loading="lazy"
-                onerror={`this.src='https://ui-avatars.com/api/?name=${t.author}&background=FF4D4D&color=fff&size=88'`}
-              />
-              <div class="testimonial-content">
-                <p class="testimonial-quote">"{t.quote}"</p>
-                <span class="testimonial-author">@{t.author}</span>
-              </div>
-            </a>
-          ))}
-        </div>
-      </div>
-    </section>
 
     <!-- Quick Start -->
     <section class="quickstart" id="getting-started">
@@ -683,6 +590,54 @@ const duration2 = (row2.length / 2 * pixelsPerItem) / pixelsPerSecond;
       }
     </script>
 
+    <!-- Testimonials (moved up for social proof) -->
+    <section class="testimonials">
+      <div class="section-header">
+        <h2 class="section-title">
+          <span class="claw-accent">⟩</span> What People Say
+        </h2>
+        <a href="/shoutouts" class="section-link">View all <span class="sr-only">community shoutouts</span>
+          <span aria-hidden="true">→</span>
+        </a>
+      </div>
+      <div class="testimonials-track">
+        <div class="testimonials-row row-1" style={`--duration: ${duration1}s`}>
+          {row1.map((t) => (
+            <a href={t.url} target="_blank" rel="noopener" class="testimonial-card" tabindex="-1">
+              <img
+                src={`https://unavatar.io/x/${t.author}`}
+                alt={t.author}
+                class="testimonial-avatar"
+                loading="lazy"
+                onerror={`this.src='https://ui-avatars.com/api/?name=${t.author}&background=FF4D4D&color=fff&size=88'`}
+              />
+              <div class="testimonial-content">
+                <p class="testimonial-quote">"{t.quote}"</p>
+                <span class="testimonial-author">@{t.author}</span>
+              </div>
+            </a>
+          ))}
+        </div>
+        <div class="testimonials-row row-2" style={`--duration: ${duration2}s`}>
+          {row2.map((t) => (
+            <a href={t.url} target="_blank" rel="noopener" class="testimonial-card">
+              <img
+                src={`https://unavatar.io/x/${t.author}`}
+                alt={t.author}
+                class="testimonial-avatar"
+                loading="lazy"
+                onerror={`this.src='https://ui-avatars.com/api/?name=${t.author}&background=FF4D4D&color=fff&size=88'`}
+              />
+              <div class="testimonial-content">
+                <p class="testimonial-quote">"{t.quote}"</p>
+                <span class="testimonial-author">@{t.author}</span>
+              </div>
+            </a>
+          ))}
+        </div>
+      </div>
+    </section>
+
     <!-- What It Does -->
     <section class="features" id="features">
       <h2 class="section-title">
@@ -727,20 +682,82 @@ const duration2 = (row2.length / 2 * pixelsPerItem) / pixelsPerSecond;
       <h2 class="section-title">
         <span class="claw-accent">⟩</span> Works With Everything
       </h2>
-      <div class="integrations-row">
-        {integrationPills.map((p) => (
-          <span class="integration-pill">
-            <Icon icon={p.icon} color={p.color} size={16} />
-            <span>{p.name}</span>
-          </span>
-        ))}
-      </div>
-      <div class="integrations-links">
-        <a href="/integrations" class="integrations-link">View all 50+ integrations →</a>
-        <span class="link-separator">·</span>
-        <a href="/showcase" class="integrations-link">See what people built →</a>
+      <div class="integrations-content">
+        <div class="integrations-grid">
+          {integrationPills.map((p) => (
+            <div class="integration-icon-wrapper">
+              <div class="integration-icon-bg" style={`background: ${p.color};`}>
+                <Icon icon={p.icon} color="white" size={20} />
+              </div>
+              <span class="integration-name">{p.name}</span>
+            </div>
+          ))}
+        </div>
+        <div class="integrations-right">
+          <a href="/integrations" class="integrations-cta-box integrations-box">
+            <span class="integrations-cta-title">
+              View all integrations
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M7 7h10v10"/><path d="M7 17 17 7"/>
+              </svg>
+            </span>
+            <div class="cta-box-bottom">
+              <span class="integrations-cta-subtitle">50+ platforms and counting</span>
+              <div class="cta-box-icons">
+                <div class="cta-icon-mini" style="background: #000000;"><Icon icon={siIcon(siNotion)} color="white" size={14} /></div>
+                <div class="cta-icon-mini" style="background: #5E6AD2;"><Icon icon={siIcon(siLinear)} color="white" size={14} /></div>
+                <div class="cta-icon-mini" style="background: #0079BF;"><Icon icon={siIcon(siTrello)} color="white" size={14} /></div>
+                <div class="cta-icon-mini" style="background: #2D8CFF;"><Icon icon={siIcon(siZoom)} color="white" size={14} /></div>
+              </div>
+            </div>
+          </a>
+          <a href="/showcase" class="integrations-cta-box showcase-box">
+            <span class="integrations-cta-title">
+              See what people built
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M7 7h10v10"/><path d="M7 17 17 7"/>
+              </svg>
+            </span>
+            <div class="cta-box-bottom">
+              <span class="integrations-cta-subtitle">Real-world workflows</span>
+              <div class="cta-box-avatars">
+                <img src="https://unavatar.io/github/steipete" alt="" class="cta-avatar-mini" />
+                <img src="https://unavatar.io/github/getify" alt="" class="cta-avatar-mini" />
+                <img src="https://unavatar.io/github/sindresorhus" alt="" class="cta-avatar-mini" />
+                <img src="https://unavatar.io/github/addyosmani" alt="" class="cta-avatar-mini" />
+              </div>
+            </div>
+          </a>
+        </div>
       </div>
     </section>
+
+    <!-- CTA Grid -->
+    <nav class="cta-grid">
+      <a href="https://discord.com/invite/clawd" class="cta cta-discord" target="_blank" rel="noopener">
+        <Icon icon={siIcon(siDiscord)} size={28} class="cta-icon" />
+        <span class="cta-label">Discord</span>
+        <span class="cta-sub">Join the community</span>
+      </a>
+
+      <a href="https://docs.openclaw.ai/getting-started" class="cta cta-docs" target="_blank" rel="noopener">
+        <Icon icon="lucide:book-open" size={28} class="cta-icon" />
+        <span class="cta-label">Documentation</span>
+        <span class="cta-sub">Learn the ropes</span>
+      </a>
+
+      <a href="https://github.com/openclaw/openclaw" class="cta cta-github" target="_blank" rel="noopener">
+        <Icon icon={siIcon(siGithub)} size={28} class="cta-icon" />
+        <span class="cta-label">GitHub</span>
+        <span class="cta-sub">View the source</span>
+      </a>
+
+      <a href="https://clawhub.ai" class="cta cta-skills" target="_blank" rel="noopener">
+        <Icon icon="lucide:zap" size={28} class="cta-icon" />
+        <span class="cta-label">ClawHub</span>
+        <span class="cta-sub">Download skills</span>
+      </a>
+    </nav>
 
     <!-- Press Section -->
     <section class="press-section">
@@ -750,9 +767,7 @@ const duration2 = (row2.length / 2 * pixelsPerItem) / pixelsPerSecond;
       <div class="press-grid">
         <a href="https://www.macstories.net/stories/clawdbot-showed-me-what-the-future-of-personal-ai-assistants-looks-like/" target="_blank" rel="noopener" class="press-card press-featured">
           <div class="press-logo">
-            <svg viewBox="0 0 24 24" fill="currentColor" class="press-icon">
-              <path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.81-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/>
-            </svg>
+            <Icon icon={siIcon(siApple)} size={18} class="press-icon" />
             <span class="press-name">MacStories</span>
           </div>
           <blockquote class="press-quote">
@@ -762,9 +777,7 @@ const duration2 = (row2.length / 2 * pixelsPerItem) / pixelsPerSecond;
         </a>
         <a href="https://www.starryhope.com/minipcs/clawdbot-mac-mini-ai-agent-trend/" target="_blank" rel="noopener" class="press-card">
           <div class="press-logo">
-            <svg viewBox="0 0 24 24" fill="currentColor" class="press-icon">
-              <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
-            </svg>
+            <Icon icon="lucide:zap" size={18} class="press-icon" />
             <span class="press-name">StarryHope</span>
           </div>
           <blockquote class="press-quote">
@@ -774,44 +787,6 @@ const duration2 = (row2.length / 2 * pixelsPerItem) / pixelsPerSecond;
         </a>
       </div>
     </section>
-
-    <!-- CTA Grid -->
-    <nav class="cta-grid">
-      <a href="https://discord.com/invite/clawd" class="cta cta-discord" target="_blank" rel="noopener">
-        <svg class="cta-icon" viewBox="0 0 24 24" fill="currentColor">
-          <path d="M20.317 4.37a19.791 19.791 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057a.082.082 0 0 0 .031.057 19.9 19.9 0 0 0 5.993 3.03.078.078 0 0 0 .084-.028 14.09 14.09 0 0 0 1.226-1.994.076.076 0 0 0-.041-.106 13.107 13.107 0 0 1-1.872-.892.077.077 0 0 1-.008-.128 10.2 10.2 0 0 0 .372-.292.074.074 0 0 1 .077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 0 1 .078.01c.12.098.246.198.373.292a.077.077 0 0 1-.006.127 12.299 12.299 0 0 1-1.873.892.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028 19.839 19.839 0 0 0 6.002-3.03.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.03zM8.02 15.33c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.956-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.956 2.418-2.157 2.418zm7.975 0c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.955-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.946 2.418-2.157 2.418z"/>
-        </svg>
-        <span class="cta-label">Discord</span>
-        <span class="cta-sub">Join the community</span>
-      </a>
-
-      <a href="https://docs.openclaw.ai/getting-started" class="cta cta-docs" target="_blank" rel="noopener">
-        <svg class="cta-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/>
-          <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/>
-          <line x1="8" y1="7" x2="16" y2="7"/>
-          <line x1="8" y1="11" x2="14" y2="11"/>
-        </svg>
-        <span class="cta-label">Documentation</span>
-        <span class="cta-sub">Learn the ropes</span>
-      </a>
-
-      <a href="https://github.com/openclaw/openclaw" class="cta cta-github" target="_blank" rel="noopener">
-        <svg class="cta-icon" viewBox="0 0 24 24" fill="currentColor">
-          <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
-        </svg>
-        <span class="cta-label">GitHub</span>
-        <span class="cta-sub">View the source</span>
-      </a>
-
-      <a href="https://clawhub.ai" class="cta cta-skills" target="_blank" rel="noopener">
-        <svg class="cta-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
-        </svg>
-        <span class="cta-label">ClawHub</span>
-        <span class="cta-sub">Download skills</span>
-      </a>
-    </nav>
 
     <!-- Newsletter Signup -->
     <section class="newsletter">
@@ -861,228 +836,6 @@ const duration2 = (row2.length / 2 * pixelsPerItem) / pixelsPerSecond;
 </Layout>
 
 <style>
-  /* Navbar - ClawHub inspired */
-  .navbar {
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    z-index: 100;
-    background: transparent;
-    border-bottom: 1px solid transparent;
-    transition: background-color 0.3s cubic-bezier(0.4, 0, 0.2, 1),
-                backdrop-filter 0.3s cubic-bezier(0.4, 0, 0.2, 1),
-                border-color 0.3s cubic-bezier(0.4, 0, 0.2, 1),
-                box-shadow 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  }
-
-  .navbar.scrolled {
-    background: rgba(248, 242, 237, 0.8);
-    backdrop-filter: blur(12px) saturate(180%);
-    -webkit-backdrop-filter: blur(12px) saturate(180%);
-    border-bottom-color: var(--border-subtle);
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
-  }
-
-  html[data-theme='dark'] .navbar.scrolled {
-    background: rgba(26, 21, 18, 0.8);
-  }
-
-  .navbar-container {
-    max-width: 1000px;
-    margin: 0 auto;
-    padding: 16px 24px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 32px;
-  }
-
-  .navbar-left {
-    display: flex;
-    align-items: center;
-    gap: 20px;
-  }
-
-  .navbar-right {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-  }
-
-  .navbar-logo {
-    display: flex;
-    align-items: center;
-    text-decoration: none;
-    color: var(--text-primary);
-    transition: all 0.2s ease;
-  }
-
-  .navbar-logo:hover {
-    color: var(--accent);
-  }
-
-  .navbar-logo-icon {
-    width: 32px;
-    height: 32px;
-    color: var(--accent);
-    transition: transform 0.2s ease;
-  }
-
-  .navbar-logo:hover .navbar-logo-icon {
-    transform: rotate(-5deg) scale(1.05);
-  }
-
-  .navbar-links {
-    display: flex;
-    align-items: center;
-    gap: 20px;
-  }
-
-  /* Navbar theme switcher */
-  .navbar-theme-switcher {
-    display: flex;
-    gap: 0;
-    padding: 2px;
-    border-radius: 9999px;
-    border: 1px solid var(--border-subtle);
-    background: var(--surface-card);
-    backdrop-filter: blur(12px);
-    transition: all 0.3s ease;
-  }
-  
-  .navbar-theme-switcher:hover {
-    gap: 2px;
-  }
-
-  .navbar-theme-btn {
-    width: 0;
-    height: 32px;
-    display: grid;
-    place-items: center;
-    padding: 0;
-    margin: 0;
-    border: none;
-    border-radius: 9999px;
-    background: transparent;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    color: var(--text-muted);
-    opacity: 0;
-    flex-shrink: 0;
-    overflow: hidden;
-  }
-
-  .navbar-theme-btn.active {
-    width: 32px;
-    opacity: 1;
-    background: var(--accent);
-    color: white;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-  }
-
-  .navbar-theme-switcher:hover .navbar-theme-btn {
-    width: 32px;
-    opacity: 1;
-    margin: 0;
-  }
-
-  .navbar-theme-btn:hover:not(.active) {
-    background: var(--surface-interactive);
-    color: var(--text-secondary);
-  }
-
-  .navbar-theme-btn svg {
-    width: 16px;
-    height: 16px;
-  }
-
-  .navbar-link {
-    color: var(--text-secondary);
-    text-decoration: none;
-    font-size: 0.95rem;
-    font-weight: 500;
-    transition: color 0.2s ease;
-    position: relative;
-  }
-
-  .navbar-link:hover {
-    color: var(--text-primary);
-  }
-
-  .navbar-link::after {
-    content: '';
-    position: absolute;
-    bottom: -4px;
-    left: 0;
-    right: 0;
-    height: 2px;
-    background: var(--accent);
-    transform: scaleX(0);
-    transition: transform 0.2s ease;
-  }
-
-  .navbar-link:hover::after {
-    transform: scaleX(1);
-  }
-
-  .navbar-github {
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    padding: 8px 16px;
-    border-radius: 12px;
-    background: var(--surface-interactive);
-    border: 1px solid var(--border-subtle);
-    color: var(--text-secondary);
-    text-decoration: none;
-    font-size: 0.9rem;
-    font-weight: 500;
-    transition: all 0.2s ease;
-  }
-
-  html[data-theme='light'] .navbar-github {
-    color: var(--primary);
-  }
-
-  .navbar-github:hover {
-    background: var(--surface-interactive-hover);
-    border-color: var(--border-accent);
-    color: var(--text-primary);
-  }
-
-  html[data-theme='light'] .navbar-github:hover {
-    color: var(--accent);
-  }
-
-  .navbar-github-text {
-    display: inline;
-  }
-
-  @media (max-width: 768px) {
-    .navbar-container {
-      padding: 12px 16px;
-      gap: 16px;
-    }
-
-    .navbar-links {
-      display: none;
-    }
-
-    .navbar-github-text {
-      display: none;
-    }
-
-    .navbar-github {
-      padding: 8px 12px;
-    }
-  }
-
-  /* Adjust container padding for navbar */
-  .container {
-    padding-top: 90px;
-  }
-
   /* Subtle Starfield - ClawHub inspired */
   .stars {
     position: fixed;
@@ -1569,73 +1322,237 @@ const duration2 = (row2.length / 2 * pixelsPerItem) / pixelsPerSecond;
     animation: fadeInUp 0.8s ease-out 0.6s both;
   }
 
-  .integrations-row {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 10px;
-    justify-content: center;
-    margin-bottom: 16px;
-  }
-
-  .integration-pill {
-    display: inline-flex;
+  .integrations-content {
+    display: grid;
+    grid-template-columns: 1.2fr 1fr;
+    gap: 48px;
     align-items: center;
-    gap: 6px;
-    padding: 8px 14px;
-    border-radius: 20px;
-    border: 1px solid var(--border-subtle);
-    background: var(--surface-card);
-    backdrop-filter: blur(8px);
-    font-size: 0.85rem;
-    color: var(--text-secondary);
-    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
-    cursor: default;
   }
 
-  .integration-pill :global(svg) {
+  .integrations-right {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+  }
+
+  .integrations-cta-box {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    padding: 24px;
+    border-radius: 16px;
+    border: 1px solid var(--border-subtle);
+    text-decoration: none;
+    transition: all 0.2s ease;
+    overflow: hidden;
+  }
+
+  .integrations-box {
+    background: linear-gradient(135deg, rgba(230, 92, 70, 0.08) 0%, rgba(42, 31, 25, 0.6) 100%);
+  }
+
+  html[data-theme='light'] .integrations-box {
+    background: linear-gradient(135deg, rgba(230, 92, 70, 0.08) 0%, rgba(255, 255, 255, 0.9) 100%);
+  }
+
+  .showcase-box {
+    background: linear-gradient(135deg, rgba(217, 78, 56, 0.08) 0%, rgba(42, 31, 25, 0.6) 100%);
+  }
+
+  html[data-theme='light'] .showcase-box {
+    background: linear-gradient(135deg, rgba(217, 78, 56, 0.08) 0%, rgba(255, 255, 255, 0.9) 100%);
+  }
+
+  .integrations-cta-box:hover {
+    border-color: var(--border-accent);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(230, 92, 70, 0.15);
+  }
+
+  .cta-box-bottom {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+  }
+
+  .cta-box-icons,
+  .cta-box-avatars {
+    display: flex;
+    gap: 6px;
+    align-items: center;
+    flex-shrink: 0;
+  }
+
+  .cta-icon-mini {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    display: grid;
+    place-items: center;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+    flex-shrink: 0;
+  }
+
+  html[data-theme='light'] .cta-icon-mini {
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  }
+
+  .cta-avatar-mini {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    border: 2px solid var(--border-subtle);
+    flex-shrink: 0;
+    object-fit: cover;
+  }
+
+  .integrations-cta-title {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-family: var(--font-display);
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: var(--text-primary);
+  }
+
+  .integrations-cta-title svg {
     width: 16px;
     height: 16px;
-    flex-shrink: 0;
+    transition: transform 0.2s ease;
+  }
+
+  .integrations-cta-box:hover .integrations-cta-title svg {
+    transform: translate(2px, -2px);
+  }
+
+  .integrations-cta-subtitle {
+    font-size: 0.9rem;
+    color: var(--text-muted);
+  }
+
+  .integrations-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+  }
+
+  .integration-icon-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .integration-icon-bg {
+    position: relative;
+    width: 48px;
+    height: 48px;
+    display: grid;
+    place-items: center;
+    border-radius: 12px;
+    box-shadow: 
+      0 2px 8px rgba(0, 0, 0, 0.15),
+      inset 0 1px 1px rgba(255, 255, 255, 0.2);
     transition: all 0.2s ease;
   }
 
-  /* Fix white icons in light mode */
-  html[data-theme='light'] .integration-pill :global(svg[color="#FFFFFF"]),
-  html[data-theme='light'] .integration-pill :global(svg path[fill="#FFFFFF"]) {
-    color: var(--primary);
-    fill: var(--primary);
-  }
-
-  .integration-pill:hover {
-    border-color: var(--coral-bright);
-    transform: translateY(-4px);
-    box-shadow: 0 8px 24px color-mix(in srgb, var(--coral-bright) 20%, transparent);
-  }
-
-  .integrations-links {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 12px;
-    flex-wrap: wrap;
-  }
-
-  .integrations-link {
-    color: var(--coral-bright);
-    text-decoration: none;
-    font-size: 0.9rem;
-    font-weight: 500;
-    transition: color 0.2s ease;
-  }
-
-  .integrations-link:hover {
-    color: var(--cyan-bright);
-  }
-
-  .link-separator {
+  .integration-name {
+    font-size: 0.7rem;
     color: var(--text-muted);
-    font-size: 0.9rem;
+    text-align: center;
+    font-weight: 500;
   }
+
+  @media (max-width: 768px) {
+    .integrations-content {
+      grid-template-columns: 1fr;
+      gap: 32px;
+    }
+    
+    .integrations-grid {
+      grid-template-columns: repeat(4, 1fr);
+      gap: 12px;
+    }
+    
+    .integration-icon-bg {
+      width: 44px;
+      height: 44px;
+      border-radius: 12px;
+    }
+    
+    .integration-name {
+      font-size: 0.65rem;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .integrations-grid {
+      grid-template-columns: repeat(4, 1fr);
+      gap: 10px;
+    }
+    
+    .integration-icon-bg {
+      width: 40px;
+      height: 40px;
+    }
+
+    .integration-name {
+      font-size: 0.6rem;
+    }
+    
+    .integrations-cta-box {
+      padding: 20px;
+    }
+    
+    .integrations-cta-title {
+      font-size: 1rem;
+    }
+
+    .cta-box-bottom {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 12px;
+    }
+
+    .cta-icon-mini,
+    .cta-avatar-mini {
+      width: 28px;
+      height: 28px;
+    }
+  }
+
+  .integration-icon-bg::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: 12px;
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.15) 0%, transparent 60%);
+    pointer-events: none;
+  }
+
+  .integration-icon-bg:hover {
+    transform: translateY(-2px) scale(1.05);
+    box-shadow: 
+      0 4px 12px rgba(0, 0, 0, 0.2),
+      inset 0 1px 1px rgba(255, 255, 255, 0.2);
+  }
+
+  html[data-theme='light'] .integration-icon-bg {
+    box-shadow: 
+      0 2px 8px rgba(0, 0, 0, 0.1),
+      inset 0 1px 1px rgba(255, 255, 255, 0.3);
+  }
+
+  html[data-theme='light'] .integration-icon-bg:hover {
+    box-shadow: 
+      0 4px 12px rgba(0, 0, 0, 0.15),
+      inset 0 1px 1px rgba(255, 255, 255, 0.3);
+  }
+
+
 
   /* Press Section */
   .press-section {
@@ -1918,8 +1835,7 @@ const duration2 = (row2.length / 2 * pixelsPerItem) / pixelsPerSecond;
 
   .pm-switch,
   .hackable-switch,
-  .os-switch,
-  .win-shell-switch {
+  .os-switch {
     margin-left: auto;
   }
 
@@ -1951,16 +1867,11 @@ const duration2 = (row2.length / 2 * pixelsPerItem) / pixelsPerSecond;
     color: var(--text-secondary);
   }
 
+  .mode-btn.active,
   .pm-btn.active,
   .hackable-btn.active,
   .os-btn.active,
   .win-shell-btn.active {
-    background: var(--accent);
-    color: white;
-    font-weight: 600;
-  }
-
-  .mode-btn.active {
     background: var(--accent);
     color: white;
     font-weight: 600;
