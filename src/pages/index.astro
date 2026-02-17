@@ -27,10 +27,10 @@ const integrationPills = [
   { name: 'Spotify', icon: siIcon(siSpotify), color: '#1DB954' },
   { name: 'Hue', icon: siIcon(siPhilipshue), color: '#0065D3' },
   { name: 'Obsidian', icon: siIcon(siObsidian), color: '#7C3AED' },
-  { name: 'Twitter', icon: siIcon(siX), color: '#FFFFFF' },
+  { name: 'Twitter', icon: siIcon(siX), color: 'currentColor' },
   { name: 'Browser', icon: siIcon(siGooglechrome), color: '#4285F4' },
   { name: 'Gmail', icon: siIcon(siGmail), color: '#EA4335' },
-  { name: 'GitHub', icon: siIcon(siGithub), color: '#FFFFFF' },
+  { name: 'GitHub', icon: siIcon(siGithub), color: 'currentColor' },
 ];
 
 // Split top 30 into two rows for carousel
@@ -51,6 +51,36 @@ const duration2 = (row2.length / 2 * pixelsPerItem) / pixelsPerSecond;
 ---
 
 <Layout title="OpenClaw — Personal AI Assistant">
+  <!-- Navbar -->
+  <nav class="navbar" id="navbar">
+    <div class="navbar-container">
+      <a href="/" class="navbar-logo">
+        <div class="navbar-logo-icon" aria-hidden="true">
+          <svg viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M20 3 C10 3 5 11 5 18 C5 25 10 31 15 33 L15 37 L18 37 L18 33 C18 33 20 34 22 33 L22 37 L25 37 L25 33 C30 31 35 25 35 18 C35 11 30 3 20 3Z" fill="currentColor" opacity="0.9"/>
+            <path d="M7 15 C2 13 0 17 2 20 C4 23 7 22 8 18 C9 16 8 15 7 15Z" fill="currentColor"/>
+            <path d="M33 15 C38 13 40 17 38 20 C36 23 33 22 32 18 C31 16 32 15 33 15Z" fill="currentColor"/>
+            <circle cx="15" cy="12" r="2" fill="var(--bg-deep)"/>
+            <circle cx="25" cy="12" r="2" fill="var(--bg-deep)"/>
+          </svg>
+        </div>
+        <span class="navbar-logo-text">OpenClaw</span>
+      </a>
+      
+      <div class="navbar-links">
+        <a href="#getting-started" class="navbar-link">Getting Started</a>
+        <a href="#features" class="navbar-link">Features</a>
+        <a href="/integrations" class="navbar-link">Integrations</a>
+        <a href="/blog" class="navbar-link">Blog</a>
+      </div>
+      
+      <a href="https://github.com/openclaw/openclaw" target="_blank" rel="noopener" class="navbar-github" title="View on GitHub">
+        <Icon icon={siIcon(siGithub)} size={20} />
+        <span class="navbar-github-text">GitHub</span>
+      </a>
+    </div>
+  </nav>
+
   <div class="stars"></div>
   <div class="nebula"></div>
 
@@ -154,7 +184,7 @@ const duration2 = (row2.length / 2 * pixelsPerItem) / pixelsPerSecond;
     </section>
 
     <!-- Quick Start -->
-    <section class="quickstart">
+    <section class="quickstart" id="getting-started">
       <h2 class="section-title">
         <span class="claw-accent">⟩</span> Quick Start
       </h2>
@@ -581,6 +611,41 @@ const duration2 = (row2.length / 2 * pixelsPerItem) / pixelsPerSecond;
         });
       });
 
+      // Navbar Scroll Effect
+      const navbar = document.getElementById('navbar');
+      let lastScrollY = window.scrollY;
+
+      window.addEventListener('scroll', () => {
+        const currentScrollY = window.scrollY;
+        
+        if (currentScrollY > 20) {
+          navbar.classList.add('scrolled');
+        } else {
+          navbar.classList.remove('scrolled');
+        }
+        
+        lastScrollY = currentScrollY;
+      });
+
+      // Smooth scroll for navbar links
+      document.querySelectorAll('.navbar-link').forEach(link => {
+        link.addEventListener('click', (e) => {
+          const href = link.getAttribute('href');
+          if (href.startsWith('#')) {
+            e.preventDefault();
+            const target = document.querySelector(href);
+            if (target) {
+              const offset = 80; // Account for navbar height
+              const targetPosition = target.offsetTop - offset;
+              window.scrollTo({
+                top: targetPosition,
+                behavior: 'smooth'
+              });
+            }
+          }
+        });
+      });
+
       // Easter egg: Dalek mode on lobster hover (null-safe)
       const lobsterIcon = document.querySelector('.lobster-icon');
       const tagline = document.getElementById('tagline');
@@ -618,7 +683,7 @@ const duration2 = (row2.length / 2 * pixelsPerItem) / pixelsPerSecond;
     </script>
 
     <!-- What It Does -->
-    <section class="features">
+    <section class="features" id="features">
       <h2 class="section-title">
         <span class="claw-accent">⟩</span> What It Does
       </h2>
@@ -795,38 +860,207 @@ const duration2 = (row2.length / 2 * pixelsPerItem) / pixelsPerSecond;
 </Layout>
 
 <style>
-  /* Starfield Background */
+  /* Navbar - ClawHub inspired */
+  .navbar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 100;
+    background: transparent;
+    border-bottom: 1px solid transparent;
+    transition: background-color 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+                backdrop-filter 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+                border-color 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+                box-shadow 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .navbar.scrolled {
+    background: rgba(248, 242, 237, 0.8);
+    backdrop-filter: blur(12px) saturate(180%);
+    -webkit-backdrop-filter: blur(12px) saturate(180%);
+    border-bottom-color: var(--border-subtle);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+  }
+
+  html[data-theme='dark'] .navbar.scrolled {
+    background: rgba(26, 21, 18, 0.8);
+  }
+
+  .navbar-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 16px 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 32px;
+  }
+
+  @media (min-width: 1248px) {
+    .navbar-container {
+      padding-left: 24px;
+      padding-right: 24px;
+    }
+  }
+
+  .navbar-logo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    text-decoration: none;
+    color: var(--text-primary);
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: 1.1rem;
+    transition: all 0.2s ease;
+  }
+
+  .navbar-logo:hover {
+    color: var(--accent);
+  }
+
+  .navbar-logo-icon {
+    width: 32px;
+    height: 32px;
+    color: var(--accent);
+    transition: transform 0.2s ease;
+  }
+
+  .navbar-logo:hover .navbar-logo-icon {
+    transform: rotate(-5deg) scale(1.05);
+  }
+
+  .navbar-logo-text {
+    background: linear-gradient(135deg, var(--text-primary) 0%, var(--accent) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .navbar-links {
+    display: flex;
+    align-items: center;
+    gap: 24px;
+    margin-left: auto;
+  }
+
+  .navbar-link {
+    color: var(--text-secondary);
+    text-decoration: none;
+    font-size: 0.95rem;
+    font-weight: 500;
+    transition: color 0.2s ease;
+    position: relative;
+  }
+
+  .navbar-link:hover {
+    color: var(--text-primary);
+  }
+
+  .navbar-link::after {
+    content: '';
+    position: absolute;
+    bottom: -4px;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: var(--accent);
+    transform: scaleX(0);
+    transition: transform 0.2s ease;
+  }
+
+  .navbar-link:hover::after {
+    transform: scaleX(1);
+  }
+
+  .navbar-github {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 16px;
+    border-radius: 8px;
+    background: var(--surface-interactive);
+    border: 1px solid var(--border-subtle);
+    color: var(--text-secondary);
+    text-decoration: none;
+    font-size: 0.9rem;
+    font-weight: 500;
+    transition: all 0.2s ease;
+  }
+
+  html[data-theme='light'] .navbar-github {
+    color: var(--primary);
+  }
+
+  .navbar-github:hover {
+    background: var(--surface-interactive-hover);
+    border-color: var(--border-accent);
+    color: var(--text-primary);
+  }
+
+  html[data-theme='light'] .navbar-github:hover {
+    color: var(--accent);
+  }
+
+  .navbar-github-text {
+    display: inline;
+  }
+
+  @media (max-width: 768px) {
+    .navbar-container {
+      padding: 12px 16px;
+      gap: 16px;
+    }
+
+    .navbar-links {
+      display: none;
+    }
+
+    .navbar-github-text {
+      display: none;
+    }
+
+    .navbar-github {
+      padding: 8px 12px;
+    }
+  }
+
+  /* Adjust container padding for navbar */
+  .container {
+    padding-top: 90px;
+  }
+
+  /* Subtle Starfield - ClawHub inspired */
   .stars {
     position: fixed;
     inset: 0;
     background-image:
-      radial-gradient(2px 2px at 20px 30px, rgba(255,255,255,0.8), transparent),
-      radial-gradient(2px 2px at 40px 70px, rgba(255,255,255,0.5), transparent),
-      radial-gradient(1px 1px at 90px 40px, rgba(255,255,255,0.6), transparent),
-      radial-gradient(2px 2px at 130px 80px, rgba(255,255,255,0.4), transparent),
-      radial-gradient(1px 1px at 160px 120px, rgba(255,255,255,0.7), transparent),
-      radial-gradient(2px 2px at 200px 60px, rgba(0,229,204,0.6), transparent),
-      radial-gradient(1px 1px at 250px 150px, rgba(255,255,255,0.5), transparent),
-      radial-gradient(2px 2px at 300px 40px, rgba(255,77,77,0.4), transparent);
-    background-size: 350px 200px;
-    animation: twinkle 8s ease-in-out infinite alternate;
+      radial-gradient(1px 1px at 20px 30px, rgba(230, 92, 70, 0.3), transparent),
+      radial-gradient(1px 1px at 90px 40px, rgba(248, 242, 237, 0.4), transparent),
+      radial-gradient(1px 1px at 160px 120px, rgba(230, 92, 70, 0.25), transparent),
+      radial-gradient(1px 1px at 250px 150px, rgba(248, 242, 237, 0.35), transparent),
+      radial-gradient(1px 1px at 320px 80px, rgba(230, 92, 70, 0.2), transparent);
+    background-size: 400px 250px;
+    animation: twinkle 12s ease-in-out infinite alternate;
     pointer-events: none;
     z-index: 0;
+    opacity: 0.6;
   }
 
   @keyframes twinkle {
-    0% { opacity: 0.4; }
+    0% { opacity: 0.5; }
     100% { opacity: 0.7; }
   }
 
-  /* Nebula Gradient */
+  /* Warm Nebula Gradient - ClawHub inspired */
   .nebula {
     position: fixed;
     inset: 0;
     background:
-      radial-gradient(ellipse 80% 50% at 20% 20%, rgba(255, 77, 77, 0.12), transparent 50%),
-      radial-gradient(ellipse 60% 60% at 80% 30%, rgba(0, 229, 204, 0.08), transparent 50%),
-      radial-gradient(ellipse 90% 70% at 50% 90%, rgba(255, 77, 77, 0.06), transparent 50%);
+      radial-gradient(ellipse 90% 60% at 15% 20%, rgba(230, 92, 70, 0.06), transparent 60%),
+      radial-gradient(ellipse 70% 70% at 85% 25%, rgba(107, 85, 73, 0.04), transparent 60%),
+      radial-gradient(ellipse 100% 80% at 50% 95%, rgba(230, 92, 70, 0.03), transparent 65%);
     pointer-events: none;
     z-index: 0;
   }
@@ -836,7 +1070,7 @@ const duration2 = (row2.length / 2 * pixelsPerItem) / pixelsPerSecond;
     z-index: 1;
     max-width: 860px;
     margin: 0 auto;
-    padding: 60px 24px 40px;
+    padding: 120px 24px 40px 24px;
     min-height: 100vh;
     display: flex;
     flex-direction: column;
@@ -1271,6 +1505,13 @@ const duration2 = (row2.length / 2 * pixelsPerItem) / pixelsPerSecond;
     transition: all 0.2s ease;
   }
 
+  /* Fix white icons in light mode */
+  html[data-theme='light'] .integration-pill :global(svg[color="#FFFFFF"]),
+  html[data-theme='light'] .integration-pill :global(svg path[fill="#FFFFFF"]) {
+    color: var(--primary);
+    fill: var(--primary);
+  }
+
   .integration-pill:hover {
     border-color: var(--coral-bright);
     transform: translateY(-4px);
@@ -1308,9 +1549,6 @@ const duration2 = (row2.length / 2 * pixelsPerItem) / pixelsPerSecond;
     animation: fadeInUp 0.8s ease-out 0.65s both;
   }
 
-  .press-section .section-title {
-    margin-bottom: 20px;
-  }
 
   .press-grid {
     display: grid;
@@ -1400,11 +1638,15 @@ const duration2 = (row2.length / 2 * pixelsPerItem) / pixelsPerSecond;
     margin-bottom: 20px;
   }
 
+  .section-header .section-title {
+    margin-bottom: 0;
+  }
+
   .section-title {
     font-family: var(--font-display);
     font-size: 1.4rem;
     font-weight: 600;
-    margin-bottom: 0;
+    margin-bottom: 20px;
     display: flex;
     align-items: center;
     gap: 10px;
@@ -1429,9 +1671,10 @@ const duration2 = (row2.length / 2 * pixelsPerItem) / pixelsPerSecond;
 
   .code-block {
     background: var(--bg-elevated);
-    border: 1px solid var(--border-subtle);
+    border: 1px solid var(--accent);
     border-radius: 12px;
     overflow: hidden;
+    box-shadow: 0 4px 16px rgba(230, 92, 70, 0.1);
   }
 
   .code-header {
@@ -1440,7 +1683,7 @@ const duration2 = (row2.length / 2 * pixelsPerItem) / pixelsPerSecond;
     gap: 8px;
     padding: 12px 16px;
     background: var(--surface-overlay);
-    border-bottom: 1px solid var(--border-subtle);
+    border-bottom: 1px solid rgba(230, 92, 70, 0.2);
   }
 
   .code-content {
@@ -1572,14 +1815,14 @@ const duration2 = (row2.length / 2 * pixelsPerItem) / pixelsPerSecond;
   .hackable-btn.active,
   .os-btn.active,
   .win-shell-btn.active {
-    background: var(--coral-bright);
-    color: var(--bg-deep);
+    background: var(--accent);
+    color: white;
     font-weight: 600;
   }
 
   .mode-btn.active {
-    background: var(--cyan-bright);
-    color: var(--bg-deep);
+    background: var(--accent);
+    color: white;
     font-weight: 600;
   }
 
@@ -1611,14 +1854,14 @@ const duration2 = (row2.length / 2 * pixelsPerItem) / pixelsPerSecond;
   }
 
   .beta-btn:hover {
-    border-color: var(--cyan-bright);
-    color: var(--cyan-bright);
+    border-color: var(--accent);
+    color: var(--accent);
   }
 
   .beta-btn.active {
-    background: var(--surface-cyan-soft);
-    border-color: var(--cyan-bright);
-    color: var(--cyan-bright);
+    background: var(--surface-coral-soft);
+    border-color: var(--accent);
+    color: var(--accent);
   }
 
   .beta-label {
@@ -1633,7 +1876,7 @@ const duration2 = (row2.length / 2 * pixelsPerItem) / pixelsPerSecond;
 
   .pm-cmd,
   .pm-install {
-    color: var(--cyan-bright);
+    color: var(--accent);
   }
 
   .code-block pre {
