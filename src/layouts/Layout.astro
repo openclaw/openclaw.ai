@@ -264,95 +264,9 @@ const {
       html[data-theme='light'] .nebula {
         opacity: 0.45;
       }
-
-      /* ClawHub-style theme switcher - EXACT MATCH */
-      .theme-switcher {
-        display: none;
-        position: fixed;
-        top: 16px;
-        right: 16px;
-        z-index: 999;
-        gap: 2px;
-        padding: 2px;
-        border-radius: 9999px;
-        border: 1px solid var(--border-subtle);
-        background: var(--surface-card-strong);
-        backdrop-filter: blur(12px);
-      }
-
-      .theme-btn {
-        width: 36px;
-        height: 36px;
-        display: grid;
-        place-items: center;
-        padding: 0;
-        border: none;
-        border-radius: 9999px;
-        background: transparent;
-        cursor: pointer;
-        transition: all 0.15s cubic-bezier(0.4, 0, 0.2, 1);
-        color: var(--text-muted);
-      }
-
-      .theme-btn:hover:not(.active) {
-        background: var(--surface-interactive);
-        color: var(--text-secondary);
-      }
-
-      .theme-btn.active {
-        background: var(--accent);
-        color: white;
-        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-      }
-
-      .theme-btn:focus-visible {
-        outline: 2px solid var(--accent);
-        outline-offset: 2px;
-      }
-
-      .theme-icon {
-        font-size: 1rem;
-        line-height: 1;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-      }
-
-      @media (max-width: 640px) {
-        .theme-switcher {
-          top: 12px;
-          right: 12px;
-        }
-        
-        .theme-btn {
-          width: 32px;
-          height: 32px;
-        }
-        
-        .theme-icon {
-          font-size: 0.9rem;
-        }
-      }
     </style>
   </head>
   <body>
-    <div class="theme-switcher">
-      <button class="theme-btn" type="button" data-theme-btn="system" aria-label="System theme" title="System theme">
-        <svg class="theme-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <rect width="20" height="14" x="2" y="3" rx="2"/><line x1="8" x2="16" y1="21" y2="21"/><line x1="12" x2="12" y1="17" y2="21"/>
-        </svg>
-      </button>
-      <button class="theme-btn" type="button" data-theme-btn="light" aria-label="Light theme" title="Light theme">
-        <svg class="theme-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.93 4.93 1.41 1.41"/><path d="m17.66 17.66 1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="m6.34 17.66-1.41 1.41"/><path d="m19.07 4.93-1.41 1.41"/>
-        </svg>
-      </button>
-      <button class="theme-btn" type="button" data-theme-btn="dark" aria-label="Dark theme" title="Dark theme">
-        <svg class="theme-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/>
-        </svg>
-      </button>
-    </div>
     <slot />
     <Analytics />
     <SpeedInsights />
@@ -448,9 +362,17 @@ const {
           }
         });
 
-        // Initialize with current preference
+        // Initialize button states on page load
         const currentPreference = root.dataset.themePreference || 'system';
-        applyTheme(currentPreference, null, false);
+        const allButtons = document.querySelectorAll('[data-theme-btn]');
+        allButtons.forEach(btn => {
+          const btnTheme = btn.getAttribute('data-theme-btn');
+          if (btnTheme === currentPreference) {
+            btn.classList.add('active');
+          } else {
+            btn.classList.remove('active');
+          }
+        });
       })();
     </script>
   </body>
