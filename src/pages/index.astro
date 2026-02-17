@@ -1130,9 +1130,27 @@ const duration2 = (row2.length / 2 * pixelsPerItem) / pixelsPerSecond;
 
   /* Hero */
   .hero {
+    position: relative;
     text-align: center;
     margin-bottom: 56px;
     animation: fadeInUp 0.8s ease-out;
+  }
+
+  .hero::before {
+    content: '';
+    position: absolute;
+    top: -20%;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 800px;
+    height: 800px;
+    background: radial-gradient(circle, rgba(230, 92, 70, 0.15) 0%, transparent 70%);
+    pointer-events: none;
+    z-index: -1;
+  }
+
+  html[data-theme='light'] .hero::before {
+    background: radial-gradient(circle, rgba(230, 92, 70, 0.12) 0%, transparent 70%);
   }
 
   @keyframes fadeInUp {
@@ -1746,11 +1764,57 @@ const duration2 = (row2.length / 2 * pixelsPerItem) / pixelsPerSecond;
   }
 
   .code-block {
+    position: relative;
     background: var(--bg-elevated);
     border: 1px solid var(--accent);
     border-radius: 12px;
     overflow: hidden;
     box-shadow: 0 4px 16px rgba(230, 92, 70, 0.1);
+  }
+
+  .code-block::before,
+  .code-block::after {
+    content: '';
+    position: absolute;
+    width: 40%;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, var(--coral-bright), transparent);
+    box-shadow: 0 0 8px var(--coral-bright);
+    pointer-events: none;
+  }
+
+  .code-block::before {
+    top: 0;
+    left: 0;
+    animation: shineTopRight 8s ease-in-out infinite;
+  }
+
+  .code-block::after {
+    bottom: 0;
+    right: 0;
+    animation: shineBottomLeft 8s ease-in-out infinite;
+  }
+
+  @keyframes shineTopRight {
+    0%, 100% {
+      left: -30%;
+      opacity: 0;
+    }
+    50% {
+      left: 100%;
+      opacity: 1;
+    }
+  }
+
+  @keyframes shineBottomLeft {
+    0%, 100% {
+      right: -30%;
+      opacity: 0;
+    }
+    50% {
+      right: 100%;
+      opacity: 1;
+    }
   }
 
   .code-header {

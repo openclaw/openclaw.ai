@@ -113,7 +113,7 @@ const {
             135deg,
             rgba(230, 92, 70, 0.08) 0%,
             rgba(42, 31, 25, 0.8) 50%,
-            rgba(0, 229, 204, 0.05) 100%
+            rgba(217, 78, 56, 0.06) 100%
           );
         --press-featured-gradient:
           linear-gradient(135deg, rgba(230, 92, 70, 0.1) 0%, rgba(42, 31, 25, 0.7) 100%);
@@ -173,7 +173,7 @@ const {
             135deg,
             rgba(230, 92, 70, 0.08) 0%,
             rgba(255, 255, 255, 0.95) 52%,
-            rgba(0, 143, 135, 0.08) 100%
+            rgba(217, 78, 56, 0.08) 100%
           );
         --press-featured-gradient:
           linear-gradient(135deg, rgba(230, 92, 70, 0.1) 0%, rgba(255, 255, 255, 0.96) 100%);
@@ -183,7 +183,7 @@ const {
         --shadow-cyan-soft: rgba(0, 143, 135, 0.2);
         --shadow-github-soft: rgba(42, 31, 25, 0.15);
         --github-hover-color: #2A1F19;
-        --hero-title-start: #6B5549;
+        --hero-title-start: #C4AFA0;
         --hero-title-end: #E65C46;
         --logo-gradient-start: #E65C46;
         --logo-gradient-end: #d94e38;
@@ -203,7 +203,10 @@ const {
 
       body {
         font-family: var(--font-body);
-        background: var(--bg-deep);
+        background:
+          radial-gradient(1200px 800px at 20% -10%, rgba(230, 92, 70, 0.06), transparent 60%),
+          radial-gradient(900px 600px at 90% 10%, rgba(201, 63, 42, 0.04), transparent 60%),
+          var(--bg-deep);
         color: var(--text-primary);
         line-height: 1.6;
         min-height: 100vh;
