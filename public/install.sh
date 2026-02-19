@@ -853,6 +853,7 @@ NPM_SILENT_FLAG="--silent"
 VERBOSE="${OPENCLAW_VERBOSE:-0}"
 OPENCLAW_USE_GUM="${OPENCLAW_USE_GUM:-auto}"
 OPENCLAW_BIN=""
+SELECTED_NODE_BIN=""
 PNPM_CMD=()
 HELP=0
 
@@ -1106,6 +1107,174 @@ check_node() {
         ui_info "Node.js not found, installing it now"
         return 1
     fi
+}
+
+node_major_from_binary() {
+    local node_bin="$1"
+    if [[ -z "$node_bin" || ! -x "$node_bin" ]]; then
+        return 1
+    fi
+    "$node_bin" -p 'process.versions.node.split(".")[0]' 2>/dev/null || true
+}
+
+node_is_supported_binary() {
+    local node_bin="$1"
+    local major=""
+    major="$(node_major_from_binary "$node_bin")"
+    if [[ ! "$major" =~ ^[0-9]+$ ]]; then
+        return 1
+    fi
+    [[ "$major" -ge 22 ]]
+}
+
+has_supported_node() {
+    local node_bin=""
+    node_bin="$(command -v node 2>/dev/null || true)"
+    if [[ -z "$node_bin" ]]; then
+        return 1
+    fi
+    node_is_supported_binary "$node_bin"
+}
+
+prepend_path_dir() {
+    local dir="${1%/}"
+    if [[ -z "$dir" || ! -d "$dir" ]]; then
+        return 1
+    fi
+    local current=":${PATH:-}:"
+    current="${current//:${dir}:/:}"
+    current="${current#:}"
+    current="${current%:}"
+    if [[ -n "$current" ]]; then
+        export PATH="${dir}:${current}"
+    else
+        export PATH="${dir}"
+    fi
+    hash -r 2>/dev/null || true
+}
+
+ensure_supported_node_on_path() {
+    if has_supported_node; then
+        SELECTED_NODE_BIN="$(command -v node 2>/dev/null || true)"
+        return 0
+    fi
+
+    local -a candidates=()
+    local candidate=""
+    while IFS= read -r candidate; do
+        [[ -n "$candidate" ]] && candidates+=("$candidate")
+    done < <(type -aP node 2>/dev/null || true)
+    candidates+=(
+        "/usr/bin/node"
+        "/usr/local/bin/node"
+        "/opt/homebrew/bin/node"
+        "/opt/homebrew/opt/node@22/bin/node"
+        "/usr/local/opt/node@22/bin/node"
+    )
+
+    local seen=":"
+    for candidate in "${candidates[@]}"; do
+        if [[ -z "$candidate" || ! -x "$candidate" ]]; then
+            continue
+        fi
+        case "$seen" in
+            *":$candidate:"*) continue ;;
+        esac
+        seen="${seen}${candidate}:"
+
+        if node_is_supported_binary "$candidate"; then
+            prepend_path_dir "$(dirname "$candidate")" || continue
+            SELECTED_NODE_BIN="$candidate"
+            ui_info "Using Node.js runtime at ${candidate}"
+            return 0
+        fi
+    done
+
+    return 1
+}
+
+original_path_node_bin() {
+    if [[ -z "${ORIGINAL_PATH:-}" ]]; then
+        return 1
+    fi
+    PATH="$ORIGINAL_PATH" command -v node 2>/dev/null || true
+}
+
+original_path_has_supported_node() {
+    local node_bin=""
+    node_bin="$(original_path_node_bin)"
+    if [[ -z "$node_bin" ]]; then
+        return 1
+    fi
+    node_is_supported_binary "$node_bin"
+}
+
+find_openclaw_entry_path() {
+    local npm_root=""
+    npm_root="$(npm root -g 2>/dev/null || true)"
+    if [[ -z "$npm_root" ]]; then
+        return 1
+    fi
+    local entry_js="${npm_root}/openclaw/dist/entry.js"
+    if [[ -f "$entry_js" ]]; then
+        echo "$entry_js"
+        return 0
+    fi
+    local entry_mjs="${npm_root}/openclaw/dist/entry.mjs"
+    if [[ -f "$entry_mjs" ]]; then
+        echo "$entry_mjs"
+        return 0
+    fi
+    return 1
+}
+
+install_openclaw_compat_shim() {
+    if [[ "$INSTALL_METHOD" != "npm" ]]; then
+        return 0
+    fi
+    if original_path_has_supported_node; then
+        return 0
+    fi
+
+    local node_bin="${SELECTED_NODE_BIN:-}"
+    if [[ -z "$node_bin" ]]; then
+        node_bin="$(command -v node 2>/dev/null || true)"
+    fi
+    if [[ -z "$node_bin" || ! -x "$node_bin" ]] || ! node_is_supported_binary "$node_bin"; then
+        return 1
+    fi
+
+    local entry_path=""
+    entry_path="$(find_openclaw_entry_path || true)"
+    if [[ -z "$entry_path" ]]; then
+        return 1
+    fi
+
+    local preferred_dir=""
+    local original_node=""
+    original_node="$(original_path_node_bin)"
+    if [[ -n "$original_node" ]]; then
+        preferred_dir="$(dirname "$original_node")"
+    fi
+
+    local target_dir=""
+    if [[ -n "$preferred_dir" && -d "$preferred_dir" && -w "$preferred_dir" ]]; then
+        target_dir="$preferred_dir"
+    else
+        target_dir="$HOME/.local/bin"
+        ensure_user_local_bin_on_path
+    fi
+
+    mkdir -p "$target_dir"
+    local shim_path="${target_dir}/openclaw"
+    cat > "$shim_path" <<EOF
+#!/usr/bin/env bash
+set -euo pipefail
+exec "$node_bin" "$entry_path" "\$@"
+EOF
+    chmod +x "$shim_path"
+    ui_warn "Configured openclaw shim at ${shim_path} for Node $("$node_bin" -v 2>/dev/null || echo '22+')"
+    return 0
 }
 
 # Install Node.js
@@ -1876,6 +2045,14 @@ main() {
     if ! check_node; then
         install_node
     fi
+    ensure_supported_node_on_path || true
+    if ! has_supported_node; then
+        ui_error "Node.js v22+ is required but could not be activated on PATH"
+        echo "Detected node: $(command -v node 2>/dev/null || echo '(not found)')"
+        echo "Current version: $(node -v 2>/dev/null || echo 'unknown')"
+        echo "Install Node.js 22+ manually: https://nodejs.org"
+        exit 1
+    fi
 
     ui_stage "Installing OpenClaw"
 
@@ -1912,6 +2089,7 @@ main() {
 
         # Step 5: OpenClaw
         install_openclaw
+        install_openclaw_compat_shim || true
     fi
 
     ui_stage "Finalizing setup"
