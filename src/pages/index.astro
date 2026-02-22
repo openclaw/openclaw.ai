@@ -27,10 +27,10 @@ const integrationPills = [
   { name: 'Spotify', icon: siIcon(siSpotify), color: '#1DB954' },
   { name: 'Hue', icon: siIcon(siPhilipshue), color: '#0065D3' },
   { name: 'Obsidian', icon: siIcon(siObsidian), color: '#7C3AED' },
-  { name: 'Twitter', icon: siIcon(siX), color: '#FFFFFF' },
+  { name: 'Twitter', icon: siIcon(siX), color: 'currentColor' },
   { name: 'Browser', icon: siIcon(siGooglechrome), color: '#4285F4' },
   { name: 'Gmail', icon: siIcon(siGmail), color: '#EA4335' },
-  { name: 'GitHub', icon: siIcon(siGithub), color: '#FFFFFF' },
+  { name: 'GitHub', icon: siIcon(siGithub), color: 'currentColor' },
 ];
 
 // Split top 30 into two rows for carousel
@@ -1813,7 +1813,7 @@ const duration2 = (row2.length / 2 * pixelsPerItem) / pixelsPerSecond;
     height: 36px;
     width: auto;
     opacity: 0.7;
-    transition: opacity 0.25s ease;
+    transition: opacity 0.25s ease, filter 0.25s ease;
   }
 
   .sponsor-card:hover .sponsor-logo {
@@ -1826,6 +1826,10 @@ const duration2 = (row2.length / 2 * pixelsPerItem) / pixelsPerSecond;
 
   .sponsor-logo-blacksmith {
     height: 32px;
+  }
+
+  html[data-theme='light'] .sponsor-logo {
+    filter: invert(1);
   }
 
   @media (max-width: 480px) {
