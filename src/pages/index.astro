@@ -855,6 +855,7 @@ const duration2 = (row2.length / 2 * pixelsPerItem) / pixelsPerSecond;
     min-height: 100vh;
     display: flex;
     flex-direction: column;
+    overflow-x: hidden;
   }
 
   /* Hero */
@@ -1864,13 +1865,15 @@ const duration2 = (row2.length / 2 * pixelsPerItem) / pixelsPerSecond;
     display: flex;
     justify-content: center;
     align-items: center;
-    gap: 12px;
+    gap: 8px;
     margin-bottom: 16px;
     font-size: 0.95rem;
+    flex-wrap: wrap;
   }
 
   .footer-separator {
     color: var(--text-muted);
+    margin: 0 4px;
   }
 
   .footer a {
@@ -2113,6 +2116,19 @@ const duration2 = (row2.length / 2 * pixelsPerItem) / pixelsPerSecond;
       font-size: 0.85rem;
     }
 
+    .footer-nav {
+      gap: 6px;
+      font-size: 0.85rem;
+    }
+
+    .footer a {
+      display: inline-block;
+    }
+
+    .footer-separator {
+      margin: 0 2px;
+    }
+
     /* Quick Start mobile layout */
     .code-header {
       flex-wrap: wrap;
@@ -2171,6 +2187,21 @@ const duration2 = (row2.length / 2 * pixelsPerItem) / pixelsPerSecond;
     .macos-download-btn {
       padding: 12px 20px;
       font-size: 0.9rem;
+    }
+  }
+
+  @media (min-width: 481px) and (max-width: 768px) {
+    .footer-nav {
+      gap: 10px;
+      font-size: 0.9rem;
+    }
+
+    .footer a {
+      display: inline-block;
+    }
+
+    .footer-separator {
+      margin: 0 6px;
     }
   }
 
