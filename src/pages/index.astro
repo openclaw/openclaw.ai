@@ -1828,6 +1828,10 @@ const duration2 = (row2.length / 2 * pixelsPerItem) / pixelsPerSecond;
     height: 32px;
   }
 
+  :global(html[data-theme='light']) .sponsor-logo {
+    filter: brightness(0);
+  }
+
   @media (max-width: 480px) {
     .sponsors-grid {
       gap: 16px;
