@@ -1816,6 +1816,11 @@ const duration2 = (row2.length / 2 * pixelsPerItem) / pixelsPerSecond;
     transition: opacity 0.25s ease;
   }
 
+  :global(html[data-theme='light']) .sponsor-logo {
+    filter: invert(1);
+    opacity: 0.8;
+  }
+
   .sponsor-card:hover .sponsor-logo {
     opacity: 1;
   }
