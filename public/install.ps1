@@ -125,7 +125,8 @@ function Install-Node {
 
 # Check for existing OpenClaw installation
 function Check-ExistingOpenClaw {
-    if (Resolve-OpenClawCmdPath) {
+    $diagnosis = Get-OpenClawPostInstallDiagnosis
+    if ($diagnosis.IsHealthy) {
         Write-Host "[*] Existing OpenClaw installation detected" -ForegroundColor Yellow
         return $true
     }
@@ -449,6 +450,25 @@ function Ensure-OpenClawReadyAfterInstall {
     return (Ensure-OpenClawOnPath)
 }
 
+function Get-PersistentExecutionPolicy {
+    try {
+        $list = Get-ExecutionPolicy -List
+    } catch {
+        return $null
+    }
+
+    foreach ($scope in @("MachinePolicy", "UserPolicy", "CurrentUser", "LocalMachine")) {
+        $entry = $list | Where-Object { $_.Scope.ToString() -eq $scope } | Select-Object -First 1
+        if (-not $entry) { continue }
+        $value = $entry.ExecutionPolicy.ToString()
+        if ($value -and $value -ne "Undefined") {
+            return $value
+        }
+    }
+
+    return "Undefined"
+}
+
 function Warn-OpenClawPowerShellPolicy {
     $cmdPath = Resolve-OpenClawCmdPath
     if (-not $cmdPath) {
@@ -460,13 +480,8 @@ function Warn-OpenClawPowerShellPolicy {
         return
     }
 
-    $policy = $null
-    try {
-        $policy = (Get-ExecutionPolicy).ToString()
-    } catch {
-        $policy = $null
-    }
-    if ($policy -ne "Restricted") {
+    $persistentPolicy = Get-PersistentExecutionPolicy
+    if ($persistentPolicy -ne "Restricted") {
         return
     }
 

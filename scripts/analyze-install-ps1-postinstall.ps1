@@ -106,6 +106,17 @@ function Get-ExecutionPolicyMap {
     return [pscustomobject]$policyMap
 }
 
+function Get-PersistentExecutionPolicy {
+    $policyMap = Get-ExecutionPolicyMap
+    foreach ($scope in @("MachinePolicy", "UserPolicy", "CurrentUser", "LocalMachine")) {
+        $value = $policyMap.$scope
+        if (-not [string]::IsNullOrWhiteSpace($value) -and $value -ne "Undefined") {
+            return $value
+        }
+    }
+    return "Undefined"
+}
+
 $issues = New-Object System.Collections.Generic.List[string]
 $warnings = New-Object System.Collections.Generic.List[string]
 $pathEntries = $env:Path -split ";" | Where-Object { -not [string]::IsNullOrWhiteSpace($_) }
@@ -143,7 +154,7 @@ if ($shimReports.Count -eq 0) {
 
 foreach ($shim in $shimReports) {
     if (-not $shim.targetPath) {
-        $warnings.Add("Could not parse target path from shim: $($shim.shimPath)")
+        $issues.Add("Could not parse launcher target path from shim: $($shim.shimPath)")
         continue
     }
     if (-not $shim.targetExists) {
@@ -156,8 +167,9 @@ if ($shimReports.Count -gt 0 -and (($shimReports | Where-Object { $_.shimDirInPa
 }
 
 $effectivePolicy = (Get-ExecutionPolicy).ToString()
-if ($resolvedOpenClaw -and $resolvedOpenClaw.Source -like "*.ps1" -and $effectivePolicy -eq "Restricted") {
-    $issues.Add("PowerShell resolves openclaw to a .ps1 shim while execution policy is Restricted.")
+$persistentPolicy = Get-PersistentExecutionPolicy
+if ($resolvedOpenClaw -and $resolvedOpenClaw.Source -like "*.ps1" -and $persistentPolicy -eq "Restricted") {
+    $issues.Add("PowerShell resolves openclaw to a .ps1 shim while persistent execution policy is Restricted.")
 }
 
 foreach ($prefix in $prefixes) {
@@ -171,6 +183,8 @@ foreach ($prefix in $prefixes) {
 $report = [pscustomobject]@{
     timestamp = (Get-Date).ToString("o")
     executionPolicy = Get-ExecutionPolicyMap
+    persistentExecutionPolicy = $persistentPolicy
+    effectiveExecutionPolicy = $effectivePolicy
     npm = [pscustomobject]@{
         commandPath = Get-NpmCommandPath
         prefixes = $prefixes
