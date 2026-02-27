@@ -15,7 +15,7 @@
   },
   "dependencies": {
     "@astrojs/rss": "^4.0.15",
-    "@lucide/astro": "^0.563.0",
+    "@lucide/astro": "^0.575.0",
     "@vercel/analytics": "^1.6.1",
     "astro": "^5.17.2",
     "js-yaml": "^4.1.1",
