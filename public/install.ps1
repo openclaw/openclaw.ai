@@ -304,12 +304,12 @@ function Get-OpenClawPostInstallDiagnosis {
     if ($shimContents) {
         $pathMatch = [regex]::Match(
             $shimContents,
-            '"(?<target>(?:(?:%~?dp0%)[\\/])?[^"\r\n]*(?:node_modules[\\/]openclaw[\\/]openclaw\.mjs|dist[\\/]entry\.js))"',
+            '"(?<target>(?:(?:%~?dp0%?)[\\/])?[^"\r\n]*(?:node_modules[\\/]openclaw[\\/]openclaw\.mjs|dist[\\/]entry\.js))"',
             [System.Text.RegularExpressions.RegexOptions]::IgnoreCase
         )
         if ($pathMatch.Success) {
             $rawTarget = $pathMatch.Groups["target"].Value
-            if ($rawTarget -match '^%~?dp0%[\\/](.+)$') {
+            if ($rawTarget -match '^%~?dp0%?[\\/](.+)$') {
                 $expectedTarget = Join-Path $cmdDir $Matches[1]
             } elseif ([System.IO.Path]::IsPathRooted($rawTarget)) {
                 $expectedTarget = $rawTarget

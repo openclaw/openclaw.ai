@@ -81,12 +81,12 @@ function Resolve-ShimTarget {
     if ($contents) {
         $pathMatch = [regex]::Match(
             $contents,
-            '"(?<target>(?:(?:%~?dp0%)[\\/])?[^"\r\n]*(?:node_modules[\\/]openclaw[\\/]openclaw\.mjs|dist[\\/]entry\.js))"',
+            '"(?<target>(?:(?:%~?dp0%?)[\\/])?[^"\r\n]*(?:node_modules[\\/]openclaw[\\/]openclaw\.mjs|dist[\\/]entry\.js))"',
             [System.Text.RegularExpressions.RegexOptions]::IgnoreCase
         )
         if ($pathMatch.Success) {
             $rawTarget = $pathMatch.Groups["target"].Value
-            if ($rawTarget -match '^%~?dp0%[\\/](.+)$') {
+            if ($rawTarget -match '^%~?dp0%?[\\/](.+)$') {
                 return (Join-Path $shimDir $Matches[1])
             }
             if ([System.IO.Path]::IsPathRooted($rawTarget)) {
