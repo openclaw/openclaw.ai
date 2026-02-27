@@ -449,6 +449,32 @@ function Ensure-OpenClawReadyAfterInstall {
     return (Ensure-OpenClawOnPath)
 }
 
+function Warn-OpenClawPowerShellPolicy {
+    $cmdPath = Resolve-OpenClawCmdPath
+    if (-not $cmdPath) {
+        return
+    }
+
+    $resolved = Get-Command openclaw -ErrorAction SilentlyContinue
+    if (-not $resolved -or -not $resolved.Source -or $resolved.Source -notlike "*.ps1") {
+        return
+    }
+
+    $policy = $null
+    try {
+        $policy = (Get-ExecutionPolicy).ToString()
+    } catch {
+        $policy = $null
+    }
+    if ($policy -ne "Restricted") {
+        return
+    }
+
+    Write-Host "[!] PowerShell policy is Restricted and openclaw resolves to a .ps1 shim." -ForegroundColor Yellow
+    Write-Host "Use openclaw.cmd, or set a user policy if desired:" -ForegroundColor Gray
+    Write-Host "  Set-ExecutionPolicy -Scope CurrentUser -ExecutionPolicy RemoteSigned" -ForegroundColor Cyan
+}
+
 function Ensure-Pnpm {
     if (Get-Command pnpm -ErrorAction SilentlyContinue) {
         return
@@ -704,6 +730,7 @@ function Main {
         Write-Host "Open a new terminal, then run: openclaw doctor" -ForegroundColor Cyan
         return
     }
+    Warn-OpenClawPowerShellPolicy
 
     Refresh-GatewayServiceIfLoaded
 
