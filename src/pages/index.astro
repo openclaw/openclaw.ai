@@ -782,10 +782,12 @@ const duration2 = (row2.length / 2 * pixelsPerItem) / pixelsPerSecond;
       </h2>
       <div class="sponsors-grid">
         <a href="https://openai.com" target="_blank" rel="noopener" class="sponsor-card">
-          <img src="/sponsors/openai.svg" alt="OpenAI" class="sponsor-logo sponsor-logo-openai" loading="lazy" />
+          <img src="/sponsors/openai-dark.svg" alt="OpenAI" class="sponsor-logo sponsor-logo-openai sponsor-logo-dark" loading="lazy" />
+          <img src="/sponsors/openai-light.svg" alt="OpenAI" class="sponsor-logo sponsor-logo-openai sponsor-logo-light" loading="lazy" />
         </a>
         <a href="https://blacksmith.sh" target="_blank" rel="noopener" class="sponsor-card">
-          <img src="/sponsors/blacksmith.svg" alt="Blacksmith" class="sponsor-logo sponsor-logo-blacksmith" loading="lazy" />
+          <img src="/sponsors/blacksmith-dark.svg" alt="Blacksmith" class="sponsor-logo sponsor-logo-blacksmith sponsor-logo-dark" loading="lazy" />
+          <img src="/sponsors/blacksmith-light.svg" alt="Blacksmith" class="sponsor-logo sponsor-logo-blacksmith sponsor-logo-light" loading="lazy" />
         </a>
         <a href="https://www.convex.dev" target="_blank" rel="noopener" class="sponsor-card">
           <img src="/sponsors/convex.svg" alt="Convex" class="sponsor-logo sponsor-logo-convex" loading="lazy" />
@@ -1815,8 +1817,28 @@ const duration2 = (row2.length / 2 * pixelsPerItem) / pixelsPerSecond;
   .sponsor-logo {
     height: 36px;
     width: auto;
-    opacity: 0.7;
+    opacity: 0.8;
     transition: opacity 0.25s ease;
+  }
+
+  .sponsor-logo-dark {
+    display: block;
+  }
+
+  .sponsor-logo-light {
+    display: none;
+  }
+
+  html[data-theme='light'] .sponsor-logo-dark {
+    display: none;
+  }
+
+  html[data-theme='light'] .sponsor-logo-light {
+    display: block;
+  }
+
+  html[data-theme='light'] .sponsor-logo {
+    opacity: 0.65;
   }
 
   .sponsor-card:hover .sponsor-logo {
