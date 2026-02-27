@@ -166,7 +166,8 @@ function Ensure-OpenClawOnPath {
     }
 
     if (-not [string]::IsNullOrWhiteSpace($npmPrefix)) {
-        $npmBin = Join-Path $npmPrefix "bin"
+        # Windows: npm puts binaries directly in prefix, not prefix/bin (Unix convention)
+        $npmBin = $npmPrefix
         $userPath = [Environment]::GetEnvironmentVariable("Path", "User")
         if (-not ($userPath -split ";" | Where-Object { $_ -ieq $npmBin })) {
             [Environment]::SetEnvironmentVariable("Path", "$userPath;$npmBin", "User")
@@ -181,7 +182,7 @@ function Ensure-OpenClawOnPath {
     Write-Host "[!] openclaw is not on PATH yet." -ForegroundColor Yellow
     Write-Host "Restart PowerShell or add the npm global bin folder to PATH." -ForegroundColor Yellow
     if ($npmPrefix) {
-        Write-Host "Expected path: $npmPrefix\\bin" -ForegroundColor Cyan
+        Write-Host "Expected path: $npmPrefix" -ForegroundColor Cyan
     } else {
         Write-Host "Hint: run \"npm config get prefix\" to find your npm global path." -ForegroundColor Gray
     }
