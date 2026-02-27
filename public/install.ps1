@@ -299,9 +299,39 @@ function Get-OpenClawPostInstallDiagnosis {
     return [pscustomobject]$diagnosis
 }
 
+function Add-DirToUserPath {
+    param(
+        [string]$Dir
+    )
+
+    if ([string]::IsNullOrWhiteSpace($Dir)) {
+        return $false
+    }
+
+    $candidate = $Dir.Trim()
+    $userPath = [Environment]::GetEnvironmentVariable("Path", "User")
+    if ([string]::IsNullOrWhiteSpace($userPath)) {
+        $userPath = ""
+    }
+
+    $alreadyPresent = $userPath -split ";" | Where-Object { $_ -and $_.Trim() -ieq $candidate }
+    if ($alreadyPresent) {
+        return $false
+    }
+
+    $newUserPath = if ([string]::IsNullOrWhiteSpace($userPath)) { $candidate } else { "$userPath;$candidate" }
+    [Environment]::SetEnvironmentVariable("Path", $newUserPath, "User")
+    $env:Path = [System.Environment]::GetEnvironmentVariable("Path","Machine") + ";" + [System.Environment]::GetEnvironmentVariable("Path","User")
+    return $true
+}
+
 function Ensure-OpenClawOnPath {
     $diagnosis = Get-OpenClawPostInstallDiagnosis
     if ($diagnosis.IsHealthy) {
+        $launcherDir = Split-Path -Parent $diagnosis.OpenClawCmdPath
+        if (Add-DirToUserPath -Dir $launcherDir) {
+            Write-Host "[!] Added $launcherDir to user PATH (restart terminal if command not found)" -ForegroundColor Yellow
+        }
         return $true
     }
 
@@ -309,10 +339,7 @@ function Ensure-OpenClawOnPath {
         if (-not (Test-Path (Join-Path $npmBin "openclaw.cmd"))) {
             continue
         }
-        $userPath = [Environment]::GetEnvironmentVariable("Path", "User")
-        if (-not ($userPath -split ";" | Where-Object { $_ -and $_.Trim() -ieq $npmBin })) {
-            [Environment]::SetEnvironmentVariable("Path", "$userPath;$npmBin", "User")
-            $env:Path = [System.Environment]::GetEnvironmentVariable("Path","Machine") + ";" + [System.Environment]::GetEnvironmentVariable("Path","User")
+        if (Add-DirToUserPath -Dir $npmBin) {
             Write-Host "[!] Added $npmBin to user PATH (restart terminal if command not found)" -ForegroundColor Yellow
         }
     }
