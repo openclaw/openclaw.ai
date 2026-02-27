@@ -224,10 +224,14 @@ function Install-OpenClaw {
     $prevUpdateNotifier = $env:NPM_CONFIG_UPDATE_NOTIFIER
     $prevFund = $env:NPM_CONFIG_FUND
     $prevAudit = $env:NPM_CONFIG_AUDIT
+    $prevScriptShell = $env:NPM_CONFIG_SCRIPT_SHELL
     $env:NPM_CONFIG_LOGLEVEL = "error"
     $env:NPM_CONFIG_UPDATE_NOTIFIER = "false"
     $env:NPM_CONFIG_FUND = "false"
     $env:NPM_CONFIG_AUDIT = "false"
+    if ([string]::IsNullOrWhiteSpace($env:NPM_CONFIG_SCRIPT_SHELL)) {
+        $env:NPM_CONFIG_SCRIPT_SHELL = "cmd.exe"
+    }
     try {
         $npmOutput = npm install -g "$packageName@$Tag" 2>&1
         if ($LASTEXITCODE -ne 0) {
@@ -248,6 +252,7 @@ function Install-OpenClaw {
         $env:NPM_CONFIG_UPDATE_NOTIFIER = $prevUpdateNotifier
         $env:NPM_CONFIG_FUND = $prevFund
         $env:NPM_CONFIG_AUDIT = $prevAudit
+        $env:NPM_CONFIG_SCRIPT_SHELL = $prevScriptShell
     }
     Write-Host "[OK] OpenClaw installed" -ForegroundColor Green
 }
@@ -280,11 +285,16 @@ function Install-OpenClawFromGit {
 
     Remove-LegacySubmodule -RepoDir $RepoDir
 
+    $prevPnpmShell = $env:NPM_CONFIG_SCRIPT_SHELL
+    if ([string]::IsNullOrWhiteSpace($env:NPM_CONFIG_SCRIPT_SHELL)) {
+        $env:NPM_CONFIG_SCRIPT_SHELL = "cmd.exe"
+    }
     pnpm -C $RepoDir install
     if (-not (pnpm -C $RepoDir ui:build)) {
         Write-Host "[!] UI build failed; continuing (CLI may still work)" -ForegroundColor Yellow
     }
     pnpm -C $RepoDir build
+    $env:NPM_CONFIG_SCRIPT_SHELL = $prevPnpmShell
 
     $binDir = Join-Path $env:USERPROFILE ".local\\bin"
     if (-not (Test-Path $binDir)) {
