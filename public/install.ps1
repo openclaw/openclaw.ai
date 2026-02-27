@@ -133,6 +133,25 @@ function Check-ExistingOpenClaw {
     return $false
 }
 
+function Check-BrokenOpenClawArtifacts {
+    $diagnosis = Get-OpenClawPostInstallDiagnosis
+    if ($diagnosis.IsHealthy) {
+        return $false
+    }
+
+    if ($diagnosis.MissingTargetPaths -and $diagnosis.MissingTargetPaths.Count -gt 0) {
+        Write-Host "[*] Existing OpenClaw install artifacts detected (repair mode)" -ForegroundColor Yellow
+        return $true
+    }
+
+    if ($diagnosis.OpenClawCmdPath) {
+        Write-Host "[*] Existing OpenClaw launcher detected but not healthy (repair mode)" -ForegroundColor Yellow
+        return $true
+    }
+
+    return $false
+}
+
 function Check-Git {
     try {
         $null = Get-Command git -ErrorAction Stop
@@ -709,6 +728,7 @@ function Main {
 
     # Check for existing installation
     $isUpgrade = Check-ExistingOpenClaw
+    $hasBrokenInstallArtifacts = Check-BrokenOpenClawArtifacts
 
     # Step 1: Node.js
     if (-not (Check-Node)) {
@@ -749,8 +769,8 @@ function Main {
 
     Refresh-GatewayServiceIfLoaded
 
-    # Step 3: Run doctor for migrations if upgrading or git install
-    if ($isUpgrade -or $InstallMethod -eq "git") {
+    # Step 3: Run doctor for migrations if upgrading, repairing prior artifacts, or git install
+    if ($isUpgrade -or $hasBrokenInstallArtifacts -or $InstallMethod -eq "git") {
         Run-Doctor
     }
 
