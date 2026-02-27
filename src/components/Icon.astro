@@ -44,7 +44,7 @@ import {
   Globe, Mic, Clock, Webhook, CloudSun, Image, Camera, Search, Mail,
   StickyNote, CheckSquare, ListTodo, PenTool, Bed, ShoppingCart, Printer,
   Heart, UtensilsCrossed, MonitorSmartphone, Eye, Monitor, Bot, Users, Hash,
-  Home, MessageCircle, Brain, Terminal, Puzzle, Zap
+  Home, MessageCircle, Brain, Terminal, Puzzle, Zap, Calendar, BookOpen
 } from '@lucide/astro';
 
 const { icon, color = 'currentColor', size = 24, class: className = '' } = Astro.props;
@@ -81,6 +81,8 @@ const lucideIcons: Record<string, any> = {
   'lucide:terminal': Terminal,
   'lucide:puzzle': Puzzle,
   'lucide:zap': Zap,
+  'lucide:calendar': Calendar,
+  'lucide:book-open': BookOpen,
 };
 
 const isStringIcon = typeof icon === 'string';

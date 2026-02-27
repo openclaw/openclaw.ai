@@ -1,0 +1,337 @@
+---
+import Icon from './Icon.astro';
+import LobsterLogo from './LobsterLogo.astro';
+import { siGithub } from 'simple-icons';
+
+const siIcon = (icon: any) => icon.path;
+---
+
+<nav class="navbar" id="navbar">
+  <div class="navbar-container">
+    <div class="navbar-left">
+      <a href="/" class="navbar-logo" title="OpenClaw">
+        <div class="navbar-logo-icon" aria-hidden="true">
+          <LobsterLogo gradientId="navbar-lobster-gradient" />
+        </div>
+      </a>
+      
+      <div class="navbar-links">
+        <a href="#getting-started" class="navbar-link">Getting Started</a>
+        <a href="#features" class="navbar-link">Features</a>
+        <a href="/integrations" class="navbar-link">Integrations</a>
+        <a href="/blog" class="navbar-link">Blog</a>
+      </div>
+    </div>
+    
+    <div class="navbar-right">
+      <div class="navbar-theme-switcher">
+        <button class="navbar-theme-btn" type="button" data-theme-btn="system" aria-label="System theme" title="System theme">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <rect width="20" height="14" x="2" y="3" rx="2"/><line x1="8" x2="16" y1="21" y2="21"/><line x1="12" x2="12" y1="17" y2="21"/>
+          </svg>
+        </button>
+        <button class="navbar-theme-btn" type="button" data-theme-btn="light" aria-label="Light theme" title="Light theme">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.93 4.93 1.41 1.41"/><path d="m17.66 17.66 1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="m6.34 17.66-1.41 1.41"/><path d="m19.07 4.93-1.41 1.41"/>
+          </svg>
+        </button>
+        <button class="navbar-theme-btn" type="button" data-theme-btn="dark" aria-label="Dark theme" title="Dark theme">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/>
+          </svg>
+        </button>
+      </div>
+      
+      <a href="https://docs.openclaw.ai" target="_blank" rel="noopener" class="navbar-docs-btn" aria-label="Documentation">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/>
+          <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/>
+          <line x1="8" y1="7" x2="16" y2="7"/>
+          <line x1="8" y1="11" x2="14" y2="11"/>
+        </svg>
+        <span class="navbar-docs-tooltip">Documentation</span>
+      </a>
+      
+      <a href="https://github.com/openclaw/openclaw" target="_blank" rel="noopener" class="navbar-github" title="View on GitHub">
+        <Icon icon={siIcon(siGithub)} size={20} />
+        <span class="navbar-github-text">GitHub</span>
+      </a>
+    </div>
+  </div>
+</nav>
+
+<style>
+  .navbar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 100;
+    background: transparent;
+    border-bottom: 1px solid transparent;
+    transition: background-color 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+                backdrop-filter 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+                border-color 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+                box-shadow 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .navbar.scrolled {
+    background: rgba(248, 242, 237, 0.8);
+    backdrop-filter: blur(12px) saturate(180%);
+    -webkit-backdrop-filter: blur(12px) saturate(180%);
+    border-bottom-color: var(--border-subtle);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+  }
+
+  html[data-theme='dark'] .navbar.scrolled {
+    background: rgba(26, 21, 18, 0.8);
+  }
+
+  .navbar-container {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 16px 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 32px;
+  }
+
+  .navbar-left {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+  }
+
+  .navbar-right {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .navbar-logo {
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+    color: var(--text-primary);
+    transition: all 0.2s ease;
+  }
+
+  .navbar-logo:hover {
+    color: var(--accent);
+  }
+
+  .navbar-logo-icon {
+    width: 32px;
+    height: 32px;
+    color: var(--accent);
+    transition: transform 0.2s ease;
+  }
+
+  .navbar-logo:hover .navbar-logo-icon {
+    transform: rotate(-5deg) scale(1.05);
+  }
+
+  .navbar-links {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+  }
+
+  /* Theme switcher */
+  .navbar-theme-switcher {
+    display: flex;
+    gap: 0;
+    padding: 2px;
+    border-radius: 9999px;
+    border: 1px solid var(--border-subtle);
+    background: var(--surface-card);
+    backdrop-filter: blur(12px);
+    transition: all 0.3s ease;
+  }
+  
+  .navbar-theme-switcher:hover {
+    gap: 2px;
+  }
+
+  .navbar-theme-btn {
+    width: 0;
+    height: 32px;
+    display: grid;
+    place-items: center;
+    padding: 0;
+    margin: 0;
+    border: none;
+    border-radius: 9999px;
+    background: transparent;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    color: var(--text-muted);
+    opacity: 0;
+    flex-shrink: 0;
+    overflow: hidden;
+  }
+
+  .navbar-theme-btn.active {
+    width: 32px;
+    opacity: 1;
+    background: var(--accent);
+    color: white;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  }
+
+  .navbar-theme-switcher:hover .navbar-theme-btn {
+    width: 32px;
+    opacity: 1;
+    margin: 0;
+  }
+
+  .navbar-theme-btn:hover:not(.active) {
+    background: var(--surface-interactive);
+    color: var(--text-secondary);
+  }
+
+  .navbar-theme-btn svg {
+    width: 16px;
+    height: 16px;
+  }
+
+  /* Documentation button */
+  .navbar-docs-btn {
+    position: relative;
+    display: grid;
+    place-items: center;
+    width: 36px;
+    height: 36px;
+    padding: 0;
+    border-radius: 9999px;
+    border: 1px solid var(--border-subtle);
+    background: var(--surface-interactive);
+    color: var(--text-secondary);
+    text-decoration: none;
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+
+  html[data-theme='light'] .navbar-docs-btn {
+    color: var(--primary);
+  }
+
+  .navbar-docs-btn:hover {
+    background: var(--surface-interactive-hover);
+    color: var(--text-primary);
+    border-color: var(--border-accent);
+  }
+
+  html[data-theme='light'] .navbar-docs-btn:hover {
+    color: var(--accent);
+  }
+
+  .navbar-docs-btn svg {
+    width: 16px;
+    height: 16px;
+  }
+
+  .navbar-docs-tooltip {
+    position: absolute;
+    bottom: -40px;
+    left: 50%;
+    transform: translateX(-50%) scale(0.95);
+    padding: 6px 12px;
+    border-radius: 6px;
+    background: var(--surface-card-strong);
+    border: 1px solid var(--border-subtle);
+    color: var(--text-secondary);
+    font-size: 0.75rem;
+    white-space: nowrap;
+    opacity: 0;
+    pointer-events: none;
+    transition: all 0.2s ease;
+  }
+
+  .navbar-docs-btn:hover .navbar-docs-tooltip {
+    opacity: 1;
+    transform: translateX(-50%) scale(1);
+  }
+
+  .navbar-link {
+    color: var(--text-secondary);
+    text-decoration: none;
+    font-size: 0.95rem;
+    font-weight: 500;
+    transition: color 0.2s ease;
+    position: relative;
+  }
+
+  .navbar-link:hover {
+    color: var(--text-primary);
+  }
+
+  .navbar-link::after {
+    content: '';
+    position: absolute;
+    bottom: -4px;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: var(--accent);
+    transform: scaleX(0);
+    transition: transform 0.2s ease;
+  }
+
+  .navbar-link:hover::after {
+    transform: scaleX(1);
+  }
+
+  .navbar-github {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 16px;
+    border-radius: 12px;
+    background: var(--surface-interactive);
+    border: 1px solid var(--border-subtle);
+    color: var(--text-secondary);
+    text-decoration: none;
+    font-size: 0.9rem;
+    font-weight: 500;
+    transition: all 0.2s ease;
+  }
+
+  html[data-theme='light'] .navbar-github {
+    color: var(--primary);
+  }
+
+  .navbar-github:hover {
+    background: var(--surface-interactive-hover);
+    border-color: var(--border-accent);
+    color: var(--text-primary);
+  }
+
+  html[data-theme='light'] .navbar-github:hover {
+    color: var(--accent);
+  }
+
+  .navbar-github-text {
+    display: inline;
+  }
+
+  @media (max-width: 768px) {
+    .navbar-container {
+      padding: 12px 16px;
+      gap: 16px;
+    }
+
+    .navbar-links {
+      display: none;
+    }
+
+    .navbar-github-text {
+      display: none;
+    }
+
+    .navbar-github {
+      padding: 8px 12px;
+    }
+  }
+</style>
