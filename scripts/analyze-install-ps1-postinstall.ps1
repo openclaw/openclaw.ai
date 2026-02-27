@@ -78,7 +78,7 @@ function Resolve-ShimTarget {
         return $null
     }
 
-    if ($contents -and $contents -match '%dp0%\\(node_modules\\openclaw\\openclaw\.mjs)') {
+    if ($contents -and $contents -match '%dp0%\\((?:\.\.\\)*node_modules\\openclaw\\openclaw\.mjs)') {
         return (Join-Path $shimDir $Matches[1])
     }
     if ($contents -and $contents -match 'node\s+"([^"]*dist\\entry\.js)"') {

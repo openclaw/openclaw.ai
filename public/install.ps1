@@ -281,7 +281,7 @@ function Get-OpenClawPostInstallDiagnosis {
     }
 
     $expectedTarget = $null
-    if ($shimContents -and $shimContents -match '%dp0%\\(node_modules\\openclaw\\openclaw\.mjs)') {
+    if ($shimContents -and $shimContents -match '%dp0%\\((?:\.\.\\)*node_modules\\openclaw\\openclaw\.mjs)') {
         $relativeTarget = $Matches[1]
         $expectedTarget = Join-Path $cmdDir $relativeTarget
     } elseif ($shimContents -and $shimContents -match 'node\s+"([^"]*dist\\entry\.js)"') {
