@@ -284,27 +284,27 @@ function Get-OpenClawPostInstallDiagnosis {
     if ($shimContents) {
         $pathMatch = [regex]::Match(
             $shimContents,
-            '"(?<target>(?:%dp0%\\)?[^"\r\n]*node_modules\\openclaw\\openclaw\.mjs)"',
+            '"(?<target>(?:(?:%~?dp0%)[\\/])?[^"\r\n]*(?:node_modules[\\/]openclaw[\\/]openclaw\.mjs|dist[\\/]entry\.js))"',
             [System.Text.RegularExpressions.RegexOptions]::IgnoreCase
         )
-        if (-not $pathMatch.Success) {
-            $pathMatch = [regex]::Match(
-                $shimContents,
-                '"(?<target>(?:%dp0%\\)?[^"\r\n]*dist\\entry\.js)"',
-                [System.Text.RegularExpressions.RegexOptions]::IgnoreCase
-            )
-        }
         if ($pathMatch.Success) {
             $rawTarget = $pathMatch.Groups["target"].Value
-            if ($rawTarget -match '^%dp0%\\(.+)$') {
+            if ($rawTarget -match '^%~?dp0%[\\/](.+)$') {
                 $expectedTarget = Join-Path $cmdDir $Matches[1]
-            } else {
+            } elseif ([System.IO.Path]::IsPathRooted($rawTarget)) {
                 $expectedTarget = $rawTarget
+            } else {
+                $expectedTarget = Join-Path $cmdDir $rawTarget
             }
         }
     }
 
-    if ($expectedTarget -and -not (Test-Path $expectedTarget)) {
+    if (-not $expectedTarget) {
+        $diagnosis.Summary = "openclaw.cmd exists but its launcher target could not be parsed."
+        return [pscustomobject]$diagnosis
+    }
+
+    if (-not (Test-Path $expectedTarget)) {
         $diagnosis.MissingTargetPaths += $expectedTarget
         $diagnosis.Summary = "openclaw.cmd exists but its target is missing: $expectedTarget."
         return [pscustomobject]$diagnosis
