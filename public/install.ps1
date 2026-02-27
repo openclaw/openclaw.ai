@@ -281,11 +281,27 @@ function Get-OpenClawPostInstallDiagnosis {
     }
 
     $expectedTarget = $null
-    if ($shimContents -and $shimContents -match '%dp0%\\((?:\.\.\\)*node_modules\\openclaw\\openclaw\.mjs)') {
-        $relativeTarget = $Matches[1]
-        $expectedTarget = Join-Path $cmdDir $relativeTarget
-    } elseif ($shimContents -and $shimContents -match 'node\s+"([^"]*dist\\entry\.js)"') {
-        $expectedTarget = $Matches[1]
+    if ($shimContents) {
+        $pathMatch = [regex]::Match(
+            $shimContents,
+            '"(?<target>(?:%dp0%\\)?[^"\r\n]*node_modules\\openclaw\\openclaw\.mjs)"',
+            [System.Text.RegularExpressions.RegexOptions]::IgnoreCase
+        )
+        if (-not $pathMatch.Success) {
+            $pathMatch = [regex]::Match(
+                $shimContents,
+                '"(?<target>(?:%dp0%\\)?[^"\r\n]*dist\\entry\.js)"',
+                [System.Text.RegularExpressions.RegexOptions]::IgnoreCase
+            )
+        }
+        if ($pathMatch.Success) {
+            $rawTarget = $pathMatch.Groups["target"].Value
+            if ($rawTarget -match '^%dp0%\\(.+)$') {
+                $expectedTarget = Join-Path $cmdDir $Matches[1]
+            } else {
+                $expectedTarget = $rawTarget
+            }
+        }
     }
 
     if ($expectedTarget -and -not (Test-Path $expectedTarget)) {

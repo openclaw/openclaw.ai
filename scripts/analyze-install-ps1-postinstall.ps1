@@ -78,11 +78,26 @@ function Resolve-ShimTarget {
         return $null
     }
 
-    if ($contents -and $contents -match '%dp0%\\((?:\.\.\\)*node_modules\\openclaw\\openclaw\.mjs)') {
-        return (Join-Path $shimDir $Matches[1])
-    }
-    if ($contents -and $contents -match 'node\s+"([^"]*dist\\entry\.js)"') {
-        return $Matches[1]
+    if ($contents) {
+        $pathMatch = [regex]::Match(
+            $contents,
+            '"(?<target>(?:%dp0%\\)?[^"\r\n]*node_modules\\openclaw\\openclaw\.mjs)"',
+            [System.Text.RegularExpressions.RegexOptions]::IgnoreCase
+        )
+        if (-not $pathMatch.Success) {
+            $pathMatch = [regex]::Match(
+                $contents,
+                '"(?<target>(?:%dp0%\\)?[^"\r\n]*dist\\entry\.js)"',
+                [System.Text.RegularExpressions.RegexOptions]::IgnoreCase
+            )
+        }
+        if ($pathMatch.Success) {
+            $rawTarget = $pathMatch.Groups["target"].Value
+            if ($rawTarget -match '^%dp0%\\(.+)$') {
+                return (Join-Path $shimDir $Matches[1])
+            }
+            return $rawTarget
+        }
     }
     return $null
 }
