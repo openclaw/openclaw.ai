@@ -729,6 +729,7 @@ function Main {
     # Check for existing installation
     $isUpgrade = Check-ExistingOpenClaw
     $hasBrokenInstallArtifacts = Check-BrokenOpenClawArtifacts
+    $treatAsUpgrade = $isUpgrade -or $hasBrokenInstallArtifacts
 
     # Step 1: Node.js
     if (-not (Check-Node)) {
@@ -770,7 +771,7 @@ function Main {
     Refresh-GatewayServiceIfLoaded
 
     # Step 3: Run doctor for migrations if upgrading, repairing prior artifacts, or git install
-    if ($isUpgrade -or $hasBrokenInstallArtifacts -or $InstallMethod -eq "git") {
+    if ($treatAsUpgrade -or $InstallMethod -eq "git") {
         Run-Doctor
     }
 
@@ -806,7 +807,7 @@ function Main {
         Write-Host "OpenClaw installed successfully!" -ForegroundColor Green
     }
     Write-Host ""
-    if ($isUpgrade) {
+    if ($treatAsUpgrade) {
         $updateMessages = @(
             "Leveled up! New skills unlocked. You're welcome.",
             "Fresh code, same lobster. Miss me?",
@@ -854,7 +855,7 @@ function Main {
         Write-Host ""
     }
 
-    if ($isUpgrade) {
+    if ($treatAsUpgrade) {
         Write-Host "Upgrade complete. Run " -NoNewline
         Write-Host "openclaw doctor" -ForegroundColor Cyan -NoNewline
         Write-Host " to check for additional migrations."
