@@ -125,13 +125,11 @@ function Install-Node {
 
 # Check for existing OpenClaw installation
 function Check-ExistingOpenClaw {
-    try {
-        $null = Get-Command openclaw -ErrorAction Stop
-    Write-Host "[*] Existing OpenClaw installation detected" -ForegroundColor Yellow
-    return $true
-    } catch {
-        return $false
+    if (Get-OpenClawCommandPath) {
+        Write-Host "[*] Existing OpenClaw installation detected" -ForegroundColor Yellow
+        return $true
     }
+    return $false
 }
 
 function Check-Git {
@@ -153,8 +151,53 @@ function Require-Git {
     exit 1
 }
 
+function Get-OpenClawCommandPath {
+    $openclawCmd = Get-Command openclaw.cmd -ErrorAction SilentlyContinue
+    if ($openclawCmd -and $openclawCmd.Source) {
+        return $openclawCmd.Source
+    }
+
+    $openclaw = Get-Command openclaw -ErrorAction SilentlyContinue
+    if ($openclaw -and $openclaw.Source) {
+        return $openclaw.Source
+    }
+
+    return $null
+}
+
+function Invoke-OpenClawCommand {
+    param(
+        [Parameter(ValueFromRemainingArguments = $true)]
+        [string[]]$Arguments
+    )
+
+    $commandPath = Get-OpenClawCommandPath
+    if (-not $commandPath) {
+        throw "openclaw command not found on PATH."
+    }
+
+    & $commandPath @Arguments
+}
+
+function Get-NpmGlobalBinCandidates {
+    param(
+        [string]$NpmPrefix
+    )
+
+    $candidates = @()
+    if (-not [string]::IsNullOrWhiteSpace($NpmPrefix)) {
+        $candidates += $NpmPrefix
+        $candidates += (Join-Path $NpmPrefix "bin")
+    }
+    if (-not [string]::IsNullOrWhiteSpace($env:APPDATA)) {
+        $candidates += (Join-Path $env:APPDATA "npm")
+    }
+
+    return $candidates | Where-Object { -not [string]::IsNullOrWhiteSpace($_) } | Select-Object -Unique
+}
+
 function Ensure-OpenClawOnPath {
-    if (Get-Command openclaw -ErrorAction SilentlyContinue) {
+    if (Get-OpenClawCommandPath) {
         return $true
     }
 
@@ -165,23 +208,28 @@ function Ensure-OpenClawOnPath {
         $npmPrefix = $null
     }
 
-    if (-not [string]::IsNullOrWhiteSpace($npmPrefix)) {
-        $npmBin = Join-Path $npmPrefix "bin"
+    $npmBins = Get-NpmGlobalBinCandidates -NpmPrefix $npmPrefix
+    foreach ($npmBin in $npmBins) {
+        if (-not (Test-Path (Join-Path $npmBin "openclaw.cmd"))) {
+            continue
+        }
+
         $userPath = [Environment]::GetEnvironmentVariable("Path", "User")
         if (-not ($userPath -split ";" | Where-Object { $_ -ieq $npmBin })) {
             [Environment]::SetEnvironmentVariable("Path", "$userPath;$npmBin", "User")
             $env:Path = [System.Environment]::GetEnvironmentVariable("Path","Machine") + ";" + [System.Environment]::GetEnvironmentVariable("Path","User")
             Write-Host "[!] Added $npmBin to user PATH (restart terminal if command not found)" -ForegroundColor Yellow
         }
-        if (Test-Path (Join-Path $npmBin "openclaw.cmd")) {
-            return $true
-        }
+        return $true
     }
 
     Write-Host "[!] openclaw is not on PATH yet." -ForegroundColor Yellow
-    Write-Host "Restart PowerShell or add the npm global bin folder to PATH." -ForegroundColor Yellow
-    if ($npmPrefix) {
-        Write-Host "Expected path: $npmPrefix\\bin" -ForegroundColor Cyan
+    Write-Host "Restart PowerShell or add the npm global install folder to PATH." -ForegroundColor Yellow
+    if ($npmBins.Count -gt 0) {
+        Write-Host "Expected path (one of):" -ForegroundColor Gray
+        foreach ($npmBin in $npmBins) {
+            Write-Host "  $npmBin" -ForegroundColor Cyan
+        }
     } else {
         Write-Host "Hint: run \"npm config get prefix\" to find your npm global path." -ForegroundColor Gray
     }
@@ -205,7 +253,13 @@ function Ensure-Pnpm {
         }
     }
     Write-Host "[*] Installing pnpm..." -ForegroundColor Yellow
-    npm install -g pnpm
+    $prevScriptShell = $env:NPM_CONFIG_SCRIPT_SHELL
+    $env:NPM_CONFIG_SCRIPT_SHELL = "cmd.exe"
+    try {
+        npm install -g pnpm
+    } finally {
+        $env:NPM_CONFIG_SCRIPT_SHELL = $prevScriptShell
+    }
     Write-Host "[OK] pnpm installed" -ForegroundColor Green
 }
 
@@ -224,10 +278,12 @@ function Install-OpenClaw {
     $prevUpdateNotifier = $env:NPM_CONFIG_UPDATE_NOTIFIER
     $prevFund = $env:NPM_CONFIG_FUND
     $prevAudit = $env:NPM_CONFIG_AUDIT
+    $prevScriptShell = $env:NPM_CONFIG_SCRIPT_SHELL
     $env:NPM_CONFIG_LOGLEVEL = "error"
     $env:NPM_CONFIG_UPDATE_NOTIFIER = "false"
     $env:NPM_CONFIG_FUND = "false"
     $env:NPM_CONFIG_AUDIT = "false"
+    $env:NPM_CONFIG_SCRIPT_SHELL = "cmd.exe"
     try {
         $npmOutput = npm install -g "$packageName@$Tag" 2>&1
         if ($LASTEXITCODE -ne 0) {
@@ -248,6 +304,7 @@ function Install-OpenClaw {
         $env:NPM_CONFIG_UPDATE_NOTIFIER = $prevUpdateNotifier
         $env:NPM_CONFIG_FUND = $prevFund
         $env:NPM_CONFIG_AUDIT = $prevAudit
+        $env:NPM_CONFIG_SCRIPT_SHELL = $prevScriptShell
     }
     Write-Host "[OK] OpenClaw installed" -ForegroundColor Green
 }
@@ -280,11 +337,17 @@ function Install-OpenClawFromGit {
 
     Remove-LegacySubmodule -RepoDir $RepoDir
 
-    pnpm -C $RepoDir install
-    if (-not (pnpm -C $RepoDir ui:build)) {
-        Write-Host "[!] UI build failed; continuing (CLI may still work)" -ForegroundColor Yellow
+    $prevPnpmScriptShell = $env:NPM_CONFIG_SCRIPT_SHELL
+    $env:NPM_CONFIG_SCRIPT_SHELL = "cmd.exe"
+    try {
+        pnpm -C $RepoDir install
+        if (-not (pnpm -C $RepoDir ui:build)) {
+            Write-Host "[!] UI build failed; continuing (CLI may still work)" -ForegroundColor Yellow
+        }
+        pnpm -C $RepoDir build
+    } finally {
+        $env:NPM_CONFIG_SCRIPT_SHELL = $prevPnpmScriptShell
     }
-    pnpm -C $RepoDir build
 
     $binDir = Join-Path $env:USERPROFILE ".local\\bin"
     if (-not (Test-Path $binDir)) {
@@ -309,7 +372,7 @@ function Install-OpenClawFromGit {
 function Run-Doctor {
     Write-Host "[*] Running doctor to migrate settings..." -ForegroundColor Yellow
     try {
-        openclaw doctor --non-interactive
+        Invoke-OpenClawCommand doctor --non-interactive
     } catch {
         # Ignore errors from doctor
     }
@@ -318,7 +381,7 @@ function Run-Doctor {
 
 function Test-GatewayServiceLoaded {
     try {
-        $statusJson = (openclaw daemon status --json 2>$null)
+        $statusJson = (Invoke-OpenClawCommand daemon status --json 2>$null)
         if ([string]::IsNullOrWhiteSpace($statusJson)) {
             return $false
         }
@@ -333,7 +396,7 @@ function Test-GatewayServiceLoaded {
 }
 
 function Refresh-GatewayServiceIfLoaded {
-    if (-not (Get-Command openclaw -ErrorAction SilentlyContinue)) {
+    if (-not (Get-OpenClawCommandPath)) {
         return
     }
     if (-not (Test-GatewayServiceLoaded)) {
@@ -342,15 +405,15 @@ function Refresh-GatewayServiceIfLoaded {
 
     Write-Host "[*] Refreshing loaded gateway service..." -ForegroundColor Yellow
     try {
-        openclaw gateway install --force | Out-Null
+        Invoke-OpenClawCommand gateway install --force | Out-Null
     } catch {
         Write-Host "[!] Gateway service refresh failed; continuing." -ForegroundColor Yellow
         return
     }
 
     try {
-        openclaw gateway restart | Out-Null
-        openclaw gateway status --probe --json | Out-Null
+        Invoke-OpenClawCommand gateway restart | Out-Null
+        Invoke-OpenClawCommand gateway status --probe --json | Out-Null
         Write-Host "[OK] Gateway service refreshed" -ForegroundColor Green
     } catch {
         Write-Host "[!] Gateway service restart failed; continuing." -ForegroundColor Yellow
@@ -446,7 +509,7 @@ function Main {
 
     $installedVersion = $null
     try {
-        $installedVersion = (openclaw --version 2>$null).Trim()
+        $installedVersion = (Invoke-OpenClawCommand --version 2>$null).Trim()
     } catch {
         $installedVersion = $null
     }
@@ -528,7 +591,7 @@ function Main {
         } else {
             Write-Host "Starting setup..." -ForegroundColor Cyan
             Write-Host ""
-            openclaw onboard
+            Invoke-OpenClawCommand onboard
         }
     }
 }
