@@ -790,6 +790,10 @@ const duration2 = (row2.length / 2 * pixelsPerItem) / pixelsPerSecond;
         <a href="https://www.convex.dev" target="_blank" rel="noopener" class="sponsor-card">
           <img src="/sponsors/convex.svg" alt="Convex" class="sponsor-logo sponsor-logo-convex" loading="lazy" />
         </a>
+        <a href="https://vercel.com" target="_blank" rel="noopener" class="sponsor-card">
+          <img src="/sponsors/vercel-dark.svg" alt="Vercel" class="sponsor-logo sponsor-logo-vercel sponsor-logo-dark-only" loading="lazy" />
+          <img src="/sponsors/vercel-light.svg" alt="Vercel" class="sponsor-logo sponsor-logo-vercel sponsor-logo-light-only" loading="lazy" />
+        </a>
       </div>
     </section>
 
@@ -1835,6 +1839,22 @@ const duration2 = (row2.length / 2 * pixelsPerItem) / pixelsPerSecond;
     height: 28px;
   }
 
+  .sponsor-logo-vercel {
+    height: 28px;
+  }
+
+  .sponsor-logo-light-only {
+    display: none;
+  }
+
+  html[data-theme='light'] .sponsor-logo-dark-only {
+    display: none;
+  }
+
+  html[data-theme='light'] .sponsor-logo-light-only {
+    display: block;
+  }
+
   @media (max-width: 480px) {
     .sponsors-grid {
       gap: 16px;
@@ -1857,6 +1877,10 @@ const duration2 = (row2.length / 2 * pixelsPerItem) / pixelsPerSecond;
     }
 
     .sponsor-logo-convex {
+      height: 22px;
+    }
+
+    .sponsor-logo-vercel {
       height: 22px;
     }
   }
