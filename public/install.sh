@@ -1365,6 +1365,48 @@ install_node() {
         ui_success "Node.js v22 installed"
         print_active_node_paths || true
     fi
+
+    # Detect NVM and warn if the active Node is still from NVM with old version
+    detect_nvm_and_warn
+}
+
+# Detect NVM and warn user if they need to switch Node version
+detect_nvm_and_warn() {
+    # Check if NVM is installed (look for NVM_DIR or nvm script)
+    local nvm_dir="${NVM_DIR:-}"
+    if [[ -z "$nvm_dir" ]] && [[ -f "${HOME}/.nvm/nvm.sh" ]]; then
+        nvm_dir="${HOME}/.nvm"
+    fi
+
+    # If NVM not found, nothing to do
+    if [[ -z "$nvm_dir" ]]; then
+        return 0
+    fi
+
+    # NVM is present - check if current node is from NVM and old
+    local node_path
+    node_path="$(command -v node 2>/dev/null || true)"
+
+    if [[ -n "$node_path" && "$node_path" == *".nvm"* ]]; then
+        local current_version
+        current_version="$(node -v 2>/dev/null || true)"
+        local major="${current_version#v}"
+        major="${major%%.*}"
+
+        if [[ -n "$major" && "$major" -lt 22 ]]; then
+            ui_warn ""
+            ui_warn "⚠️  NVM detected with old default Node version"
+            ui_warn "   Your shell is using NVM's Node ${current_version}, but OpenClaw requires Node 22+"
+            ui_warn ""
+            ui_info "To fix this, run:"
+            ui_info "  nvm install 22"
+            ui_info "  nvm use 22"
+            ui_info "  nvm alias default 22"
+            ui_warn ""
+            ui_warn "Then restart your terminal and run the installer again."
+            exit 1
+        fi
+    fi
 }
 
 # Check Git

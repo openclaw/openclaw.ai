@@ -102,3 +102,36 @@ jobs:
 
       - name: Run git smoke (install-cli.sh)
         run: docker run --rm -t openclaw-install-cli-git-smoke:ci
+
+  windows-install-verify:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [windows-2022, windows-latest]
+        node: [22, 24]
+    steps:
+      - name: Checkout
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node }}
+
+      - name: Install via install.ps1
+        shell: pwsh
+        run: .\public\install.ps1 -NoOnboard -InstallMethod npm
+
+      - name: Verify command resolution and shim location
+        shell: pwsh
+        run: |
+          $cmd = Get-Command openclaw.cmd -ErrorAction Stop
+          & $cmd.Source --version
+
+          $prefix = (npm config get prefix 2>$null).Trim()
+          $rootShim = Join-Path $prefix "openclaw.cmd"
+          $binShim = Join-Path (Join-Path $prefix "bin") "openclaw.cmd"
+          if (-not ((Test-Path $rootShim) -or (Test-Path $binShim))) {
+            throw "openclaw.cmd was not found in npm global prefix candidates."
+          }

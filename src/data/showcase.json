@@ -643,7 +643,7 @@
   {
     "id": "2014608153393168425",
     "author": "cedric_chee",
-    "quote": "@openclaw is my media studio for the creator. I hooked it up to Codex 5.2 and Minimax-M2.1 (as fallback). Some Skills in action:\n- Kyutai Pocket TTS\n- Whisper audio transcribe\n- Browser use (web scraping, form filling)\n- Twitter ops\n\nI hacked this up in <5 days, all on my mobile while I was on the move.",
+    "quote": "@openclaw is my media studio for the creator. I hooked it up to Codex 5.2 and Minimax-M2.5 (as fallback). Some Skills in action:\n- Kyutai Pocket TTS\n- Whisper audio transcribe\n- Browser use (web scraping, form filling)\n- Twitter ops\n\nI hacked this up in <5 days, all on my mobile while I was on the move.",
     "category": "creative",
     "likes": 2,
     "images": [
