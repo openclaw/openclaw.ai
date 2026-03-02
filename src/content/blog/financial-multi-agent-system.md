@@ -367,8 +367,8 @@ T+125s: 协调者 → 用户: "分析完成"
 ## Next Steps
 
 1. **Read OpenClaw Docs**: https://docs.openclaw.ai
-2. **Explore Skills**: https://clawhub.com
-3. **Join Community**: https://discord.com/invite/clawd
+2. **Explore Skills**: https://clawhub.ai
+3. **Join Community**: https://discord.gg/openclaw
 4. **Contribute**: Submit your own agent templates
 
 ---
