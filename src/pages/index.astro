@@ -1824,7 +1824,7 @@ const duration2 = (row2.length / 2 * pixelsPerItem) / pixelsPerSecond;
     transition: opacity 0.25s ease;
   }
 
-  :global(html[data-theme='light']) .sponsor-logo {
+  :global(html[data-theme='light']) .sponsor-logo:not(.sponsor-logo-light-only) {
     filter: invert(1);
     opacity: 0.8;
   }
