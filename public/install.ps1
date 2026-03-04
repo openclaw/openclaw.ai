@@ -144,7 +144,7 @@ function Check-Git {
 function Require-Git {
     if (Check-Git) { return }
     Write-Host ""
-    Write-Host "Error: Git is required for --InstallMethod git." -ForegroundColor Red
+    Write-Host "Error: Git is required to install OpenClaw." -ForegroundColor Red
     Write-Host "Install Git for Windows:" -ForegroundColor Yellow
     Write-Host "  https://git-scm.com/download/win" -ForegroundColor Cyan
     Write-Host "Then re-run this installer." -ForegroundColor Yellow
@@ -268,6 +268,8 @@ function Install-OpenClaw {
     if ([string]::IsNullOrWhiteSpace($Tag)) {
         $Tag = "latest"
     }
+    Require-Git
+
     # Use openclaw package for beta, openclaw for stable
     $packageName = "openclaw"
     if ($Tag -eq "beta" -or $Tag -match "^beta\.") {
