@@ -1,0 +1,408 @@
+---
+import Layout from '../layouts/Layout.astro';
+
+const effectiveDate = 'March 7, 2026';
+---
+
+<Layout
+  title="Privacy Policy - OpenClaw"
+  description="Privacy Policy for OpenClaw mobile apps."
+  canonicalUrl="https://openclaw.ai/privacy"
+>
+  <div class="stars"></div>
+  <div class="nebula"></div>
+
+  <main class="container">
+    <header class="header">
+      <a href="/" class="back-link">&larr; Back to home</a>
+      <p class="eyebrow">OpenClaw Mobile Apps</p>
+      <h1 class="title">Privacy Policy</h1>
+      <p class="subtitle">
+        Simple version: OpenClaw mobile apps only access device data when you enable a feature or
+        grant a permission. App data is sent to the gateway you choose, not to a central OpenClaw
+        cloud.
+      </p>
+    </header>
+
+    <section class="summary-grid" aria-label="privacy summary">
+      <article class="summary-card">
+        <span class="summary-label">No ads or analytics</span>
+        <p>No ad, analytics, or crash-reporting SDKs in the current mobile builds.</p>
+      </article>
+      <article class="summary-card">
+        <span class="summary-label">Permission-based</span>
+        <p>Camera, mic, location, contacts, photos, calendar, notifications, motion, and SMS are optional.</p>
+      </article>
+      <article class="summary-card">
+        <span class="summary-label">Your gateway</span>
+        <p>The app connects to the gateway you configure and sends commands and content there.</p>
+      </article>
+      <article class="summary-card">
+        <span class="summary-label">Optional providers</span>
+        <p>Voice features may use platform speech services and ElevenLabs if you enable them.</p>
+      </article>
+    </section>
+
+    <article class="policy-card">
+      <div class="meta-row">
+        <span>Effective date: {effectiveDate}</span>
+        <span class="meta-separator" aria-hidden="true">&middot;</span>
+        <span>Applies to iOS and Android mobile apps</span>
+      </div>
+
+      <section class="section">
+        <h2>1. Scope</h2>
+        <p>
+          This policy applies to OpenClaw mobile apps for iOS and Android. It also covers
+          supported mobile app features tied to those apps, such as share-sheet forwarding or live
+          mobile status surfaces where available. It does not cover the privacy practices of the
+          gateway, server, AI provider, or other services you choose to connect to through
+          OpenClaw.
+        </p>
+      </section>
+
+      <section class="section">
+        <h2>2. Information the app can access</h2>
+        <p>The apps can access the following categories of data, depending on which features you turn on:</p>
+        <ul>
+          <li>
+            Connection and setup data, such as gateway host/port, tokens, passwords, TLS
+            fingerprints, pairing state, local display name, wake-word settings, feature toggles,
+            local discovery state, and push or notification tokens on supported platforms.
+          </li>
+          <li>
+            A local device identity and device-specific auth tokens used to pair and authenticate
+            with your gateway.
+          </li>
+          <li>Camera photos and videos if you use snapshot or clip features.</li>
+          <li>Microphone audio if you use voice transcription, talk mode, voice wake, or audio capture.</li>
+          <li>Location data if you enable location sharing. Background location is only used if you explicitly enable "Always" or the platform equivalent.</li>
+          <li>Photos you choose to make available through the Photos permission.</li>
+          <li>Contacts if you enable contact search or contact creation.</li>
+          <li>Calendar data and, on supported platforms, reminders if you enable those features.</li>
+          <li>Notification-related data. On Android, if you enable the notification listener, the app can access notification content and metadata and perform supported actions. On supported platforms, the app may also use notification permissions or push tokens to deliver its own notifications.</li>
+          <li>Motion sensor data if you enable activity or pedometer features.</li>
+          <li>On Android, SMS sending metadata if you use SMS send features. The app does not request SMS read permissions.</li>
+          <li>Screen content only when you explicitly start a supported screen capture or recording flow.</li>
+          <li>Content you intentionally share with OpenClaw through a system share sheet or share extension on supported platforms.</li>
+        </ul>
+      </section>
+
+      <section class="section">
+        <h2>3. Where data goes</h2>
+        <ul>
+          <li>
+            OpenClaw sends commands, content, and device capability data to the gateway you
+            configure. That gateway may be local, on your tailnet, self-hosted, or operated by
+            someone else.
+          </li>
+          <li>
+            If you use voice transcription or wake words, the relevant platform speech recognition
+            service may process microphone audio and transcripts.
+          </li>
+          <li>
+            If you enable talk mode with ElevenLabs, text and voice configuration needed for speech
+            output may be sent to ElevenLabs.
+          </li>
+          <li>
+            On supported platforms, push notification tokens may be sent to your gateway so it can
+            deliver app notifications or wake events.
+          </li>
+          <li>
+            If your configured gateway forwards data to AI models or other third-party services,
+            those services will handle data according to their own policies.
+          </li>
+          <li>
+            Mobile operating systems may copy app data through backup, restore, or device-transfer
+            features depending on platform and device settings.
+          </li>
+        </ul>
+      </section>
+
+      <section class="section">
+        <h2>4. What we do not do</h2>
+        <ul>
+          <li>We do not sell your personal data.</li>
+          <li>We do not include mobile ad SDKs in the current mobile builds.</li>
+          <li>We do not include mobile analytics or crash-reporting SDKs in the current mobile builds.</li>
+          <li>Current Android builds do not request SMS read permissions.</li>
+        </ul>
+      </section>
+
+      <section class="section">
+        <h2>5. Local storage and security</h2>
+        <p>
+          The mobile apps store connection secrets such as gateway tokens and passwords locally
+          using platform security features, such as Android encrypted shared preferences and the
+          iOS Keychain. They also store local device identity, app settings, and pairing state in
+          app-private storage.
+        </p>
+        <p>
+          Temporary files may be written to app cache while features run, for example media output,
+          update packages, or debugging artifacts.
+        </p>
+      </section>
+
+      <section class="section">
+        <h2>6. Retention</h2>
+        <p>
+          Data stored on your device generally remains there until you remove it, clear app data, or
+          uninstall the app. Data handled by your gateway or any connected third-party service is
+          retained according to that service's own configuration and policies.
+        </p>
+      </section>
+
+      <section class="section">
+        <h2>7. Your choices</h2>
+        <ul>
+          <li>You can deny or revoke iOS or Android permissions at any time in system settings.</li>
+          <li>You can disable features such as location, notifications, voice, or talk mode inside the app.</li>
+          <li>You can disconnect from a gateway, clear app storage, or uninstall the app.</li>
+          <li>You can control retention and third-party routing on the gateway you choose to use.</li>
+        </ul>
+      </section>
+
+      <section class="section">
+        <h2>8. Changes and contact</h2>
+        <p>
+          We may update this policy as the app changes. If we do, we will post the updated version
+          here and update the effective date above.
+        </p>
+        <p>
+          For privacy or security questions, email <a href="mailto:security@openclaw.ai">security@openclaw.ai</a>.
+        </p>
+      </section>
+    </article>
+  </main>
+</Layout>
+
+<style>
+  .stars {
+    position: fixed;
+    inset: 0;
+    background-image:
+      radial-gradient(2px 2px at 20px 30px, rgba(255,255,255,0.8), transparent),
+      radial-gradient(2px 2px at 40px 70px, rgba(255,255,255,0.5), transparent),
+      radial-gradient(1px 1px at 90px 40px, rgba(255,255,255,0.6), transparent),
+      radial-gradient(2px 2px at 130px 80px, rgba(255,255,255,0.4), transparent),
+      radial-gradient(1px 1px at 160px 120px, rgba(255,255,255,0.7), transparent),
+      radial-gradient(2px 2px at 200px 60px, rgba(0,229,204,0.6), transparent),
+      radial-gradient(1px 1px at 250px 150px, rgba(255,255,255,0.5), transparent),
+      radial-gradient(2px 2px at 300px 40px, rgba(255,77,77,0.4), transparent);
+    background-size: 350px 200px;
+    animation: twinkle 8s ease-in-out infinite alternate;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  @keyframes twinkle {
+    0% { opacity: 0.4; }
+    100% { opacity: 0.7; }
+  }
+
+  .nebula {
+    position: fixed;
+    inset: 0;
+    background:
+      radial-gradient(ellipse 80% 50% at 20% 20%, rgba(255, 77, 77, 0.12), transparent 50%),
+      radial-gradient(ellipse 60% 60% at 80% 30%, rgba(0, 229, 204, 0.08), transparent 50%),
+      radial-gradient(ellipse 90% 70% at 50% 90%, rgba(255, 77, 77, 0.06), transparent 50%);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .container {
+    position: relative;
+    z-index: 1;
+    max-width: 920px;
+    margin: 0 auto;
+    padding: 40px 24px 72px;
+  }
+
+  .header {
+    text-align: center;
+    margin-bottom: 32px;
+    animation: fadeInUp 0.6s ease-out;
+  }
+
+  @keyframes fadeInUp {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  .back-link {
+    display: inline-block;
+    margin-bottom: 20px;
+    color: var(--text-muted);
+    text-decoration: none;
+    font-size: 0.95rem;
+    transition: color 0.2s ease;
+  }
+
+  .back-link:hover {
+    color: var(--coral-bright);
+  }
+
+  .eyebrow {
+    margin-bottom: 10px;
+    color: var(--cyan-bright);
+    font-size: 0.85rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+
+  .title {
+    font-family: var(--font-display);
+    font-size: clamp(2.4rem, 7vw, 4rem);
+    font-weight: 700;
+    line-height: 1.1;
+    color: var(--text-primary);
+    margin-bottom: 14px;
+  }
+
+  .subtitle {
+    max-width: 760px;
+    margin: 0 auto;
+    color: var(--text-secondary);
+    font-size: 1.08rem;
+  }
+
+  .summary-grid {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 14px;
+    margin-bottom: 20px;
+  }
+
+  .summary-card,
+  .policy-card {
+    border: 1px solid var(--border-subtle);
+    background: var(--surface-card-strong);
+    backdrop-filter: blur(10px);
+  }
+
+  .summary-card {
+    padding: 18px;
+    border-radius: 18px;
+    min-height: 144px;
+  }
+
+  .summary-label {
+    display: inline-flex;
+    margin-bottom: 10px;
+    padding: 4px 10px;
+    border-radius: 999px;
+    background: var(--surface-cyan-soft);
+    color: var(--cyan-bright);
+    font-size: 0.78rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .summary-card p {
+    color: var(--text-secondary);
+    font-size: 0.96rem;
+    line-height: 1.55;
+  }
+
+  .policy-card {
+    border-radius: 26px;
+    padding: 28px;
+    animation: fadeInUp 0.6s ease-out 0.1s both;
+  }
+
+  .meta-row {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 10px;
+    padding-bottom: 18px;
+    margin-bottom: 12px;
+    border-bottom: 1px solid var(--border-subtle);
+    color: var(--text-muted);
+    font-size: 0.92rem;
+  }
+
+  .meta-separator {
+    opacity: 0.45;
+  }
+
+  .section + .section {
+    margin-top: 24px;
+  }
+
+  .section h2 {
+    font-family: var(--font-display);
+    font-size: 1.45rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin-bottom: 8px;
+  }
+
+  .section p,
+  .section li {
+    color: var(--text-secondary);
+    font-size: 1rem;
+    line-height: 1.72;
+  }
+
+  .section p + p {
+    margin-top: 12px;
+  }
+
+  .section ul {
+    margin-top: 10px;
+    padding-left: 22px;
+  }
+
+  .section li + li {
+    margin-top: 10px;
+  }
+
+  .section li::marker {
+    color: var(--coral-bright);
+  }
+
+  .section a {
+    color: var(--coral-bright);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+
+  .section a:hover {
+    color: var(--cyan-bright);
+  }
+
+  @media (max-width: 900px) {
+    .summary-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+
+  @media (max-width: 640px) {
+    .container {
+      padding: 28px 16px 56px;
+    }
+
+    .summary-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .policy-card {
+      padding: 22px 18px;
+      border-radius: 20px;
+    }
+
+    .subtitle {
+      font-size: 1rem;
+    }
+  }
+</style>
