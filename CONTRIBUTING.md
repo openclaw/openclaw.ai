@@ -23,6 +23,12 @@ Please do not open PRs for any of the following unless a maintainer explicitly a
 
 Unsolicited content/editorial PRs and unsolicited redesign PRs will be closed.
 
+## Bun Is Not Supported
+
+Do not submit PRs that add Bun to install instructions, quick-start examples, support matrices, or product messaging.
+
+Bun has known compatibility issues in the OpenClaw stack and can break real integrations/plugins. PRs that present Bun as supported, recommended, or equivalent to the supported runtimes will be closed.
+
 ## Before Opening a PR
 
 - keep scope tight
