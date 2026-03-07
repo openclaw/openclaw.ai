@@ -1,5 +1,8 @@
 # Changelog
 
+## 2026-03-07
+
+- Windows installer: fail fast with a clear Git requirement before npm-based install flows that would otherwise die later with `spawn git` (#94, thanks @ningding97).
 ## 2026-02-22
 
 - Installer: make gum behavior fully automatic (interactive TTYs get gum, headless shells get plain status), and remove manual gum toggles.
