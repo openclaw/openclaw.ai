@@ -510,4 +510,67 @@ echo "==> case: install_openclaw_from_git (deps step uses run_pnpm function)"
   assert_eq "$deps_cmd" "run_pnpm" "install_openclaw_from_git dependencies command"
 )
 
+echo "==> case: install_openclaw_compat_shim (always uses user-local bin)"
+(
+  root="${TMP_DIR}/case-openclaw-compat-shim"
+  home_dir="${root}/home"
+  selected_bin_dir="${root}/node22/bin"
+  original_bin_dir="${root}/nvm/bin"
+  pkg_dir="${root}/npm-root/openclaw/dist"
+
+  mkdir -p "${home_dir}" "${selected_bin_dir}" "${original_bin_dir}" "${pkg_dir}"
+  : > "${pkg_dir}/entry.js"
+
+  cat >"${selected_bin_dir}/node" <<'EOF'
+#!/usr/bin/env bash
+set -euo pipefail
+if [[ "${1:-}" == "-p" ]]; then
+  echo "22"
+  exit 0
+fi
+if [[ "${1:-}" == "-v" ]]; then
+  echo "v22.12.0"
+  exit 0
+fi
+exit 0
+EOF
+  chmod +x "${selected_bin_dir}/node"
+
+  cat >"${original_bin_dir}/node" <<'EOF'
+#!/usr/bin/env bash
+set -euo pipefail
+if [[ "${1:-}" == "-p" ]]; then
+  echo "20"
+  exit 0
+fi
+if [[ "${1:-}" == "-v" ]]; then
+  echo "v20.18.0"
+  exit 0
+fi
+exit 0
+EOF
+  chmod +x "${original_bin_dir}/node"
+
+  export HOME="${home_dir}"
+  export PATH="/usr/bin:/bin"
+  export INSTALL_METHOD="npm"
+  export SELECTED_NODE_BIN="${selected_bin_dir}/node"
+  export ORIGINAL_PATH="${original_bin_dir}:/usr/bin:/bin"
+
+  ui_warn() { :; }
+  ensure_user_local_bin_on_path() {
+    mkdir -p "${HOME}/.local/bin"
+    export PATH="${HOME}/.local/bin:${PATH}"
+  }
+  refresh_shell_command_cache() { hash -r 2>/dev/null || true; }
+  find_openclaw_entry_path() {
+    echo "${pkg_dir}/entry.js"
+  }
+
+  install_openclaw_compat_shim
+
+  got="$(command -v openclaw || true)"
+  assert_eq "$got" "${home_dir}/.local/bin/openclaw" "install_openclaw_compat_shim wrapper path"
+)
+
 echo "OK"

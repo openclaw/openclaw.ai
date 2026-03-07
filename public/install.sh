@@ -1443,20 +1443,8 @@ install_openclaw_compat_shim() {
         return 1
     fi
 
-    local preferred_dir=""
-    local original_node=""
-    original_node="$(original_path_node_bin)"
-    if [[ -n "$original_node" ]]; then
-        preferred_dir="$(dirname "$original_node")"
-    fi
-
-    local target_dir=""
-    if [[ -n "$preferred_dir" && -d "$preferred_dir" && -w "$preferred_dir" ]]; then
-        target_dir="$preferred_dir"
-    else
-        target_dir="$HOME/.local/bin"
-        ensure_user_local_bin_on_path
-    fi
+    local target_dir="$HOME/.local/bin"
+    ensure_user_local_bin_on_path
 
     mkdir -p "$target_dir"
     local shim_path="${target_dir}/openclaw"
@@ -1466,6 +1454,7 @@ set -euo pipefail
 exec "$node_bin" "$entry_path" "\$@"
 EOF
     chmod +x "$shim_path"
+    refresh_shell_command_cache
     ui_warn "Configured openclaw shim at ${shim_path} for Node $("$node_bin" -v 2>/dev/null || echo '22+')"
     return 0
 }
