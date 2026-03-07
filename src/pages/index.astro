@@ -1903,12 +1903,13 @@ const duration2 = (row2.length / 2 * pixelsPerItem) / pixelsPerSecond;
 
   .footer-nav {
     display: flex;
+    flex-wrap: wrap;
     justify-content: center;
     align-items: center;
-    gap: 8px;
+    column-gap: 8px;
+    row-gap: 8px;
     margin-bottom: 16px;
     font-size: 0.95rem;
-    flex-wrap: wrap;
   }
 
   .footer-separator {
