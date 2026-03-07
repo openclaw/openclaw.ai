@@ -2,6 +2,8 @@
 
 ## 2026-03-07
 
+- Shoutouts: use the theme-aware card surface token so shoutout cards render correctly in light mode (#100, thanks @zwying0814).
+- Sponsors: keep the Vercel logo visible in light mode by excluding the light-theme asset from sponsor inversion rules (#88, thanks @Unmesh100).
 - Windows installer: fail fast with a clear Git requirement before npm-based install flows that would otherwise die later with `spawn git` (#94, thanks @ningding97).
 ## 2026-02-22
 
