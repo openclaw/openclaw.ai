@@ -122,6 +122,6 @@ The lobster grows stronger. 🦞
 
 *Publish skills: clawhub.ai*
 
-*Join the discussion: Discord*
+*Join the discussion: <a href="https://discord.gg/openclaw" target="_blank" rel="noopener">Discord</a>*
 
 — Peter, Jamieson, and Bernardo

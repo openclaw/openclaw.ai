@@ -1,5 +1,12 @@
 # Changelog
 
+## 2026-03-07
+
+- Shoutouts: use the theme-aware card surface token so shoutout cards render correctly in light mode (#100, thanks @zwying0814).
+- Sponsors: keep the Vercel logo visible in light mode by excluding the light-theme asset from sponsor inversion rules (#88, thanks @Unmesh100).
+- Windows installer: fail fast with a clear Git requirement before npm-based install flows that would otherwise die later with `spawn git` (#94, thanks @ningding97).
+- Blog: restore the missing Discord link in the VirusTotal partnership post footer (#96, thanks @gandli).
+- Dependencies: bump `@lucide/astro` to `0.577.0` and sync `bun.lock` (#99, thanks @dependabot).
 ## 2026-02-22
 
 - Installer: make gum behavior fully automatic (interactive TTYs get gum, headless shells get plain status), and remove manual gum toggles.
