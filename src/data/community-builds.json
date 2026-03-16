@@ -1,0 +1,30 @@
+[
+  {
+    "title": "PR Review → Telegram Feedback",
+    "href": "https://x.com/i/status/2010878524543131691",
+    "source": "X thread",
+    "summary": "OpenCode ships the change, opens the PR, and OpenClaw reviews the diff and sends merge-ready feedback into Telegram.",
+    "tags": ["review", "github", "telegram"]
+  },
+  {
+    "title": "Wine Cellar Skill in Minutes",
+    "href": "https://x.com/i/status/2010916352454791216",
+    "source": "X thread",
+    "summary": "A local wine cellar skill built from a sample CSV export, with storage decisions and testing handled through chat.",
+    "tags": ["skills", "local", "csv"]
+  },
+  {
+    "title": "SNAG Screenshot-to-Markdown",
+    "href": "https://github.com/am-will/snag",
+    "source": "GitHub",
+    "summary": "Hotkey a screen region, run vision on it, and drop clean Markdown straight into your clipboard.",
+    "tags": ["devtools", "screenshots", "markdown"]
+  },
+  {
+    "title": "Beeper CLI",
+    "href": "https://github.com/blqke/beepcli",
+    "source": "GitHub",
+    "summary": "Read, send, and archive messages through Beeper Desktop so agents can work across iMessage, WhatsApp, and the rest.",
+    "tags": ["messaging", "beeper", "automation"]
+  }
+]

@@ -1,0 +1,47 @@
+[
+  {
+    "outlet": "TechCrunch",
+    "title": "OpenClaw’s AI assistants are now building their own social network",
+    "url": "https://techcrunch.com/2026/01/30/openclaws-ai-assistants-are-now-building-their-own-social-network/",
+    "displayDate": "Jan 30, 2026",
+    "author": "Anna Heim",
+    "summary": "A strong first-read on the OpenClaw takeoff: rebrand, viral growth, Moltbook, and why the project captured the open-source AI crowd.",
+    "featured": true
+  },
+  {
+    "outlet": "Financial Times",
+    "title": "OpenAI hires OpenClaw founder Peter Steinberger",
+    "url": "https://www.ft.com/content/45b172e6-df8c-41a7-bba9-3e21e361d3aa",
+    "displayDate": "Feb 16, 2026",
+    "author": "Financial Times",
+    "summary": "High-signal business coverage on Steinberger joining OpenAI, the scale of OpenClaw adoption, and why personal agents became strategically important.",
+    "featured": true
+  },
+  {
+    "outlet": "The Verge",
+    "title": "The OpenClaw superfan meetup serves optimism and lobster",
+    "url": "https://www.theverge.com/ai-artificial-intelligence/890517/openclaw-clawcon-meetup-nyc-open-source-ai",
+    "displayDate": "Mar 7, 2026",
+    "author": "The Verge",
+    "summary": "A useful culture piece on ClawCon, community energy, and the broader belief that personal AI should stay open and user-controlled.",
+    "featured": false
+  },
+  {
+    "outlet": "Business Insider",
+    "title": "China rushed to use OpenClaw. Now, some stressed-out users are forking out cash to uninstall the AI agent.",
+    "url": "https://www.businessinsider.com/china-openclaw-lobster-craze-uninstall-ai-agent-paid-side-hustle-2026-3",
+    "displayDate": "Mar 12, 2026",
+    "author": "Business Insider",
+    "summary": "Shows how far OpenClaw spread internationally and how quickly a real service economy formed around installs, support, and cleanup.",
+    "featured": false
+  },
+  {
+    "outlet": "Business Insider",
+    "title": "Cyber pets, blind dates, and stock trading: How Chinese users are jumping on the OpenClaw craze",
+    "url": "https://www.businessinsider.com/china-openclaw-craze-lobster-stock-trading-blind-dates-cyber-pets-2026-3",
+    "displayDate": "Mar 16, 2026",
+    "author": "Business Insider",
+    "summary": "A broader look at how OpenClaw is being used in the wild: productivity, side businesses, experimentation, and some very strange edge cases.",
+    "featured": false
+  }
+]
