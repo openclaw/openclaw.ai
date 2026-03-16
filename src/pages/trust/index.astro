@@ -1,4 +1,6 @@
 ---
+import TrustTopbar from '../../components/TrustTopbar.astro';
+
 const isSubdomain = Astro.url.hostname === 'trust.openclaw.ai';
 const trustHref = isSubdomain ? '/' : '/trust';
 const threatModelHref = isSubdomain ? '/threatmodel' : '/trust/threatmodel';
@@ -58,94 +60,6 @@ const langLinks = {
 
     a { color: var(--gray-500); text-decoration: none; }
     a:hover { color: var(--gray-900); }
-
-    /* Topbar */
-    .topbar {
-      position: sticky;
-      top: 0;
-      z-index: 100;
-      background: var(--bg);
-      border-bottom: 1px solid var(--gray-200);
-    }
-
-    .topbar-inner {
-      max-width: 720px;
-      margin: 0 auto;
-      padding: 0 24px;
-      height: 52px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-    }
-
-    .topbar-brand {
-      display: flex;
-      align-items: center;
-      text-decoration: none;
-      color: var(--gray-900);
-    }
-
-    .topbar-brand:hover { color: var(--gray-900); }
-
-    .topbar-brand img {
-      height: 28px;
-      width: auto;
-    }
-
-    .topbar-nav {
-      display: flex;
-      align-items: center;
-      gap: 4px;
-    }
-
-    .topbar-link {
-      padding: 6px 14px;
-      border-radius: 8px;
-      font-family: var(--heading);
-      font-size: 14px;
-      font-weight: 500;
-      color: var(--gray-500);
-      transition: color 0.15s, background 0.15s;
-    }
-
-    .topbar-link:hover {
-      color: var(--gray-900);
-      background: var(--gray-50);
-    }
-
-    .topbar-link.active {
-      color: var(--primary);
-      font-weight: 600;
-    }
-
-    .lang-switcher {
-      display: flex;
-      align-items: center;
-      gap: 2px;
-      margin-left: 8px;
-      padding-left: 10px;
-      border-left: 1px solid var(--gray-200);
-    }
-
-    .lang-link {
-      padding: 4px 8px;
-      border-radius: 6px;
-      font-family: var(--heading);
-      font-size: 12px;
-      font-weight: 500;
-      color: var(--gray-400);
-      transition: color 0.15s, background 0.15s;
-    }
-
-    .lang-link:hover {
-      color: var(--gray-900);
-      background: var(--gray-50);
-    }
-
-    .lang-link.active {
-      color: var(--primary);
-      font-weight: 600;
-    }
 
     .container {
       max-width: 720px;
@@ -476,29 +390,17 @@ const langLinks = {
 
     @media (max-width: 480px) {
       .container { padding: 24px 16px; }
-      .topbar-inner { padding: 0 16px; }
       .article-content p:first-child { font-size: 1.1rem; }
     }
   </style>
 </head>
 <body>
-  <nav class="topbar">
-    <div class="topbar-inner">
-      <a href="https://openclaw.ai" class="topbar-brand">
-        <img src="/openclaw-logo-text-dark.png" alt="OpenClaw" />
-      </a>
-      <div class="topbar-nav">
-        <a href={trustHref} class="topbar-link active">Trust</a>
-        <a href={threatModelHref} class="topbar-link">Threat Model</a>
-        <div class="lang-switcher">
-          <a href={langLinks.en.trust} class="lang-link active">{langLinks.en.label}</a>
-          <a href={langLinks['zh-cn'].trust} class="lang-link">{langLinks['zh-cn'].label}</a>
-          <a href={langLinks.ko.trust} class="lang-link">{langLinks.ko.label}</a>
-          <a href={langLinks.ja.trust} class="lang-link">{langLinks.ja.label}</a>
-        </div>
-      </div>
-    </div>
-  </nav>
+  <TrustTopbar
+    activePage="trust"
+    locale="en"
+    labels={{ trust: 'Trust', threatModel: 'Threat Model' }}
+    langLinks={langLinks}
+  />
 
   <main class="container">
     <article class="article">

@@ -1,4 +1,5 @@
 ---
+import TrustTopbar from '../../../components/TrustTopbar.astro';
 import yaml from 'js-yaml';
 import threatsYaml from '../../../i18n/ko/threats.yaml?raw';
 import t from '../../../i18n/ko/threatmodel.json';
@@ -8,10 +9,10 @@ const trustHref = isSubdomain ? '/ko' : '/trust/ko';
 const threatModelHref = isSubdomain ? '/ko/threatmodel' : '/trust/ko/threatmodel';
 
 const langLinks = {
-  en: isSubdomain ? '/threatmodel' : '/trust/threatmodel',
-  'zh-cn': isSubdomain ? '/zh-cn/threatmodel' : '/trust/zh-cn/threatmodel',
-  ko: isSubdomain ? '/ko/threatmodel' : '/trust/ko/threatmodel',
-  ja: isSubdomain ? '/ja/threatmodel' : '/trust/ja/threatmodel',
+  en: { label: 'EN', trust: isSubdomain ? '/' : '/trust', threatmodel: isSubdomain ? '/threatmodel' : '/trust/threatmodel' },
+  'zh-cn': { label: '中文', trust: isSubdomain ? '/zh-cn' : '/trust/zh-cn', threatmodel: isSubdomain ? '/zh-cn/threatmodel' : '/trust/zh-cn/threatmodel' },
+  ko: { label: '한국어', trust: trustHref, threatmodel: threatModelHref },
+  ja: { label: '日本語', trust: isSubdomain ? '/ja' : '/trust/ja', threatmodel: isSubdomain ? '/ja/threatmodel' : '/trust/ja/threatmodel' },
 };
 
 interface Threat { id: string; name: string; tactic: string; atlas: string; risk: string; category: string; description: string; attackVector: string; affected: string; mitigations: string; residualRisk: string; recommendations: string; }
@@ -109,94 +110,6 @@ for (const b of trustBoundaries) {
 
     a { color: var(--gray-500); text-decoration: none; }
     a:hover { color: var(--gray-900); }
-
-    /* Topbar */
-    .topbar {
-      position: sticky;
-      top: 0;
-      z-index: 100;
-      background: var(--bg);
-      border-bottom: 1px solid var(--gray-200);
-    }
-
-    .topbar-inner {
-      max-width: 1800px;
-      margin: 0 auto;
-      padding: 0 24px;
-      height: 52px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-    }
-
-    .topbar-brand {
-      display: flex;
-      align-items: center;
-      text-decoration: none;
-      color: var(--gray-900);
-    }
-
-    .topbar-brand:hover { color: var(--gray-900); }
-
-    .topbar-brand img {
-      height: 28px;
-      width: auto;
-    }
-
-    .topbar-nav {
-      display: flex;
-      align-items: center;
-      gap: 4px;
-    }
-
-    .topbar-link {
-      padding: 6px 14px;
-      border-radius: 8px;
-      font-family: var(--heading);
-      font-size: 14px;
-      font-weight: 500;
-      color: var(--gray-500);
-      transition: color 0.15s, background 0.15s;
-    }
-
-    .topbar-link:hover {
-      color: var(--gray-900);
-      background: var(--gray-50);
-    }
-
-    .topbar-link.active {
-      color: var(--primary);
-      font-weight: 600;
-    }
-
-    .lang-switcher {
-      display: flex;
-      align-items: center;
-      gap: 2px;
-      margin-left: 8px;
-      padding-left: 8px;
-      border-left: 1px solid var(--gray-200);
-    }
-
-    .lang-link {
-      padding: 4px 8px;
-      border-radius: 6px;
-      font-family: var(--heading);
-      font-size: 12px;
-      font-weight: 500;
-      color: var(--gray-400);
-      transition: color 0.15s, background 0.15s;
-    }
-
-    .lang-link:hover {
-      color: var(--gray-700);
-      background: var(--gray-50);
-    }
-
-    .lang-link.active {
-      color: var(--primary);
-      font-weight: 600;
-    }
 
     .tm-container {
       max-width: 1800px;
@@ -683,28 +596,17 @@ for (const b of trustBoundaries) {
 
     @media (max-width: 480px) {
       .tm-container { padding: 24px 16px; }
-      .topbar-inner { padding: 0 16px; }
     }
   </style>
 </head>
 <body>
-  <nav class="topbar">
-    <div class="topbar-inner">
-      <a href="https://openclaw.ai" class="topbar-brand">
-        <img src="/openclaw-logo-text-dark.png" alt="OpenClaw" />
-      </a>
-      <div class="topbar-nav">
-        <a href={trustHref} class="topbar-link">{t.nav.trust}</a>
-        <a href={threatModelHref} class="topbar-link active">{t.nav.threatModel}</a>
-        <div class="lang-switcher">
-          <a href={langLinks.en} class="lang-link">EN</a>
-          <a href={langLinks['zh-cn']} class="lang-link">中文</a>
-          <a href={langLinks.ko} class="lang-link active">한국어</a>
-          <a href={langLinks.ja} class="lang-link">日本語</a>
-        </div>
-      </div>
-    </div>
-  </nav>
+  <TrustTopbar
+    activePage="threatmodel"
+    locale="ko"
+    wide={true}
+    labels={{ trust: t.nav.trust, threatModel: t.nav.threatModel }}
+    langLinks={langLinks}
+  />
 
   <main class="tm-container">
     <h1 class="article-title">{t.header.title}</h1>

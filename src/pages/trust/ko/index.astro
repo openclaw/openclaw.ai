@@ -1,4 +1,5 @@
 ---
+import TrustTopbar from '../../../components/TrustTopbar.astro';
 import t from '../../../i18n/ko/trust.json';
 
 const isSubdomain = Astro.url.hostname === 'trust.openclaw.ai';
@@ -6,10 +7,10 @@ const trustHref = isSubdomain ? '/ko' : '/trust/ko';
 const threatModelHref = isSubdomain ? '/ko/threatmodel' : '/trust/ko/threatmodel';
 
 const langLinks = {
-  en: isSubdomain ? '/' : '/trust',
-  'zh-cn': isSubdomain ? '/zh-cn' : '/trust/zh-cn',
-  ko: isSubdomain ? '/ko' : '/trust/ko',
-  ja: isSubdomain ? '/ja' : '/trust/ja',
+  en: { label: 'EN', trust: isSubdomain ? '/' : '/trust', threatmodel: isSubdomain ? '/threatmodel' : '/trust/threatmodel' },
+  'zh-cn': { label: '中文', trust: isSubdomain ? '/zh-cn' : '/trust/zh-cn', threatmodel: isSubdomain ? '/zh-cn/threatmodel' : '/trust/zh-cn/threatmodel' },
+  ko: { label: '한국어', trust: trustHref, threatmodel: threatModelHref },
+  ja: { label: '日本語', trust: isSubdomain ? '/ja' : '/trust/ja', threatmodel: isSubdomain ? '/ja/threatmodel' : '/trust/ja/threatmodel' },
 };
 ---
 
@@ -60,94 +61,6 @@ const langLinks = {
 
     a { color: var(--gray-500); text-decoration: none; }
     a:hover { color: var(--gray-900); }
-
-    /* Topbar */
-    .topbar {
-      position: sticky;
-      top: 0;
-      z-index: 100;
-      background: var(--bg);
-      border-bottom: 1px solid var(--gray-200);
-    }
-
-    .topbar-inner {
-      max-width: 720px;
-      margin: 0 auto;
-      padding: 0 24px;
-      height: 52px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-    }
-
-    .topbar-brand {
-      display: flex;
-      align-items: center;
-      text-decoration: none;
-      color: var(--gray-900);
-    }
-
-    .topbar-brand:hover { color: var(--gray-900); }
-
-    .topbar-brand img {
-      height: 28px;
-      width: auto;
-    }
-
-    .topbar-nav {
-      display: flex;
-      align-items: center;
-      gap: 4px;
-    }
-
-    .topbar-link {
-      padding: 6px 14px;
-      border-radius: 8px;
-      font-family: var(--heading);
-      font-size: 14px;
-      font-weight: 500;
-      color: var(--gray-500);
-      transition: color 0.15s, background 0.15s;
-    }
-
-    .topbar-link:hover {
-      color: var(--gray-900);
-      background: var(--gray-50);
-    }
-
-    .topbar-link.active {
-      color: var(--primary);
-      font-weight: 600;
-    }
-
-    .lang-switcher {
-      display: flex;
-      align-items: center;
-      gap: 2px;
-      margin-left: 8px;
-      padding-left: 8px;
-      border-left: 1px solid var(--gray-200);
-    }
-
-    .lang-link {
-      padding: 4px 8px;
-      border-radius: 6px;
-      font-family: var(--heading);
-      font-size: 12px;
-      font-weight: 500;
-      color: var(--gray-400);
-      transition: color 0.15s, background 0.15s;
-    }
-
-    .lang-link:hover {
-      color: var(--gray-700);
-      background: var(--gray-50);
-    }
-
-    .lang-link.active {
-      color: var(--primary);
-      font-weight: 600;
-    }
 
     .container {
       max-width: 720px;
@@ -478,29 +391,17 @@ const langLinks = {
 
     @media (max-width: 480px) {
       .container { padding: 24px 16px; }
-      .topbar-inner { padding: 0 16px; }
       .article-content p:first-child { font-size: 1.1rem; }
     }
   </style>
 </head>
 <body>
-  <nav class="topbar">
-    <div class="topbar-inner">
-      <a href="https://openclaw.ai" class="topbar-brand">
-        <img src="/openclaw-logo-text-dark.png" alt="OpenClaw" />
-      </a>
-      <div class="topbar-nav">
-        <a href={trustHref} class="topbar-link active">{t.nav.trust}</a>
-        <a href={threatModelHref} class="topbar-link">{t.nav.threatModel}</a>
-        <div class="lang-switcher">
-          <a href={langLinks.en} class="lang-link">EN</a>
-          <a href={langLinks['zh-cn']} class="lang-link">中文</a>
-          <a href={langLinks.ko} class="lang-link active">한국어</a>
-          <a href={langLinks.ja} class="lang-link">日本語</a>
-        </div>
-      </div>
-    </div>
-  </nav>
+  <TrustTopbar
+    activePage="trust"
+    locale="ko"
+    labels={{ trust: t.nav.trust, threatModel: t.nav.threatModel }}
+    langLinks={langLinks}
+  />
 
   <main class="container">
     <article class="article">
