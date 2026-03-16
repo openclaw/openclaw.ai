@@ -9,12 +9,12 @@
     "featured": true
   },
   {
-    "outlet": "Financial Times",
-    "title": "OpenAI hires OpenClaw founder Peter Steinberger",
-    "url": "https://www.ft.com/content/45b172e6-df8c-41a7-bba9-3e21e361d3aa",
-    "displayDate": "Feb 16, 2026",
-    "author": "Financial Times",
-    "summary": "High-signal business coverage on Steinberger joining OpenAI, the scale of OpenClaw adoption, and why personal agents became strategically important.",
+    "outlet": "TechCrunch",
+    "title": "OpenClaw creator Peter Steinberger joins OpenAI",
+    "url": "https://techcrunch.com/2026/02/15/openclaw-creator-peter-steinberger-joins-openai/",
+    "displayDate": "Feb 15, 2026",
+    "author": "Anthony Ha",
+    "summary": "A clean, positive headline around the next chapter for OpenClaw: founder momentum, OpenAI backing, and the long-term foundation path.",
     "featured": true
   },
   {
@@ -23,25 +23,43 @@
     "url": "https://www.theverge.com/ai-artificial-intelligence/890517/openclaw-clawcon-meetup-nyc-open-source-ai",
     "displayDate": "Mar 7, 2026",
     "author": "The Verge",
-    "summary": "A useful culture piece on ClawCon, community energy, and the broader belief that personal AI should stay open and user-controlled.",
+    "summary": "A strong community story about ClawCon, the people building around OpenClaw, and the feeling that personal agents have escaped the lab.",
+    "featured": false
+  },
+  {
+    "outlet": "The Verge",
+    "title": "OpenClaw creator Peter Steinberger joins OpenAI",
+    "url": "https://www.theverge.com/openai/630450/peter-steinberger-openclaw-openai",
+    "displayDate": "Feb 15, 2026",
+    "author": "The Verge",
+    "summary": "Another positive institutional signal: OpenClaw’s creator moving into a major platform role while the project continues as open source.",
     "featured": false
   },
   {
     "outlet": "Business Insider",
-    "title": "China rushed to use OpenClaw. Now, some stressed-out users are forking out cash to uninstall the AI agent.",
-    "url": "https://www.businessinsider.com/china-openclaw-lobster-craze-uninstall-ai-agent-paid-side-hustle-2026-3",
-    "displayDate": "Mar 12, 2026",
+    "title": "OpenClaw's creator is heading to OpenAI. He says it could've been a 'huge company,' but building one didn't excite him.",
+    "url": "https://www.businessinsider.com/sam-altman-hires-openclaw-creator-peter-steinberger-personal-ai-agents-2026-2",
+    "displayDate": "Feb 15, 2026",
     "author": "Business Insider",
-    "summary": "Shows how far OpenClaw spread internationally and how quickly a real service economy formed around installs, support, and cleanup.",
+    "summary": "A positive business-profile angle on OpenClaw’s breakout moment and why Steinberger chose leverage and reach over starting another company.",
     "featured": false
   },
   {
     "outlet": "Business Insider",
-    "title": "Cyber pets, blind dates, and stock trading: How Chinese users are jumping on the OpenClaw craze",
-    "url": "https://www.businessinsider.com/china-openclaw-craze-lobster-stock-trading-blind-dates-cyber-pets-2026-3",
-    "displayDate": "Mar 16, 2026",
+    "title": "'Eccentric but brilliant': OpenClaw's creator got feedback from Mark Zuckerberg",
+    "url": "https://www.businessinsider.com/openclaw-creator-peter-steinberger-gets-feedback-from-mark-zuckerberg",
+    "displayDate": "Feb 19, 2026",
     "author": "Business Insider",
-    "summary": "A broader look at how OpenClaw is being used in the wild: productivity, side businesses, experimentation, and some very strange edge cases.",
+    "summary": "Good social proof for the site: OpenClaw getting attention and detailed product feedback from the very top of the industry.",
+    "featured": false
+  },
+  {
+    "outlet": "TechCrunch",
+    "title": "OpenClaw creator’s advice to AI builders is to be more playful and allow yourself time to improve",
+    "url": "https://techcrunch.com/2026/02/25/openclaw-creators-advice-to-ai-builders-is-to-be-more-playful-and-allow-yourself-time-to-improve/",
+    "displayDate": "Feb 25, 2026",
+    "author": "Sarah Perez",
+    "summary": "A builder-focused piece with the right tone for the homepage: experimentation, agency, and why OpenClaw resonated with makers so quickly.",
     "featured": false
   }
 ]
