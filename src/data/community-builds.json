@@ -1,30 +1,62 @@
 [
   {
+    "id": "2012778049406742632",
+    "author": "jdrhyne",
     "title": "15+ Agent Army Running Across 3 Machines",
     "href": "https://x.com/jdrhyne/status/2012778049406742632",
     "source": "X thread",
     "summary": "A full OpenClaw setup clearing 10,000 emails, reviewing decks, building CLI tools, optimizing Google Ads, drafting posts, and orchestrating Codex workers across a Discord-driven agent fleet.",
-    "tags": ["multi-agent", "discord", "automation"]
+    "tags": ["multi-agent", "discord", "automation"],
+    "likes": 119
   },
   {
+    "id": "2012565160586625345",
+    "author": "danpeguine",
     "title": "Personal Operating System With Daily Briefings",
     "href": "https://x.com/danpeguine/status/2012565160586625345",
     "source": "X thread",
     "summary": "OpenClaw timeblocks tasks, runs weekly reviews from meeting notes, briefs before meetings, watches family school deadlines, researches projects, resolves calendar conflicts, and creates invoices.",
-    "tags": ["calendar", "briefings", "productivity"]
+    "tags": ["calendar", "briefings", "productivity"],
+    "likes": 257
   },
   {
+    "id": "2012119327147798753",
+    "author": "georgedagg_",
     "title": "Voice-Guided Production Fix While Walking the Dog",
     "href": "https://x.com/georgedagg_/status/2012119327147798753",
     "source": "X thread",
     "summary": "A live OpenClaw workflow that inspected failed Railway builds, diagnosed the root cause, changed deployment configs, redeployed, fixed a design issue, and submitted a PR over voice.",
-    "tags": ["voice", "deploy", "coding"]
+    "tags": ["voice", "deploy", "coding"],
+    "likes": 143
   },
   {
+    "id": "2012535486401671588",
+    "author": "dreetje",
     "title": "One Chat Controlling Mail, Messages, Orders, Calls, and a Vault",
     "href": "https://x.com/dreetje/status/2012535486401671588",
     "source": "X thread",
     "summary": "A single OpenClaw assistant checking mail, reading Beeper messages, ordering things, sending reminders, creating GitHub issues, discussing bookmarks, handling voice calls, and reading and writing a dedicated 1Password vault.",
-    "tags": ["mail", "beeper", "personal-ai"]
+    "tags": ["mail", "beeper", "personal-ai"],
+    "likes": 271
+  },
+  {
+    "id": "2008994096736817624",
+    "author": "davekiss",
+    "title": "Entire Website Rebuilt From Telegram",
+    "href": "https://x.com/davekiss/status/2008994096736817624",
+    "source": "X thread",
+    "summary": "A full personal-site rebuild from bed: Notion to Astro, 18 posts migrated, DNS moved to Cloudflare, and no laptop involved.",
+    "tags": ["telegram", "website", "astro"],
+    "likes": 142
+  },
+  {
+    "id": "2007616854689280196",
+    "author": "stevecaldwell",
+    "title": "Family Meal Planning System Built Overnight",
+    "href": "https://x.com/stevecaldwell/status/2007616854689280196",
+    "source": "X thread",
+    "summary": "A weekly family planning system with a year-long meal template, aisle-sorted shopping lists, weather-aware dinner planning, and automated reminders.",
+    "tags": ["family", "notion", "planning"],
+    "likes": 133
   }
 ]

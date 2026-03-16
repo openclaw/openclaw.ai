@@ -1,9 +1,10 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import showcaseData from '../data/showcase.json';
+import featuredBuilds from '../data/community-builds.json';
 
-// Use JSON order directly.
-const sortedShowcase = showcaseData;
+const featuredIds = new Set(featuredBuilds.map((item) => item.id));
+const sortedShowcase = showcaseData.filter((item) => !featuredIds.has(item.id));
 
 const categoryLabels: Record<string, string> = {
   'power-user': '🚀 Power User',
@@ -27,8 +28,42 @@ const categoryLabels: Record<string, string> = {
       <h1 class="title">
         <span class="claw-accent">⟩</span> What People Are Building
       </h1>
-      <p class="subtitle">Real projects, real automation, real magic.</p>
+      <p class="subtitle">The strongest OpenClaw builds we could verify in public: X threads, shipped workflows, and real automation.</p>
     </header>
+
+    <section class="featured-section">
+      <div class="featured-header">
+        <h2 class="featured-title">Featured Builds</h2>
+        <p class="featured-copy">
+          Handpicked examples that show range: personal ops, coding, family workflows, and “I cannot believe this is running from chat.”
+        </p>
+      </div>
+      <div class="featured-grid">
+        {featuredBuilds.map((build) => (
+          <a href={build.href} target="_blank" rel="noopener" class="featured-card">
+            <div class="featured-topline">
+              <span class="featured-source">{build.source}</span>
+              <span class="featured-likes">❤️ {build.likes}</span>
+            </div>
+            <h3 class="featured-card-title">{build.title}</h3>
+            <p class="featured-summary">{build.summary}</p>
+            <div class="featured-meta">
+              <span class="featured-author">@{build.author}</span>
+              <div class="featured-tags">
+                {build.tags.map((tag: string) => (
+                  <span class="featured-tag">{tag}</span>
+                ))}
+              </div>
+            </div>
+          </a>
+        ))}
+      </div>
+    </section>
+
+    <div class="grid-header">
+      <h2 class="grid-title">More From the Community</h2>
+      <p class="grid-copy">A broader stream of OpenClaw projects, experiments, and production workflows.</p>
+    </div>
 
     <div class="showcase-grid">
       {sortedShowcase.map((item) => (
@@ -177,6 +212,122 @@ const categoryLabels: Record<string, string> = {
   .subtitle {
     color: var(--text-secondary);
     font-size: 1.1rem;
+    max-width: 780px;
+    margin: 0 auto;
+  }
+
+  .featured-section {
+    margin-bottom: 48px;
+  }
+
+  .featured-header {
+    display: grid;
+    gap: 10px;
+    margin-bottom: 22px;
+  }
+
+  .featured-title,
+  .grid-title {
+    font-family: var(--font-display);
+    font-size: 1.45rem;
+    font-weight: 600;
+    color: var(--text-primary);
+  }
+
+  .featured-copy,
+  .grid-copy {
+    color: var(--text-secondary);
+    max-width: 760px;
+  }
+
+  .featured-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 18px;
+  }
+
+  .featured-card {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    padding: 22px;
+    border-radius: 18px;
+    border: 1px solid var(--border-subtle);
+    background:
+      linear-gradient(135deg, rgba(255, 77, 77, 0.06), transparent 40%),
+      var(--surface-card-strong);
+    backdrop-filter: blur(10px);
+    text-decoration: none;
+    color: var(--text-primary);
+    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .featured-card:hover {
+    transform: translateY(-4px);
+    border-color: var(--coral-bright);
+    box-shadow: 0 16px 48px var(--shadow-coral-soft);
+  }
+
+  .featured-topline,
+  .featured-meta {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+  }
+
+  .featured-source,
+  .featured-tag {
+    display: inline-flex;
+    align-items: center;
+    min-height: 28px;
+    padding: 0 10px;
+    border-radius: 999px;
+    border: 1px solid var(--border-subtle);
+    background: var(--surface-overlay);
+    color: var(--text-muted);
+    font-size: 0.76rem;
+  }
+
+  .featured-source {
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+  }
+
+  .featured-likes {
+    font-size: 0.84rem;
+    color: var(--text-muted);
+  }
+
+  .featured-card-title {
+    font-family: var(--font-display);
+    font-size: 1.2rem;
+    line-height: 1.3;
+  }
+
+  .featured-summary {
+    color: var(--text-secondary);
+    line-height: 1.65;
+  }
+
+  .featured-author {
+    color: var(--coral-bright);
+    font-weight: 600;
+    font-size: 0.95rem;
+  }
+
+  .featured-tags {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+    gap: 8px;
+  }
+
+  .grid-header {
+    display: grid;
+    gap: 8px;
+    margin-bottom: 20px;
   }
 
   .showcase-grid {
@@ -409,6 +560,19 @@ const categoryLabels: Record<string, string> = {
   @media (max-width: 640px) {
     .container {
       padding: 24px 16px;
+    }
+
+    .featured-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .featured-meta {
+      align-items: flex-start;
+      flex-direction: column;
+    }
+
+    .featured-tags {
+      justify-content: flex-start;
     }
 
     .showcase-grid {
