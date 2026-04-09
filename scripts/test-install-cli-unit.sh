@@ -131,6 +131,51 @@ EOF
   assert_eq "$package_count" "1" "ensure_pnpm_git_prepare_allowlist package count"
 )
 
+echo "==> case: install_openclaw keeps a single package root under toolchain"
+(
+  root="${TMP_DIR}/case-install-npm"
+  prefix="${root}/prefix"
+  fake_bin="${root}/bin"
+  fake_npm="${fake_bin}/npm"
+  toolchain_dir="${prefix}/tools/node-v${NODE_VERSION}"
+  entry_js="${toolchain_dir}/lib/node_modules/openclaw/dist/entry.js"
+  mkdir -p "${fake_bin}" "${toolchain_dir}/bin" "$(dirname "${entry_js}")"
+  printf 'console.log("ok")\n' > "${entry_js}"
+  printf 'legacy-bin\n' > "${toolchain_dir}/bin/openclaw"
+
+  cat >"${fake_npm}" <<'EOF'
+#!/usr/bin/env bash
+set -euo pipefail
+printf '%s\n' "$*" > "${FAKE_NPM_ARGS_FILE}"
+EOF
+  chmod +x "${fake_npm}"
+
+  export PREFIX="${prefix}"
+  export FAKE_NPM_ARGS_FILE="${root}/npm-args.txt"
+  export SHARP_IGNORE_GLOBAL_LIBVIPS=1
+  export OPENCLAW_VERSION=latest
+  export NPM_LOGLEVEL=error
+
+  npm_bin() { echo "${fake_npm}"; }
+  log() { :; }
+  emit_json() { :; }
+  fix_npm_prefix_if_needed() { :; }
+
+  install_openclaw
+
+  args="$(cat "${FAKE_NPM_ARGS_FILE}")"
+  assert_eq "$args" "install -g --prefix ${toolchain_dir} --loglevel error --no-fund --no-audit openclaw@latest" "install_openclaw npm prefix"
+  test -x "${prefix}/bin/openclaw"
+  test -e "${toolchain_dir}/bin/openclaw"
+  wrapper_target="$(python3 - <<'PY' "${prefix}/bin/openclaw"
+import pathlib
+import sys
+print(pathlib.Path(sys.argv[1]).read_text().splitlines()[-1])
+PY
+)"
+  assert_eq "$wrapper_target" "exec \"${prefix}/tools/node/bin/node\" \"${toolchain_dir}/lib/node_modules/openclaw/dist/entry.js\" \"\$@\"" "install_openclaw wrapper target"
+)
+
 echo "==> case: install_openclaw_from_git uses run_pnpm"
 (
   root="${TMP_DIR}/case-install-git"
