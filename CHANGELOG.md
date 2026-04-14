@@ -3,6 +3,7 @@
 ## 2026-03-16
 
 - Integrations: correct MS Teams docs link to the canonical `/channels/msteams` path (#109, thanks @SidU).
+- Showcase/press: add curated community builds and a press page, and surface standout examples on the homepage (#108, thanks @jchopard69).
 
 ## 2026-03-07
 
