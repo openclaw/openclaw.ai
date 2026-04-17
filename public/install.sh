@@ -1038,7 +1038,7 @@ Examples:
   curl -fsSL --proto '=https' --tlsv1.2 https://openclaw.ai/install.sh | bash -s -- --no-onboard --verify
   curl -fsSL --proto '=https' --tlsv1.2 https://openclaw.ai/install.sh | bash -s -- --version main
   curl -fsSL --proto '=https' --tlsv1.2 https://openclaw.ai/install.sh | bash -s -- --install-method git --no-onboard
-  curl -fsSL --proto '=https' --tlsv1.2 https://openclaw.ai/install.sh | OPENCLAW_PROFILE=rescue bash -s -- --gateway-port 19001
+  curl -fsSL --proto '=https' --tlsv1.2 https://openclaw.ai/install.sh | OPENCLAW_PROFILE=rescue bash -s -- --profile rescue --gateway-port 19001 --workspace ~/openclaw-rescue
 EOF
 }
 
@@ -2095,7 +2095,8 @@ resolve_workspace_dir() {
         echo "${INSTALL_WORKSPACE}"
         return
     fi
-    local profile="${OPENCLAW_PROFILE:-default}"
+    local profile=""
+    profile="$(resolve_install_profile)"
     if [[ "${profile}" != "default" ]]; then
         echo "${HOME}/.openclaw/workspace-${profile}"
     else
@@ -2103,15 +2104,25 @@ resolve_workspace_dir() {
     fi
 }
 
+resolve_install_profile() {
+    local profile="${INSTALL_PROFILE:-${OPENCLAW_PROFILE:-default}}"
+    local profile_lc=""
+    profile_lc="$(printf '%s' "${profile}" | tr '[:upper:]' '[:lower:]')"
+    if [[ -z "${profile}" || "${profile_lc}" == "default" ]]; then
+        echo "default"
+        return
+    fi
+    echo "${profile}"
+}
+
 resolve_install_state_dir() {
     if [[ -n "${OPENCLAW_STATE_DIR:-}" ]]; then
         echo "${OPENCLAW_STATE_DIR}"
         return
     fi
-    local profile="${OPENCLAW_PROFILE:-default}"
-    local profile_lc=""
-    profile_lc="$(printf '%s' "${profile}" | tr '[:upper:]' '[:lower:]')"
-    if [[ -n "${profile}" && "${profile_lc}" != "default" ]]; then
+    local profile=""
+    profile="$(resolve_install_profile)"
+    if [[ "${profile}" != "default" ]]; then
         echo "${HOME}/.openclaw-${profile}"
     else
         echo "${HOME}/.openclaw"
@@ -2129,9 +2140,17 @@ resolve_install_config_path() {
 }
 
 install_config_already_exists() {
+    local profile=""
     local config_path=""
+    profile="$(resolve_install_profile)"
     config_path="$(resolve_install_config_path)"
-    [[ -f "${config_path}" || -f "$HOME/.clawdbot/clawdbot.json" || -f "$HOME/.moltbot/moltbot.json" || -f "$HOME/.moldbot/moldbot.json" ]]
+    if [[ -f "${config_path}" ]]; then
+        return 0
+    fi
+    if [[ "${profile}" != "default" ]]; then
+        return 1
+    fi
+    [[ -f "$HOME/.clawdbot/clawdbot.json" || -f "$HOME/.moltbot/moltbot.json" || -f "$HOME/.moldbot/moldbot.json" ]]
 }
 
 validate_install_overrides() {
@@ -2150,7 +2169,13 @@ validate_install_overrides() {
 
 build_onboard_command() {
     local claw="$1"
-    ONBOARD_CMD=("$claw" "onboard")
+    local selected_profile=""
+    selected_profile="$(resolve_supplied_install_profile)"
+    ONBOARD_CMD=("$claw")
+    if [[ -n "${selected_profile}" ]]; then
+        ONBOARD_CMD+=("--profile" "${selected_profile}")
+    fi
+    ONBOARD_CMD+=("onboard")
     if [[ -n "${INSTALL_WORKSPACE}" ]]; then
         ONBOARD_CMD+=("--workspace" "${INSTALL_WORKSPACE}")
     fi
@@ -2161,9 +2186,11 @@ build_onboard_command() {
 
 build_onboard_display_command() {
     local claw_name="${1:-openclaw}"
+    local selected_profile=""
+    selected_profile="$(resolve_supplied_install_profile)"
     ONBOARD_DISPLAY_CMD=("$claw_name")
-    if [[ -n "${INSTALL_PROFILE}" ]]; then
-        ONBOARD_DISPLAY_CMD+=("--profile" "${INSTALL_PROFILE}")
+    if [[ -n "${selected_profile}" ]]; then
+        ONBOARD_DISPLAY_CMD+=("--profile" "${selected_profile}")
     fi
     ONBOARD_DISPLAY_CMD+=("onboard")
     if [[ -n "${INSTALL_WORKSPACE}" ]]; then
@@ -2180,6 +2207,22 @@ format_onboard_display_command() {
     local formatted=""
     printf -v formatted '%q ' "${ONBOARD_DISPLAY_CMD[@]}"
     echo "${formatted% }"
+}
+
+resolve_supplied_install_profile() {
+    local raw_profile=""
+    local resolved_profile=""
+    raw_profile="${INSTALL_PROFILE:-${OPENCLAW_PROFILE:-}}"
+    if [[ -z "${raw_profile}" ]]; then
+        echo ""
+        return
+    fi
+    resolved_profile="$(resolve_install_profile)"
+    if [[ "${resolved_profile}" == "default" ]]; then
+        echo ""
+        return
+    fi
+    echo "${resolved_profile}"
 }
 
 run_bootstrap_onboarding_if_needed() {
