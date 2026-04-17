@@ -993,6 +993,9 @@ SHARP_IGNORE_GLOBAL_LIBVIPS="${SHARP_IGNORE_GLOBAL_LIBVIPS:-1}"
 NPM_LOGLEVEL="${OPENCLAW_NPM_LOGLEVEL:-error}"
 NPM_SILENT_FLAG="--silent"
 VERBOSE="${OPENCLAW_VERBOSE:-0}"
+INSTALL_PROFILE="${OPENCLAW_PROFILE:-}"
+INSTALL_WORKSPACE="${OPENCLAW_WORKSPACE:-}"
+INSTALL_GATEWAY_PORT="${OPENCLAW_GATEWAY_PORT:-}"
 OPENCLAW_BIN=""
 SELECTED_NODE_BIN=""
 PNPM_CMD=()
@@ -1012,6 +1015,9 @@ Options:
   --version <version|dist-tag>         npm install: version (default: latest)
   --beta                               Use beta if available, else latest
   --git-dir, --dir <path>             Checkout directory (default: ~/openclaw)
+  --profile <name>                    Isolated OpenClaw profile for config/state/service naming
+  --workspace <dir>                   Workspace to use during onboarding
+  --gateway-port <port>               Gateway port to write during onboarding
   --no-git-update                      Skip git pull for existing checkout
   --no-onboard                          Skip onboarding (non-interactive)
   --no-prompt                           Disable prompts (required in CI/automation)
@@ -1025,6 +1031,9 @@ Environment variables:
   OPENCLAW_BETA=0|1
   OPENCLAW_GIT_DIR=...
   OPENCLAW_GIT_UPDATE=0|1
+  OPENCLAW_PROFILE=<name>
+  OPENCLAW_WORKSPACE=<dir>
+  OPENCLAW_GATEWAY_PORT=<port>
   OPENCLAW_NO_PROMPT=1
   OPENCLAW_DRY_RUN=1
   OPENCLAW_NO_ONBOARD=1
@@ -1036,6 +1045,7 @@ Examples:
   curl -fsSL --proto '=https' --tlsv1.2 https://openclaw.ai/install.sh | bash
   curl -fsSL --proto '=https' --tlsv1.2 https://openclaw.ai/install.sh | bash -s -- --no-onboard
   curl -fsSL --proto '=https' --tlsv1.2 https://openclaw.ai/install.sh | bash -s -- --install-method git --no-onboard
+  curl -fsSL --proto '=https' --tlsv1.2 https://openclaw.ai/install.sh | OPENCLAW_PROFILE=rescue bash -s -- --profile rescue --gateway-port 19001 --workspace ~/openclaw-rescue
 EOF
 }
 
@@ -1088,6 +1098,18 @@ parse_args() {
                 ;;
             --git-dir|--dir)
                 GIT_DIR="$2"
+                shift 2
+                ;;
+            --profile)
+                INSTALL_PROFILE="$2"
+                shift 2
+                ;;
+            --workspace)
+                INSTALL_WORKSPACE="$2"
+                shift 2
+                ;;
+            --gateway-port)
+                INSTALL_GATEWAY_PORT="$2"
                 shift 2
                 ;;
             --no-git-update)
@@ -2206,7 +2228,12 @@ maybe_open_dashboard() {
 }
 
 resolve_workspace_dir() {
-    local profile="${OPENCLAW_PROFILE:-default}"
+    if [[ -n "${INSTALL_WORKSPACE}" ]]; then
+        echo "${INSTALL_WORKSPACE}"
+        return
+    fi
+    local profile=""
+    profile="$(resolve_install_profile)"
     if [[ "${profile}" != "default" ]]; then
         echo "${HOME}/.openclaw/workspace-${profile}"
     else
@@ -2214,13 +2241,133 @@ resolve_workspace_dir() {
     fi
 }
 
+resolve_install_profile() {
+    local profile="${INSTALL_PROFILE:-${OPENCLAW_PROFILE:-default}}"
+    local profile_lc=""
+    profile_lc="$(printf '%s' "${profile}" | tr '[:upper:]' '[:lower:]')"
+    if [[ -z "${profile}" || "${profile_lc}" == "default" ]]; then
+        echo "default"
+        return
+    fi
+    echo "${profile}"
+}
+
+resolve_install_state_dir() {
+    if [[ -n "${OPENCLAW_STATE_DIR:-}" ]]; then
+        echo "${OPENCLAW_STATE_DIR}"
+        return
+    fi
+    local profile=""
+    profile="$(resolve_install_profile)"
+    if [[ "${profile}" != "default" ]]; then
+        echo "${HOME}/.openclaw-${profile}"
+    else
+        echo "${HOME}/.openclaw"
+    fi
+}
+
+resolve_install_config_path() {
+    if [[ -n "${OPENCLAW_CONFIG_PATH:-}" ]]; then
+        echo "${OPENCLAW_CONFIG_PATH}"
+        return
+    fi
+    local state_dir=""
+    state_dir="$(resolve_install_state_dir)"
+    echo "${state_dir}/openclaw.json"
+}
+
+install_config_already_exists() {
+    local profile=""
+    local config_path=""
+    profile="$(resolve_install_profile)"
+    config_path="$(resolve_install_config_path)"
+    if [[ -f "${config_path}" ]]; then
+        return 0
+    fi
+    if [[ "${profile}" != "default" ]]; then
+        return 1
+    fi
+    [[ -f "$HOME/.clawdbot/clawdbot.json" || -f "$HOME/.moltbot/moltbot.json" || -f "$HOME/.moldbot/moldbot.json" ]]
+}
+
+validate_install_overrides() {
+    if [[ -n "${INSTALL_PROFILE}" ]]; then
+        if [[ ! "${INSTALL_PROFILE}" =~ ^[A-Za-z0-9][A-Za-z0-9_-]{0,63}$ ]]; then
+            ui_error "Invalid --profile: ${INSTALL_PROFILE} (use letters, numbers, '_' and '-' only)"
+            exit 2
+        fi
+        export OPENCLAW_PROFILE="${INSTALL_PROFILE}"
+    fi
+    if [[ -n "${INSTALL_GATEWAY_PORT}" && ! "${INSTALL_GATEWAY_PORT}" =~ ^[0-9]+$ ]]; then
+        ui_error "Invalid --gateway-port: ${INSTALL_GATEWAY_PORT}"
+        exit 2
+    fi
+}
+
+resolve_supplied_install_profile() {
+    local raw_profile=""
+    local resolved_profile=""
+    raw_profile="${INSTALL_PROFILE:-${OPENCLAW_PROFILE:-}}"
+    if [[ -z "${raw_profile}" ]]; then
+        echo ""
+        return
+    fi
+    resolved_profile="$(resolve_install_profile)"
+    if [[ "${resolved_profile}" == "default" ]]; then
+        echo ""
+        return
+    fi
+    echo "${resolved_profile}"
+}
+
+build_onboard_command() {
+    local claw="$1"
+    local selected_profile=""
+    selected_profile="$(resolve_supplied_install_profile)"
+    ONBOARD_CMD=("$claw")
+    if [[ -n "${selected_profile}" ]]; then
+        ONBOARD_CMD+=("--profile" "${selected_profile}")
+    fi
+    ONBOARD_CMD+=("onboard")
+    if [[ -n "${INSTALL_WORKSPACE}" ]]; then
+        ONBOARD_CMD+=("--workspace" "${INSTALL_WORKSPACE}")
+    fi
+    if [[ -n "${INSTALL_GATEWAY_PORT}" ]]; then
+        ONBOARD_CMD+=("--gateway-port" "${INSTALL_GATEWAY_PORT}")
+    fi
+}
+
+build_onboard_display_command() {
+    local claw_name="${1:-openclaw}"
+    local selected_profile=""
+    selected_profile="$(resolve_supplied_install_profile)"
+    ONBOARD_DISPLAY_CMD=("$claw_name")
+    if [[ -n "${selected_profile}" ]]; then
+        ONBOARD_DISPLAY_CMD+=("--profile" "${selected_profile}")
+    fi
+    ONBOARD_DISPLAY_CMD+=("onboard")
+    if [[ -n "${INSTALL_WORKSPACE}" ]]; then
+        ONBOARD_DISPLAY_CMD+=("--workspace" "${INSTALL_WORKSPACE}")
+    fi
+    if [[ -n "${INSTALL_GATEWAY_PORT}" ]]; then
+        ONBOARD_DISPLAY_CMD+=("--gateway-port" "${INSTALL_GATEWAY_PORT}")
+    fi
+}
+
+format_onboard_display_command() {
+    local claw_name="${1:-openclaw}"
+    build_onboard_display_command "$claw_name"
+    local formatted=""
+    printf -v formatted '%q ' "${ONBOARD_DISPLAY_CMD[@]}"
+    echo "${formatted% }"
+}
+
 run_bootstrap_onboarding_if_needed() {
     if [[ "${NO_ONBOARD}" == "1" ]]; then
         return
     fi
 
-    local config_path="${OPENCLAW_CONFIG_PATH:-$HOME/.openclaw/openclaw.json}"
-    if [[ -f "${config_path}" || -f "$HOME/.clawdbot/clawdbot.json" || -f "$HOME/.moltbot/moltbot.json" || -f "$HOME/.moldbot/moldbot.json" ]]; then
+    if install_config_already_exists; then
         return
     fi
 
@@ -2233,7 +2380,9 @@ run_bootstrap_onboarding_if_needed() {
     fi
 
     if [[ ! -r /dev/tty || ! -w /dev/tty ]]; then
-        ui_info "BOOTSTRAP.md found but no TTY; run openclaw onboard to finish setup"
+        local onboard_cmd=""
+        onboard_cmd="$(format_onboard_display_command)"
+        ui_info "BOOTSTRAP.md found but no TTY; run ${onboard_cmd} to finish setup"
         return
     fi
 
@@ -2248,8 +2397,11 @@ run_bootstrap_onboarding_if_needed() {
         return
     fi
 
-    "$claw" onboard || {
-        ui_error "Onboarding failed; run openclaw onboard to retry"
+    build_onboard_command "$claw"
+    "${ONBOARD_CMD[@]}" || {
+        local onboard_cmd=""
+        onboard_cmd="$(format_onboard_display_command "$(basename "$claw")")"
+        ui_error "Onboarding failed; run ${onboard_cmd} to retry"
         ui_info "If gateway startup looks unhealthy, run: openclaw gateway status --deep"
         return
     }
@@ -2336,6 +2488,8 @@ main() {
         print_usage
         return 0
     fi
+
+    validate_install_overrides
 
     bootstrap_gum_temp || true
     print_installer_banner
@@ -2571,10 +2725,11 @@ main() {
         fi
     else
         if [[ "$NO_ONBOARD" == "1" || "$skip_onboard" == "true" ]]; then
-            ui_info "Skipping onboard (requested); run openclaw onboard later"
+            local onboard_cmd=""
+            onboard_cmd="$(format_onboard_display_command)"
+            ui_info "Skipping onboard (requested); run ${onboard_cmd} later"
         else
-            local config_path="${OPENCLAW_CONFIG_PATH:-$HOME/.openclaw/openclaw.json}"
-            if [[ -f "${config_path}" || -f "$HOME/.clawdbot/clawdbot.json" || -f "$HOME/.moltbot/moltbot.json" || -f "$HOME/.moldbot/moldbot.json" ]]; then
+            if install_config_already_exists; then
                 ui_info "Config already present; running doctor"
                 run_doctor
                 should_open_dashboard=true
@@ -2594,9 +2749,12 @@ main() {
                     return 0
                 fi
                 exec </dev/tty
-                exec "$claw" onboard
+                build_onboard_command "$claw"
+                exec "${ONBOARD_CMD[@]}"
             fi
-            ui_info "No TTY; run openclaw onboard to finish setup"
+            local onboard_cmd=""
+            onboard_cmd="$(format_onboard_display_command)"
+            ui_info "No TTY; run ${onboard_cmd} to finish setup"
             return 0
         fi
     fi
