@@ -14,6 +14,29 @@ param(
 
 $ErrorActionPreference = "Stop"
 
+$script:InstallExitCode = 0
+
+function Fail-Install {
+    param([int]$Code = 1)
+
+    $script:InstallExitCode = $Code
+    return $false
+}
+
+function Complete-Install {
+    param([bool]$Succeeded)
+
+    if ($Succeeded) {
+        return
+    }
+
+    if ($PSCommandPath) {
+        exit $script:InstallExitCode
+    }
+
+    throw "OpenClaw installation failed with exit code $($script:InstallExitCode)."
+}
+
 Write-Host ""
 Write-Host "  OpenClaw Installer" -ForegroundColor Cyan
 Write-Host ""
@@ -21,7 +44,8 @@ Write-Host ""
 # Check if running in PowerShell
 if ($PSVersionTable.PSVersion.Major -lt 5) {
     Write-Host "Error: PowerShell 5+ required" -ForegroundColor Red
-    exit 1
+    Complete-Install -Succeeded:$false
+    return
 }
 
 Write-Host "[OK] Windows detected" -ForegroundColor Green
@@ -91,11 +115,11 @@ function Install-Node {
         $env:Path = [System.Environment]::GetEnvironmentVariable("Path","Machine") + ";" + [System.Environment]::GetEnvironmentVariable("Path","User")
         if (Check-Node) {
             Write-Host "[OK] Node.js installed via winget" -ForegroundColor Green
-            return
+            return $true
         }
         Write-Host "[!] winget completed, but Node.js is still unavailable in this shell" -ForegroundColor Yellow
         Write-Host "Restart PowerShell and re-run the installer if Node.js was installed successfully." -ForegroundColor Yellow
-        exit 1
+        return $false
     }
 
     # Try Chocolatey
@@ -106,7 +130,7 @@ function Install-Node {
         # Refresh PATH
         $env:Path = [System.Environment]::GetEnvironmentVariable("Path","Machine") + ";" + [System.Environment]::GetEnvironmentVariable("Path","User")
         Write-Host "[OK] Node.js installed via Chocolatey" -ForegroundColor Green
-        return
+        return $true
     }
 
     # Try Scoop
@@ -114,7 +138,7 @@ function Install-Node {
         Write-Host "  Using Scoop..." -ForegroundColor Gray
         scoop install nodejs-lts
         Write-Host "[OK] Node.js installed via Scoop" -ForegroundColor Green
-        return
+        return $true
     }
 
     # Manual download fallback
@@ -125,7 +149,7 @@ function Install-Node {
     Write-Host "  https://nodejs.org/en/download/" -ForegroundColor Cyan
     Write-Host ""
     Write-Host "Or install winget (App Installer) from the Microsoft Store." -ForegroundColor Gray
-    exit 1
+    return $false
 }
 
 # Check for existing OpenClaw installation
@@ -281,12 +305,12 @@ function Install-PortableGit {
 }
 
 function Ensure-Git {
-    if (Check-Git) { return }
-    if (Use-PortableGitIfPresent) { return }
+    if (Check-Git) { return $true }
+    if (Use-PortableGitIfPresent) { return $true }
     try {
         Install-PortableGit
         if (Check-Git) {
-            return
+            return $true
         }
     } catch {
         Write-Host "[!] Portable Git bootstrap failed: $($_.Exception.Message)" -ForegroundColor Yellow
@@ -297,7 +321,7 @@ function Ensure-Git {
     Write-Host "Auto-bootstrap of user-local Git did not succeed." -ForegroundColor Yellow
     Write-Host "Install Git for Windows manually, then re-run this installer:" -ForegroundColor Yellow
     Write-Host "  https://git-scm.com/download/win" -ForegroundColor Cyan
-    exit 1
+    return $false
 }
 
 function Get-OpenClawCommandPath {
@@ -450,7 +474,9 @@ function Install-OpenClaw {
     if ([string]::IsNullOrWhiteSpace($Tag)) {
         $Tag = "latest"
     }
-    Ensure-Git
+    if (-not (Ensure-Git)) {
+        return $false
+    }
 
     # Use openclaw package for beta, openclaw for stable
     $packageName = "openclaw"
@@ -483,7 +509,7 @@ function Install-OpenClaw {
                 Write-Host '  powershell -c "irm https://openclaw.ai/install.ps1 | iex"' -ForegroundColor Cyan
             }
             $npmOutput | ForEach-Object { Write-Host $_ }
-            exit 1
+            return $false
         }
     } finally {
         $env:NPM_CONFIG_LOGLEVEL = $prevLogLevel
@@ -494,6 +520,7 @@ function Install-OpenClaw {
         $env:NODE_LLAMA_CPP_SKIP_DOWNLOAD = $prevNodeLlamaSkipDownload
     }
     Write-Host "[OK] OpenClaw installed" -ForegroundColor Green
+    return $true
 }
 
 # Install OpenClaw from GitHub
@@ -502,7 +529,9 @@ function Install-OpenClawFromGit {
         [string]$RepoDir,
         [switch]$SkipUpdate
     )
-    Ensure-Git
+    if (-not (Ensure-Git)) {
+        return $false
+    }
     Ensure-Pnpm
 
     $repoUrl = "https://github.com/openclaw/openclaw.git"
@@ -557,6 +586,7 @@ function Install-OpenClawFromGit {
 
     Write-Host "[OK] OpenClaw wrapper installed to $cmdPath" -ForegroundColor Green
     Write-Host "[i] This checkout uses pnpm. For deps, run: pnpm install (avoid npm install in the repo)." -ForegroundColor Gray
+    return $true
 }
 
 # Run doctor for migrations (safe, non-interactive)
@@ -637,7 +667,7 @@ function Remove-LegacySubmodule {
 function Main {
     if ($InstallMethod -ne "npm" -and $InstallMethod -ne "git") {
         Write-Host "Error: invalid -InstallMethod (use npm or git)." -ForegroundColor Red
-        exit 2
+        return (Fail-Install -Code 2)
     }
 
     if ($DryRun) {
@@ -654,7 +684,7 @@ function Main {
         if ($NoOnboard) {
             Write-Host "[OK] Onboard: skipped" -ForegroundColor Green
         }
-        return
+        return $true
     }
 
     Remove-LegacySubmodule -RepoDir $RepoDir
@@ -664,14 +694,16 @@ function Main {
 
     # Step 1: Node.js
     if (-not (Check-Node)) {
-        Install-Node
+        if (-not (Install-Node)) {
+            return (Fail-Install)
+        }
 
         # Verify installation
         if (-not (Check-Node)) {
             Write-Host ""
             Write-Host "Error: Node.js installation may require a terminal restart" -ForegroundColor Red
             Write-Host "Please close this terminal, open a new one, and run this installer again." -ForegroundColor Yellow
-            exit 1
+            return (Fail-Install)
         }
     }
 
@@ -680,9 +712,13 @@ function Main {
     # Step 2: OpenClaw
     if ($InstallMethod -eq "git") {
         $finalGitDir = $GitDir
-        Install-OpenClawFromGit -RepoDir $GitDir -SkipUpdate:$NoGitUpdate
+        if (-not (Install-OpenClawFromGit -RepoDir $GitDir -SkipUpdate:$NoGitUpdate)) {
+            return (Fail-Install)
+        }
     } else {
-        Install-OpenClaw
+        if (-not (Install-OpenClaw)) {
+            return (Fail-Install)
+        }
     }
 
     if (-not (Ensure-OpenClawOnPath)) {
@@ -785,6 +821,9 @@ function Main {
             Invoke-OpenClawCommand onboard
         }
     }
+
+    return $true
 }
 
-Main
+$installSucceeded = Main
+Complete-Install -Succeeded:$installSucceeded

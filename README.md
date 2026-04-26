@@ -48,6 +48,7 @@ The landing page hosts installer scripts:
 
 Installer UI controls (macOS/Linux `install.sh`):
 - Gum UI is auto-detected; interactive terminals get richer status output, non-interactive shells fall back to plain output automatically.
+- Windows `install.ps1` keeps `irm ... | iex` failures in the current PowerShell session while preserving non-zero exits for direct script-file automation.
 
 These scripts:
 1. Install Homebrew (macOS) or detect package managers (Windows)

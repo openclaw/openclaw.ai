@@ -2,6 +2,7 @@
 
 ## 2026-04-26
 
+- Windows installer: route PowerShell install failures through a top-level handler so `irm ... | iex` returns control to the current shell while direct script-file runs still exit non-zero. Fixes openclaw/openclaw#38054, thanks @PwrSrg.
 - Installer: warn when multiple npm global roots contain OpenClaw installs, showing active Node/npm/openclaw plus each install path and version so stale version-manager installs are visible. Fixes openclaw/openclaw#40839, thanks @zhixianio.
 
 ## 2026-03-16
