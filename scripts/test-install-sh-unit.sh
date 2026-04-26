@@ -66,6 +66,23 @@ export CLAWDBOT_INSTALL_SH_NO_RUN=1
 # shellcheck source=../public/install.sh
 source "${ROOT_DIR}/public/install.sh"
 
+echo "==> case: ensure_home_env repairs root HOME"
+(
+  root="${TMP_DIR}/case-home-env"
+  home_dir="${root}/home"
+  tool_bin="${root}/tool-bin"
+  mkdir -p "${home_dir}" "${tool_bin}"
+
+  make_exe "${tool_bin}/id" "if [[ \"\${1:-}\" == \"-un\" ]]; then echo vmroot; exit 0; fi; exit 1"
+  make_exe "${tool_bin}/getent" "if [[ \"\${1:-}\" == \"passwd\" && \"\${2:-}\" == \"vmroot\" ]]; then echo 'vmroot:x:0:0:VM Root:${home_dir}:/bin/bash'; exit 0; fi; exit 1"
+
+  export PATH="${tool_bin}:/usr/bin:/bin"
+  export HOME="/"
+
+  ensure_home_env
+  assert_eq "$HOME" "${home_dir}" "ensure_home_env root HOME"
+)
+
 echo "==> case: resolve_openclaw_bin (direct PATH)"
 (
   bin="${TMP_DIR}/case-path/bin"

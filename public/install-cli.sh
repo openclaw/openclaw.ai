@@ -4,6 +4,31 @@ set -euo pipefail
 # OpenClaw CLI installer (non-interactive, no onboarding)
 # Usage: curl -fsSL --proto '=https' --tlsv1.2 https://openclaw.ai/install-cli.sh | bash -s -- [--json] [--prefix <path>] [--version <ver>] [--node-version <ver>] [--onboard]
 
+ensure_home_env() {
+  if [[ -n "${HOME:-}" && "${HOME}" != "/" && -d "${HOME}" ]]; then
+    return 0
+  fi
+
+  local user_name=""
+  local home_dir=""
+  user_name="$(id -un 2>/dev/null || true)"
+
+  if [[ -n "$user_name" ]]; then
+    if command -v getent >/dev/null 2>&1; then
+      home_dir="$(getent passwd "$user_name" 2>/dev/null | awk -F: '{print $6; exit}' || true)"
+    fi
+    if [[ -z "$home_dir" && "$(uname -s 2>/dev/null || true)" == "Darwin" ]] && command -v dscl >/dev/null 2>&1; then
+      home_dir="$(dscl . -read "/Users/${user_name}" NFSHomeDirectory 2>/dev/null | awk '{print $2; exit}' || true)"
+    fi
+  fi
+
+  if [[ -n "$home_dir" && "$home_dir" != "/" && -d "$home_dir" ]]; then
+    export HOME="$home_dir"
+  fi
+}
+
+ensure_home_env
+
 PREFIX="${OPENCLAW_PREFIX:-${HOME}/.openclaw}"
 OPENCLAW_VERSION="${OPENCLAW_VERSION:-latest}"
 NODE_VERSION="${OPENCLAW_NODE_VERSION:-22.22.0}"

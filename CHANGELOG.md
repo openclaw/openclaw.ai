@@ -2,6 +2,7 @@
 
 ## 2026-04-26
 
+- Installer: normalize `HOME` when headless VM execution reports `/`, preventing npm from trying to use `/.npm` on macOS Parallels guests.
 - Installer: keep `install-cli.sh` package installs under the prefix-local Node toolchain so `openclaw update` does not create a second package root (#118, thanks @AISymbiote).
 - Integrations: add QQ Bot to the chat provider list with the canonical docs link (#119, thanks @sliverp).
 - Integrations: point Notion, Bear Notes, GitHub, Image Gen, and Camera cards to their specific ClawHub skill pages (#117, thanks @DJStompZone).

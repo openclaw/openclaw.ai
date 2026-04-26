@@ -32,6 +32,42 @@ export OPENCLAW_INSTALL_CLI_SH_NO_RUN=1
 # shellcheck source=../public/install-cli.sh
 source "${ROOT_DIR}/public/install-cli.sh"
 
+echo "==> case: ensure_home_env repairs root HOME"
+(
+  root="${TMP_DIR}/case-home-env"
+  home_dir="${root}/home"
+  tool_bin="${root}/tool-bin"
+  mkdir -p "${home_dir}" "${tool_bin}"
+
+  cat >"${tool_bin}/id" <<EOF
+#!/usr/bin/env bash
+set -euo pipefail
+if [[ "\${1:-}" == "-un" ]]; then
+  echo vmroot
+  exit 0
+fi
+exit 1
+EOF
+  chmod +x "${tool_bin}/id"
+
+  cat >"${tool_bin}/getent" <<EOF
+#!/usr/bin/env bash
+set -euo pipefail
+if [[ "\${1:-}" == "passwd" && "\${2:-}" == "vmroot" ]]; then
+  echo 'vmroot:x:0:0:VM Root:${home_dir}:/bin/bash'
+  exit 0
+fi
+exit 1
+EOF
+  chmod +x "${tool_bin}/getent"
+
+  export PATH="${tool_bin}:/usr/bin:/bin"
+  export HOME="/"
+
+  ensure_home_env
+  assert_eq "$HOME" "${home_dir}" "ensure_home_env root HOME"
+)
+
 echo "==> case: ensure_pnpm_binary_for_scripts installs prefix wrapper"
 (
   root="${TMP_DIR}/case-pnpm-wrapper"
