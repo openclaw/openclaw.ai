@@ -53,9 +53,14 @@ Installer UI controls (macOS/Linux `install.sh`):
 These scripts:
 1. Install Homebrew (macOS) or detect package managers (Windows)
 2. Install Node.js 22+ if needed
-3. Install openclaw globally via npm
+3. Install openclaw globally via npm, or from a git checkout with `--install-method git`
 4. Run `openclaw doctor --non-interactive` for migrations (upgrades only)
 5. Prompt to run `openclaw onboard` (new installs)
+
+Switching after install:
+- npm package to git checkout: `openclaw update --channel dev`
+- git checkout to npm package: `openclaw update --channel stable`
+- installer-forced switch: rerun the installer with `--install-method git` or `--install-method npm`
 
 Troubleshooting:
 - macOS first-run Homebrew bootstrap needs an Administrator account. If install fails with a sudo/admin error, use an admin account (or add the current user to the `admin` group) and rerun the installer.

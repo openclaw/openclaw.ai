@@ -711,11 +711,23 @@ function Main {
 
     # Step 2: OpenClaw
     if ($InstallMethod -eq "git") {
+        try {
+            $npmCommand = Get-NpmCommandPath
+            if ($npmCommand) {
+                & $npmCommand uninstall -g openclaw 2>$null | Out-Null
+                Write-Host "[OK] Removed npm global install if present" -ForegroundColor Green
+            }
+        } catch { }
         $finalGitDir = $GitDir
         if (-not (Install-OpenClawFromGit -RepoDir $GitDir -SkipUpdate:$NoGitUpdate)) {
             return (Fail-Install)
         }
     } else {
+        $gitWrapper = Join-Path (Join-Path $env:USERPROFILE ".local\\bin") "openclaw.cmd"
+        if (Test-Path $gitWrapper) {
+            Remove-Item -Force $gitWrapper
+            Write-Host "[OK] Removed git wrapper (switching to npm)" -ForegroundColor Green
+        }
         if (-not (Install-OpenClaw)) {
             return (Fail-Install)
         }
