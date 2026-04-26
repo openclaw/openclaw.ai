@@ -102,7 +102,7 @@ const featuredPress = pressArticles.slice(0, 4);
     <!-- Latest Blog Post -->
     {latestPost && (
       <section class="latest-post">
-        <a href={`/blog/${latestPost.slug}`} class="latest-post-card">
+        <a href={`/blog/${latestPost.id}`} class="latest-post-card">
           <span class="latest-post-badge">New</span>
           <span class="latest-post-title">{latestPost.data.title}</span>
           <span class="latest-post-link">→</span>

@@ -6,7 +6,7 @@ import { getPublishedBlogPosts } from '../../lib/blog';
 export async function getStaticPaths() {
   const posts = await getPublishedBlogPosts();
   return posts.map((post) => ({
-    params: { slug: post.slug },
+    params: { slug: post.id },
     props: { post },
   }));
 }
@@ -38,7 +38,7 @@ function estimateReadTime(content: string): string {
 }
 
 const readTime = estimateReadTime(post.body || '');
-const postUrl = `https://openclaw.ai/blog/${post.slug}`;
+const postUrl = `https://openclaw.ai/blog/${post.id}`;
 ---
 
 <Layout title={`${post.data.title} — OpenClaw Blog`} description={post.data.description}>

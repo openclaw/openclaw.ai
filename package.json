@@ -14,12 +14,12 @@
     ]
   },
   "dependencies": {
-    "@astrojs/rss": "^4.0.15",
-    "@lucide/astro": "^0.577.0",
-    "@vercel/analytics": "^1.6.1",
-    "astro": "^5.18.0",
+    "@astrojs/rss": "^4.0.18",
+    "@lucide/astro": "^1.11.0",
+    "@vercel/analytics": "^2.0.1",
+    "astro": "^6.1.9",
     "js-yaml": "^4.1.1",
-    "simple-icons": "^16.10.0"
+    "simple-icons": "^16.18.0"
   },
   "devDependencies": {
     "@types/js-yaml": "^4.0.9"

@@ -36,7 +36,7 @@ function estimateReadTime(content: string): string {
 
     <div class="posts-grid">
       {posts.map((post) => (
-        <a href={`/blog/${post.slug}`} class="post-card">
+        <a href={`/blog/${post.id}`} class="post-card">
           <div class="post-meta">
             <span class="post-date">{formatDate(post.data.date)}</span>
             <span class="post-separator">·</span>
