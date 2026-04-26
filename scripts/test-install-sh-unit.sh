@@ -133,6 +133,41 @@ echo "==> case: warn_openclaw_not_found (smoke)"
   assert_nonempty "$out" "warn_openclaw_not_found output"
 )
 
+echo "==> case: duplicate OpenClaw install warning (multiple npm roots)"
+(
+  root="${TMP_DIR}/case-duplicate-openclaw"
+  mkdir -p "${root}/brew/openclaw" "${root}/fnm/openclaw"
+  printf '{"version":"2026.3.7"}\n' > "${root}/brew/openclaw/package.json"
+  printf '{"version":"2026.3.1"}\n' > "${root}/fnm/openclaw/package.json"
+
+  collect_openclaw_npm_root_candidates() { printf '%s\n' "${root}/brew" "${root}/fnm"; }
+  # shellcheck disable=SC2034
+  OPENCLAW_BIN="${root}/fnm/.bin/openclaw"
+  ui_warn() { echo "WARN: $*"; }
+
+  out="$(warn_duplicate_openclaw_global_installs 2>&1)"
+  assert_contains "$out" "Multiple OpenClaw global installs detected" "duplicate OpenClaw warning header"
+  assert_contains "$out" "2026.3.7" "duplicate OpenClaw warning first version"
+  assert_contains "$out" "2026.3.1" "duplicate OpenClaw warning second version"
+  assert_contains "$out" "${root}/brew/openclaw" "duplicate OpenClaw warning first path"
+  assert_contains "$out" "${root}/fnm/openclaw" "duplicate OpenClaw warning second path"
+  assert_contains "$out" "Active openclaw:" "duplicate OpenClaw warning active binary"
+  assert_contains "$out" "npm uninstall -g openclaw" "duplicate OpenClaw warning cleanup hint"
+)
+
+echo "==> case: duplicate OpenClaw install warning (single npm root is quiet)"
+(
+  root="${TMP_DIR}/case-single-openclaw"
+  mkdir -p "${root}/only/openclaw"
+  printf '{"version":"2026.3.7"}\n' > "${root}/only/openclaw/package.json"
+
+  collect_openclaw_npm_root_candidates() { printf '%s\n' "${root}/only"; }
+  ui_warn() { echo "WARN: $*"; }
+
+  out="$(warn_duplicate_openclaw_global_installs 2>&1 || true)"
+  assert_eq "$out" "" "duplicate OpenClaw warning single root output"
+)
+
 echo "==> case: ensure_pnpm (existing pnpm command)"
 (
   root="${TMP_DIR}/case-pnpm-existing"

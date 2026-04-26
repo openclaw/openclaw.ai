@@ -1,5 +1,9 @@
 # Changelog
 
+## 2026-04-26
+
+- Installer: warn when multiple npm global roots contain OpenClaw installs, showing active Node/npm/openclaw plus each install path and version so stale version-manager installs are visible. Fixes openclaw/openclaw#40839, thanks @zhixianio.
+
 ## 2026-03-16
 
 - Integrations: correct MS Teams docs link to the canonical `/channels/msteams` path (#109, thanks @SidU).
