@@ -174,8 +174,8 @@ const showcase = [
       <a href="/" class="back-link">← Back to home</a>
       <h1 class="title">Integrations</h1>
       <p class="description">
-        50+ integrations with the apps and services you already use.<br/>
-        Chat from your phone, control from your desktop, automate everything.
+        A broad integration surface for the tools you already use.<br/>
+        Chat from your phone, control from your desktop, and connect the systems you actually want in the loop.
       </p>
     </header>
 
@@ -184,7 +184,7 @@ const showcase = [
       <h2 class="section-title">
         <span class="claw-accent">⟩</span> Chat Providers
       </h2>
-      <p class="section-desc">Message OpenClaw from any chat app — it responds right where you are.</p>
+      <p class="section-desc">Message OpenClaw from supported chat channels — it replies where you already work.</p>
       <div class="grid">
         {chatProviders.map((p) => (
           <a href={p.docs} target="_blank" rel="noopener" class="card" style={`--accent: ${p.color}`}>
@@ -201,7 +201,7 @@ const showcase = [
       <h2 class="section-title">
         <span class="claw-accent">⟩</span> AI Models
       </h2>
-      <p class="section-desc">Use any model you want — cloud or local. Your keys, your choice.</p>
+      <p class="section-desc">Bring your own models and keys, or connect the providers you already trust. Cloud and local setups are both supported.</p>
       <div class="grid">
         {modelProviders.map((p) => (
           <a href={p.docs} target="_blank" rel="noopener" class="card" style={`--accent: ${p.color}`}>
@@ -218,7 +218,7 @@ const showcase = [
       <h2 class="section-title">
         <span class="claw-accent">⟩</span> Productivity
       </h2>
-      <p class="section-desc">Notes, tasks, wikis, and code — OpenClaw works with your favorite tools.</p>
+      <p class="section-desc">Notes, tasks, docs, wikis, and code — OpenClaw fits around your existing tools instead of replacing them.</p>
       <div class="grid">
         {productivityApps.map((p) => (
           <a href={p.docs} target="_blank" rel="noopener" class="card" style={`--accent: ${p.color}`}>
@@ -269,7 +269,7 @@ const showcase = [
       <h2 class="section-title">
         <span class="claw-accent">⟩</span> Tools & Automation
       </h2>
-      <p class="section-desc">Browser control, scheduled tasks, email triggers, and more.</p>
+      <p class="section-desc">Browser control, scheduled tasks, webhooks, scripts, and custom automations. Add the pieces you need, not a giant black box.</p>
       <div class="grid">
         {tools.map((p) => (
           <a href={p.docs} target="_blank" rel="noopener" class="card" style={`--accent: ${p.color}`}>
@@ -303,7 +303,7 @@ const showcase = [
       <h2 class="section-title">
         <span class="claw-accent">⟩</span> Social
       </h2>
-      <p class="section-desc">Post tweets, manage email, and stay connected.</p>
+      <p class="section-desc">Connect outbound channels, social workflows, and notification paths as needed.</p>
       <div class="grid grid-2">
         {socialComms.map((p) => (
           <a href={p.docs} target="_blank" rel="noopener" class="card" style={`--accent: ${p.color}`}>
@@ -321,8 +321,8 @@ const showcase = [
         <span class="claw-accent">⟩</span> Platforms
       </h2>
       <p class="section-desc">
-        Run the Gateway anywhere. Use companion apps for voice, camera, and native features.<br/>
-        <strong>Mobile access:</strong> Chat via WhatsApp/Telegram from your phone — no app install needed.
+        Run the Gateway locally or on your own infrastructure. Add companion apps when you want voice, camera, or native device features.<br/>
+        <strong>Mobile access:</strong> Chat through connected channels like Telegram and WhatsApp from your phone.
       </p>
       <div class="grid">
         {companionApps.map((p) => (

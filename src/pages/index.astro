@@ -55,7 +55,7 @@ const featuredBuilds = communityBuilds.slice(0, 4);
 const featuredPress = pressArticles.slice(0, 4);
 ---
 
-<Layout title="OpenClaw — Personal AI Assistant">
+<Layout title="OpenClaw — Personal AI Assistant" description="OpenClaw is an open-source personal AI assistant that runs on your machine, works through chat, and uses your tools to handle real tasks.">
   <div class="stars"></div>
   <div class="nebula"></div>
 
@@ -94,9 +94,22 @@ const featuredPress = pressArticles.slice(0, 4);
       <p class="tagline" id="tagline">The AI that actually does things.</p>
 
       <p class="description">
-        Clears your inbox, sends emails, manages your calendar, checks you in for flights.<br/>
-        All from WhatsApp, Telegram, or any chat app you already use.
+        OpenClaw runs on your machine, works through chat, and helps with real tasks like email, calendar, research, automation, files, and code.<br/>
+        Use it from Telegram, WhatsApp, Discord, Slack, Signal, iMessage, and other supported channels.
       </p>
+
+      <div class="hero-actions" aria-label="Primary actions">
+        <a href="#quickstart" class="hero-btn hero-btn-primary">Install OpenClaw</a>
+        <a href="https://docs.openclaw.ai/start/getting-started" class="hero-btn" target="_blank" rel="noopener">Read the 5-minute guide</a>
+        <a href="/showcase" class="hero-btn hero-btn-ghost">View examples</a>
+      </div>
+
+      <div class="hero-trust" aria-label="Trust highlights">
+        <span>Open source</span>
+        <span>Runs locally</span>
+        <span>Your keys</span>
+        <span>Permission controls</span>
+      </div>
     </header>
 
     <!-- Latest Blog Post -->
@@ -155,7 +168,7 @@ const featuredPress = pressArticles.slice(0, 4);
     </section>
 
     <!-- Quick Start -->
-    <section class="quickstart">
+    <section class="quickstart" id="quickstart">
       <SectionHeader title="Quick Start" />
       <div class="code-block">
         <div class="code-header">
@@ -281,6 +294,28 @@ const featuredPress = pressArticles.slice(0, 4);
       <p class="quickstart-note">
         Works on macOS, Linux, and Windows. The one-liner installs Node.js and everything else for you. Switch later with <code>openclaw update --channel dev</code> or <code>openclaw update --channel stable</code>.
       </p>
+    </section>
+
+    <!-- How It Works -->
+    <section class="how-it-works">
+      <SectionHeader title="How It Works" />
+      <div class="steps-grid">
+        <div class="step-card">
+          <span class="step-number">1</span>
+          <h3 class="step-title">Install it on your machine</h3>
+          <p class="step-desc">Run OpenClaw locally on macOS, Linux, or Windows so the assistant lives where your tools already are.</p>
+        </div>
+        <div class="step-card">
+          <span class="step-number">2</span>
+          <h3 class="step-title">Connect a chat channel</h3>
+          <p class="step-desc">Start with Telegram, WhatsApp, Discord, Slack, Signal, iMessage, or the channel that fits your workflow.</p>
+        </div>
+        <div class="step-card">
+          <span class="step-number">3</span>
+          <h3 class="step-title">Choose what it can do</h3>
+          <p class="step-desc">Add tools, models, memory, browser access, scheduled jobs, and permissions only where you want them.</p>
+        </div>
+      </div>
     </section>
 
     <script>
@@ -572,15 +607,15 @@ const featuredPress = pressArticles.slice(0, 4);
     <section class="features">
       <SectionHeader title="What It Does" />
       <div class="features-grid">
-        <a href="https://docs.openclaw.ai/getting-started" target="_blank" rel="noopener" class="feature-card">
+        <a href="https://docs.openclaw.ai/start/getting-started" target="_blank" rel="noopener" class="feature-card">
           <div class="feature-icon"><Icon icon="lucide:home" color="var(--coral-bright)" size={28} /></div>
           <h3 class="feature-title">Runs on Your Machine</h3>
           <p class="feature-desc">Mac, Windows, or Linux. Anthropic, OpenAI, or local models. Private by default—your data stays yours.</p>
         </a>
         <a href="/integrations" class="feature-card">
           <div class="feature-icon"><Icon icon="lucide:message-circle" color="var(--coral-bright)" size={28} /></div>
-          <h3 class="feature-title">Any Chat App</h3>
-          <p class="feature-desc">Talk to it on WhatsApp, Telegram, Discord, Slack, Signal, or iMessage. Works in DMs and group chats.</p>
+          <h3 class="feature-title">Supported Chat Channels</h3>
+          <p class="feature-desc">Talk to it on WhatsApp, Telegram, Discord, Slack, Signal, iMessage, and more. Works in DMs and group chats where connected.</p>
         </a>
         <a href="https://docs.openclaw.ai/session" target="_blank" rel="noopener" class="feature-card">
           <div class="feature-icon"><Icon icon="lucide:brain" color="var(--coral-bright)" size={28} /></div>
@@ -686,7 +721,7 @@ const featuredPress = pressArticles.slice(0, 4);
         <span class="cta-sub">Join the community</span>
       </a>
 
-      <a href="https://docs.openclaw.ai/getting-started" class="cta cta-docs" target="_blank" rel="noopener">
+      <a href="https://docs.openclaw.ai/start/getting-started" class="cta cta-docs" target="_blank" rel="noopener">
         <svg class="cta-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
           <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/>
           <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/>
@@ -981,6 +1016,67 @@ const featuredPress = pressArticles.slice(0, 4);
     animation: fadeInUp 0.8s ease-out 0.3s both;
   }
 
+  .hero-actions {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin: 28px auto 14px;
+    animation: fadeInUp 0.8s ease-out 0.38s both;
+  }
+
+  .hero-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 44px;
+    padding: 0 18px;
+    border-radius: 999px;
+    border: 1px solid var(--border-subtle);
+    background: var(--surface-card);
+    color: var(--text-primary);
+    text-decoration: none;
+    font-size: 0.92rem;
+    font-weight: 700;
+    transition: all 0.22s ease;
+  }
+
+  .hero-btn:hover {
+    transform: translateY(-2px);
+    border-color: var(--cyan-bright);
+    box-shadow: 0 10px 28px var(--shadow-cyan-soft);
+  }
+
+  .hero-btn-primary {
+    border-color: var(--coral-bright);
+    background: linear-gradient(135deg, var(--coral-bright), var(--coral-mid));
+    color: white;
+    box-shadow: 0 10px 32px var(--shadow-coral-soft);
+  }
+
+  .hero-btn-ghost {
+    color: var(--cyan-bright);
+  }
+
+  .hero-trust {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 12px;
+    animation: fadeInUp 0.8s ease-out 0.44s both;
+  }
+
+  .hero-trust span {
+    padding: 6px 10px;
+    border-radius: 999px;
+    border: 1px solid var(--border-subtle);
+    background: var(--surface-card);
+    color: var(--text-muted);
+    font-size: 0.78rem;
+  }
+
   /* CTA Grid */
   .cta-grid {
     display: grid;
@@ -1175,6 +1271,58 @@ const featuredPress = pressArticles.slice(0, 4);
       width: 100%;
       justify-content: center;
     }
+  }
+
+  /* How It Works */
+  .how-it-works {
+    margin-bottom: 56px;
+    animation: fadeInUp 0.8s ease-out 0.52s both;
+  }
+
+  .steps-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+
+  @media (min-width: 720px) {
+    .steps-grid {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+
+  .step-card {
+    padding: 22px;
+    border-radius: 16px;
+    border: 1px solid var(--border-subtle);
+    background: var(--surface-card);
+    backdrop-filter: blur(12px);
+  }
+
+  .step-number {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 30px;
+    height: 30px;
+    margin-bottom: 12px;
+    border-radius: 999px;
+    background: var(--surface-coral-soft);
+    color: var(--coral-bright);
+    font-weight: 800;
+  }
+
+  .step-title {
+    font-family: var(--font-display);
+    font-size: 1rem;
+    color: var(--text-primary);
+    margin-bottom: 6px;
+  }
+
+  .step-desc {
+    color: var(--text-muted);
+    font-size: 0.88rem;
+    line-height: 1.55;
   }
 
   /* Features */
