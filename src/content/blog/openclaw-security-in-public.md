@@ -20,7 +20,7 @@ OpenClaw launched into a weird moment for open source security. In January, curl
 
 Plus, we are the most-watched AI agent project in the world. Every CVE against OpenClaw is a career trophy, so of course people look.
 
-As of April 30, GitHub shows [1,309 security advisories](https://github.com/openclaw/openclaw/security/advisories) in openclaw/openclaw since January 10. 535 were published. 746 were closed as invalid. The number coming in has dropped significantly over the last few months as we hardened the whole system.
+As of April 30, GitHub shows [1,309 security advisories](https://github.com/openclaw/openclaw/security/advisories) since January 10. 535 were published. 746 were closed as invalid. The number coming in has dropped significantly over the last few months as we hardened the whole system.
 
 The closer a report sits to "critical", the more likely it is to be nonsense. GitHub currently shows 109 critical reports: 14 published, 95 closed as invalid. That is 87%.
 
