@@ -1,5 +1,9 @@
 # Changelog
 
+## 2026-05-03
+
+- Installer: sync `public/install.sh` with canonical `scripts/install.sh` from openclaw/openclaw, bringing progress indicators during quiet steps, progress during npm install in non-interactive `curl | bash` mode, Arch Linux support, Node version handling improvements, gum spinner fixes, and removal of legacy options. Fixes hosted installer drift (openclaw/openclaw#73837, thanks @SebTardif).
+
 ## 2026-04-26
 
 - Installer: normalize `HOME` when headless VM execution reports `/`, preventing npm from trying to use `/.npm` on macOS Parallels guests.
