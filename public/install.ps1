@@ -470,6 +470,31 @@ function Ensure-Pnpm {
 }
 
 # Install OpenClaw
+function Resolve-NpmOpenClawInstallSpec {
+    param(
+        [string]$PackageName,
+        [string]$RequestedTag
+    )
+
+    if ([string]::IsNullOrWhiteSpace($RequestedTag)) {
+        return "$PackageName@latest"
+    }
+
+    $trimmedTag = $RequestedTag.Trim()
+    if (
+        $trimmedTag -match '^(https?|file):' -or
+        $trimmedTag -match '^(git\+|github:)' -or
+        $trimmedTag -match '^[A-Za-z]:[\\/]' -or
+        $trimmedTag -match '^\\\\' -or
+        $trimmedTag -match '^\.\.?[\\/]' -or
+        $trimmedTag -match '\.tgz($|[?#])'
+    ) {
+        return $trimmedTag
+    }
+
+    return "$PackageName@$trimmedTag"
+}
+
 function Install-OpenClaw {
     if ([string]::IsNullOrWhiteSpace($Tag)) {
         $Tag = "latest"
@@ -483,7 +508,8 @@ function Install-OpenClaw {
     if ($Tag -eq "beta" -or $Tag -match "^beta\.") {
         $packageName = "openclaw"
     }
-    Write-Host "[*] Installing OpenClaw ($packageName@$Tag)..." -ForegroundColor Yellow
+    $installSpec = Resolve-NpmOpenClawInstallSpec -PackageName $packageName -RequestedTag $Tag
+    Write-Host "[*] Installing OpenClaw ($installSpec)..." -ForegroundColor Yellow
     $prevLogLevel = $env:NPM_CONFIG_LOGLEVEL
     $prevUpdateNotifier = $env:NPM_CONFIG_UPDATE_NOTIFIER
     $prevFund = $env:NPM_CONFIG_FUND
@@ -497,7 +523,7 @@ function Install-OpenClaw {
     $env:NPM_CONFIG_SCRIPT_SHELL = "cmd.exe"
     $env:NODE_LLAMA_CPP_SKIP_DOWNLOAD = "1"
     try {
-        $npmOutput = & (Get-NpmCommandPath) install -g "$packageName@$Tag" 2>&1
+        $npmOutput = & (Get-NpmCommandPath) install -g "$installSpec" 2>&1
         if ($LASTEXITCODE -ne 0) {
             Write-Host "[!] npm install failed" -ForegroundColor Red
             if ($npmOutput -match "spawn git" -or $npmOutput -match "ENOENT.*git") {

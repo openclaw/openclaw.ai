@@ -43,6 +43,9 @@ for script in "${SCRIPTS[@]}"; do
 
   require_contains "$script" 'function Fail-Install {'
   require_contains "$script" 'function Complete-Install {'
+  require_contains "$script" 'function Resolve-NpmOpenClawInstallSpec {'
+  require_contains "$script" 'install -g "$installSpec"'
+  require_contains "$script" 'return "$PackageName@$trimmedTag"'
   require_contains "$script" 'return (Fail-Install -Code 2)'
   require_contains "$script" 'return (Fail-Install)'
   # shellcheck disable=SC2016
