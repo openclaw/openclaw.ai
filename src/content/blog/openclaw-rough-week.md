@@ -1,39 +1,33 @@
 ---
 title: "OpenClaw Had a Rough Week"
 description: "What happened around the 2026.4.24 and 2026.4.29 releases, why the direction was right, and what we are changing now."
-date: 2026-05-03
+date: 2026-05-05
 author: "Peter Steinberger"
 authorHandle: "steipete"
 draft: false
 tags: ["release", "stability", "security", "clawhub"]
 ---
 
-**TL;DR:** OpenClaw got rough around 2026.4.24, and 2026.4.29 made it obvious. Sorry. We are making core smaller, moving optional stuff to [ClawHub](https://clawhub.ai/), and announcing LTS separately later in May.
+**TL;DR:** OpenClaw had a rough week. 2026.4.29 made it obvious. Sorry. We are making core smaller, moving optional stuff to [ClawHub](https://clawhub.ai/), and announcing LTS separately later in May.
 
 The trouble started around 2026.4.24. By 2026.4.29 it was obvious enough that nobody could pretend this was just a few weird installs. Gateways got slower. Some installs got stuck in plugin dependency repair loops. Discord, Telegram, WhatsApp and other channels behaved worse than they should. People downgraded. People lost time.
 
+This was not one bug. Plugin dependency repair ran in startup and update paths, bundled and external plugins were half-split, ClawHub artifact metadata was still settling, and gateway cold paths did too much work.
+
 That sucks. I’m sorry.
 
-The annoying part is that the direction was right. The execution was not.
+We’ve been pushing OpenClaw to become smaller, safer and more infrastructure-grade. That means less magic in core, fewer bundled dependencies, clearer plugin boundaries, better scanning, better release hygiene, better security posture. All the boring stuff that matters once people run this as actual infrastructure and not just as my weird lobster playground.
 
-We’ve been pushing OpenClaw to become smaller, safer and more enterprise-ready. That means less magic in core, fewer bundled dependencies, clearer plugin boundaries, better scanning, better release hygiene, better security posture. All the boring stuff that matters once people run this as actual infrastructure and not just as my weird lobster experiment.
-
-The recent npm supply-chain attacks made this feel a lot less theoretical. The [Axios compromise](https://www.microsoft.com/en-us/security/blog/2026/04/01/mitigating-the-axios-npm-supply-chain-compromise/) was a wake-up call. We did not use Axios directly, but we were still exposed to the same class of risk: transitive npm deps, install-time behavior, postinstall scripts, packages pulling packages pulling packages.
+Recent npm ecosystem supply-chain incidents made this feel a lot less theoretical. OpenClaw did not directly depend on [Axios](https://www.microsoft.com/en-us/security/blog/2026/04/01/mitigating-the-axios-npm-supply-chain-compromise/); the relevant risk was the shape of the dependency graph: transitive packages, install-time behavior, postinstall scripts, packages pulling packages pulling packages.
 
 So we started moving things out of core: channels, providers, heavy tools, parsers, optional integrations. The [plugin inventory](https://docs.openclaw.ai/plugins/plugin-inventory) shows what still ships in core, what installs separately, and what is source-checkout only.
 
-The problem: ClawHub was not quite ready to carry all of that weight yet. For a few releases we ended up in the worst middle state: too much moved toward plugins, while too many plugins were still bundled, repaired, staged, checked or loaded in places users feel immediately. Startup. Update. Gateway restart. Doctor.
+The problem: I underestimated how difficult it would be to get this right. For a few releases we ended up in the worst middle state: too much moved toward plugins, while too many plugins were still bundled, repaired, staged, checked, or dependency-loaded in places users feel immediately.
 
-Core gets smaller. Plugins become explicit. ClawHub becomes the distribution layer.
+This also exposed an operating problem: OpenClaw was still too founder-driven. Too much release, review, packaging and support work sat with me. Through the OpenClaw Foundation, and with help from OpenAI, we are building a real team around the project.
 
-There’s also a release lesson here. Fast releases are great when we’re building quickly, and we are building very quickly. But not everyone wants to live on the edge with us. Some people run OpenClaw as infrastructure. For them, “latest” should not mean “good luck, see you in Discord.”
+Going forward, we'll be changing how releases are done, and will soon announce an LTS release next to our faster update cycles.
 
-We’ll announce LTS separately later in May.
+Thank you to everyone who reported issues, pasted logs, tested betas, downgraded, upgraded again, or just waited while we dug through this.
 
-For now the focus is boring stability work. Cut dependency surface. Remove runtime dependency nonsense from startup paths. Make plugin installs more explicit. Make ClawHub ready. Keep security work going, but stop making users pay for internal migration churn.
-
-Thank you to everyone who reported issues, pasted logs, tested betas, downgraded, upgraded again, or just waited while we dug through this. “2026.4.24 got slow.” “2026.4.29 broke my channel.” “Why is it installing plugins again?” That’s the kind of annoying, specific feedback that actually helps.
-
-OpenClaw will keep getting more secure. It will also get smaller.
-
-And next time we move this much furniture around, we need to make sure users don’t wake up with the couch blocking the front door.
+OpenClaw will keep getting more secure. It will also get smaller. But it has to stay boringly reliable while we do that.
