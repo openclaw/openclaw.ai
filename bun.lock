@@ -3,7 +3,7 @@
   "configVersion": 0,
   "workspaces": {
     "": {
-      "name": "clawd-bot-landing",
+      "name": "openclaw-ai",
       "dependencies": {
         "@astrojs/rss": "^4.0.18",
         "@lucide/astro": "^1.11.0",
