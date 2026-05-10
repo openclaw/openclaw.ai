@@ -1366,6 +1366,32 @@ prepend_path_dir() {
     refresh_shell_command_cache
 }
 
+persist_shell_path_prepend() {
+    local dir="${1%/}"
+    if [[ -z "$dir" ]]; then
+        return 1
+    fi
+
+    local path_line="export PATH=\"${dir}:\$PATH\""
+    local wrote_rc=0
+    for rc in "$HOME/.bashrc" "$HOME/.zshrc"; do
+        if [[ -f "$rc" ]]; then
+            if ! grep -Fq "$dir" "$rc"; then
+                local tmp_rc="${rc}.openclaw-tmp"
+                {
+                    printf '%s\n' "$path_line"
+                    cat "$rc"
+                } > "$tmp_rc"
+                mv "$tmp_rc" "$rc"
+            fi
+            wrote_rc=1
+        fi
+    done
+    if [[ "$wrote_rc" -eq 0 ]]; then
+        printf '%s\n' "$path_line" >> "$HOME/.bashrc"
+    fi
+}
+
 promote_supported_node_binary() {
     local candidates=()
     local candidate dir seen_dirs=":"
@@ -1397,6 +1423,9 @@ promote_supported_node_binary() {
         seen_dirs="${seen_dirs}${dir}:"
         if node_binary_is_at_least_required "$candidate"; then
             prepend_path_dir "$dir" || continue
+            if [[ "$OS" == "linux" ]]; then
+                persist_shell_path_prepend "$dir" || true
+            fi
             ui_info "Using Node.js runtime at ${candidate}"
             return 0
         fi
@@ -1406,7 +1435,7 @@ promote_supported_node_binary() {
 }
 
 activate_supported_node_on_path() {
-    promote_supported_node_binary "$@"
+    promote_supported_node_binary
 }
 
 print_active_node_paths() {
@@ -1623,8 +1652,8 @@ install_node() {
             exit 1
         fi
 
-        promote_supported_node_binary || true
         ui_success "Node.js v${NODE_DEFAULT_MAJOR} installed"
+        activate_supported_node_on_path || true
         print_active_node_paths || true
     fi
 }
@@ -1738,7 +1767,12 @@ fix_npm_permissions() {
     for rc in "$HOME/.bashrc" "$HOME/.zshrc"; do
         if [[ -f "$rc" ]]; then
             if ! grep -q ".npm-global" "$rc"; then
-                echo "$path_line" >> "$rc"
+                local tmp_rc="${rc}.openclaw-tmp"
+                {
+                    printf '%s\n' "$path_line"
+                    cat "$rc"
+                } > "$tmp_rc"
+                mv "$tmp_rc" "$rc"
             fi
             wrote_rc=1
         fi
@@ -2665,6 +2699,7 @@ main() {
     if ! check_node; then
         install_node
     fi
+    activate_supported_node_on_path || true
     if ! ensure_default_node_active_shell; then
         exit 1
     fi
