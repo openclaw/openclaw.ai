@@ -34,7 +34,7 @@ jobs:
         shell: cmd
         run: set "OPENCLAW_INSTALL_PS1_URL=%GITHUB_WORKSPACE%\\public\\install.ps1" && .\\public\\install.cmd --dry-run --no-onboard --npm
 
-  install-scripts-macos:
+  macos-install-verify:
     # GitHub-hosted macOS runners are frequently capacity constrained.
     # Keep this check available for manual verification without blocking
     # normal push/PR CI on an unstarted job.
@@ -44,8 +44,22 @@ jobs:
       - name: Checkout
         uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
 
+      - name: Setup Node.js
+        uses: actions/setup-node@48b55a011bda9f5d6aeb4c2d9c7362e8dae4041e # v6.4.0
+        with:
+          node-version: 24
+
       - name: install.sh dry run
         run: bash public/install.sh --dry-run --no-onboard --no-prompt
+
+      - name: Install via install.sh
+        env:
+          OPENCLAW_NO_ONBOARD: "1"
+          OPENCLAW_NO_PROMPT: "1"
+        run: bash public/install.sh --no-onboard --no-prompt --version latest
+
+      - name: Verify openclaw
+        run: openclaw --version
 
   shellcheck:
     runs-on: ubuntu-latest
