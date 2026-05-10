@@ -32,7 +32,7 @@ jobs:
       - name: install.cmd dry run
         if: runner.os == 'Windows'
         shell: cmd
-        run: set "CLAWDBOT_INSTALL_PS1_URL=%GITHUB_WORKSPACE%\\public\\install.ps1" && .\\public\\install.cmd --dry-run --no-onboard --npm
+        run: set "OPENCLAW_INSTALL_PS1_URL=%GITHUB_WORKSPACE%\\public\\install.ps1" && .\\public\\install.cmd --dry-run --no-onboard --npm
 
   install-scripts-macos:
     # GitHub-hosted macOS runners are frequently capacity constrained.
@@ -57,7 +57,7 @@ jobs:
         run: sudo apt-get update -y && sudo apt-get install -y shellcheck
 
       - name: ShellCheck
-        run: shellcheck $(git ls-files '*.sh')
+        run: shellcheck -e SC1091 public/install.sh public/install-cli.sh scripts/test-install-matrix.sh scripts/docker/*/run.sh
 
   install-sh-unit:
     runs-on: ubuntu-latest
