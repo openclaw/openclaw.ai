@@ -1349,6 +1349,23 @@ node_binary_is_at_least_required() {
     return 1
 }
 
+prepend_path_dir() {
+    local dir="${1%/}"
+    if [[ -z "$dir" || ! -d "$dir" ]]; then
+        return 1
+    fi
+    local current=":${PATH:-}:"
+    current="${current//:${dir}:/:}"
+    current="${current#:}"
+    current="${current%:}"
+    if [[ -n "$current" ]]; then
+        export PATH="${dir}:${current}"
+    else
+        export PATH="${dir}"
+    fi
+    refresh_shell_command_cache
+}
+
 promote_supported_node_binary() {
     local candidates=()
     local candidate dir seen_dirs=":"
@@ -1379,13 +1396,17 @@ promote_supported_node_binary() {
         fi
         seen_dirs="${seen_dirs}${dir}:"
         if node_binary_is_at_least_required "$candidate"; then
-            export PATH="$dir:$PATH"
-            refresh_shell_command_cache
+            prepend_path_dir "$dir" || continue
+            ui_info "Using Node.js runtime at ${candidate}"
             return 0
         fi
     done
 
     return 1
+}
+
+activate_supported_node_on_path() {
+    promote_supported_node_binary "$@"
 }
 
 print_active_node_paths() {
@@ -1478,79 +1499,6 @@ ensure_default_node_active_shell() {
     else
         echo "Install/select Node.js ${NODE_DEFAULT_MAJOR} (or Node ${NODE_MIN_VERSION}+ minimum) and ensure it is first on PATH, then rerun installer."
     fi
-
-    return 1
-}
-
-node_binary_is_at_least_required() {
-    local node_bin="$1"
-    local major minor
-    if [[ -z "$node_bin" || ! -x "$node_bin" ]]; then
-        return 1
-    fi
-    read -r major minor < <("$node_bin" -p '`${process.versions.node.split(".")[0]} ${process.versions.node.split(".")[1]}`' 2>/dev/null || true)
-    if [[ ! "$major" =~ ^[0-9]+$ || ! "$minor" =~ ^[0-9]+$ ]]; then
-        return 1
-    fi
-    if [[ "$major" -gt "$NODE_MIN_MAJOR" ]]; then
-        return 0
-    fi
-    if [[ "$major" -eq "$NODE_MIN_MAJOR" && "$minor" -ge "$NODE_MIN_MINOR" ]]; then
-        return 0
-    fi
-    return 1
-}
-
-prepend_path_dir() {
-    local dir="${1%/}"
-    if [[ -z "$dir" || ! -d "$dir" ]]; then
-        return 1
-    fi
-    local current=":${PATH:-}:"
-    current="${current//:${dir}:/:}"
-    current="${current#:}"
-    current="${current%:}"
-    if [[ -n "$current" ]]; then
-        export PATH="${dir}:${current}"
-    else
-        export PATH="${dir}"
-    fi
-    refresh_shell_command_cache
-}
-
-activate_supported_node_on_path() {
-    if node_is_at_least_required; then
-        return 0
-    fi
-
-    local -a candidates=()
-    local candidate=""
-    while IFS= read -r candidate; do
-        [[ -n "$candidate" ]] && candidates+=("$candidate")
-    done < <(type -aP node 2>/dev/null || true)
-    candidates+=(
-        "/usr/bin/node"
-        "/usr/local/bin/node"
-        "/opt/homebrew/bin/node"
-        "/opt/homebrew/opt/node@${NODE_DEFAULT_MAJOR}/bin/node"
-        "/usr/local/opt/node@${NODE_DEFAULT_MAJOR}/bin/node"
-    )
-
-    local seen=":"
-    for candidate in "${candidates[@]}"; do
-        if [[ -z "$candidate" || ! -x "$candidate" ]]; then
-            continue
-        fi
-        case "$seen" in
-            *":$candidate:"*) continue ;;
-        esac
-        seen="${seen}${candidate}:"
-        if node_binary_is_at_least_required "$candidate"; then
-            prepend_path_dir "$(dirname "$candidate")" || continue
-            ui_info "Using Node.js runtime at ${candidate}"
-            return 0
-        fi
-    done
 
     return 1
 }
@@ -2722,7 +2670,6 @@ main() {
     if ! check_node; then
         install_node
     fi
-    activate_supported_node_on_path || true
     if ! ensure_default_node_active_shell; then
         exit 1
     fi

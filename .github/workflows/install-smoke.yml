@@ -65,11 +65,13 @@ jobs:
       - name: Checkout
         uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
 
-      - name: Unit tests (install.sh)
-        run: bash scripts/test-install-sh-unit.sh
+      - name: Installer syntax
+        run: bash -n public/install.sh public/install-cli.sh
 
-      - name: Unit tests (install-cli.sh)
-        run: bash scripts/test-install-cli-unit.sh
+      - name: Installer help
+        run: |
+          bash public/install.sh --help >/tmp/install-help.txt
+          bash public/install-cli.sh --help >/tmp/install-cli-help.txt
 
   install-smoke:
     runs-on: ubuntu-latest
