@@ -1738,12 +1738,7 @@ fix_npm_permissions() {
     for rc in "$HOME/.bashrc" "$HOME/.zshrc"; do
         if [[ -f "$rc" ]]; then
             if ! grep -q ".npm-global" "$rc"; then
-                local tmp_rc="${rc}.openclaw-tmp"
-                {
-                    printf '%s\n' "$path_line"
-                    cat "$rc"
-                } > "$tmp_rc"
-                mv "$tmp_rc" "$rc"
+                echo "$path_line" >> "$rc"
             fi
             wrote_rc=1
         fi
