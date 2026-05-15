@@ -36,18 +36,7 @@ function getAuthorUrl(author: Author): string | null {
 }
 
 function getAuthorLabel(author: Author): string | null {
-  if (author.handle) {
-    return `@${author.handle}`;
-  }
-
-  if (!author.url) {
-    return null;
-  }
-
-  const url = new URL(author.url);
-  const hostname = url.hostname.replace(/^www\./, '');
-  const pathname = url.pathname.replace(/\/$/, '');
-  return pathname ? `${hostname}${pathname}` : hostname;
+  return author.handle ? `@${author.handle}` : author.url ? new URL(author.url).hostname.replace(/^www\./, '') : null;
 }
 
 function formatDate(date: Date): string {
@@ -423,17 +412,6 @@ const postUrl = `https://openclaw.ai/blog/${post.id}`;
     border-radius: 0 8px 8px 0;
     font-style: italic;
     color: var(--text-secondary);
-  }
-
-  .article-content :global(img) {
-    display: block;
-    width: 100%;
-    max-height: 360px;
-    object-fit: contain;
-    margin: 32px 0;
-    border-radius: 12px;
-    border: 1px solid var(--border-subtle);
-    background: var(--bg-elevated);
   }
 
   /* Article Footer */
