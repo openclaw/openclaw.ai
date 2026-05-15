@@ -24,7 +24,7 @@ OpenClaw runs on your machine. That means it can touch your documents, your code
 
 The filesystem risk people usually reach for first is path traversal. That risk is real, but it is also only one symptom of a bigger class of bugs: unclear boundaries. Code thinks it is writing inside one root, then a symlink, absolute path, archive extraction, or sloppy join makes it cross another.
 
-[`fs-safe`](https://fs-safe.io/) is one answer to that. It is not a new idea bolted onto OpenClaw from the outside. It is the set of safe filesystem patterns OpenClaw had already been growing, pulled into a shared library so core code, plugins, and adjacent services can use the same root-bounded primitives.
+[`fs-safe`](https://fs-safe.io/) is one answer to that. It is not a new idea bolted onto OpenClaw from the outside. It is the set of [safe filesystem patterns](https://docs.openclaw.ai/gateway/security/secure-file-operations) OpenClaw had already been growing, pulled into a shared library so core code, plugins, and adjacent services can use the same root-bounded primitives.
 
 It is also not a sandbox. A plugin that is allowed to run arbitrary shell commands can still do arbitrary shell-command things. `fs-safe` protects against boundary-crossing bugs in filesystem code. It does not turn untrusted code into trusted code.
 
@@ -44,7 +44,7 @@ We started with the obvious approach: validate the URL before fetching it. That 
 
 The fix has to move closer to egress.
 
-[Proxyline](https://proxyline.dev/) is our Node-process routing layer for that. It is not itself the filtering proxy. It installs process-global routing for Node networking surfaces and sends traffic through the proxy you configured. The configured proxy is where the connect-time policy should live: block metadata addresses, private ranges, loopback canaries, and whatever else your environment needs blocked.
+[Proxyline](https://proxyline.dev/) is our Node-process routing layer for that. It is not itself the filtering proxy. It installs process-global routing for Node networking surfaces and sends traffic through the [proxy you configured](https://docs.openclaw.ai/security/network-proxy). The configured proxy is where the connect-time policy should live: block metadata addresses, private ranges, loopback canaries, and whatever else your environment needs blocked.
 
 Proxyline routes. The proxy enforces.
 
@@ -52,7 +52,7 @@ It also gives operators observability. If you already run a managed proxy, you c
 
 Proxyline is not a perfect cage around every possible byte. Raw sockets, native modules, unusual transports, early-captured agents, and non-OpenClaw child processes can still bypass a Node-level guardrail. But for ordinary OpenClaw network paths, moving the control point from "a wrapper remembered to validate this URL" to "egress flows through a proxy policy" is a much better shape.
 
-The validation path is simple: `example.com` should pass, a loopback canary should fail, and `openclaw proxy validate` should prove the configured route behaves that way.
+The validation path is simple: `example.com` should pass, a loopback canary should fail, and [`openclaw proxy validate`](https://docs.openclaw.ai/cli/proxy) should prove the configured route behaves that way.
 
 ## ClawHub Trust, ClawScan, and Plugin Provenance
 
@@ -66,9 +66,9 @@ The ClawHub pipeline is a mix of signals: ClawScan, VirusTotal, static analysis,
 
 So the hard work is calibration. Which signal is reliable? Which one false-positives? Which findings should block an install, and which should be shown as evidence without becoming a verdict?
 
-That is where ClawHub can do something a local install flow cannot. It can attach trust evidence to a specific package version. It can say this release is clean, suspicious, held, quarantined, revoked, or malicious. It can block downloads for malicious or quarantined releases. It can show users what changed and why.
+That is where [ClawHub](https://docs.openclaw.ai/clawdhub) can do something a local install flow cannot. It can attach trust evidence to a specific package version. It can say this release is [clean, suspicious, held, quarantined, revoked, or malicious](https://docs.openclaw.ai/clawhub/security). It can block downloads for malicious or quarantined releases. It can show users what changed and why.
 
-Not every OpenClaw plugin will live on ClawHub. Plugins can come from GitHub, a private registry, or a file someone sends you. That is not going away, and OpenClaw should not pretend users do not own their own machines.
+Not every OpenClaw plugin will live on ClawHub. [Plugins can come from](https://docs.openclaw.ai/cli/plugins) GitHub, a private registry, or a file someone sends you. That is not going away, and OpenClaw should not pretend users do not own their own machines.
 
 What we can do is make the safe path better. Publish on ClawHub. Get scanned. Attach evidence. Let users weigh that evidence before install.
 
@@ -88,7 +88,7 @@ Fixing this means fewer prompts, and better prompts.
 
 The accuracy part starts with parsing. String matching is not enough. If an allowlist or blocklist only sees the outer command, wrappers become a bypass. A policy that understands `rm` but cannot see inside `bash -c "rm -rf ~/something"` is not a policy users should trust.
 
-OpenClaw has been pushing on that. The shell approval path now evaluates inner command chains for common shell `-c` wrappers. If the inner chain contains an executable that is not allowed, the wrapper should not make it safe. The command highlighter also uses Tree-sitter to show users what OpenClaw found, including executables inside wrapper payloads.
+OpenClaw has been pushing on that. The [shell approval path](https://docs.openclaw.ai/tools/exec-approvals) now evaluates inner command chains for common shell `-c` wrappers. If the inner chain contains an executable that is not allowed, the wrapper should not make it safe. The command highlighter also uses Tree-sitter to show users what OpenClaw found, including executables inside wrapper payloads.
 
 PowerShell has its own shape and its own traps. We already fail closed for forms we do not understand, and broader PowerShell support is on the roadmap.
 
