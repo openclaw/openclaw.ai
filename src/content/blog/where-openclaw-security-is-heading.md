@@ -44,7 +44,7 @@ We started with the obvious approach: validate the URL before fetching it. That 
 
 The fix has to move closer to egress.
 
-Proxyline is our Node-process routing layer for that. It is not itself the filtering proxy. It installs process-global routing for Node networking surfaces and sends traffic through the proxy you configured. The configured proxy is where the connect-time policy should live: block metadata addresses, private ranges, loopback canaries, and whatever else your environment needs blocked.
+[Proxyline](https://proxyline.dev/) is our Node-process routing layer for that. It is not itself the filtering proxy. It installs process-global routing for Node networking surfaces and sends traffic through the proxy you configured. The configured proxy is where the connect-time policy should live: block metadata addresses, private ranges, loopback canaries, and whatever else your environment needs blocked.
 
 Proxyline routes. The proxy enforces.
 
