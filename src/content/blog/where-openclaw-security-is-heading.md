@@ -32,15 +32,15 @@ Writing inside a plugin workspace should work. Traversal and absolute-path write
 
 The next step is making these primitives the expected pattern for plugins on ClawHub too. Bypassing them is not automatically malicious, but it is security-relevant. Over time, that kind of choice should count against a plugin's trust posture.
 
-The safest filesystem call is still the one we do not make. That is the security motivation behind the in-flight SQLite runtime-state refactor. Sessions, transcripts, scheduler state, and plugin state belong in a typed database with clear ownership and transactions, not sprawled across loose files. `fs-safe` makes required filesystem access safer; moving runtime state into SQLite removes whole categories of filesystem access from the runtime path.
+The safest filesystem call is still the one we do not make. That is the security motivation behind the in-flight SQLite runtime-state refactor. Sessions, transcripts, scheduler state, and plugin state are the kind of runtime state we want in a typed database with clear ownership and transactions, not sprawled across loose files. `fs-safe` makes required filesystem access safer; moving runtime state into SQLite removes whole categories of filesystem access from the runtime path.
 
-## SSRF, Network Egress, and Proxyline
+## Network egress and Proxyline
 
 **Status: rolling out as a Node-process egress guardrail.**
 
 Agentic systems make SSRF harder than it is in a normal web service. In a normal service, user-controlled URLs are often the exception. In an agent runtime, user-controlled or model-influenced URLs are normal product behavior. "Fetch this URL because someone, or something, asked for it" is not an edge case. It is a feature.
 
-We started with the obvious approach: validate the URL before fetching it. That is not enough. Validate-then-fetch has a TOCTOU gap — validation resolves DNS, the fetch resolves DNS again, and the answer can change between. A host that pointed at a public IP during validation can point at a metadata endpoint by the time the request leaves.
+We started with the obvious approach: validate the URL before fetching it. That is not enough. Validation resolves DNS, the fetch resolves DNS again, and the answer can change between the two. A host that pointed at a public IP during validation can point at a metadata endpoint by the time the request leaves.
 
 The fix has to move closer to egress.
 
@@ -54,19 +54,15 @@ Proxyline is not a perfect cage around every possible byte. Raw sockets, native 
 
 The validation path is simple: `example.com` should pass, a loopback canary should fail, and [`openclaw proxy validate`](https://docs.openclaw.ai/cli/proxy) should prove the configured route behaves that way.
 
-## ClawHub Trust, ClawScan, and Plugin Provenance
+## Plugin trust on ClawHub
 
 **Status: landed for ClawHub-hosted package trust signals; still evolving for tiers and off-Hub packages.**
-
-For a while, we tried to secure plugins mostly inside OpenClaw itself. That will never be enough.
 
 ClawHub has to be the authority for plugin trust and provenance when a plugin comes from ClawHub. OpenClaw should consume those signals during install and update, not rely only on local inspection after the fact.
 
 The ClawHub pipeline is a mix of signals: ClawScan, VirusTotal, static analysis, metadata checks, source provenance, and manual moderation. None of those is magic. Scanners are noisy in different ways, and a pipeline that screams about everything teaches users to ignore it.
 
-So the hard work is calibration. Which signal is reliable? Which one false-positives? Which findings should block an install, and which should be shown as evidence without becoming a verdict?
-
-That is where [ClawHub](https://docs.openclaw.ai/clawdhub) can do something a local install flow cannot. It can attach trust evidence to a specific package version. It can say this release is [clean, suspicious, held, quarantined, revoked, or malicious](https://docs.openclaw.ai/clawhub/security). It can block downloads for malicious or quarantined releases. It can show users what changed and why.
+That is where [ClawHub](https://docs.openclaw.ai/clawhub) can do something a local install flow cannot. It can attach [trust evidence](https://docs.openclaw.ai/clawhub/security-audits) to a specific package version. It can say this release is clean, suspicious, held, quarantined, revoked, or malicious. It can block downloads for [malicious or quarantined releases](https://docs.openclaw.ai/clawhub/moderation). It can show users what changed and why.
 
 Not every OpenClaw plugin will live on ClawHub. [Plugins can come from](https://docs.openclaw.ai/cli/plugins) GitHub, a private registry, or a file someone sends you. That is not going away, and OpenClaw should not pretend users do not own their own machines.
 
@@ -76,11 +72,9 @@ We are also exploring higher-trust tiers above the baseline: official packages, 
 
 If ClawHub marks `@openclaw/files@1.4.2` as malicious and quarantined, the ClawHub install path should refuse it. That is the bar.
 
-## Command Authorization and Prompt Fatigue
+## Command approvals and prompt fatigue
 
 **Status: landed for stronger shell allowlist analysis; experimenting on contextual approval.**
-
-Anyone who has used an agent harness in approval mode knows the pain.
 
 Prompts arrive faster than anyone can read them. After a few minutes, users flip on YOLO mode so work can continue. At that point the prompts are not protecting anyone. They trained the user to stop reading.
 
@@ -88,7 +82,7 @@ Fixing this means fewer prompts, and better prompts.
 
 The accuracy part starts with parsing. String matching is not enough. If an allowlist or blocklist only sees the outer command, wrappers become a bypass. A policy that understands `rm` but cannot see inside `bash -c "rm -rf ~/something"` is not a policy users should trust.
 
-OpenClaw has been pushing on that. The [shell approval path](https://docs.openclaw.ai/tools/exec-approvals) now evaluates inner command chains for common shell `-c` wrappers. If the inner chain contains an executable that is not allowed, the wrapper should not make it safe. The command highlighter also uses Tree-sitter to show users what OpenClaw found, including executables inside wrapper payloads.
+The [shell approval path](https://docs.openclaw.ai/tools/exec-approvals) now evaluates inner command chains for common shell `-c` wrappers. If the inner chain contains an executable that is not allowed, the wrapper should not make it safe. The command highlighter also uses Tree-sitter to show users what OpenClaw found, including executables inside wrapper payloads.
 
 PowerShell has its own shape and its own traps. We already fail closed for forms we do not understand, and broader PowerShell support is on the roadmap.
 
@@ -96,7 +90,7 @@ Parsing is the easier half. The harder half is deciding when to ask.
 
 A static approval policy tends to do one of two bad things. It prompts on everything that might be risky, which sends users to YOLO mode. Or it relies on a fixed allow/deny list that cannot tell whether a command fits the current task.
 
-The question users actually care about is simpler: did I want this to happen?
+The question users actually care about: did I want this to happen?
 
 That is why we are experimenting with contextual approval. The goal is not "never prompt." The goal is that prompts mean something. If OpenClaw asks, the user should stop and read. If OpenClaw does not ask, that decision should be one we can defend.
 
@@ -114,13 +108,11 @@ Precision is everything. A noisy rule is worse than no rule, because it teaches 
 
 Today the checked-in precise OpenGrep rulepack has 148 rules. It runs on PR diffs, and the full scan can be run manually. New patched advisories become candidates for new rules.
 
-CodeQL covers broader ground alongside it. The challenge there is scale. OpenGrep can scan our focused rulepack quickly. CodeQL gives deeper semantic coverage but takes more time and cleanup. We need both.
+CodeQL runs alongside for deeper semantic coverage. It is slower and noisier to maintain; we use both.
 
 ## What This Means for OpenClaw Users
 
 OpenClaw is not becoming less powerful. It is becoming more legible. More observable. More explicit about which boundary is being enforced where.
-
-`fs-safe` does not sandbox plugins; it prevents filesystem boundary mistakes. Proxyline does not replace a filtering proxy; it routes Node egress through one. ClawHub does not remove user choice; it gives users package-version evidence before install. Command authorization does not work because prompts exist; it works when prompts are rare enough and accurate enough to matter.
 
 We are not going to promise risk-free agents. Anyone promising that is selling something, or has not shipped enough yet.
 
