@@ -19,6 +19,21 @@ function estimateReadTime(content: string): string {
   const minutes = Math.ceil(words / wordsPerMinute);
   return `${minutes} min read`;
 }
+
+type Author = { name: string; handle?: string; url?: string; avatar?: string };
+
+function firstAuthor(post: (typeof posts)[number]): Author {
+  return post.data.authors?.[0] ?? {
+    name: post.data.author ?? 'OpenClaw Team',
+    handle: post.data.authorHandle,
+    url: post.data.authorUrl,
+    avatar: post.data.authorAvatar,
+  };
+}
+
+function getAuthorAvatar(author: Author): string {
+  return author.avatar ?? (author.handle ? `https://unavatar.io/x/${author.handle}` : '/openclaw-logo-text-dark.png');
+}
 ---
 
 <Layout title="Blog — OpenClaw">
@@ -46,13 +61,20 @@ function estimateReadTime(content: string): string {
           <p class="post-description">{post.data.description}</p>
           <div class="post-footer">
             <div class="post-author">
+              {(() => {
+                const author = firstAuthor(post);
+                return (
+                  <>
               <img
-                src={`https://unavatar.io/x/${post.data.authorHandle}`}
-                alt={post.data.author}
+                src={getAuthorAvatar(author)}
+                alt={author.name}
                 class="author-avatar"
                 loading="lazy"
               />
-              <span class="author-name">{post.data.author}</span>
+              <span class="author-name">{author.name}</span>
+                  </>
+                );
+              })()}
             </div>
             <div class="post-tags">
               {post.data.tags.map((tag) => (

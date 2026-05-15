@@ -15,12 +15,29 @@ const { post } = Astro.props;
 const { Content } = await render(post);
 
 // Normalize authors - support both legacy single author and new multi-author format
-type Author = { name: string; handle: string };
+type Author = { name: string; handle?: string; url?: string; avatar?: string };
 const authors: Author[] = post.data.authors
   ? post.data.authors
-  : post.data.author && post.data.authorHandle
-    ? [{ name: post.data.author, handle: post.data.authorHandle }]
+  : post.data.author
+    ? [{
+        name: post.data.author,
+        handle: post.data.authorHandle,
+        url: post.data.authorUrl,
+        avatar: post.data.authorAvatar,
+      }]
     : [];
+
+function getAuthorAvatar(author: Author): string {
+  return author.avatar ?? (author.handle ? `https://unavatar.io/x/${author.handle}` : '/openclaw-logo-text-dark.png');
+}
+
+function getAuthorUrl(author: Author): string | null {
+  return author.url ?? (author.handle ? `https://x.com/${author.handle}` : null);
+}
+
+function getAuthorLabel(author: Author): string | null {
+  return author.handle ? `@${author.handle}` : author.url ? new URL(author.url).hostname.replace(/^www\./, '') : null;
+}
 
 function formatDate(date: Date): string {
   return date.toLocaleDateString('en-US', {
@@ -61,14 +78,16 @@ const postUrl = `https://openclaw.ai/blog/${post.id}`;
             {authors.map((author) => (
               <div class="author-info">
                 <img
-                  src={`https://unavatar.io/x/${author.handle}`}
+                  src={getAuthorAvatar(author)}
                   alt={author.name}
                   class="author-avatar"
                   loading="lazy"
                 />
                 <div class="author-details">
                   <span class="author-name">{author.name}</span>
-                  <a href={`https://x.com/${author.handle}`} class="author-handle" target="_blank" rel="noopener">@{author.handle}</a>
+                  {getAuthorUrl(author) && getAuthorLabel(author) && (
+                    <a href={getAuthorUrl(author)} class="author-handle" target="_blank" rel="noopener">{getAuthorLabel(author)}</a>
+                  )}
                 </div>
               </div>
             ))}
