@@ -745,17 +745,51 @@ for (const b of trustBoundaries) {
     function getRiskColor(risk) {
       switch (risk) { case 'Critical': return '#ef4444'; case 'High': return '#f97316'; case 'Medium': return '#eab308'; case 'Low': return '#22c55e'; default: return '#6b7280'; }
     }
+    function appendDetailSection(parent, label, value) {
+      var section = document.createElement('div');
+      section.className = 'detail-section';
+      var labelDiv = document.createElement('div');
+      labelDiv.className = 'detail-label';
+      labelDiv.textContent = label;
+      var valueDiv = document.createElement('div');
+      valueDiv.className = 'detail-value';
+      valueDiv.textContent = value == null ? '' : String(value);
+      section.appendChild(labelDiv);
+      section.appendChild(valueDiv);
+      parent.appendChild(section);
+    }
     function showThreatDetail(threatId) {
       var threat = threats.find(function(t) { return t.id === threatId; });
       if (!threat) return;
       document.getElementById('detailId').textContent = threat.id + ' \u2022 ' + threat.tactic;
       document.getElementById('detailTitle').textContent = threat.name;
       var rc = getRiskColor(threat.risk);
-      document.getElementById('detailBadges').innerHTML = '<span class="detail-badge" style="background:' + rc + '12;color:' + rc + '">' + threat.risk + ' Risk</span><a href="https://atlas.mitre.org/techniques/' + threat.atlas + '" target="_blank" class="detail-badge atlas-link" style="background:rgba(255,90,54,0.08)">' + threat.atlas + '</a>';
-      document.getElementById('detailBody').innerHTML = '<div class="detail-section"><div class="detail-label">Description</div><div class="detail-value">' + threat.description + '</div></div><div class="detail-section"><div class="detail-label">Attack Vector</div><div class="detail-value">' + threat.attackVector + '</div></div><div class="detail-section"><div class="detail-label">Affected Components</div><div class="detail-value">' + threat.affected + '</div></div><div class="detail-section"><div class="detail-label">Current Mitigations</div><div class="detail-value">' + threat.mitigations + '</div></div><div class="detail-section"><div class="detail-label">Residual Risk</div><div class="detail-value">' + threat.residualRisk + '</div></div><div class="detail-section"><div class="detail-label">Recommendations</div><div class="detail-value">' + threat.recommendations + '</div></div>';
+      var badgesDiv = document.getElementById('detailBadges');
+      badgesDiv.textContent = '';
+      var riskSpan = document.createElement('span');
+      riskSpan.className = 'detail-badge';
+      riskSpan.style.background = rc + '12';
+      riskSpan.style.color = rc;
+      riskSpan.textContent = threat.risk + ' Risk';
+      badgesDiv.appendChild(riskSpan);
+      var atlasLink = document.createElement('a');
+      atlasLink.className = 'detail-badge atlas-link';
+      atlasLink.style.background = 'rgba(255,90,54,0.08)';
+      atlasLink.setAttribute('href', 'https://atlas.mitre.org/techniques/' + threat.atlas);
+      atlasLink.setAttribute('target', '_blank');
+      atlasLink.textContent = threat.atlas;
+      badgesDiv.appendChild(atlasLink);
+      var detailBody = document.getElementById('detailBody');
+      detailBody.textContent = '';
+      appendDetailSection(detailBody, 'Description', threat.description);
+      appendDetailSection(detailBody, 'Attack Vector', threat.attackVector);
+      appendDetailSection(detailBody, 'Affected Components', threat.affected);
+      appendDetailSection(detailBody, 'Current Mitigations', threat.mitigations);
+      appendDetailSection(detailBody, 'Residual Risk', threat.residualRisk);
+      appendDetailSection(detailBody, 'Recommendations', threat.recommendations);
       document.getElementById('detailOverlay').classList.add('active');
       document.querySelectorAll('.threat-card').forEach(function(c) { c.classList.remove('selected'); });
-      var sel = document.querySelector('[data-threat-id="' + threatId + '"]');
+      var sel = Array.prototype.find.call(document.querySelectorAll('.threat-card'), function(c) { return c.dataset.threatId === threatId; });
       if (sel) sel.classList.add('selected');
     }
     function closeDetail() { document.getElementById('detailOverlay').classList.remove('active'); document.querySelectorAll('.threat-card').forEach(function(c) { c.classList.remove('selected'); }); }
