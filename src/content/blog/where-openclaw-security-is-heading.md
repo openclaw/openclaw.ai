@@ -4,10 +4,11 @@ description: "The security roadmap for making OpenClaw a powerful personal assis
 date: 2026-05-15
 authors:
   - name: "Jesse Merhi"
-    url: "https://www.linkedin.com/in/jesse-merhi/"
+    url: "https://linktr.ee/jesse_merhi"
     avatar: "/blog/authors/jesse-merhi.jpg"
 draft: false
 tags: ["security", "open-source", "clawhub", "plugins"]
+image: "/blog/security-boundaries.svg"
 ---
 
 Our goal is for OpenClaw to become a trusted way to run a powerful AI personal assistant.
@@ -15,6 +16,8 @@ Our goal is for OpenClaw to become a trusted way to run a powerful AI personal a
 OpenClaw can read files, run commands, install plugins, talk to the network, and act on a real machine for a real user. Power like that is easy to describe as dangerous. The concern is fair. Powerful does not have to mean blind, unbounded, or impossible to audit.
 
 Some of this has landed. Some is rolling out. Some is still in flight. Some is research. I want to be clear about the difference, because posts that blur those lines mislead readers.
+
+![OpenClaw security boundaries: fs-safe, Proxyline, ClawHub trust, command approvals, and static analysis](/blog/security-boundaries.svg)
 
 ## Filesystem boundaries and fs-safe
 
@@ -39,6 +42,8 @@ Agentic systems make SSRF harder than it is in a normal web service. In a normal
 We started with the obvious approach: validate the URL before fetching it. That is not enough. Validation resolves DNS, the fetch resolves DNS again, and the answer can change between the two. A host that pointed at a public IP during validation can point at a metadata endpoint by the time the request leaves.
 
 The fix has to move closer to egress.
+
+![Network egress through Proxyline and an enforcing proxy](/blog/security-egress.svg)
 
 [Proxyline](https://proxyline.dev/) is our Node-process routing layer for that. It installs process-global routing for Node networking surfaces and sends traffic through the [proxy you configured](https://docs.openclaw.ai/security/network-proxy). The configured proxy is where the connect-time policy should live: block metadata addresses, private ranges, loopback canaries, and whatever else your environment needs blocked.
 
@@ -99,6 +104,8 @@ Precision is everything. A noisy rule is worse than no rule, because it teaches 
 Today the checked-in precise OpenGrep rulepack has 148 rules. It runs on PR diffs, and the full scan can be run manually. New patched advisories become candidates for new rules.
 
 CodeQL runs alongside for deeper semantic coverage. It is slower and noisier to maintain; we use both.
+
+![Security review loop: advisories become precise rules that protect future pull requests](/blog/security-review-loop.svg)
 
 ## What This Means for OpenClaw Users
 

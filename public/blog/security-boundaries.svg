@@ -1,0 +1,46 @@
+<svg width="1200" height="630" viewBox="0 0 1200 630" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="title desc">
+  <title id="title">OpenClaw security boundaries</title>
+  <desc id="desc">A stylized OpenClaw security diagram showing bounded filesystem, network egress, plugin trust, command approval, and static analysis layers.</desc>
+  <rect width="1200" height="630" rx="36" fill="#0B1020"/>
+  <circle cx="1010" cy="120" r="170" fill="#00E5CC" opacity="0.1"/>
+  <circle cx="170" cy="520" r="210" fill="#FF4D4D" opacity="0.12"/>
+  <g opacity="0.45">
+    <path d="M82 86H1118" stroke="#23304D" stroke-width="2"/>
+    <path d="M82 544H1118" stroke="#23304D" stroke-width="2"/>
+    <path d="M156 58V572" stroke="#23304D" stroke-width="2"/>
+    <path d="M1044 58V572" stroke="#23304D" stroke-width="2"/>
+  </g>
+  <rect x="126" y="108" width="948" height="414" rx="30" fill="#111A2E" stroke="#2D3B5E" stroke-width="2"/>
+  <rect x="186" y="168" width="828" height="294" rx="26" fill="#151F36" stroke="#445579" stroke-width="2" stroke-dasharray="12 12"/>
+  <text x="600" y="84" fill="#F8FAFC" font-family="Inter, Arial, sans-serif" font-size="46" font-weight="800" text-anchor="middle">Defensible by default</text>
+  <text x="600" y="558" fill="#94A3B8" font-family="Inter, Arial, sans-serif" font-size="24" text-anchor="middle">Powerful agents need visible boundaries, not vague promises.</text>
+  <g transform="translate(295 232)">
+    <circle cx="305" cy="82" r="78" fill="#FF4D4D"/>
+    <path d="M270 78c0-28 22-50 50-50h10v34h-10c-9 0-16 7-16 16v38h-34V78Z" fill="#0B1020"/>
+    <path d="M340 28h28v34h-28V28Z" fill="#0B1020"/>
+    <path d="M244 142c24 34 95 48 126 0" stroke="#0B1020" stroke-width="20" stroke-linecap="round"/>
+    <path d="M230 65l-44-34M228 104l-54 6M382 65l44-34M384 104l54 6" stroke="#FFB4B4" stroke-width="12" stroke-linecap="round"/>
+  </g>
+  <g font-family="Inter, Arial, sans-serif" font-size="24" font-weight="700">
+    <g transform="translate(242 194)">
+      <rect width="228" height="58" rx="16" fill="#0F766E" opacity="0.32" stroke="#00E5CC"/>
+      <text x="114" y="38" fill="#CFFAFE" text-anchor="middle">fs-safe</text>
+    </g>
+    <g transform="translate(730 194)">
+      <rect width="228" height="58" rx="16" fill="#0F766E" opacity="0.32" stroke="#00E5CC"/>
+      <text x="114" y="38" fill="#CFFAFE" text-anchor="middle">Proxyline</text>
+    </g>
+    <g transform="translate(190 374)">
+      <rect width="248" height="58" rx="16" fill="#7F1D1D" opacity="0.34" stroke="#FF8A8A"/>
+      <text x="124" y="38" fill="#FFE4E6" text-anchor="middle">ClawHub trust</text>
+    </g>
+    <g transform="translate(476 414)">
+      <rect width="248" height="58" rx="16" fill="#7F1D1D" opacity="0.34" stroke="#FF8A8A"/>
+      <text x="124" y="38" fill="#FFE4E6" text-anchor="middle">Approvals</text>
+    </g>
+    <g transform="translate(762 374)">
+      <rect width="248" height="58" rx="16" fill="#7F1D1D" opacity="0.34" stroke="#FF8A8A"/>
+      <text x="124" y="38" fill="#FFE4E6" text-anchor="middle">Static analysis</text>
+    </g>
+  </g>
+</svg>

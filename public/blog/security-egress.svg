@@ -1,0 +1,20 @@
+<svg width="1200" height="560" viewBox="0 0 1200 560" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="title desc">
+  <title id="title">Network egress through policy</title>
+  <desc id="desc">A flow diagram showing OpenClaw traffic routed through Proxyline and an enforcing proxy before reaching the internet.</desc>
+  <rect width="1200" height="560" rx="32" fill="#0B1020"/>
+  <rect x="84" y="166" width="250" height="160" rx="24" fill="#111A2E" stroke="#2D3B5E" stroke-width="2"/>
+  <rect x="476" y="166" width="250" height="160" rx="24" fill="#102A35" stroke="#00E5CC" stroke-width="2"/>
+  <rect x="866" y="166" width="250" height="160" rx="24" fill="#2A1722" stroke="#FF8A8A" stroke-width="2"/>
+  <text x="209" y="226" fill="#F8FAFC" font-family="Inter, Arial, sans-serif" font-size="30" font-weight="800" text-anchor="middle">OpenClaw</text>
+  <text x="209" y="266" fill="#94A3B8" font-family="Inter, Arial, sans-serif" font-size="20" text-anchor="middle">ordinary agent traffic</text>
+  <text x="601" y="226" fill="#CFFAFE" font-family="Inter, Arial, sans-serif" font-size="30" font-weight="800" text-anchor="middle">Proxyline</text>
+  <text x="601" y="266" fill="#94A3B8" font-family="Inter, Arial, sans-serif" font-size="20" text-anchor="middle">routes through policy</text>
+  <text x="991" y="226" fill="#FFE4E6" font-family="Inter, Arial, sans-serif" font-size="30" font-weight="800" text-anchor="middle">Egress proxy</text>
+  <text x="991" y="266" fill="#94A3B8" font-family="Inter, Arial, sans-serif" font-size="20" text-anchor="middle">blocks private targets</text>
+  <path d="M354 246H456" stroke="#00E5CC" stroke-width="8" stroke-linecap="round"/>
+  <path d="M436 224L458 246L436 268" stroke="#00E5CC" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M746 246H846" stroke="#FF8A8A" stroke-width="8" stroke-linecap="round"/>
+  <path d="M826 224L848 246L826 268" stroke="#FF8A8A" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/>
+  <text x="600" y="96" fill="#F8FAFC" font-family="Inter, Arial, sans-serif" font-size="42" font-weight="800" text-anchor="middle">Move enforcement closer to egress</text>
+  <text x="600" y="426" fill="#CBD5E1" font-family="Inter, Arial, sans-serif" font-size="24" text-anchor="middle">Validation helps, but connect-time policy is where SSRF defenses become observable.</text>
+</svg>
