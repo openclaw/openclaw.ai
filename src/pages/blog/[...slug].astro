@@ -414,6 +414,34 @@ const postUrl = `https://openclaw.ai/blog/${post.id}`;
     color: var(--text-secondary);
   }
 
+  .article-content :global(.evidence-figure) {
+    margin: 36px 0 40px;
+  }
+
+  .article-content :global(.evidence-figure img) {
+    display: block;
+    width: 100%;
+    max-height: none;
+    height: auto;
+    margin: 0;
+    object-fit: initial;
+    border: 1px solid var(--border-subtle);
+    border-radius: 12px;
+    box-shadow: 0 18px 48px rgba(0, 0, 0, 0.28);
+  }
+
+  .article-content :global(.evidence-figure figcaption) {
+    margin-top: 12px;
+    color: var(--text-muted);
+    font-size: 0.9rem;
+    line-height: 1.55;
+    text-align: center;
+  }
+
+  .article-content :global(.evidence-figure figcaption code) {
+    font-size: 0.86em;
+  }
+
   /* Article Footer */
   .article-footer {
     margin-top: 64px;

@@ -28,6 +28,11 @@ It is not a sandbox. A plugin that is allowed to run arbitrary shell commands ca
 
 Writing inside a plugin workspace should work. Traversal and absolute-path writes outside that workspace should fail. Plugin authors should not have to reimplement those checks.
 
+<figure class="evidence-figure">
+  <img src="/blog/where-openclaw-security-is-heading/fs-safe-boundary-refusal-evidence.png" alt="Terminal output showing fs-safe allowing an in-workspace write and blocking traversal and absolute-path writes with outside-workspace errors." loading="lazy" />
+  <figcaption>Writing inside the plugin workspace succeeds. Traversal and absolute-path writes are refused as <code>outside-workspace</code>.</figcaption>
+</figure>
+
 The next step is making these primitives the expected pattern for plugins on ClawHub too. Bypassing them is not automatically malicious, but it is security-relevant. Over time, that kind of choice should count against a plugin's trust posture.
 
 The safest filesystem call is still the one we do not make. That is the security motivation behind the in-flight SQLite runtime-state refactor. Sessions, transcripts, scheduler state, and plugin state belong in a typed database with clear ownership and transactions, not loose files. Moving runtime state into SQLite removes whole categories of filesystem access from the runtime path.
@@ -50,6 +55,11 @@ Proxyline is not a perfect cage around every possible byte. Raw sockets, native 
 
 The validation path is simple: `example.com` should pass, a loopback canary should fail, and [`openclaw proxy validate`](https://docs.openclaw.ai/cli/proxy) should prove the configured route behaves that way.
 
+<figure class="evidence-figure">
+  <img src="/blog/where-openclaw-security-is-heading/proxy-validation-egress-evidence.png" alt="Terminal output showing openclaw proxy validate allowing example.com, denying a loopback canary, and passing validation." loading="lazy" />
+  <figcaption>The local filtering proxy allows <code>example.com</code>, blocks the loopback canary, and <code>openclaw proxy validate</code> passes.</figcaption>
+</figure>
+
 ## Plugin trust on ClawHub
 
 ClawHub has to be the authority for plugin trust and provenance when a plugin comes from ClawHub. OpenClaw should consume those signals during install and update, rather than rely only on local inspection after the fact.
@@ -64,7 +74,12 @@ What we can do is make the safe path better. Publish on ClawHub. Get scanned. At
 
 We are also exploring higher-trust tiers above the baseline: official packages, trusted publishers, and packages held to stricter review expectations. For plugins that live outside ClawHub, we want scanning to reach them too, but the exact product shape still needs work.
 
-If ClawHub marks `@openclaw/files@1.4.2` as malicious and quarantined, the ClawHub install path should refuse it. That is the bar.
+If ClawHub marks a release as malicious and quarantined, the ClawHub install path should refuse it. That is the bar.
+
+<figure class="evidence-figure">
+  <img src="/blog/where-openclaw-security-is-heading/clawhub-malicious-install-blocked-compact-evidence.png" alt="Terminal output showing OpenClaw refusing to install a ClawHub release flagged as malicious and quarantined." loading="lazy" />
+  <figcaption>ClawHub marks a release as malicious and quarantined; OpenClaw refuses the install.</figcaption>
+</figure>
 
 ## Command approvals and prompt fatigue
 
@@ -74,17 +89,22 @@ Fixing this means fewer prompts, and better prompts.
 
 The accuracy part starts with parsing. String matching is not enough. If an allowlist or blocklist only sees the outer command, wrappers become a bypass. A policy that understands `rm` but cannot see inside `bash -c "rm -rf ~/something"` is not a policy users should trust.
 
-The [shell approval path](https://docs.openclaw.ai/tools/exec-approvals) now evaluates inner command chains for common shell `-c` wrappers. If the inner chain contains an executable that is not allowed, the wrapper should not make it safe. The command highlighter also uses Tree-sitter to show users what OpenClaw found, including executables inside wrapper payloads.
+The [shell approval path](https://docs.openclaw.ai/tools/exec-approvals) now evaluates inner command chains for common shell `-c` wrappers. If the inner chain contains an executable that is not allowed, the wrapper should not make it safe. The command highlighter also uses Tree-sitter to surface what OpenClaw found inside wrappers.
 
-PowerShell has its own shape and its own traps. We already fail closed for forms we do not understand, and broader PowerShell support is on the roadmap.
+<figure class="evidence-figure">
+  <img src="/blog/where-openclaw-security-is-heading/command-ast-approval-highlight-evidence.png" alt="OpenClaw exec approval dialog highlighting executables inside a nested bash and Python command, including rm." loading="lazy" />
+  <figcaption>The command highlighter identifies executables inside wrapper payloads, including the inner destructive command.</figcaption>
+</figure>
+
+PowerShell has its own traps; we fail closed for forms we do not understand, and broader support is on the roadmap.
 
 Parsing is the easier half. The harder half is deciding when to ask.
 
-A static approval policy tends to do one of two bad things. It prompts on everything that might be risky, which sends users to YOLO mode. Or it relies on a fixed allow/deny list that cannot tell whether a command fits the current task.
+A static approval policy either prompts on everything that might be risky, or relies on a fixed allow/deny list that cannot tell whether a command fits the current task.
 
-The question users actually care about is blunt: did I want this to happen?
+The question users actually care about: did I want this to happen?
 
-That is why we are experimenting with contextual approval. The goal is not "never prompt." The goal is that prompts mean something. If OpenClaw asks, the user should stop and read. If OpenClaw does not ask, that decision should be one we can defend.
+That is why we are experimenting with contextual approval. The goal is not "never prompt." The goal is that prompts mean something — and when they do, the user should stop and read.
 
 ## Static analysis
 
@@ -97,6 +117,11 @@ For that, we use OpenGrep with a precise rulepack. Each rule is tied to an advis
 Precision is everything. A noisy rule is worse than no rule, because it teaches the team to ignore the channel.
 
 Today the checked-in precise OpenGrep rulepack has 148 rules. It runs on PR diffs, and the full scan can be run manually. New patched advisories become candidates for new rules.
+
+<figure class="evidence-figure">
+  <img src="/blog/where-openclaw-security-is-heading/opengrep-ghsa-local-rule-hit-evidence.png" alt="Terminal output showing an OpenGrep rule finding a GHSA-derived unsafe safe-bin profile fallback pattern." loading="lazy" />
+  <figcaption>An OpenGrep rule catching a previous GHSA-shaped bug locally.</figcaption>
+</figure>
 
 CodeQL runs alongside for deeper semantic coverage. It is slower and noisier to maintain; we use both.
 
