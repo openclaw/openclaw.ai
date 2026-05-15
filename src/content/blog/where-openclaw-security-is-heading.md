@@ -110,6 +110,8 @@ The question users actually care about: did I want this to happen?
 
 That is why we are experimenting with contextual approval. The goal is not "never prompt." The goal is that prompts mean something — and when they do, the user should stop and read.
 
+For OpenAI users we expose [Auto Review](https://developers.openai.com/codex/concepts/sandboxing/auto-review), a codex-specific feature which replaces manual approval at the sandbox boundary with a separate reviewer agent.
+
 ## Static analysis
 
 OpenClaw has had a lot of GitHub Security Advisories. The first job was plugging holes. The next job is making sure the same bug class does not come back.

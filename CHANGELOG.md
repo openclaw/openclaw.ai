@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Blog: trim and tighten the "Where OpenClaw Security Is Heading" post, drop redundant status preambles, fix dangling phrasing, and add an Auto Review reference for codex users.
+- Blog: widen the article card with a solid backdrop for readability, and round evidence images while cropping their baked-in decorative frame.
 - Installer: after Linux NodeSource installs, prefer the newly installed supported Node binary when an older `/usr/local/bin/node` still shadows it on PATH.
 - Installer: when redirecting an unwritable Linux npm global prefix, create or prepend the `.bashrc` PATH hint so fresh non-interactive shells can find `openclaw`.
 
