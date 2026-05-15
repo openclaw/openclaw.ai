@@ -12,15 +12,11 @@ tags: ["security", "open-source", "clawhub", "plugins"]
 
 Our goal is for OpenClaw to become a trusted way to run a powerful AI personal assistant.
 
-That sounds simple, but it flips how people often talk about agent runtimes. OpenClaw can read files, run commands, install plugins, talk to the network, and act on a real machine for a real user. Power like that is easy to describe as dangerous.
+OpenClaw can read files, run commands, install plugins, talk to the network, and act on a real machine for a real user. Power like that is easy to describe as dangerous, and the concern is not wrong. But powerful does not have to mean blind, unbounded, or impossible to audit.
 
-The concern is not wrong. We want OpenClaw to be powerful enough to do real work. That is the point. But powerful does not have to mean blind, unbounded, or impossible to audit.
+Some of this has landed. Some is rolling out. Some is still in flight. Some is research. I want to be clear about the difference, because posts that blur those lines mislead readers.
 
-This is where our security work is heading.
-
-Some of this has landed. Some is rolling out. Some is still in flight. Some is research. I want to be clear about the difference, because security posts that blur those lines are usually where trust goes to die.
-
-## Filesystem Handling, Runtime State, and fs-safe
+## Filesystem boundaries and fs-safe
 
 **Status: landed for the shared filesystem primitives; in flight for the larger runtime-state move.**
 
@@ -28,41 +24,33 @@ OpenClaw runs on your machine. That means it can touch your documents, your code
 
 The filesystem risk people usually reach for first is path traversal. That risk is real, but it is also only one symptom of a bigger class of bugs: unclear boundaries. Code thinks it is writing inside one root, then a symlink, absolute path, archive extraction, or sloppy join makes it cross another.
 
-`fs-safe` is one answer to that. It is not a new idea bolted onto OpenClaw from the outside. It is the set of safe filesystem patterns OpenClaw had already been growing, pulled into a shared library so core code, plugins, and adjacent services can use the same root-bounded primitives.
+[`fs-safe`](https://fs-safe.io/) is one answer to that. It is not a new idea bolted onto OpenClaw from the outside. It is the set of safe filesystem patterns OpenClaw had already been growing, pulled into a shared library so core code, plugins, and adjacent services can use the same root-bounded primitives.
 
-It is also not a sandbox. A plugin that is allowed to run arbitrary shell commands can still do arbitrary shell-command things. We should say that plainly. `fs-safe` protects against boundary-crossing bugs in filesystem code. It does not turn untrusted code into trusted code.
+It is also not a sandbox. A plugin that is allowed to run arbitrary shell commands can still do arbitrary shell-command things. `fs-safe` protects against boundary-crossing bugs in filesystem code. It does not turn untrusted code into trusted code.
 
-That distinction matters. Writing inside a plugin workspace should work. Traversal and absolute-path writes outside that workspace should fail. Plugin authors should not have to reimplement those checks, and reviewers should not have to rediscover every edge case in every package.
+Writing inside a plugin workspace should work. Traversal and absolute-path writes outside that workspace should fail. Plugin authors should not have to reimplement those checks, and reviewers should not have to rediscover every edge case in every package.
 
 The next step is making these primitives the expected pattern for plugins on ClawHub too. Bypassing them is not automatically malicious, but it is security-relevant. Over time, that kind of choice should count against a plugin's trust posture.
 
-The safest filesystem call is still the one we do not make. That is the security motivation behind the in-flight SQLite runtime-state refactor. Runtime state should not sprawl across loose files when it can live in a typed database with clearer ownership, transactions, and recovery behavior.
-
-Sessions, transcripts, scheduler state, and plugin state are all areas where we want less ad hoc file handling. `fs-safe` makes required filesystem access safer. Moving runtime state into a database removes whole categories of filesystem access from the runtime path.
+The safest filesystem call is still the one we do not make. That is the security motivation behind the in-flight SQLite runtime-state refactor. Sessions, transcripts, scheduler state, and plugin state belong in a typed database with clear ownership and transactions, not sprawled across loose files. `fs-safe` makes required filesystem access safer; moving runtime state into SQLite removes whole categories of filesystem access from the runtime path.
 
 ## SSRF, Network Egress, and Proxyline
 
 **Status: rolling out as a Node-process egress guardrail.**
 
-The network problem is also a boundary problem.
-
 Agentic systems make SSRF harder than it is in a normal web service. In a normal service, user-controlled URLs are often the exception. In an agent runtime, user-controlled or model-influenced URLs are normal product behavior. "Fetch this URL because someone, or something, asked for it" is not an edge case. It is a feature.
 
-We started with the obvious approach: validate the URL before fetching it. Resolve DNS, check the address, then let the request go out.
-
-That is not enough.
-
-The validation code resolves DNS. The actual fetch resolves DNS again. Between those two moments, the answer can change. A host that pointed at a public IP during validation can point at a metadata endpoint by the time the request leaves.
+We started with the obvious approach: validate the URL before fetching it. That is not enough. Validate-then-fetch has a TOCTOU gap — validation resolves DNS, the fetch resolves DNS again, and the answer can change between. A host that pointed at a public IP during validation can point at a metadata endpoint by the time the request leaves.
 
 The fix has to move closer to egress.
 
 Proxyline is our Node-process routing layer for that. It is not itself the filtering proxy. It installs process-global routing for Node networking surfaces and sends traffic through the proxy you configured. The configured proxy is where the connect-time policy should live: block metadata addresses, private ranges, loopback canaries, and whatever else your environment needs blocked.
 
-That split is important. Proxyline routes. The proxy enforces.
+Proxyline routes. The proxy enforces.
 
 It also gives operators observability. If you already run a managed proxy, you can route OpenClaw through it and watch destinations, rates, and blocked attempts from infrastructure you already trust.
 
-Proxyline is not a perfect cage around every possible byte. Raw sockets, native modules, unusual transports, early-captured agents, and non-OpenClaw child processes can still bypass a Node-level guardrail. We are not going to pretend otherwise. But for ordinary OpenClaw network paths, moving the control point from "a wrapper remembered to validate this URL" to "egress flows through a proxy policy" is a much better shape.
+Proxyline is not a perfect cage around every possible byte. Raw sockets, native modules, unusual transports, early-captured agents, and non-OpenClaw child processes can still bypass a Node-level guardrail. But for ordinary OpenClaw network paths, moving the control point from "a wrapper remembered to validate this URL" to "egress flows through a proxy policy" is a much better shape.
 
 The validation path is simple: `example.com` should pass, a loopback canary should fail, and `openclaw proxy validate` should prove the configured route behaves that way.
 
@@ -86,7 +74,7 @@ What we can do is make the safe path better. Publish on ClawHub. Get scanned. At
 
 We are also exploring higher-trust tiers above the baseline: official packages, trusted publishers, and packages held to stricter review expectations. For plugins that live outside ClawHub, we want scanning to reach them too, but the exact product shape still needs work.
 
-If ClawHub marks `@openclaw/kitchen-sink@0.1.0` as malicious and quarantined, the ClawHub install path should refuse it. That is the bar.
+If ClawHub marks `@openclaw/files@1.4.2` as malicious and quarantined, the ClawHub install path should refuse it. That is the bar.
 
 ## Command Authorization and Prompt Fatigue
 
@@ -116,11 +104,9 @@ That is why we are experimenting with contextual approval. The goal is not "neve
 
 **Status: landed and running on PRs.**
 
-OpenClaw has had a lot of GitHub Security Advisories. That means we have patched a lot of security bugs.
+OpenClaw has had a lot of GitHub Security Advisories. The first job was plugging holes. The next job is making sure the same bug class does not come back.
 
-The first job was plugging holes. The next job is making sure the same bug class does not come back.
-
-After an advisory is patched, it is tempting to call it done. We should not. A GHSA is evidence about a bug class, not just one bug. The question after triage is: can we find all the code that looks like this?
+After an advisory is patched, it is tempting to call it done. A GHSA is evidence about a bug class, not just one bug. The question after triage is: can we find all the code that looks like this?
 
 For that, we use OpenGrep with a precise rulepack. Each rule is tied to an advisory, report, or review finding. The baseline goal is regression detection: if the same vulnerable shape returns, CI catches it before review does. The better goal is variant detection: catch nearby versions of the same mistake.
 
@@ -132,9 +118,7 @@ CodeQL covers broader ground alongside it. The challenge there is scale. OpenGre
 
 ## What This Means for OpenClaw Users
 
-OpenClaw is not becoming less powerful. That would miss the point.
-
-It is becoming more legible. More observable. More explicit about which boundary is being enforced where.
+OpenClaw is not becoming less powerful. It is becoming more legible. More observable. More explicit about which boundary is being enforced where.
 
 `fs-safe` does not sandbox plugins; it prevents filesystem boundary mistakes. Proxyline does not replace a filtering proxy; it routes Node egress through one. ClawHub does not remove user choice; it gives users package-version evidence before install. Command authorization does not work because prompts exist; it works when prompts are rare enough and accurate enough to matter.
 
