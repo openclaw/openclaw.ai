@@ -18,8 +18,6 @@ Some of this has landed. Some is rolling out. Some is still in flight. Some is r
 
 ## Filesystem boundaries and fs-safe
 
-The shared filesystem primitives have landed. The larger runtime-state move is still in flight.
-
 OpenClaw runs on your machine. That means it can touch your documents, your codebases, and your photos.
 
 The filesystem risk people usually reach for first is path traversal. That risk is real, but it is also only one symptom of a bigger class of bugs: unclear boundaries. Code thinks it is writing inside one root, then a symlink, absolute path, archive extraction, or sloppy join makes it cross another.
@@ -35,8 +33,6 @@ The next step is making these primitives the expected pattern for plugins on Cla
 The safest filesystem call is still the one we do not make. That is the security motivation behind the in-flight SQLite runtime-state refactor. Sessions, transcripts, scheduler state, and plugin state are the kind of runtime state we want in a typed database with clear ownership and transactions, not sprawled across loose files. `fs-safe` makes required filesystem access safer; moving runtime state into SQLite removes whole categories of filesystem access from the runtime path.
 
 ## Network egress and Proxyline
-
-This is rolling out as a Node-process egress guardrail.
 
 Agentic systems make SSRF harder than it is in a normal web service. In a normal service, user-controlled URLs are often the exception. In an agent runtime, user-controlled or model-influenced URLs are normal product behavior. "Fetch this URL because someone, or something, asked for it" is normal work.
 
@@ -56,8 +52,6 @@ The validation path is simple: `example.com` should pass, a loopback canary shou
 
 ## Plugin trust on ClawHub
 
-ClawHub-hosted package trust signals have landed. Tiers and off-Hub scanning are still evolving.
-
 ClawHub has to be the authority for plugin trust and provenance when a plugin comes from ClawHub. OpenClaw should consume those signals during install and update, rather than rely only on local inspection after the fact.
 
 The ClawHub pipeline is a mix of signals: ClawScan, VirusTotal, static analysis, metadata checks, source provenance, and manual moderation. None of those is magic. Scanners are noisy in different ways, and a pipeline that screams about everything teaches users to ignore it.
@@ -73,8 +67,6 @@ We are also exploring higher-trust tiers above the baseline: official packages, 
 If ClawHub marks `@openclaw/files@1.4.2` as malicious and quarantined, the ClawHub install path should refuse it. That is the bar.
 
 ## Command approvals and prompt fatigue
-
-Stronger shell allowlist analysis has landed. Contextual approval is still experimental.
 
 Prompts arrive faster than anyone can read them. After a few minutes, users flip on YOLO mode so work can continue. At that point the prompts train the user to stop reading.
 
