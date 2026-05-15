@@ -22,15 +22,15 @@ OpenClaw runs on your machine. That means it can touch your documents, your code
 
 The filesystem risk people usually reach for first is path traversal. That risk is real, but it is also only one symptom of a bigger class of bugs: unclear boundaries. Code thinks it is writing inside one root, then a symlink, absolute path, archive extraction, or sloppy join makes it cross another.
 
-[`fs-safe`](https://fs-safe.io/) is one answer to that. It is not a new idea bolted onto OpenClaw from the outside. It is the set of [safe filesystem patterns](https://docs.openclaw.ai/gateway/security/secure-file-operations) OpenClaw had already been growing, pulled into a shared library so core code, plugins, and adjacent services can use the same root-bounded primitives.
+[`fs-safe`](https://fs-safe.io/) is one answer to that. It is the set of [safe filesystem patterns](https://docs.openclaw.ai/gateway/security/secure-file-operations) OpenClaw had already been growing, pulled into a shared library so core code, plugins, and adjacent services can use the same root-bounded primitives.
 
-It is not a sandbox. A plugin that is allowed to run arbitrary shell commands can still do arbitrary shell-command things. `fs-safe` protects against boundary-crossing bugs in filesystem code. It does not turn untrusted code into trusted code.
+It is not a sandbox. A plugin that is allowed to run arbitrary shell commands can still do arbitrary shell-command things. `fs-safe` protects against boundary-crossing bugs in filesystem code.
 
-Writing inside a plugin workspace should work. Traversal and absolute-path writes outside that workspace should fail. Plugin authors should not have to reimplement those checks, and reviewers should not have to rediscover every edge case in every package.
+Writing inside a plugin workspace should work. Traversal and absolute-path writes outside that workspace should fail. Plugin authors should not have to reimplement those checks.
 
 The next step is making these primitives the expected pattern for plugins on ClawHub too. Bypassing them is not automatically malicious, but it is security-relevant. Over time, that kind of choice should count against a plugin's trust posture.
 
-The safest filesystem call is still the one we do not make. That is the security motivation behind the in-flight SQLite runtime-state refactor. Sessions, transcripts, scheduler state, and plugin state are the kind of runtime state we want in a typed database with clear ownership and transactions, not sprawled across loose files. `fs-safe` makes required filesystem access safer; moving runtime state into SQLite removes whole categories of filesystem access from the runtime path.
+The safest filesystem call is still the one we do not make. That is the security motivation behind the in-flight SQLite runtime-state refactor. Sessions, transcripts, scheduler state, and plugin state belong in a typed database with clear ownership and transactions, not loose files. Moving runtime state into SQLite removes whole categories of filesystem access from the runtime path.
 
 ## Network egress and Proxyline
 
