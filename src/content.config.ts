@@ -5,6 +5,10 @@ const authorSchema = z.object({
   name: z.string(),
   handle: z.string().optional(),
   url: z.string().optional(),
+  links: z.array(z.object({
+    label: z.string(),
+    url: z.string(),
+  })).optional(),
   avatar: z.string().optional(),
 });
 

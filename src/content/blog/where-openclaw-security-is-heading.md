@@ -4,7 +4,11 @@ description: "The security roadmap for making OpenClaw a powerful personal assis
 date: 2026-05-15
 authors:
   - name: "Jesse Merhi"
-    url: "https://www.linkedin.com/in/jesse-merhi/"
+    links:
+      - label: "LinkedIn"
+        url: "https://www.linkedin.com/in/jesse-merhi/"
+      - label: "@jesse_merhi"
+        url: "https://x.com/jesse_merhi"
     avatar: "/blog/authors/jesse-merhi.jpg"
 draft: false
 tags: ["security", "open-source", "clawhub", "plugins"]

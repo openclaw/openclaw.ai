@@ -15,7 +15,8 @@ const { post } = Astro.props;
 const { Content } = await render(post);
 
 // Normalize authors - support both legacy single author and new multi-author format
-type Author = { name: string; handle?: string; url?: string; avatar?: string };
+type AuthorLink = { label: string; url: string };
+type Author = { name: string; handle?: string; url?: string; links?: AuthorLink[]; avatar?: string };
 const authors: Author[] = post.data.authors
   ? post.data.authors
   : post.data.author
@@ -31,12 +32,14 @@ function getAuthorAvatar(author: Author): string {
   return author.avatar ?? (author.handle ? `https://unavatar.io/x/${author.handle}` : '/openclaw-logo-text-dark.png');
 }
 
-function getAuthorUrl(author: Author): string | null {
-  return author.url ?? (author.handle ? `https://x.com/${author.handle}` : null);
-}
-
-function getAuthorLabel(author: Author): string | null {
-  return author.handle ? `@${author.handle}` : author.url ? new URL(author.url).hostname.replace(/^www\./, '') : null;
+function getAuthorLinks(author: Author): AuthorLink[] {
+  if (author.links?.length) return author.links;
+  const url = author.url ?? (author.handle ? `https://x.com/${author.handle}` : null);
+  if (!url) return [];
+  return [{
+    label: author.handle ? `@${author.handle}` : new URL(url).hostname.replace(/^www\./, ''),
+    url,
+  }];
 }
 
 function formatDate(date: Date): string {
@@ -85,8 +88,12 @@ const postUrl = `https://openclaw.ai/blog/${post.id}`;
                 />
                 <div class="author-details">
                   <span class="author-name">{author.name}</span>
-                  {getAuthorUrl(author) && getAuthorLabel(author) && (
-                    <a href={getAuthorUrl(author)} class="author-handle" target="_blank" rel="noopener">{getAuthorLabel(author)}</a>
+                  {getAuthorLinks(author).length > 0 && (
+                    <div class="author-links">
+                      {getAuthorLinks(author).map((link) => (
+                        <a href={link.url} class="author-handle" target="_blank" rel="noopener">{link.label}</a>
+                      ))}
+                    </div>
                   )}
                 </div>
               </div>
@@ -285,6 +292,12 @@ const postUrl = `https://openclaw.ai/blog/${post.id}`;
   .author-name {
     font-weight: 600;
     color: var(--text-primary);
+  }
+
+  .author-links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px 10px;
   }
 
   .author-handle {
