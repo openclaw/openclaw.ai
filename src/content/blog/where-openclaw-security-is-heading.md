@@ -88,8 +88,6 @@ That is why we are experimenting with contextual approval. The goal is not "neve
 
 ## Static analysis
 
-This has landed and runs on PRs.
-
 OpenClaw has had a lot of GitHub Security Advisories. The first job was plugging holes. The next job is making sure the same bug class does not come back.
 
 After an advisory is patched, it is tempting to call it done. A GHSA is evidence about a bug class, not just one bug. The question after triage is: can we find all the code that looks like this?
