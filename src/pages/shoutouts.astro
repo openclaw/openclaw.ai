@@ -28,7 +28,7 @@ const allTestimonials = [...testimonials, ...extraTestimonials];
             alt={t.author}
             class="shoutout-avatar"
             loading="lazy"
-            onerror={`this.src='https://ui-avatars.com/api/?name=${t.author}&background=FF4D4D&color=fff&size=96'`}
+            onerror={`this.src='https://ui-avatars.com/api/?name=${encodeURIComponent(t.author)}&background=FF4D4D&color=fff&size=96'`}
           />
           <div class="shoutout-content">
             <p class="shoutout-quote">"{t.quote}"</p>

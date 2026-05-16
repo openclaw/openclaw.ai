@@ -125,7 +125,7 @@ const featuredPress = pressArticles.slice(0, 4);
                 alt={t.author}
                 class="testimonial-avatar"
                 loading="lazy"
-                onerror={`this.src='https://ui-avatars.com/api/?name=${t.author}&background=FF4D4D&color=fff&size=88'`}
+                onerror={`this.src='https://ui-avatars.com/api/?name=${encodeURIComponent(t.author)}&background=FF4D4D&color=fff&size=88'`}
               />
               <div class="testimonial-content">
                 <p class="testimonial-quote">"{t.quote}"</p>
@@ -142,7 +142,7 @@ const featuredPress = pressArticles.slice(0, 4);
                 alt={t.author}
                 class="testimonial-avatar"
                 loading="lazy"
-                onerror={`this.src='https://ui-avatars.com/api/?name=${t.author}&background=FF4D4D&color=fff&size=88'`}
+                onerror={`this.src='https://ui-avatars.com/api/?name=${encodeURIComponent(t.author)}&background=FF4D4D&color=fff&size=88'`}
               />
               <div class="testimonial-content">
                 <p class="testimonial-quote">"{t.quote}"</p>
