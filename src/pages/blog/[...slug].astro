@@ -29,7 +29,7 @@ const authors: Author[] = post.data.authors
     : [];
 
 function getAuthorAvatar(author: Author): string {
-  return author.avatar ?? (author.handle ? `https://unavatar.io/x/${author.handle}` : '/openclaw-logo-text-dark.png');
+  return author.avatar ?? (author.handle ? `https://unavatar.io/x/${author.handle}?token=sk_wjNATzw3FtKNhoJtrXo4hq` : '/openclaw-logo-text-dark.png');
 }
 
 function getAuthorLinks(author: Author): AuthorLink[] {
