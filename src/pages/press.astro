@@ -1,6 +1,7 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import pressArticles from '../data/press.json';
+import { sanitizeUrl } from '../lib/sanitize-url';
 ---
 
 <Layout
@@ -26,7 +27,7 @@ import pressArticles from '../data/press.json';
     <div class="press-grid">
       {pressArticles.map((article) => (
         <a
-          href={article.url}
+          href={sanitizeUrl(article.url)}
           target="_blank"
           rel="noopener"
           class:list={['press-card', article.featured && 'press-featured']}

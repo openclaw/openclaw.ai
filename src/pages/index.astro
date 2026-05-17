@@ -6,6 +6,7 @@ import testimonials from '../data/testimonials.json';
 import communityBuilds from '../data/community-builds.json';
 import pressArticles from '../data/press.json';
 import { getPublishedBlogPosts } from '../lib/blog';
+import { sanitizeUrl } from '../lib/sanitize-url';
 
 // Get latest blog post
 const [latestPost] = await getPublishedBlogPosts();
@@ -119,7 +120,7 @@ const featuredPress = pressArticles.slice(0, 4);
       <div class="testimonials-track">
         <div class="testimonials-row row-1" style={`--duration: ${duration1}s`}>
           {row1.map((t) => (
-            <a href={t.url} target="_blank" rel="noopener" class="testimonial-card" tabindex="-1">
+            <a href={sanitizeUrl(t.url)} target="_blank" rel="noopener" class="testimonial-card" tabindex="-1">
               <img
                 src={`https://unavatar.io/x/${t.author}`}
                 alt={t.author}
@@ -136,7 +137,7 @@ const featuredPress = pressArticles.slice(0, 4);
         </div>
         <div class="testimonials-row row-2" style={`--duration: ${duration2}s`}>
           {row2.map((t) => (
-            <a href={t.url} target="_blank" rel="noopener" class="testimonial-card">
+            <a href={sanitizeUrl(t.url)} target="_blank" rel="noopener" class="testimonial-card">
               <img
                 src={`https://unavatar.io/x/${t.author}`}
                 alt={t.author}
@@ -631,7 +632,7 @@ const featuredPress = pressArticles.slice(0, 4);
       />
       <div class="builds-grid">
         {featuredBuilds.map((build) => (
-          <a href={build.href} target="_blank" rel="noopener" class="build-card">
+          <a href={sanitizeUrl(build.href)} target="_blank" rel="noopener" class="build-card">
             <div class="build-card-header">
               <span class="build-source">{build.source}</span>
               <span class="build-open">Open →</span>
@@ -659,7 +660,7 @@ const featuredPress = pressArticles.slice(0, 4);
       <div class="press-grid">
         {featuredPress.map((article) => (
           <a
-            href={article.url}
+            href={sanitizeUrl(article.url)}
             target="_blank"
             rel="noopener"
             class:list={['press-card', article.featured && 'press-featured']}
