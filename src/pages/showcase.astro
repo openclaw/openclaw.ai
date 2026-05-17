@@ -2,6 +2,7 @@
 import Layout from '../layouts/Layout.astro';
 import showcaseData from '../data/showcase.json';
 import featuredBuilds from '../data/community-builds.json';
+import { sanitizeUrl } from '../lib/sanitize-url';
 
 const featuredIds = new Set(featuredBuilds.map((item) => item.id));
 const sortedShowcase = showcaseData.filter((item) => !featuredIds.has(item.id));
@@ -40,7 +41,7 @@ const categoryLabels: Record<string, string> = {
       </div>
       <div class="featured-grid">
         {featuredBuilds.map((build) => (
-          <a href={build.href} target="_blank" rel="noopener" class="featured-card">
+          <a href={sanitizeUrl(build.href)} target="_blank" rel="noopener" class="featured-card">
             <div class="featured-topline">
               <span class="featured-source">{build.source}</span>
               <span class="featured-likes">❤️ {build.likes}</span>
