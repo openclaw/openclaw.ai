@@ -1,6 +1,7 @@
 ---
 import Layout from '../../layouts/Layout.astro';
 import { getPublishedBlogPosts } from '../../lib/blog';
+import { getCachedXAvatarSrc, getInitialsAvatarSrc } from '../../lib/avatars';
 
 // Get all blog posts, sorted by date (newest first)
 const posts = await getPublishedBlogPosts();
@@ -32,7 +33,7 @@ function firstAuthor(post: (typeof posts)[number]): Author {
 }
 
 function getAuthorAvatar(author: Author): string {
-  return author.avatar ?? (author.handle ? `https://unavatar.io/x/${author.handle}` : '/openclaw-logo-text-dark.png');
+  return author.avatar ?? (author.handle ? getCachedXAvatarSrc(author.handle, author.name, 88) : '/openclaw-logo-text-dark.png');
 }
 ---
 
@@ -65,13 +66,14 @@ function getAuthorAvatar(author: Author): string {
                 const author = firstAuthor(post);
                 return (
                   <>
-              <img
-                src={getAuthorAvatar(author)}
-                alt={author.name}
-                class="author-avatar"
-                loading="lazy"
-              />
-              <span class="author-name">{author.name}</span>
+                    <img
+                      src={getAuthorAvatar(author)}
+                      alt={author.name}
+                      class="author-avatar"
+                      loading="lazy"
+                      onerror={`this.src='${getInitialsAvatarSrc(author.name, 88)}'`}
+                    />
+                    <span class="author-name">{author.name}</span>
                   </>
                 );
               })()}

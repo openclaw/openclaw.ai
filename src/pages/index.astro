@@ -6,6 +6,7 @@ import testimonials from '../data/testimonials.json';
 import communityBuilds from '../data/community-builds.json';
 import pressArticles from '../data/press.json';
 import { getPublishedBlogPosts } from '../lib/blog';
+import { getCachedXAvatarSrc, getInitialsAvatarSrc } from '../lib/avatars';
 
 // Get latest blog post
 const [latestPost] = await getPublishedBlogPosts();
@@ -121,11 +122,11 @@ const featuredPress = pressArticles.slice(0, 4);
           {row1.map((t) => (
             <a href={t.url} target="_blank" rel="noopener" class="testimonial-card" tabindex="-1">
               <img
-                src={`https://unavatar.io/x/${t.author}`}
+                src={getCachedXAvatarSrc(t.author, t.author, 88)}
                 alt={t.author}
                 class="testimonial-avatar"
                 loading="lazy"
-                onerror={`this.src='https://ui-avatars.com/api/?name=${encodeURIComponent(t.author)}&background=FF4D4D&color=fff&size=88'`}
+                onerror={`this.src='${getInitialsAvatarSrc(t.author, 88)}'`}
               />
               <div class="testimonial-content">
                 <p class="testimonial-quote">"{t.quote}"</p>
@@ -138,11 +139,11 @@ const featuredPress = pressArticles.slice(0, 4);
           {row2.map((t) => (
             <a href={t.url} target="_blank" rel="noopener" class="testimonial-card">
               <img
-                src={`https://unavatar.io/x/${t.author}`}
+                src={getCachedXAvatarSrc(t.author, t.author, 88)}
                 alt={t.author}
                 class="testimonial-avatar"
                 loading="lazy"
-                onerror={`this.src='https://ui-avatars.com/api/?name=${encodeURIComponent(t.author)}&background=FF4D4D&color=fff&size=88'`}
+                onerror={`this.src='${getInitialsAvatarSrc(t.author, 88)}'`}
               />
               <div class="testimonial-content">
                 <p class="testimonial-quote">"{t.quote}"</p>

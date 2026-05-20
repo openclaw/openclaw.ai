@@ -2,6 +2,7 @@
 import Layout from '../../layouts/Layout.astro';
 import { render } from 'astro:content';
 import { getPublishedBlogPosts } from '../../lib/blog';
+import { getCachedXAvatarSrc, getInitialsAvatarSrc } from '../../lib/avatars';
 
 export async function getStaticPaths() {
   const posts = await getPublishedBlogPosts();
@@ -29,7 +30,7 @@ const authors: Author[] = post.data.authors
     : [];
 
 function getAuthorAvatar(author: Author): string {
-  return author.avatar ?? (author.handle ? `https://unavatar.io/x/${author.handle}` : '/openclaw-logo-text-dark.png');
+  return author.avatar ?? (author.handle ? getCachedXAvatarSrc(author.handle, author.name, 88) : '/openclaw-logo-text-dark.png');
 }
 
 function getAuthorLinks(author: Author): AuthorLink[] {
@@ -85,6 +86,7 @@ const postUrl = `https://openclaw.ai/blog/${post.id}`;
                   alt={author.name}
                   class="author-avatar"
                   loading="lazy"
+                  onerror={`this.src='${getInitialsAvatarSrc(author.name, 88)}'`}
                 />
                 <div class="author-details">
                   <span class="author-name">{author.name}</span>

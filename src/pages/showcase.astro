@@ -2,6 +2,7 @@
 import Layout from '../layouts/Layout.astro';
 import showcaseData from '../data/showcase.json';
 import featuredBuilds from '../data/community-builds.json';
+import { getCachedXAvatarSrc, getInitialsAvatarSrc } from '../lib/avatars';
 
 const featuredIds = new Set(featuredBuilds.map((item) => item.id));
 const sortedShowcase = showcaseData.filter((item) => !featuredIds.has(item.id));
@@ -70,10 +71,11 @@ const categoryLabels: Record<string, string> = {
         <a href={`https://x.com/${item.author}/status/${item.id}`} target="_blank" rel="noopener" class="showcase-card">
           <div class="card-header">
             <img
-              src={`https://unavatar.io/x/${item.author}`}
+              src={getCachedXAvatarSrc(item.author, item.author, 96)}
               alt={item.author}
               class="avatar"
               loading="lazy"
+              onerror={`this.src='${getInitialsAvatarSrc(item.author, 96)}'`}
             />
             <div class="author-info">
               <span class="author-name">@{item.author}</span>

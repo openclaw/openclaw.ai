@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+- Website: cache X avatar lookups under local static assets and stop emitting Unavatar URLs in generated pages.
 - Integrations: point provider, platform, automation, and ClawHub cards at canonical target pages, and fix the WhatsApp docs link (#137, thanks @Tilakraj0308).
 - Shoutouts: URL-encode testimonial avatar fallbacks so contributor names cannot break the inline fallback URL (#142, thanks @SebTardif).
 - Blog: trim and tighten the "Where OpenClaw Security Is Heading" post, drop redundant status preambles, fix dangling phrasing, and add an Auto Review reference for codex users.

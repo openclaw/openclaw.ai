@@ -2,6 +2,7 @@
 import Layout from '../layouts/Layout.astro';
 import testimonials from '../data/testimonials.json';
 import extraTestimonials from '../data/testimonials-extra.json';
+import { getCachedXAvatarSrc, getInitialsAvatarSrc } from '../lib/avatars';
 
 // Combine all testimonials - strongest first, then extras (no randomization)
 const allTestimonials = [...testimonials, ...extraTestimonials];
@@ -24,11 +25,11 @@ const allTestimonials = [...testimonials, ...extraTestimonials];
       {allTestimonials.map((t) => (
         <a href={t.url} target="_blank" rel="noopener" class="shoutout-card">
           <img
-            src={t.avatar || `https://unavatar.io/x/${t.author}`}
+            src={t.avatar || getCachedXAvatarSrc(t.author, t.author, 96)}
             alt={t.author}
             class="shoutout-avatar"
             loading="lazy"
-            onerror={`this.src='https://ui-avatars.com/api/?name=${encodeURIComponent(t.author)}&background=FF4D4D&color=fff&size=96'`}
+            onerror={`this.src='${getInitialsAvatarSrc(t.author, 96)}'`}
           />
           <div class="shoutout-content">
             <p class="shoutout-quote">"{t.quote}"</p>

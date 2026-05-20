@@ -5,6 +5,7 @@
   "scripts": {
     "dev": "astro dev",
     "build": "astro build",
+    "avatars:cache": "node scripts/cache-avatars.mjs",
     "preview": "astro preview"
   },
   "pnpm": {
@@ -19,6 +20,7 @@
     "@vercel/analytics": "^2.0.1",
     "astro": "^6.1.9",
     "js-yaml": "^4.1.1",
+    "sharp": "0.34.5",
     "simple-icons": "^16.18.0"
   },
   "devDependencies": {
