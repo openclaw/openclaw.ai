@@ -1,6 +1,7 @@
 ---
 import TrustTopbar from '../../../components/TrustTopbar.astro';
 import t from '../../../i18n/ko/trust.json';
+import { sanitizeTrustHtml as san } from '../../../lib/sanitize-html';
 
 const isSubdomain = Astro.url.hostname === 'trust.openclaw.ai';
 const trustHref = isSubdomain ? '/ko' : '/trust/ko';
@@ -416,7 +417,7 @@ const langLinks = {
 
         <section class="section">
           <h2>{t.newEra.heading}</h2>
-          {t.newEra.paragraphs.map((p: string) => <p set:html={p} />)}
+          {t.newEra.paragraphs.map((p: string) => <p set:html={san(p)} />)}
         </section>
 
         <section class="section">
@@ -437,13 +438,13 @@ const langLinks = {
 
         <section class="section">
           <h2>{t.scope.heading}</h2>
-          <p set:html={t.scope.intro} />
+          <p set:html={san(t.scope.intro)} />
 
           {t.scope.sections.map((s: { title: string; items: string[] }) => (
             <>
               <h4>{s.title}</h4>
               <ul>
-                {s.items.map((item: string) => <li set:html={item} />)}
+                {s.items.map((item: string) => <li set:html={san(item)} />)}
               </ul>
             </>
           ))}
@@ -490,7 +491,7 @@ const langLinks = {
               <tbody>
                 {t.phase1.coverage.rows.map((row: string[]) => (
                   <tr>
-                    <td set:html={row[0]} />
+                    <td set:html={san(row[0])} />
                     <td>{row[1]}</td>
                   </tr>
                 ))}
@@ -517,7 +518,7 @@ const langLinks = {
             </table>
           </div>
 
-          {t.phase1.closing.map((p: string) => <p set:html={p} />)}
+          {t.phase1.closing.map((p: string) => <p set:html={san(p)} />)}
         </section>
 
         <section class="section">
@@ -538,7 +539,7 @@ const langLinks = {
                 {t.phase2.table.groups.map((g: { category: string; rows: string[][] }) => (
                   g.rows.map((row: string[], ri: number) => (
                     <tr>
-                      {ri === 0 && <td rowspan={g.rows.length} set:html={g.category} />}
+                      {ri === 0 && <td rowspan={g.rows.length} set:html={san(g.category)} />}
                       <td>{row[0]}</td>
                       <td>{row[1]}</td>
                     </tr>
@@ -570,7 +571,7 @@ const langLinks = {
                 {t.phase3.scope.rows.map((row: string[]) => (
                   <tr>
                     <td>{row[0]}</td>
-                    <td set:html={row[1]} />
+                    <td set:html={san(row[1])} />
                     <td>{row[2]}</td>
                   </tr>
                 ))}
@@ -605,7 +606,7 @@ const langLinks = {
                 <li><strong>{repo.label}</strong> - <a href={repo.url}>{repo.name}</a></li>
               ))}
             </ul>
-            <p set:html={t.phase4.reportBox.fallback} />
+            <p set:html={san(t.phase4.reportBox.fallback)} />
 
             <h4 style="margin-top: 24px;">{t.phase4.reportBox.fieldsTitle}</h4>
             <div class="fields">
@@ -625,7 +626,7 @@ const langLinks = {
               <tbody>
                 {t.phase4.sla.rows.map((row: string[]) => (
                   <tr>
-                    <td set:html={row[0]} />
+                    <td set:html={san(row[0])} />
                     <td>{row[1]}</td>
                     <td>{row[2]}</td>
                     <td>{row[3]}</td>
@@ -644,8 +645,8 @@ const langLinks = {
 
         <section class="section">
           <h2>{t.securityTrust.heading}</h2>
-          <p set:html={t.securityTrust.bio} />
-          <p set:html={t.securityTrust.bioDetail} />
+          <p set:html={san(t.securityTrust.bio)} />
+          <p set:html={san(t.securityTrust.bioDetail)} />
 
           <h3>{t.securityTrust.responsibilitiesTitle}</h3>
           <ul>
@@ -674,7 +675,7 @@ const langLinks = {
           <pre><code>{t.posture.verifyCommand}</code></pre>
           <p>{t.posture.verifyIntro}</p>
           <ul>
-            {t.posture.verifyItems.map((item: string) => <li set:html={item} />)}
+            {t.posture.verifyItems.map((item: string) => <li set:html={san(item)} />)}
           </ul>
         </section>
 
@@ -689,7 +690,7 @@ const langLinks = {
           {t.faq.items.map((item: { q: string; a: string }) => (
             <div class="faq-item">
               <div class="faq-q">{item.q}</div>
-              <div class="faq-a" set:html={item.a} />
+              <div class="faq-a" set:html={san(item.a)} />
             </div>
           ))}
         </section>

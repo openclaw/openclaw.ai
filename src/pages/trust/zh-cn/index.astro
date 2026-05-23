@@ -1,6 +1,7 @@
 ---
 import TrustTopbar from '../../../components/TrustTopbar.astro';
 import t from '../../../i18n/zh-cn/trust.json';
+import { sanitizeTrustHtml as s } from '../../../lib/sanitize-html';
 
 const isSubdomain = Astro.url.hostname === 'trust.openclaw.ai';
 const trustHref = isSubdomain ? '/zh-cn' : '/trust/zh-cn';
@@ -416,7 +417,7 @@ const langLinks = {
 
         <section class="section">
           <h2>{t.newEra.heading}</h2>
-          {t.newEra.paragraphs.map(p => <p set:html={p} />)}
+          {t.newEra.paragraphs.map(p => <p set:html={s(p)} />)}
         </section>
 
         <section class="section">
@@ -435,13 +436,13 @@ const langLinks = {
 
         <section class="section">
           <h2>{t.scope.heading}</h2>
-          <p set:html={t.scope.intro} />
+          <p set:html={s(t.scope.intro)} />
 
           {t.scope.sections.map(sec => (
             <>
               <h4>{sec.title}</h4>
               <ul>
-                {sec.items.map(item => <li set:html={item} />)}
+                {sec.items.map(item => <li set:html={s(item)} />)}
               </ul>
             </>
           ))}
@@ -488,7 +489,7 @@ const langLinks = {
               <tbody>
                 {t.phase1.coverage.rows.map(row => (
                   <tr>
-                    {row.map(cell => <td set:html={cell} />)}
+                    {row.map(cell => <td set:html={s(cell)} />)}
                   </tr>
                 ))}
               </tbody>
@@ -513,7 +514,7 @@ const langLinks = {
             </table>
           </div>
 
-          {t.phase1.closing.map(p => <p set:html={p} />)}
+          {t.phase1.closing.map(p => <p set:html={s(p)} />)}
         </section>
 
         <section class="section">
@@ -534,7 +535,7 @@ const langLinks = {
                 {t.phase2.table.groups.map(group => (
                   group.rows.map((row, ri) => (
                     <tr>
-                      {ri === 0 && <td rowspan={group.rows.length} set:html={group.category} />}
+                      {ri === 0 && <td rowspan={group.rows.length} set:html={s(group.category)} />}
                       {row.map(cell => <td>{cell}</td>)}
                     </tr>
                   ))
@@ -564,7 +565,7 @@ const langLinks = {
               <tbody>
                 {t.phase3.scope.rows.map(row => (
                   <tr>
-                    {row.map(cell => <td set:html={cell} />)}
+                    {row.map(cell => <td set:html={s(cell)} />)}
                   </tr>
                 ))}
               </tbody>
@@ -598,7 +599,7 @@ const langLinks = {
                 <li><strong>{repo.label}</strong> - <a href={repo.url}>{repo.name}</a></li>
               ))}
             </ul>
-            <p set:html={t.phase4.reportBox.fallback} />
+            <p set:html={s(t.phase4.reportBox.fallback)} />
 
             <h4 style="margin-top: 24px;">{t.phase4.reportBox.fieldsTitle}</h4>
             <div class="fields">
@@ -618,7 +619,7 @@ const langLinks = {
               <tbody>
                 {t.phase4.sla.rows.map(row => (
                   <tr>
-                    {row.map(cell => <td set:html={cell} />)}
+                    {row.map(cell => <td set:html={s(cell)} />)}
                   </tr>
                 ))}
               </tbody>
@@ -633,8 +634,8 @@ const langLinks = {
 
         <section class="section">
           <h2>{t.securityTrust.heading}</h2>
-          <p set:html={t.securityTrust.bio} />
-          <p set:html={t.securityTrust.bioDetail} />
+          <p set:html={s(t.securityTrust.bio)} />
+          <p set:html={s(t.securityTrust.bioDetail)} />
 
           <h3>{t.securityTrust.responsibilitiesTitle}</h3>
           <ul>
@@ -663,7 +664,7 @@ const langLinks = {
           <pre><code>{t.posture.verifyCommand}</code></pre>
           <p>{t.posture.verifyIntro}</p>
           <ul>
-            {t.posture.verifyItems.map(item => <li set:html={item} />)}
+            {t.posture.verifyItems.map(item => <li set:html={s(item)} />)}
           </ul>
         </section>
 
@@ -678,7 +679,7 @@ const langLinks = {
           {t.faq.items.map(item => (
             <div class="faq-item">
               <div class="faq-q">{item.q}</div>
-              <div class="faq-a" set:html={item.a} />
+              <div class="faq-a" set:html={s(item.a)} />
             </div>
           ))}
         </section>
