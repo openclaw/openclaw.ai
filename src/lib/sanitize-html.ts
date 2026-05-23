@@ -13,6 +13,7 @@ const SAFE_TAGS = new Set([
   "code",
   "br",
   "a",
+  "p",
   "span",
   "sup",
   "sub",
@@ -26,7 +27,7 @@ const SAFE_ATTRS: Record<string, Set<string>> = {
   span: new Set(["class"]),
 };
 
-const SAFE_HREF_RE = /^https?:\/\//i;
+const SAFE_HREF_RE = /^https:\/\//i;
 
 function escapeHtml(text: string): string {
   return text
