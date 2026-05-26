@@ -10,7 +10,7 @@ interface Props {
 const {
   title,
   description = "OpenClaw — The AI that actually does things. Your personal assistant on any platform.",
-  canonicalUrl = "https://openclaw.ai/",
+  canonicalUrl = new URL(Astro.url.pathname, Astro.site ?? "https://openclaw.ai").href,
 } = Astro.props;
 ---
 
