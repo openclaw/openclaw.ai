@@ -20,9 +20,11 @@ While traditional malware scanning like this is a relatively solved problem, ide
 
 To mitigate these risks, before installing a skill, you should know three things up front: what it claims to do, whether the bundled code actually matches those claims, and what the blast radius looks like if something goes wrong.
 
-Our initial attempt at providing this information to our users was to prompt a Codex agent to look for [OWASP Agentic Risks](https://owasp.org/www-project-agentic-skills-top-10/). It works well, and we've caught a number of bad actors with it. But it was a closed effort, and the agentic risk problem is too new and too fast-moving for any one registry to defend on its own.
+Our initial attempt at providing this information to our users was to prompt a Codex agent to look for [OWASP Agentic Risks](https://owasp.org/www-project-agentic-skills-top-10/). It works well, and we've caught a number of bad actors with it. But it was a closed-source effort, and the agentic risk problem is too new and too fast-moving for any one registry to defend on its own.
 
-We're excited to instead be collaborating with NVIDIA on its [verified agent skills initiative](https://developer.nvidia.com/blog/nvidia-verified-agent-skills-provide-capability-governance-for-ai-agents/), doing this work in the open so the entire skill community can benefit. Skill Cards are how we make it clear what a skill actually does, and SkillSpector is how we surface agentic risk and catch the bad actors that slip past traditional malware scanning.
+We're excited to instead be collaborating with NVIDIA on its [verified agent skills initiative](https://developer.nvidia.com/blog/nvidia-verified-agent-skills-provide-capability-governance-for-ai-agents/), doing this work in the open so the entire skill community can benefit.
+
+Skill Cards are how we make it clear what a skill actually does, and SkillSpector is how we surface agentic risk and catch the bad actors that slip past traditional malware scanning.
 
 ## **The ClawScan skill pipeline**
 
