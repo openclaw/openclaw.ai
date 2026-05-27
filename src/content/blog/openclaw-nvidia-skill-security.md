@@ -12,9 +12,9 @@ image: "/blog/openclaw-nvidia.svg"
 
 ClawHub skills now ship with [Skill Cards](https://github.com/NVIDIA/Trustworthy-AI/blob/main/Skill%20Card.md): machine-readable trust artifacts that capture the publisher, package, capabilities, scan results, and provenance for each skill version.
 
-We're also collaborating with NVIDIA on [SkillSpector](https://github.com/nvidia/skillspector), a new project from its [verified agent skills](https://developer.nvidia.com/blog/nvidia-verified-agent-skills-provide-capability-governance-for-ai-agents/) work for identifying agentic risk in AI agent skills. In ClawHub, SkillSpector findings are advisory inputs to our custom ClawScan analysis, not the final verdict.
+We're also collaborating with NVIDIA on [SkillSpector](https://github.com/nvidia/skillspector), a new project from its [verified agent skills](https://developer.nvidia.com/blog/nvidia-verified-agent-skills-provide-capability-governance-for-ai-agents/) work for identifying agentic risk in AI agent skills.
 
-Agent skills are uniquely tricky to vet. They can look harmless while still containing hidden instructions, overbroad permissions, dangerous code patterns, or behavior that doesn't match the declared purpose. Skill Cards make trust evidence legible to humans and machines, and SkillSpector adds a specialized agentic-risk lens that helps us jointly improve skill scanning security without replacing ClawScan's final decision.
+Agent skills are uniquely tricky to vet. They can look harmless while still containing hidden instructions, overbroad permissions, dangerous code patterns, or behavior that doesn't match the declared purpose. Skill Cards make trust evidence legible to humans and machines, and SkillSpector adds a specialized agentic-risk lens that helps us jointly improve skill scanning security.
 
 ## **Skill Cards and SkillSpector collaboration**
 
