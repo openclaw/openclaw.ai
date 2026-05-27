@@ -5,7 +5,7 @@ date: 2026-05-27
 author: "Patrick Erichsen"
 authorHandle: "pat_erichsen"
 authorAvatar: "/blog/authors/patrick-erichsen.jpg"
-draft: true
+draft: false
 tags: ["security", "announcement", "nvidia", "clawhub", "skills"]
 image: "/blog/openclaw-nvidia.svg"
 ---
