@@ -43,8 +43,6 @@ Building ClawHub in the open includes the security work behind it. The scan verd
 
 The agent skill ecosystem is too new and too fast-moving for any one company to be defending in private. Our goal is for ClawHub to be the most secure registry for agent skills, and the way that happens is by engaging directly with the research community to help us improve.
 
-To the best of our knowledge, this is the most extensive set publicly available skill scanner outcomes published to date.
-
 ## **What's next**
 
 Building trust in the emerging skill ecosystem is an industry-wide problem, and we’re excited to continue our collaboration with NVIDIA to develop best practices in the space around scan evidence, skill cards, provenance and verification.
