@@ -20,9 +20,9 @@ While traditional malware scanning like this is a relatively solved problem, ide
 
 To mitigate these risks, before installing a skill, you should know three things up front:
 
-1. what it claims to do
-2. whether the bundled code actually matches those claims
-3. and more importantly what the blast radius looks like if something goes wrong.
+1. What it claims to do
+2. Whether the bundled code actually matches those claims
+3. And more importantly what the blast radius looks like if something goes wrong.
 
 Our initial attempt at providing this information to our users was to prompt a Codex agent to look for [OWASP Agentic Risks](https://owasp.org/www-project-agentic-skills-top-10/). It works well, and we've caught a number of bad actors with it. But it was a closed-source effort, and the agentic risk problem is too new and too fast-moving for any one registry to defend on its own.
 
