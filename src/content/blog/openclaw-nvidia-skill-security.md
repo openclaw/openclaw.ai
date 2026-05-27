@@ -1,6 +1,6 @@
 ---
 title: "OpenClaw Collaborates with NVIDIA for Improved Skill Security"
-description: "ClawHub skills now ship with Skill Cards, while NVIDIA's new SkillSpector project adds advisory agentic-risk signals to ClawScan."
+description: "Every ClawHub skill now ships with a Skill Card documenting what the skill is and where it came from, and is scanned by SkillSpector for hidden instructions and other agentic risks"
 date: 2026-05-27
 author: "Patrick Erichsen"
 authorHandle: "pat_erichsen"
@@ -10,47 +10,48 @@ tags: ["security", "announcement", "nvidia", "clawhub", "skills"]
 image: "/blog/openclaw-nvidia.svg"
 ---
 
-ClawHub skills now ship with [Skill Cards](https://github.com/NVIDIA/Trustworthy-AI/blob/main/Skill%20Card.md): machine-readable trust artifacts that capture the publisher, package, capabilities, scan results, and provenance for each skill version.
+*Every ClawHub skill now ships with a [Skill Card](https://github.com/NVIDIA/Trustworthy-AI/blob/main/Skill%20Card.md) documenting what the skill is and where it came from, and is scanned by [SkillSpector](https://github.com/nvidia/skillspector) for hidden instructions and other agentic risks*
 
-We're also collaborating with NVIDIA on [SkillSpector](https://github.com/nvidia/skillspector), a new project from its [verified agent skills](https://developer.nvidia.com/blog/nvidia-verified-agent-skills-provide-capability-governance-for-ai-agents/) work for identifying agentic risk in AI agent skills.
+ClawHub has a reputation for being insecure.
 
-Agent skills are uniquely tricky to vet. They can look harmless while still containing hidden instructions, overbroad permissions, dangerous code patterns, or behavior that doesn't match the declared purpose. Skill Cards make trust evidence legible to humans and machines, and SkillSpector adds a specialized agentic-risk lens that helps us jointly improve skill scanning security.
+When we launched, we were immediately targeted by malicious actors who published skills bundling known malware. We quickly [partnered with VirusTotal](https://openclaw.ai/blog/virustotal-partnership) to flag those skills and automatically ban the publishers.
 
-## **Skill Cards and SkillSpector collaboration**
+While traditional malware scanning like this is a relatively solved problem, identifying *agentic risk* is not. A malicious skill can claim to summarize your logs while bundling a script that ships them off your machine. A well-meaning skill can point your agent at a CLI that wipes production on the wrong flag.
 
-**Skill Cards**, NVIDIA's open trust-artifact spec, now ship with every skill version. Each card tells you the things you actually need to know before installing a skill: who published it, what it can do, what ClawScan found, and where exactly it came from. All of it is verified by ClawHub rather than taken from publisher self-description. You can read the card in a tab on the skill detail page or view it from the terminal with `openclaw skills verify <slug> --card`.
+To mitigate these risks, before installing a skill, you should know three things up front: what it claims to do, whether the bundled code actually matches those claims, and what the blast radius looks like if something goes wrong.
+
+Our initial attempt at providing this information to our users was to prompt a Codex agent to look for [OWASP Agentic Risks](https://owasp.org/www-project-agentic-skills-top-10/). It works well, and we've caught a number of bad actors with it. But it was a closed effort, and the agentic risk problem is too new and too fast-moving for any one registry to defend on its own.
+
+We're excited to instead be collaborating with NVIDIA on its [verified agent skills initiative](https://developer.nvidia.com/blog/nvidia-verified-agent-skills-provide-capability-governance-for-ai-agents/), doing this work in the open so the entire skill community can benefit. Skill Cards are how we make it clear what a skill actually does, and SkillSpector is how we surface agentic risk and catch the bad actors that slip past traditional malware scanning.
+
+## **The ClawScan skill pipeline**
+
+Before diving into the new tools, it’s helpful to have a mental model of what the full security scan pipeline looks like on ClawHub.
+
+When a new skill version is published, a Codex agent running on [BlackSmith](https://www.blacksmith.sh/) receives the output of our static analysis, VirusTotal, and SkillSpector scans as context. It then produces a final verdict (Clean, Review, Warn, Malicious), and a bundled Skill Card.
 
 ![][image1]
 
-**SkillSpector** is a new NVIDIA project that we're collaborating on to improve agent-skill scanning. It combines static checks and LLM-assisted semantic analysis to flag potential risks such as hidden instructions, risky code paths, overbroad capabilities, dependency issues, and mismatch between declared purpose and actual behavior. In ClawHub, those findings are advisory: a SkillSpector finding does not automatically block a skill. ClawScan weighs it alongside static analysis, VirusTotal, provenance, metadata, and moderation context before making the final registry verdict. The security audit surfaces those findings so users can see which signals informed the final verdict.
+## **Skill Cards and SkillSpector collaboration**
+
+**Skill Cards**, NVIDIA's open trust-artifact spec, now ship with every skill version. Each card tells you the things you actually need to know before installing a skill: who published it, what it can do, what ClawScan found, and where exactly it came from. All of it is verified by ClawHub rather than taken from the publisher's self-description. You can read the card in a tab on the skill detail page or view it from the terminal with `openclaw skills verify <slug> --card`.
 
 ![][image2]
 
-## **How ClawHub Scans Skills**
-
-When a skill version is published, ClawScan runs custom analysis over the complete package. It combines static analysis, VirusTotal, advisory NVIDIA SkillSpector findings, provenance, metadata, and Codex-on-Blacksmith review into a final verdict, then produces a verified Skill Card for the version users can install.
+**SkillSpector** is a new NVIDIA project that we're collaborating on to improve agent-skill scanning. It combines static checks and LLM-assisted semantic analysis to flag potential risks such as hidden instructions, risky code paths, overbroad capabilities, dependency issues, and mismatch between declared purpose and actual behavior. In ClawHub, those findings are advisory: a SkillSpector finding does not automatically block a skill. ClawScan weighs it alongside static analysis, VirusTotal, provenance, metadata, and moderation context before making the final registry verdict. The security audit surfaces those findings so users can see which signals informed the final verdict.
 
 ![][image3]
 
-## **Strengthening the publisher layer**
+## **Open-sourcing our security scan signals**
 
-Skill security doesn't stop at scan time. A trusted registry also needs to know about the humans publishing skills, and respond when patterns of abuse emerge. To that end, we’ve recently shipped additional security work:
+As one of the most popular skill registries, we are now running the full ClawScan suite on thousands of publish events every single day. This is generating a huge amount of signal that would be invaluable to the security research community, but until now has been locked away inside ClawHub.
 
-* **Improved spam and abuse moderation.** We've developed an enhanced moderation algorithm to catch coordinated low-effort publishing and spammy bursts.
-* **Official publisher badges.** ClawHub now displays an Official badge on select publishers across the UI, API, and CLI install metadata. Look for it when deciding what to install.
+We’re excited to announce that as part of our commitment to securing the entire agent skill ecosystem, we’ve open-sourced a HuggingFace dataset of all security scan outcomes on ClawHub: [OpenClaw/clawhub-security-signals](https://huggingface.co/datasets/OpenClaw/clawhub-security-signals-private).
 
-## **Opening up our security signals**
+Our hope is that this empowers the broader research community to join us in improving the state of the art in skill security tooling.
 
-Building ClawHub in the open includes the security work behind it. The Skill Cards, ClawScan verdicts, advisory SkillSpector findings, and moderation outputs our pipeline generates are being prepared as a community dataset at [`OpenClaw/clawhub-security-signals`](https://huggingface.co/datasets/OpenClaw/clawhub-security-signals-private) on Hugging Face.
+A rising tide lifts all claws. 🦞
 
-The agent skill ecosystem is too new and too fast-moving for any one company to be defending in private. Our goal is for ClawHub to be the most secure registry for agent skills, and the way that happens is by engaging directly with the research community to help us improve.
-
-## **What's next**
-
-Building trust in the emerging skill ecosystem is an industry-wide problem, and we’re excited to continue collaborating with NVIDIA on Skill Cards, scan evidence, provenance, verification, and the future of agent-skill scanning.
-
-The lobster grows stronger. 🦞
-
-[image1]: /blog/openclaw-nvidia-skill-security/skill-card.png
-[image2]: /blog/openclaw-nvidia-skill-security/skill-spector.png
-[image3]: /blog/openclaw-nvidia-skill-security/clawscan-trust-pipeline.png
+[image1]: /blog/openclaw-nvidia-skill-security/clawscan-trust-pipeline.png
+[image2]: /blog/openclaw-nvidia-skill-security/skill-card.png
+[image3]: /blog/openclaw-nvidia-skill-security/skill-spector.png
