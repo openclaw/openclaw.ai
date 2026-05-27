@@ -44,7 +44,7 @@ When a new skill version is published, a Codex agent running on [BlackSmith](htt
 
 ![][image3]
 
-## **Open-sourcing our security scan signals**
+## **Open-sourcing our security scan signals dataset**
 
 As one of the most popular skill registries, we are now running the full ClawScan suite on thousands of publish events every single day, and burning tens of millions of GPT-5.5 tokens to do so. This is generating a huge amount of signal that would be invaluable to the security research community, but until now has been locked away inside ClawHub.
 
