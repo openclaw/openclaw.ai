@@ -1,6 +1,6 @@
 ---
 title: "OpenClaw Collaborates with NVIDIA for Improved Skill Security"
-description: "Every ClawHub skill now ships with a Skill Card documenting what the skill is and where it came from, and is scanned by SkillSpector for hidden instructions and other agentic risks"
+description: "Every ClawHub skill now ships with a Skill Card documenting what the skill does and where it came from, and is scanned by SkillSpector for hidden instructions and other agentic risks"
 date: 2026-05-27
 author: "Patrick Erichsen"
 authorHandle: "pat_erichsen"
@@ -10,7 +10,7 @@ tags: ["security", "announcement", "nvidia", "clawhub", "skills"]
 image: "/blog/openclaw-nvidia.svg"
 ---
 
-*Every ClawHub skill now ships with a [Skill Card](https://github.com/NVIDIA/Trustworthy-AI/blob/main/Skill%20Card.md) documenting what the skill is and where it came from, and is scanned by [SkillSpector](https://github.com/nvidia/skillspector) for hidden instructions and other agentic risks*
+Every ClawHub skill now ships with a [Skill Card](https://github.com/NVIDIA/Trustworthy-AI/blob/main/Skill%20Card.md) documenting what the skill does and where it came from, and is scanned by [SkillSpector](https://github.com/nvidia/skillspector) for hidden instructions and other agentic risks
 
 ClawHub has a reputation for being insecure.
 
