@@ -30,7 +30,7 @@ When a skill version is published, ClawHub scans the complete package with stati
 
 ![][image3]
 
-**Strengthening the publisher layer**
+## **Strengthening the publisher layer**
 
 Skill security doesn't stop at scan time. A trusted registry also needs to know about the humans publishing skills, and respond when patterns of abuse emerge. To that end, we’ve recently shipped additional security work:
 
