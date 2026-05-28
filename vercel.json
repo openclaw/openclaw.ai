@@ -1,6 +1,11 @@
 {
   "routes": [
     {
+      "src": "^/blog/performance-size-supply-chain-sweep/?$",
+      "status": 308,
+      "headers": { "Location": "/blog/lighter-core-sharper-claws/" }
+    },
+    {
       "src": "^/(.*)$",
       "has": [{ "type": "host", "value": "blog.openclaw.ai" }],
       "status": 308,
