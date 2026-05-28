@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+- Blog: refine the article docs CTA panel colors.
 - Blog: capitalize tag labels on the blog landing page.
 - Blog: simplify the blog landing page headline.
 - Website: merge the product/docs/blog visual language, make the homepage quick-start first, and retire the standalone Trust pages in favor of `/blog#security`.
