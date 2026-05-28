@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+- Ecosystem: make project card banner art more visible.
 - Ecosystem: quiet the final contribution CTA button colors.
 - Ecosystem: add a visual project directory with generated banners, real project logos, canonical site links, and local static assets.
 - Website: redirect `blog.openclaw.ai` to the canonical blog at `openclaw.ai/blog`.
