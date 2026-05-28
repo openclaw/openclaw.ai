@@ -265,16 +265,21 @@ function getAuthorAvatar(author: Author): string {
   }
 
   .featured-post {
+    position: relative;
     display: grid;
     grid-template-columns: minmax(0, 1fr) auto;
     gap: 24px;
     margin-bottom: 28px;
     padding: 28px;
-    border: 1px solid var(--border-accent);
+    border: 1px solid color-mix(in srgb, var(--cyan-bright) 24%, var(--border-subtle));
     border-radius: 8px;
     background:
-      linear-gradient(135deg, rgba(255, 77, 77, 0.08), rgba(0, 229, 204, 0.04)),
+      linear-gradient(135deg, color-mix(in srgb, var(--cyan-bright) 10%, transparent), transparent 48%),
+      linear-gradient(90deg, color-mix(in srgb, var(--coral-bright) 7%, transparent), transparent 38%),
       var(--surface-card-strong);
+    box-shadow:
+      inset 0 1px 0 var(--surface-inset-highlight),
+      0 18px 48px color-mix(in srgb, var(--cyan-bright) 8%, transparent);
     color: inherit;
     text-decoration: none;
   }
