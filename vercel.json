@@ -1,6 +1,11 @@
 {
   "redirects": [
-    { "source": "/discord", "destination": "https://discord.gg/clawd", "statusCode": 302 }
+    {
+      "source": "/discord",
+      "has": [{ "type": "host", "value": "openclaw.ai" }],
+      "destination": "https://discord.gg/clawd",
+      "statusCode": 302
+    }
   ],
   "routes": [
     {
