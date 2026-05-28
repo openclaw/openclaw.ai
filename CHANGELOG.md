@@ -4,6 +4,7 @@
 
 - Blog: refine the article docs CTA panel colors.
 - Blog: cool down the featured post card border and background so the warm coral accent stops dominating the blog index hero.
+- CI: drop the stale GitHub Pages deploy workflow; the site has been served by Vercel for a while and Pages was no longer enabled.
 - Blog: capitalize tag labels on the blog landing page.
 - Blog: simplify the blog landing page headline.
 - Website: merge the product/docs/blog visual language, make the homepage quick-start first, and retire the standalone Trust pages in favor of `/blog#security`.
