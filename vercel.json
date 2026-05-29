@@ -1,13 +1,11 @@
 {
-  "redirects": [
-    {
-      "source": "/discord",
-      "has": [{ "type": "host", "value": "openclaw.ai" }],
-      "destination": "https://discord.gg/clawd",
-      "statusCode": 302
-    }
-  ],
   "routes": [
+    {
+      "src": "^/discord/?$",
+      "has": [{ "type": "host", "value": "openclaw.ai" }],
+      "status": 302,
+      "headers": { "Location": "https://discord.gg/clawd" }
+    },
     {
       "src": "^/blog/performance-size-supply-chain-sweep/?$",
       "status": 308,
