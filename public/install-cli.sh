@@ -675,13 +675,23 @@ checkout_git_openclaw_ref() {
     return 0
   fi
 
-  git -C "$repo_dir" fetch --tags origin
-
   if git -C "$repo_dir" rev-parse --verify --quiet "refs/tags/${ref}^{commit}" >/dev/null; then
     git -C "$repo_dir" checkout --detach "$ref"
     return 0
   fi
 
+  if git -C "$repo_dir" ls-remote --exit-code --tags origin "refs/tags/${ref}" >/dev/null 2>&1; then
+    git -C "$repo_dir" fetch --depth 1 --no-tags origin "refs/tags/${ref}:refs/tags/${ref}"
+    git -C "$repo_dir" checkout --detach "$ref"
+    return 0
+  fi
+
+  if git -C "$repo_dir" rev-parse --verify --quiet "${ref}^{commit}" >/dev/null; then
+    git -C "$repo_dir" checkout --detach "$ref"
+    return 0
+  fi
+
+  git -C "$repo_dir" fetch --depth 1 --no-tags origin "$ref" || true
   if git -C "$repo_dir" rev-parse --verify --quiet "${ref}^{commit}" >/dev/null; then
     git -C "$repo_dir" checkout --detach "$ref"
     return 0
