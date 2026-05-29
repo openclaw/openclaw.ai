@@ -13,7 +13,7 @@ Landing page for [OpenClaw](https://github.com/openclaw/openclaw) — your perso
 ## Tech Stack
 
 - [Astro](https://astro.build/) — Static site generator
-- GitHub Pages — Hosting
+- [Vercel](https://vercel.com/) — Hosting
 - Custom CSS — No framework, just vibes
 
 ## Development
@@ -36,7 +36,7 @@ bun run preview
 
 ## Deploy
 
-Automatically deployed to GitHub Pages on push to `main`.
+Automatically deployed to Vercel on push to `main`.
 
 ## Install Scripts
 
