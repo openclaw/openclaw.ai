@@ -3,6 +3,7 @@
 ## Unreleased
 
 - Ecosystem: promote clawpdf into the TypeScript libraries section with its canonical site link.
+- Website: move the Discord shortcut into Vercel routing so `/discord` redirects correctly (#147, thanks @SebTardif).
 - Ecosystem: tune project card banner art visibility.
 - Ecosystem: quiet the final contribution CTA button colors.
 - Ecosystem: add a visual project directory with generated banners, real project logos, canonical site links, and local static assets.
