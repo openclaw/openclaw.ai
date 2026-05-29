@@ -3,6 +3,7 @@ import Layout from '../layouts/Layout.astro';
 import testimonials from '../data/testimonials.json';
 import extraTestimonials from '../data/testimonials-extra.json';
 import { getCachedXAvatarSrc, getInitialsAvatarSrc } from '../lib/avatars';
+import { sanitizeUrl } from '../lib/sanitize-url';
 
 // Combine all testimonials - strongest first, then extras (no randomization)
 const allTestimonials = [...testimonials, ...extraTestimonials];
@@ -23,7 +24,7 @@ const allTestimonials = [...testimonials, ...extraTestimonials];
 
     <div class="shoutouts-grid">
       {allTestimonials.map((t) => (
-        <a href={t.url} target="_blank" rel="noopener" class="shoutout-card">
+        <a href={sanitizeUrl(t.url)} target="_blank" rel="noopener" class="shoutout-card">
           <img
             src={t.avatar || getCachedXAvatarSrc(t.author, t.author, 96)}
             alt={t.author}

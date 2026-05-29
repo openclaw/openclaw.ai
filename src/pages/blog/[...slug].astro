@@ -4,6 +4,7 @@ import SiteTopbar from '../../components/SiteTopbar.astro';
 import { render } from 'astro:content';
 import { getPublishedBlogPosts } from '../../lib/blog';
 import { getCachedXAvatarSrc, getInitialsAvatarSrc } from '../../lib/avatars';
+import { sanitizeUrl } from '../../lib/sanitize-url';
 
 export async function getStaticPaths() {
   const posts = await getPublishedBlogPosts();
@@ -127,7 +128,7 @@ const postUrl = `https://openclaw.ai/blog/${post.id}`;
                   {getAuthorLinks(author).length > 0 && (
                     <div class="author-links">
                       {getAuthorLinks(author).map((link) => (
-                        <a href={link.url} class="author-handle" target="_blank" rel="noopener">{link.label}</a>
+                        <a href={sanitizeUrl(link.url)} class="author-handle" target="_blank" rel="noopener">{link.label}</a>
                       ))}
                     </div>
                   )}

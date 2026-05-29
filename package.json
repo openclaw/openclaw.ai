@@ -5,6 +5,7 @@
   "scripts": {
     "dev": "astro dev",
     "build": "astro build",
+    "test": "bun test",
     "avatars:cache": "node scripts/cache-avatars.mjs",
     "preview": "astro preview"
   },
