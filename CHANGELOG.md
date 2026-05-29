@@ -5,6 +5,7 @@
 - Ecosystem: promote clawpdf into the TypeScript libraries section with its canonical site link.
 - Website: sanitize data-driven external links before rendering them into `href` attributes (#143, thanks @SebTardif).
 - Website: stop serving the stale GitHub Pages `CNAME` file now that Vercel owns the site, and update the hosting docs (#148, thanks @SebTardif).
+- Website: keep root logo compatibility assets available for older `granola.png` and `logo.png` embeds.
 - Website: move the Discord shortcut into Vercel routing so `/discord` redirects correctly (#147, thanks @SebTardif).
 - Ecosystem: tune project card banner art visibility.
 - Ecosystem: quiet the final contribution CTA button colors.
