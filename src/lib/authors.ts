@@ -43,6 +43,7 @@ const authorProfiles: BlogAuthor[] = [
     handle: 'joshavant',
     links: [
       { label: '@joshavant', url: 'https://x.com/joshavant' },
+      { label: 'LinkedIn', url: 'https://www.linkedin.com/in/joshavant/' },
     ],
     avatar: '/avatars/x/joshavant.jpg',
   },
