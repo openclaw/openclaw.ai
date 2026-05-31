@@ -3,7 +3,6 @@ title: "OpenAI Models in OpenClaw, Done Right"
 description: "OpenClaw now runs OpenAI agent turns through the native Codex app-server harness by default, while bringing the lessons back to every model."
 date: 2026-05-14
 author: "Nik Pash"
-authorHandle: "pashmerepat"
 draft: false
 tags: ["models", "openai", "codex", "agents"]
 ---

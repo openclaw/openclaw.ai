@@ -3,7 +3,6 @@ title: "How OpenClaw Got Safer in Public"
 description: "The work you do not see behind the world's most-watched open source personal AI agent."
 date: 2026-04-30
 author: "Peter Steinberger"
-authorHandle: "steipete"
 draft: false
 tags: ["security", "open-source", "nvidia", "clawhub"]
 ---

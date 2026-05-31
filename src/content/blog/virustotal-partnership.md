@@ -4,11 +4,8 @@ description: "ClawHub skills are now scanned by VirusTotal's threat intelligence
 date: 2026-02-07
 authors:
   - name: "Peter Steinberger"
-    handle: "steipete"
   - name: "Jamieson O'Reilly"
-    handle: "theonejvo"
   - name: "Bernardo Quintero"
-    handle: "bquintero"
 draft: false
 tags: ["security", "announcement", "clawhub"]
 image: "/blog/openclaw-virustotal.svg"

@@ -4,24 +4,7 @@ description: "OpenClaw is adding opt-in auto mode for Enterprise-ready host exec
 date: 2026-05-31
 authors:
   - name: "Vincent Koc"
-    title: "Chief Architect"
-    org: "OpenClaw Foundation"
-    handle: "vincent_koc"
-    links:
-      - label: "LinkedIn"
-        url: "https://www.linkedin.com/in/koconder/"
-      - label: "@vincent_koc"
-        url: "https://x.com/vincent_koc"
-    avatar: "/blog/authors/vince-koc.jpg"
   - name: "Jesse Merhi"
-    title: "Core Maintainer"
-    org: "OpenClaw / Atlassian"
-    links:
-      - label: "LinkedIn"
-        url: "https://www.linkedin.com/in/jesse-merhi/"
-      - label: "@jesse_merhi"
-        url: "https://x.com/jesse_merhi"
-    avatar: "/blog/authors/jesse-merhi.jpg"
 draft: false
 tags: ["security", "codex", "approvals", "channels"]
 ---

@@ -3,7 +3,6 @@ title: "Introducing OpenClaw"
 description: "The journey from Clawd to Moltbot to OpenClaw—and why this name is here to stay."
 date: 2026-01-29
 author: "Peter Steinberger"
-authorHandle: "steipete"
 tags: ["announcement", "roadmap"]
 image: "/blog/openclaw-logo-text.png"
 ---
