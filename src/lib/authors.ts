@@ -15,16 +15,6 @@ export type BlogAuthor = {
 
 const authorProfiles: BlogAuthor[] = [
   {
-    name: 'Josh Avant',
-    title: 'Core Maintainer',
-    org: 'OpenClaw Foundation',
-    handle: 'josh_avant',
-    links: [
-      { label: '@josh_avant', url: 'https://x.com/josh_avant' },
-    ],
-    avatar: '/avatars/x/josh_avant.jpg',
-  },
-  {
     name: 'Vincent Koc',
     title: 'Chief Architect',
     org: 'OpenClaw Foundation',
@@ -45,6 +35,16 @@ const authorProfiles: BlogAuthor[] = [
       { label: 'LinkedIn', url: 'https://www.linkedin.com/in/jesse-merhi/' },
     ],
     avatar: '/blog/authors/jesse-merhi.jpg',
+  },
+  {
+    name: 'Josh Avant',
+    title: 'MTS',
+    org: 'OpenClaw Foundation',
+    handle: 'josh_avant',
+    links: [
+      { label: '@josh_avant', url: 'https://x.com/josh_avant' },
+    ],
+    avatar: '/avatars/x/josh_avant.jpg',
   },
   {
     name: 'Peter Steinberger',

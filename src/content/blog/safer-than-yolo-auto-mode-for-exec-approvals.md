@@ -3,9 +3,9 @@ title: "Safer Than YOLO: Auto Mode for Exec Approvals"
 description: "OpenClaw is adding opt-in auto mode for Enterprise-ready host exec guardrails: policy runs first, low-risk misses get reviewed, and humans stay in the loop."
 date: 2026-05-31
 authors:
-  - name: "Josh Avant"
   - name: "Vincent Koc"
   - name: "Jesse Merhi"
+  - name: "Josh Avant"
 draft: false
 tags: ["security", "codex", "approvals", "channels"]
 ---
