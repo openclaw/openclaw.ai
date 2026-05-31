@@ -112,6 +112,71 @@ That is why we are experimenting with contextual approval. The goal is not "neve
 
 For OpenAI users we expose [Auto Review](https://developers.openai.com/codex/concepts/sandboxing/auto-review), a codex-specific feature which replaces manual approval at the sandbox boundary with a separate reviewer agent.
 
+The same approval requests can be forwarded into chat surfaces, so the operator does not have to keep a local terminal in view.
+
+Slack can render native Block Kit approval prompts when interactivity is enabled. Exec approvals use `channels.slack.execApprovals.*`; approvers come from `channels.slack.execApprovals.approvers` or `commands.ownerAllowFrom`.
+
+```json5
+{
+  commands: {
+    ownerAllowFrom: ["slack:U12345678"],
+  },
+  channels: {
+    slack: {
+      execApprovals: {
+        enabled: "auto",
+        target: "dm",
+      },
+    },
+  },
+}
+```
+
+Telegram supports approver DMs and optional prompts in the originating chat or forum topic. Inline approval buttons require `channels.telegram.capabilities.inlineButtons` to allow the target surface.
+
+```json5
+{
+  commands: {
+    ownerAllowFrom: ["telegram:123456789"],
+  },
+  channels: {
+    telegram: {
+      execApprovals: {
+        enabled: "auto",
+        approvers: ["123456789"],
+        target: "dm",
+      },
+      capabilities: {
+        inlineButtons: "all",
+      },
+    },
+  },
+}
+```
+
+iMessage approval reactions landed too. A Like tapback maps to `allow-once`, a Dislike tapback maps to `deny`, and `allow-always` remains an explicit `/approve <id> allow-always` reply. The reacting handle must be an explicit approver, and OpenClaw ignores cross-device self-tapbacks so the bot cannot approve itself.
+
+```json5
+{
+  approvals: {
+    exec: {
+      enabled: true,
+      mode: "targets",
+      targets: [
+        { channel: "imessage", to: "+15555550123" },
+      ],
+    },
+  },
+  channels: {
+    imessage: {
+      allowFrom: ["+15555550123"],
+    },
+  },
+}
+```
+
+The full forwarding model lives in [Exec approvals - advanced](https://docs.openclaw.ai/tools/exec-approvals-advanced), with channel-specific details in the [Slack](https://docs.openclaw.ai/channels/slack), [Telegram](https://docs.openclaw.ai/channels/telegram), and [iMessage](https://docs.openclaw.ai/channels/imessage) docs.
+
 ## Static analysis
 
 OpenClaw has had a lot of GitHub Security Advisories. The first job was plugging holes. The next job is making sure the same bug class does not come back.

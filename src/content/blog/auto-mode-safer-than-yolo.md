@@ -14,9 +14,11 @@ We now have a better path: `auto`.
 
 `auto` keeps the useful part of automation - letting safe, repeatable commands run without nagging you - while preserving the security property YOLO throws away. When OpenClaw cannot prove a host command is already covered by policy, it asks a reviewer first. If the reviewer is not confident, it asks you.
 
+We shipped this first through the [Codex harness](https://docs.openclaw.ai/plugins/codex-harness), so OpenAI-backed OpenClaw sessions could already use Codex-style auto approvals. Now we are bringing the same safer default to host exec for everyone.
+
 ## Why This Exists
 
-Codex already made this shift in its own permission presets. Its `auto` preset is the default: workspace files are writable, normal commands can run, and approvals are still required for escapes such as network access or writes outside the workspace. The dangerous path still exists under the explicit `--yolo` alias, but it means what it says: bypass approvals and sandboxing.
+Codex already made this shift in its own permission presets. Its `auto` preset is the default: workspace files are writable, normal commands can run, and approvals are still required for escapes such as network access or writes outside the workspace.
 
 OpenClaw is bringing the same shape to [host exec](https://docs.openclaw.ai/tools/exec-approvals). Instead of teaching users to choose between "approve everything manually" and "trust everything forever", `tools.exec.mode: "auto"` gives us a middle lane.
 
@@ -61,9 +63,9 @@ openclaw config set tools.exec.host gateway
 openclaw config set tools.exec.mode auto
 ```
 
-That is it. You do not need to paste an approvals JSON file to turn on `auto`.
+Auto is now active for host exec.
 
-If you use the [Codex harness](https://docs.openclaw.ai/plugins/codex-harness), the same normalized OpenClaw surface applies. `tools.exec.mode: "auto"` maps Codex app-server sessions to Guardian-reviewed approvals, typically `approvalPolicy: "on-request"`, `approvalsReviewer: "auto_review"`, and `sandbox: "workspace-write"` when the local requirements allow those settings. If you intentionally want no-approval Codex posture, use `tools.exec.mode: "full"` instead.
+If you use the [Codex harness](https://docs.openclaw.ai/plugins/codex-harness), this is the path OpenAI-backed sessions already use: `tools.exec.mode: "auto"` maps Codex app-server sessions to Guardian-reviewed approvals with workspace-write sandboxing when the local requirements allow it.
 
 ## What Gets Asked
 
@@ -79,84 +81,9 @@ An approval prompt can offer:
 
 ## Approvals in Chat
 
-Approvals are no longer trapped in a local terminal. OpenClaw can route exec and plugin approvals into the places operators already watch. The full forwarding model lives in [Exec approvals - advanced](https://docs.openclaw.ai/tools/exec-approvals-advanced).
+Approvals are no longer trapped in a local terminal. OpenClaw can route approval prompts into the places operators already watch, including [Slack](https://docs.openclaw.ai/channels/slack), [Telegram](https://docs.openclaw.ai/channels/telegram), and [iMessage](https://docs.openclaw.ai/channels/imessage).
 
-### Slack
-
-[Slack](https://docs.openclaw.ai/channels/slack) can render native Block Kit approval prompts when interactivity is enabled. Exec approvals use `channels.slack.execApprovals.*`; approvers come from `channels.slack.execApprovals.approvers` or `commands.ownerAllowFrom`.
-
-```json5
-{
-  commands: {
-    ownerAllowFrom: ["slack:U12345678"],
-  },
-  channels: {
-    slack: {
-      execApprovals: {
-        enabled: "auto",
-        target: "dm",
-      },
-    },
-  },
-}
-```
-
-Slack auto-enables native exec approvals when at least one exec approver resolves. Same-chat `/approve` also works in Slack channels and DMs that already support commands. Slack approval UX is button-first, not emoji-reaction-first.
-
-### Telegram
-
-[Telegram](https://docs.openclaw.ai/channels/telegram) supports approver DMs and optional prompts in the originating chat or forum topic. Approvers must be numeric Telegram user IDs.
-
-```json5
-{
-  commands: {
-    ownerAllowFrom: ["telegram:123456789"],
-  },
-  channels: {
-    telegram: {
-      execApprovals: {
-        enabled: "auto",
-        approvers: ["123456789"],
-        target: "dm",
-      },
-      capabilities: {
-        inlineButtons: "all",
-      },
-    },
-  },
-}
-```
-
-Inline approval buttons require `channels.telegram.capabilities.inlineButtons` to allow the target surface. Telegram can also use same-chat `/approve`, but approval authorization still goes through resolved approvers.
-
-### iMessage
-
-[iMessage](https://docs.openclaw.ai/channels/imessage) approval reactions landed. When an exec or plugin approval routes to iMessage, OpenClaw can resolve it from tapbacks:
-
-- `👍` / Like tapback: `allow-once`
-- `👎` / Dislike tapback: `deny`
-- `allow-always`: still a manual `/approve <id> allow-always` reply
-
-```json5
-{
-  approvals: {
-    exec: {
-      enabled: true,
-      mode: "targets",
-      targets: [
-        { channel: "imessage", to: "+15555550123" },
-      ],
-    },
-  },
-  channels: {
-    imessage: {
-      allowFrom: ["+15555550123"],
-    },
-  },
-}
-```
-
-The reacting handle must be an explicit approver in `channels.imessage.allowFrom` or the account-level allowlist. OpenClaw ignores cross-device self-tapbacks, so your bot cannot approve itself because your phone mirrored a reaction.
+The detailed setup lives in [Exec approvals - advanced](https://docs.openclaw.ai/tools/exec-approvals-advanced).
 
 ## The Security Model
 
