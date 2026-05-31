@@ -5,13 +5,19 @@ interface Props {
   title: string;
   description?: string;
   canonicalUrl?: string;
+  ogType?: string;
+  structuredData?: Record<string, unknown> | Record<string, unknown>[];
 }
 
 const {
   title,
   description = "OpenClaw — The AI that actually does things. Your personal assistant on any platform.",
   canonicalUrl = new URL(Astro.url.pathname, Astro.site ?? "https://openclaw.ai").href,
+  ogType = "website",
+  structuredData,
 } = Astro.props;
+
+const structuredDataItems = structuredData ? Array.isArray(structuredData) ? structuredData : [structuredData] : [];
 ---
 
 <!doctype html>
@@ -30,7 +36,7 @@ const {
     <!-- Open Graph -->
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
-    <meta property="og:type" content="website" />
+    <meta property="og:type" content={ogType} />
     <meta property="og:url" content={canonicalUrl} />
     <meta property="og:image" content="https://openclaw.ai/og-image.png" />
     <meta property="og:image:width" content="1200" />
@@ -48,6 +54,10 @@ const {
     <link href="https://api.fontshare.com/v2/css?f[]=clash-display@700,600,500&f[]=satoshi@400,500,700&display=swap" rel="stylesheet">
 
     <title>{title}</title>
+
+    {structuredDataItems.map((item) => (
+      <script type="application/ld+json" set:html={JSON.stringify(item)} />
+    ))}
 
     <script is:inline>
       (() => {
