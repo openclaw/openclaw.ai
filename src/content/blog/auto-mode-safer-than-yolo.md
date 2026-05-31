@@ -5,6 +5,7 @@ date: 2026-05-31
 authors:
   - name: "Vince Koc"
     handle: "vincent_koc"
+    avatar: "/blog/authors/vince-koc.jpg"
   - name: "Jesse Merhi"
     links:
       - label: "LinkedIn"
