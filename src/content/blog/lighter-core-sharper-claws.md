@@ -3,7 +3,6 @@ title: "OpenClaw Is Getting Faster, Smaller, and Easier to Trust"
 description: "A release sweep across February through May shows faster agent turns, fewer dependencies, and a cleaner package shape."
 date: 2026-05-28
 author: "Peter Steinberger"
-authorHandle: "steipete"
 draft: false
 tags: ["performance", "release", "security", "dependencies"]
 ---

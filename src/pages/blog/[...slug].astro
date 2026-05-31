@@ -4,6 +4,7 @@ import Icon from '../../components/Icon.astro';
 import SiteTopbar from '../../components/SiteTopbar.astro';
 import { render } from 'astro:content';
 import { getPublishedBlogPosts } from '../../lib/blog';
+import { resolveAuthorProfile, type AuthorLink, type BlogAuthor } from '../../lib/authors';
 import { getCachedXAvatarSrc, getInitialsAvatarSrc } from '../../lib/avatars';
 import { sanitizeUrl } from '../../lib/sanitize-url';
 import { SITE_URL, absoluteUrl, blogPostPath } from '../../lib/seo';
@@ -21,25 +22,23 @@ const { post } = Astro.props;
 const allPosts = await getPublishedBlogPosts();
 const { Content, headings } = await render(post);
 
-type AuthorLink = { label: string; url: string };
-type Author = { name: string; title?: string; org?: string; handle?: string; url?: string; links?: AuthorLink[]; avatar?: string };
 type AuthorLinkMeta = AuthorLink & { displayLabel: string; icon?: string; ariaLabel: string; order: number };
-const authors: Author[] = post.data.authors
-  ? post.data.authors
-  : post.data.author
+const rawAuthors: BlogAuthor[] = post.data.authors
+  ?? (post.data.author
     ? [{
-        name: post.data.author,
-        handle: post.data.authorHandle,
-        url: post.data.authorUrl,
-        avatar: post.data.authorAvatar,
-      }]
-    : [];
+      name: post.data.author,
+      handle: post.data.authorHandle,
+      url: post.data.authorUrl,
+      avatar: post.data.authorAvatar,
+    }]
+    : []);
+const authors = rawAuthors.map(resolveAuthorProfile);
 
-function getAuthorAvatar(author: Author): string {
+function getAuthorAvatar(author: BlogAuthor): string {
   return author.avatar ?? (author.handle ? getCachedXAvatarSrc(author.handle, author.name, 88) : '/openclaw-logo-text-dark.png');
 }
 
-function getAuthorLinks(author: Author): AuthorLink[] {
+function getAuthorLinks(author: BlogAuthor): AuthorLink[] {
   if (author.links?.length) return author.links;
   const url = author.url ?? (author.handle ? `https://x.com/${author.handle}` : null);
   if (!url) return [];
@@ -52,7 +51,7 @@ function getAuthorLinks(author: Author): AuthorLink[] {
 const siIcon = (icon: { path: string }) => icon.path;
 const linkedinIcon = 'M20.45 20.45h-3.55v-5.57c0-1.33-.03-3.04-1.85-3.04-1.85 0-2.14 1.45-2.14 2.94v5.67H9.35V9h3.41v1.56h.05c.48-.9 1.64-1.85 3.37-1.85 3.6 0 4.27 2.37 4.27 5.46v6.28zM5.34 7.43a2.06 2.06 0 1 1 0-4.13 2.06 2.06 0 0 1 0 4.13zM7.12 20.45H3.56V9h3.56v11.45zM22.23 0H1.77C.79 0 0 .77 0 1.73v20.54C0 23.23.79 24 1.77 24h20.45c.98 0 1.78-.77 1.78-1.73V1.73C24 .77 23.2 0 22.23 0z';
 
-function getAuthorLinkMeta(author: Author, link: AuthorLink): AuthorLinkMeta {
+function getAuthorLinkMeta(author: BlogAuthor, link: AuthorLink): AuthorLinkMeta {
   const label = link.label.trim();
   const normalizedLabel = label.toLowerCase();
   let hostname = '';
@@ -78,7 +77,7 @@ function getAuthorLinkMeta(author: Author, link: AuthorLink): AuthorLinkMeta {
   return { ...link, displayLabel: label, ariaLabel: `${author.name}: ${label}`, order: 3 };
 }
 
-function getSortedAuthorLinkMeta(author: Author): AuthorLinkMeta[] {
+function getSortedAuthorLinkMeta(author: BlogAuthor): AuthorLinkMeta[] {
   return getAuthorLinks(author)
     .map((link, index) => ({ ...getAuthorLinkMeta(author, link), index }))
     .sort((a, b) => a.order - b.order || a.index - b.index);

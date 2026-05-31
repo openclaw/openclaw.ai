@@ -3,7 +3,6 @@ title: "OpenClaw Had a Rough Week"
 description: "What happened around the 2026.4.24 and 2026.4.29 releases, why the direction was right, and what we are changing now."
 date: 2026-05-05
 author: "Peter Steinberger"
-authorHandle: "steipete"
 draft: false
 tags: ["release", "stability", "security", "clawhub"]
 ---

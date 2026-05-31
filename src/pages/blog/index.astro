@@ -2,6 +2,7 @@
 import Layout from '../../layouts/Layout.astro';
 import SiteTopbar from '../../components/SiteTopbar.astro';
 import { getPublishedBlogPosts } from '../../lib/blog';
+import { resolveAuthorProfile, type BlogAuthor } from '../../lib/authors';
 import { getCachedXAvatarSrc, getInitialsAvatarSrc } from '../../lib/avatars';
 
 const posts = await getPublishedBlogPosts();
@@ -39,18 +40,16 @@ function estimateReadTime(content: string): string {
   return `${Math.max(1, Math.ceil(words / 220))} min read`;
 }
 
-type Author = { name: string; handle?: string; url?: string; avatar?: string };
-
-function firstAuthor(post: (typeof posts)[number]): Author {
-  return post.data.authors?.[0] ?? {
+function firstAuthor(post: (typeof posts)[number]): BlogAuthor {
+  return resolveAuthorProfile(post.data.authors?.[0] ?? {
     name: post.data.author ?? 'OpenClaw Team',
     handle: post.data.authorHandle,
     url: post.data.authorUrl,
     avatar: post.data.authorAvatar,
-  };
+  });
 }
 
-function getAuthorAvatar(author: Author): string {
+function getAuthorAvatar(author: BlogAuthor): string {
   return author.avatar ?? (author.handle ? getCachedXAvatarSrc(author.handle, author.name, 88) : '/openclaw-logo-text-dark.png');
 }
 ---
