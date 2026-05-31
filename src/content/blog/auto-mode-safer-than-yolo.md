@@ -40,9 +40,7 @@ OpenClaw is bringing the same shape to [host exec](https://docs.openclaw.ai/tool
 
 ## What Auto Does
 
-Host exec has two policy layers.
-
-The first layer is OpenClaw config: what the agent is asking for. The second layer is the local approvals file on the machine that will actually run the command. The effective policy is the stricter merge of both.
+Host exec starts with OpenClaw config: what the agent is allowed to ask for. Most users only need that setting. Hosts can still have stricter local policy, but that is an advanced control, not the normal setup path.
 
 In `auto` mode, OpenClaw handles a host command like this:
 
@@ -50,9 +48,9 @@ In `auto` mode, OpenClaw handles a host command like this:
 2. If the command misses policy, OpenClaw builds a bounded review packet: command, argv, cwd, env key names, host, and parser analysis.
 3. The auto reviewer can allow one low-risk execution only.
 4. Anything ambiguous, higher-risk, unparseable, timed out, model-unavailable, or reviewer-directed falls back to human approval.
-5. If no UI or configured approval client can answer, the host's `askFallback` decides the result.
+5. If no UI or configured approval client can answer, OpenClaw uses the host's configured fallback.
 
-That last point matters. `auto` is not a secret bypass around your machine's local policy. A host-local `ask: "always"` still asks. A host-local `security: "deny"` still denies.
+That last point matters. `auto` is not a secret bypass around your machine. A host configured to always ask still asks. A host configured to deny still denies.
 
 ## Enabling Auto
 
@@ -61,33 +59,9 @@ For a local gateway-host setup:
 ```bash
 openclaw config set tools.exec.host gateway
 openclaw config set tools.exec.mode auto
-
-openclaw approvals set --stdin <<'EOF'
-{
-  "version": 1,
-  "defaults": {
-    "security": "allowlist",
-    "ask": "on-miss",
-    "askFallback": "deny"
-  }
-}
-EOF
 ```
 
-For a node host, set the requested OpenClaw policy the same way, then update the node's approvals file on the node runtime:
-
-```bash
-openclaw approvals set --node <id|name|ip> --stdin <<'EOF'
-{
-  "version": 1,
-  "defaults": {
-    "security": "allowlist",
-    "ask": "on-miss",
-    "askFallback": "deny"
-  }
-}
-EOF
-```
+That is it. You do not need to paste an approvals JSON file to turn on `auto`.
 
 If you use the [Codex harness](https://docs.openclaw.ai/plugins/codex-harness), the same normalized OpenClaw surface applies. `tools.exec.mode: "auto"` maps Codex app-server sessions to Guardian-reviewed approvals, typically `approvalPolicy: "on-request"`, `approvalsReviewer: "auto_review"`, and `sandbox: "workspace-write"` when the local requirements allow those settings. If you intentionally want no-approval Codex posture, use `tools.exec.mode: "full"` instead.
 
