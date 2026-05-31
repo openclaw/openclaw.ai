@@ -17,11 +17,11 @@ draft: false
 tags: ["security", "codex", "approvals", "channels"]
 ---
 
-For a while, the fastest way to let an agent get real work done was also the scariest one: YOLO mode. It let host commands run without approval prompts. Great for trusted local automation, terrible as the default mental model for everyone else.
+YOLO mode made host commands fast by skipping approval prompts. That was useful for trusted local automation, but too blunt for everyday use.
 
-We now have a better path: `auto`.
+`auto` is the safer default.
 
-`auto` keeps the useful part of automation - letting safe, repeatable commands run without nagging you - while preserving the security property YOLO throws away. When OpenClaw cannot prove a host command is already covered by policy, it asks a reviewer first. If the reviewer is not confident, it asks you.
+Safe, repeatable commands can run without nagging you. Commands that miss policy go to a reviewer first. If the reviewer is not confident, OpenClaw asks you.
 
 We shipped this first through the [Codex harness](https://docs.openclaw.ai/plugins/codex-harness), so OpenAI-backed OpenClaw sessions could already use Codex-style auto approvals. Now we are bringing the same safer default to host exec for everyone.
 
@@ -29,7 +29,7 @@ We shipped this first through the [Codex harness](https://docs.openclaw.ai/plugi
 
 Codex already made this shift in its own permission presets. Its `auto` preset is the default: workspace files are writable, normal commands can run, and approvals are still required for escapes such as network access or writes outside the workspace.
 
-OpenClaw is bringing the same shape to [host exec](https://docs.openclaw.ai/tools/exec-approvals). Instead of teaching users to choose between "approve everything manually" and "trust everything forever", `tools.exec.mode: "auto"` gives us a middle lane.
+OpenClaw is bringing the same shape to [host exec](https://docs.openclaw.ai/tools/exec-approvals). `tools.exec.mode: "auto"` keeps the agent moving without turning every command into a permanent yes.
 
 <section class="mini-card-grid" aria-label="Exec mode comparison">
   <div class="mini-card">
@@ -51,7 +51,7 @@ OpenClaw is bringing the same shape to [host exec](https://docs.openclaw.ai/tool
 
 ## What Auto Does
 
-Host exec starts with OpenClaw config: what the agent is allowed to ask for. Most users only need that setting. Hosts can still have stricter local policy, but that is an advanced control, not the normal setup path.
+Host exec starts with OpenClaw config: what the agent is allowed to ask for. Most users only need that setting. Hosts can still apply stricter local policy.
 
 In `auto` mode, OpenClaw handles a host command like this:
 
@@ -61,7 +61,7 @@ In `auto` mode, OpenClaw handles a host command like this:
 4. Anything ambiguous, higher-risk, unparseable, timed out, model-unavailable, or reviewer-directed falls back to human approval.
 5. If no UI or configured approval client can answer, OpenClaw uses the host's configured fallback.
 
-That last point matters. `auto` is not a secret bypass around your machine. A host configured to always ask still asks. A host configured to deny still denies.
+`auto` does not override local safety settings. A host configured to always ask still asks. A host configured to deny still denies.
 
 ## Enabling Auto
 
@@ -74,7 +74,7 @@ openclaw config set tools.exec.mode auto
 
 Auto is now active for host exec.
 
-If you use the [Codex harness](https://docs.openclaw.ai/plugins/codex-harness), this is the path OpenAI-backed sessions already use: `tools.exec.mode: "auto"` maps Codex app-server sessions to Guardian-reviewed approvals with workspace-write sandboxing when the local requirements allow it.
+If you use the [Codex harness](https://docs.openclaw.ai/plugins/codex-harness), this is the path OpenAI-backed sessions already use: `tools.exec.mode: "auto"` maps Codex app-server sessions to reviewed approvals with workspace-write sandboxing when available.
 
 ## What Gets Asked
 
@@ -94,12 +94,10 @@ Approvals are no longer trapped in a local terminal. OpenClaw can route approval
 
 The detailed setup lives in [Exec approvals - advanced](https://docs.openclaw.ai/tools/exec-approvals-advanced).
 
-## The Security Model
+## Security Notes
 
-`auto` is a fatigue reducer, not a new trust boundary.
+`auto` reduces prompt noise. It still respects the host policy.
 
 The reviewer may only allow one low-risk execution. It is prompted to treat the command text, argv, cwd, env keys, heredocs, strings, filenames, and metadata as untrusted data. If that untrusted data tries to instruct the reviewer or request a decision, OpenClaw defers to a human.
 
-YOLO remains available for environments that are already externally sandboxed or deliberately trusted. But for most users, `auto` is the better default: fewer prompts than strict ask mode, much less blast radius than full host access.
-
-That is the migration path we want: not slower agents, not blind trust. Fast when we can prove it, explicit when we cannot.
+YOLO remains available for environments that are already externally sandboxed or deliberately trusted. For most users, `auto` is the better default: fewer prompts than strict ask mode, less risk than full host access.
