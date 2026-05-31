@@ -1,8 +1,24 @@
 ---
+import { FileText } from '@lucide/astro';
+import { siDiscord, siGithub } from 'simple-icons';
+
+type SimpleIcon = {
+  kind: 'simple';
+  path: string;
+};
+
+type ComponentIcon = {
+  kind: 'component';
+  component: typeof FileText;
+};
+
+type NavIcon = SimpleIcon | ComponentIcon;
+
 interface NavItem {
   href: string;
   label: string;
   external?: boolean;
+  icon?: NavIcon;
 }
 
 interface Props {
@@ -13,9 +29,20 @@ const { active = 'home' } = Astro.props;
 const items: NavItem[] = [
   { href: '/', label: 'Product' },
   { href: '/ecosystem', label: 'Ecosystem' },
-  { href: '/blog', label: 'Blog' },
+  { href: '/blog', label: 'Blog', icon: { kind: 'component', component: FileText } },
   { href: 'https://docs.openclaw.ai/', label: 'Docs', external: true },
-  { href: 'https://github.com/openclaw/openclaw', label: 'GitHub', external: true },
+  {
+    href: 'https://discord.com/invite/clawd',
+    label: 'Discord',
+    external: true,
+    icon: { kind: 'simple', path: siDiscord.path },
+  },
+  {
+    href: 'https://github.com/openclaw/openclaw',
+    label: 'GitHub',
+    external: true,
+    icon: { kind: 'simple', path: siGithub.path },
+  },
 ];
 
 function isActive(item: NavItem) {
@@ -41,6 +68,14 @@ function isActive(item: NavItem) {
         rel={item.external ? 'noopener' : undefined}
         aria-current={isActive(item) && !item.external ? 'page' : undefined}
       >
+        {item.icon?.kind === 'simple' && (
+          <svg class="site-nav-icon site-nav-icon-simple" viewBox="0 0 24 24" aria-hidden="true">
+            <path d={item.icon.path} />
+          </svg>
+        )}
+        {item.icon?.kind === 'component' && (
+          <item.icon.component class="site-nav-icon site-nav-icon-lucide" size={14} aria-hidden="true" />
+        )}
         {item.label}
       </a>
     ))}
@@ -91,6 +126,7 @@ function isActive(item: NavItem) {
   .site-nav-link {
     display: inline-flex;
     align-items: center;
+    gap: 6px;
     min-height: 34px;
     padding: 0 12px;
     border: 1px solid transparent;
@@ -100,6 +136,22 @@ function isActive(item: NavItem) {
     font-weight: 600;
     text-decoration: none;
     transition: color 0.16s ease, background 0.16s ease, border-color 0.16s ease;
+  }
+
+  .site-nav-icon {
+    width: 14px;
+    height: 14px;
+    flex: 0 0 auto;
+    stroke-width: 2.1;
+  }
+
+  .site-nav-icon-simple {
+    fill: currentColor;
+    stroke: none;
+  }
+
+  .site-nav-icon-lucide {
+    fill: none;
   }
 
   .site-nav-link:hover,

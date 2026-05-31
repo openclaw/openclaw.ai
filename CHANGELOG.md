@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+- Website: add Discord to the top navigation and align Blog/GitHub links with inline icons.
 - Blog: credit Josh Avant on the auto mode exec approvals post.
 - Ecosystem: promote clawpdf into the TypeScript libraries section with its canonical site link.
 - Website: sanitize data-driven external links before rendering them into `href` attributes (#143, thanks @SebTardif).
