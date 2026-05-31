@@ -2193,9 +2193,8 @@ checkout_git_openclaw_ref() {
         return 0
     fi
 
-    run_quiet_step "Fetching requested version" git -C "$repo_dir" fetch --tags origin
-
-    if git -C "$repo_dir" rev-parse --verify --quiet "refs/tags/${ref}^{commit}" >/dev/null; then
+    if git -C "$repo_dir" ls-remote --exit-code --tags origin "refs/tags/${ref}" >/dev/null 2>&1; then
+        run_quiet_step "Fetching requested version" git -C "$repo_dir" fetch --depth 1 --no-tags origin "refs/tags/${ref}:refs/tags/${ref}"
         run_quiet_step "Checking out ${ref}" git -C "$repo_dir" checkout --detach "$ref"
         return 0
     fi
