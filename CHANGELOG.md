@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+- Blog: credit Josh Avant on the auto mode exec approvals post.
 - Ecosystem: promote clawpdf into the TypeScript libraries section with its canonical site link.
 - Website: sanitize data-driven external links before rendering them into `href` attributes (#143, thanks @SebTardif).
 - Website: stop serving the stale GitHub Pages `CNAME` file now that Vercel owns the site, and update the hosting docs (#148, thanks @SebTardif).
