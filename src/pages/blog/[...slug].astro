@@ -399,6 +399,9 @@ const postUrl = `https://openclaw.ai/blog/${post.id}`;
     --release-data-ink: color-mix(in srgb, var(--cyan-bright) 58%, var(--text-primary));
     --release-risk-ink: color-mix(in srgb, var(--coral-bright) 46%, var(--text-primary));
     --release-track: color-mix(in srgb, var(--surface-card-strong) 72%, var(--bg-deep));
+    --article-inline-code-bg: color-mix(in srgb, var(--bg-deep) 78%, var(--bg-elevated));
+    --article-code-bg: color-mix(in srgb, var(--bg-deep) 88%, black);
+    --article-code-border: color-mix(in srgb, var(--cyan-bright) 12%, var(--border-subtle));
     color: var(--text-secondary);
     font-size: 1rem;
     line-height: 1.82;
@@ -411,6 +414,9 @@ const postUrl = `https://openclaw.ai/blog/${post.id}`;
     --release-data-ink: color-mix(in srgb, var(--cyan-bright) 68%, var(--text-primary));
     --release-risk-ink: color-mix(in srgb, var(--coral-bright) 56%, var(--text-primary));
     --release-track: color-mix(in srgb, var(--bg-elevated) 78%, white);
+    --article-inline-code-bg: var(--bg-elevated);
+    --article-code-bg: var(--bg-elevated);
+    --article-code-border: var(--border-subtle);
   }
 
   .article-content :global(p:first-child) {
@@ -476,7 +482,7 @@ const postUrl = `https://openclaw.ai/blog/${post.id}`;
     padding: 0.08em 0.36em;
     border: 1px solid var(--border-subtle);
     border-radius: 5px;
-    background: var(--bg-elevated);
+    background: var(--article-inline-code-bg);
     color: var(--cyan-bright);
     font-family: var(--font-mono);
     font-size: 0.88em;
@@ -485,9 +491,9 @@ const postUrl = `https://openclaw.ai/blog/${post.id}`;
   .article-content :global(pre) {
     overflow: auto;
     padding: 14px 16px;
-    border: 1px solid var(--border-subtle);
+    border: 1px solid var(--article-code-border);
     border-radius: 8px;
-    background: var(--bg-elevated);
+    background: var(--article-code-bg);
   }
 
   .article-content :global(pre code) {
