@@ -40,11 +40,11 @@ const authorProfiles: BlogAuthor[] = [
     name: 'Josh Avant',
     title: 'MTS',
     org: 'OpenClaw Foundation',
-    handle: 'josh_avant',
+    handle: 'joshavant',
     links: [
-      { label: '@josh_avant', url: 'https://x.com/josh_avant' },
+      { label: '@joshavant', url: 'https://x.com/joshavant' },
     ],
-    avatar: '/avatars/x/josh_avant.jpg',
+    avatar: '/avatars/x/joshavant.jpg',
   },
   {
     name: 'Peter Steinberger',
