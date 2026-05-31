@@ -38,7 +38,7 @@ const authorProfiles: BlogAuthor[] = [
   },
   {
     name: 'Josh Avant',
-    title: 'MTS',
+    title: 'Member of Technical Staff',
     org: 'OpenClaw Foundation',
     handle: 'joshavant',
     links: [
