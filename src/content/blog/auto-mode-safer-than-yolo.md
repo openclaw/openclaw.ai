@@ -2,8 +2,16 @@
 title: "Auto Mode Is the Safer Way to Let Agents Run Commands"
 description: "OpenClaw is moving host exec from YOLO to auto: deterministic commands run, risky misses get reviewed, and humans stay in the approval loop."
 date: 2026-05-31
-author: "Peter Steinberger"
-authorHandle: "steipete"
+authors:
+  - name: "Vince Koc"
+    handle: "vincent_koc"
+  - name: "Jesse Merhi"
+    links:
+      - label: "LinkedIn"
+        url: "https://www.linkedin.com/in/jesse-merhi/"
+      - label: "@jesse_merhi"
+        url: "https://x.com/jesse_merhi"
+    avatar: "/blog/authors/jesse-merhi.jpg"
 draft: false
 tags: ["security", "codex", "approvals", "channels"]
 ---
