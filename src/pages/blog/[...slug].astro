@@ -1,10 +1,13 @@
 ---
 import Layout from '../../layouts/Layout.astro';
+import Icon from '../../components/Icon.astro';
 import SiteTopbar from '../../components/SiteTopbar.astro';
 import { render } from 'astro:content';
 import { getPublishedBlogPosts } from '../../lib/blog';
 import { getCachedXAvatarSrc, getInitialsAvatarSrc } from '../../lib/avatars';
 import { sanitizeUrl } from '../../lib/sanitize-url';
+import { SITE_URL, absoluteUrl, blogPostPath } from '../../lib/seo';
+import { siGithub, siX } from 'simple-icons';
 
 export async function getStaticPaths() {
   const posts = await getPublishedBlogPosts();
@@ -19,7 +22,8 @@ const allPosts = await getPublishedBlogPosts();
 const { Content, headings } = await render(post);
 
 type AuthorLink = { label: string; url: string };
-type Author = { name: string; handle?: string; url?: string; links?: AuthorLink[]; avatar?: string };
+type Author = { name: string; title?: string; org?: string; handle?: string; url?: string; links?: AuthorLink[]; avatar?: string };
+type AuthorLinkMeta = AuthorLink & { displayLabel: string; icon?: string; ariaLabel: string; order: number };
 const authors: Author[] = post.data.authors
   ? post.data.authors
   : post.data.author
@@ -43,6 +47,41 @@ function getAuthorLinks(author: Author): AuthorLink[] {
     label: author.handle ? `@${author.handle}` : new URL(url).hostname.replace(/^www\./, ''),
     url,
   }];
+}
+
+const siIcon = (icon: { path: string }) => icon.path;
+const linkedinIcon = 'M20.45 20.45h-3.55v-5.57c0-1.33-.03-3.04-1.85-3.04-1.85 0-2.14 1.45-2.14 2.94v5.67H9.35V9h3.41v1.56h.05c.48-.9 1.64-1.85 3.37-1.85 3.6 0 4.27 2.37 4.27 5.46v6.28zM5.34 7.43a2.06 2.06 0 1 1 0-4.13 2.06 2.06 0 0 1 0 4.13zM7.12 20.45H3.56V9h3.56v11.45zM22.23 0H1.77C.79 0 0 .77 0 1.73v20.54C0 23.23.79 24 1.77 24h20.45c.98 0 1.78-.77 1.78-1.73V1.73C24 .77 23.2 0 22.23 0z';
+
+function getAuthorLinkMeta(author: Author, link: AuthorLink): AuthorLinkMeta {
+  const label = link.label.trim();
+  const normalizedLabel = label.toLowerCase();
+  let hostname = '';
+
+  try {
+    hostname = new URL(link.url).hostname.replace(/^www\./, '').toLowerCase();
+  } catch {
+    hostname = '';
+  }
+
+  if (hostname === 'x.com' || hostname === 'twitter.com' || normalizedLabel === 'x' || normalizedLabel.startsWith('@')) {
+    return { ...link, displayLabel: 'X', icon: siIcon(siX), ariaLabel: `${author.name} on X`, order: 0 };
+  }
+
+  if (hostname.endsWith('linkedin.com') || normalizedLabel.includes('linkedin')) {
+    return { ...link, displayLabel: 'LinkedIn', icon: linkedinIcon, ariaLabel: `${author.name} on LinkedIn`, order: 1 };
+  }
+
+  if (hostname === 'github.com' || normalizedLabel.includes('github')) {
+    return { ...link, displayLabel: 'GitHub', icon: siIcon(siGithub), ariaLabel: `${author.name} on GitHub`, order: 2 };
+  }
+
+  return { ...link, displayLabel: label, ariaLabel: `${author.name}: ${label}`, order: 3 };
+}
+
+function getSortedAuthorLinkMeta(author: Author): AuthorLinkMeta[] {
+  return getAuthorLinks(author)
+    .map((link, index) => ({ ...getAuthorLinkMeta(author, link), index }))
+    .sort((a, b) => a.order - b.order || a.index - b.index);
 }
 
 function formatDate(date: Date): string {
@@ -77,10 +116,45 @@ const relatedPosts = allPosts
   .slice(0, 3)
   .map((item) => item.post);
 
-const postUrl = `https://openclaw.ai/blog/${post.id}`;
+const canonicalPostUrl = absoluteUrl(blogPostPath(post));
+const articleImageUrl = post.data.image ? new URL(post.data.image, SITE_URL).href : absoluteUrl('/og-image.png');
+const structuredAuthors = authors.map((author) => {
+  const profileUrl = getSortedAuthorLinkMeta(author).find((link) => sanitizeUrl(link.url) !== '#')?.url;
+  return {
+    '@type': 'Person',
+    name: author.name,
+    ...(profileUrl ? { url: profileUrl } : {}),
+  };
+});
+const articleStructuredData = {
+  '@context': 'https://schema.org',
+  '@type': 'BlogPosting',
+  headline: post.data.title,
+  description: post.data.description,
+  url: canonicalPostUrl,
+  mainEntityOfPage: canonicalPostUrl,
+  datePublished: post.data.date.toISOString(),
+  dateModified: post.data.date.toISOString(),
+  image: [articleImageUrl],
+  author: structuredAuthors.length > 0 ? structuredAuthors : [{ '@type': 'Organization', name: 'OpenClaw' }],
+  publisher: {
+    '@type': 'Organization',
+    name: 'OpenClaw',
+    logo: {
+      '@type': 'ImageObject',
+      url: absoluteUrl('/logo.png'),
+    },
+  },
+};
 ---
 
-<Layout title={`${post.data.title} - OpenClaw Blog`} description={post.data.description}>
+<Layout
+  title={`${post.data.title} - OpenClaw Blog`}
+  description={post.data.description}
+  canonicalUrl={canonicalPostUrl}
+  ogType="article"
+  structuredData={articleStructuredData}
+>
   <SiteTopbar active="blog" />
   <div class="stars"></div>
   <div class="nebula"></div>
@@ -115,7 +189,7 @@ const postUrl = `https://openclaw.ai/blog/${post.id}`;
         <div class="article-meta">
           <div class="authors-container">
             {authors.map((author) => (
-              <div class="author-info">
+              <div class:list={['author-info', !(author.title || author.org) && 'author-info-compact']}>
                 <img
                   src={getAuthorAvatar(author)}
                   alt={author.name}
@@ -123,12 +197,27 @@ const postUrl = `https://openclaw.ai/blog/${post.id}`;
                   loading="lazy"
                   onerror={`this.src='${getInitialsAvatarSrc(author.name, 88)}'`}
                 />
-                <div class="author-details">
+                <div class:list={['author-details', !(author.title || author.org) && 'author-details-compact']}>
                   <span class="author-name">{author.name}</span>
+                  {(author.title || author.org) && (
+                    <span class="author-title">
+                      {author.title && <span class="author-role">{author.title}</span>}
+                      {author.org && <span class="author-org">{author.org}</span>}
+                    </span>
+                  )}
                   {getAuthorLinks(author).length > 0 && (
                     <div class="author-links">
-                      {getAuthorLinks(author).map((link) => (
-                        <a href={sanitizeUrl(link.url)} class="author-handle" target="_blank" rel="noopener">{link.label}</a>
+                      {getSortedAuthorLinkMeta(author).map((linkMeta) => (
+                          <a
+                            href={sanitizeUrl(linkMeta.url)}
+                            class:list={['author-link', linkMeta.icon && 'author-link-icon']}
+                            target="_blank"
+                            rel="noopener"
+                            aria-label={linkMeta.ariaLabel}
+                            title={linkMeta.displayLabel}
+                          >
+                            {linkMeta.icon ? <Icon icon={linkMeta.icon} size={13} /> : linkMeta.displayLabel}
+                          </a>
                       ))}
                     </div>
                   )}
@@ -150,10 +239,17 @@ const postUrl = `https://openclaw.ai/blog/${post.id}`;
       <footer class="article-footer">
         <section class="share-section">
           <span>Share this post</span>
-          <a href={`https://twitter.com/intent/tweet?text=${encodeURIComponent(post.data.title)}&url=${encodeURIComponent(postUrl)}&via=openclaw`} target="_blank" rel="noopener">
-            X
+          <a
+            href={`https://twitter.com/intent/tweet?text=${encodeURIComponent(post.data.title)}&url=${encodeURIComponent(canonicalPostUrl)}&via=openclaw`}
+            class="share-link share-link-icon"
+            target="_blank"
+            rel="noopener"
+            aria-label="Share on X"
+            title="Share on X"
+          >
+            <Icon icon={siIcon(siX)} size={14} />
           </a>
-          <a href={`https://news.ycombinator.com/submitlink?u=${encodeURIComponent(postUrl)}&t=${encodeURIComponent(post.data.title)}`} target="_blank" rel="noopener">
+          <a class="share-link" href={`https://news.ycombinator.com/submitlink?u=${encodeURIComponent(canonicalPostUrl)}&t=${encodeURIComponent(post.data.title)}`} target="_blank" rel="noopener">
             Hacker News
           </a>
         </section>
@@ -343,18 +439,23 @@ const postUrl = `https://openclaw.ai/blog/${post.id}`;
   .authors-container {
     display: flex;
     flex-wrap: wrap;
-    gap: 16px;
+    gap: 18px 24px;
   }
 
   .author-info {
     display: flex;
+    align-items: flex-start;
+    gap: 11px;
+  }
+
+  .author-info-compact {
     align-items: center;
-    gap: 12px;
   }
 
   .author-avatar {
     width: 44px;
     height: 44px;
+    margin-top: 1px;
     border-radius: 50%;
     border: 1px solid var(--border-subtle);
     background: var(--bg-elevated);
@@ -363,6 +464,11 @@ const postUrl = `https://openclaw.ai/blog/${post.id}`;
   .author-details {
     display: flex;
     flex-direction: column;
+    gap: 3px;
+    min-width: 0;
+  }
+
+  .author-details-compact {
     gap: 2px;
   }
 
@@ -371,16 +477,63 @@ const postUrl = `https://openclaw.ai/blog/${post.id}`;
     font-weight: 750;
   }
 
+  .author-title {
+    display: flex;
+    flex-direction: column;
+    gap: 1px;
+    max-width: 260px;
+    color: var(--text-muted);
+    font-size: 0.8rem;
+    line-height: 1.22;
+  }
+
+  .author-role {
+    font-weight: 700;
+  }
+
+  .author-org {
+    font-weight: 560;
+    color: color-mix(in srgb, var(--text-muted) 82%, var(--text-primary));
+  }
+
   .author-links {
     display: flex;
     flex-wrap: wrap;
-    gap: 4px 10px;
+    gap: 5px;
+    margin-top: 3px;
   }
 
-  .author-handle {
+  .author-details-compact .author-links {
+    margin-top: 1px;
+  }
+
+  .author-link {
     color: var(--coral-bright);
     font-size: 0.85rem;
     text-decoration: none;
+  }
+
+  .author-link-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 24px;
+    height: 24px;
+    border: 1px solid var(--border-subtle);
+    border-radius: 7px;
+    background: var(--surface-card);
+    color: var(--text-primary);
+    transition: border-color 140ms ease, color 140ms ease, transform 140ms ease;
+  }
+
+  .author-link-icon:hover {
+    border-color: var(--coral-bright);
+    color: var(--coral-bright);
+    transform: translateY(-1px);
+  }
+
+  .author-link-icon :global(svg) {
+    display: block;
   }
 
   .meta-right {
@@ -752,6 +905,14 @@ const postUrl = `https://openclaw.ai/blog/${post.id}`;
     line-height: 1;
   }
 
+  .article-content :global(.mini-card strong span) {
+    display: block;
+    color: inherit;
+    font: inherit;
+    letter-spacing: 0;
+    text-transform: none;
+  }
+
   .article-content :global(.mini-card p) {
     margin: 8px 0 0;
     color: var(--text-secondary);
@@ -863,7 +1024,7 @@ const postUrl = `https://openclaw.ai/blog/${post.id}`;
     font-size: 0.9rem;
   }
 
-  .share-section a,
+  .share-link,
   .cta-box a {
     display: inline-flex;
     align-items: center;
@@ -877,7 +1038,17 @@ const postUrl = `https://openclaw.ai/blog/${post.id}`;
     text-decoration: none;
   }
 
-  .share-section a:hover,
+  .share-link-icon {
+    justify-content: center;
+    width: 32px;
+    padding: 0;
+  }
+
+  .share-link-icon :global(svg) {
+    display: block;
+  }
+
+  .share-link:hover,
   .cta-box a:hover {
     border-color: var(--coral-bright);
     color: var(--coral-bright);
