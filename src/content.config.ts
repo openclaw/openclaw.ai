@@ -19,6 +19,7 @@ const blog = defineCollection({
   schema: z.object({
     title: z.string(),
     description: z.string(),
+    descriptionHtml: z.string().optional(),
     date: z.date(),
     // Single author (legacy)
     author: z.string().optional(),
@@ -29,6 +30,7 @@ const blog = defineCollection({
     authors: z.array(authorSchema).optional(),
     draft: z.boolean().default(false),
     tags: z.array(z.string()).default([]),
+    coverImage: z.string().optional(),
     image: z.string().optional(),
   }),
 });

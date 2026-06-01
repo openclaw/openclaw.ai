@@ -7,7 +7,7 @@ import { getPublishedBlogPosts } from '../../lib/blog';
 import { resolveAuthorProfile, type AuthorLink, type BlogAuthor } from '../../lib/authors';
 import { getCachedXAvatarSrc, getInitialsAvatarSrc } from '../../lib/avatars';
 import { sanitizeUrl } from '../../lib/sanitize-url';
-import { SITE_URL, absoluteUrl, blogPostPath } from '../../lib/seo';
+import { absoluteUrl, blogPostPath } from '../../lib/seo';
 import { siGithub, siX } from 'simple-icons';
 
 export async function getStaticPaths() {
@@ -116,7 +116,9 @@ const relatedPosts = allPosts
   .map((item) => item.post);
 
 const canonicalPostUrl = absoluteUrl(blogPostPath(post));
-const articleImageUrl = post.data.image ? new URL(post.data.image, SITE_URL).href : absoluteUrl('/og-image.png');
+const ogImage = `/og/blog/${post.id}.png`;
+const articleImageUrl = absoluteUrl(ogImage);
+const descriptionHtml = post.data.descriptionHtml ?? post.data.description;
 const structuredAuthors = authors.map((author) => {
   const profileUrl = getSortedAuthorLinkMeta(author).find((link) => sanitizeUrl(link.url) !== '#')?.url;
   return {
@@ -151,6 +153,7 @@ const articleStructuredData = {
   title={`${post.data.title} - OpenClaw Blog`}
   description={post.data.description}
   canonicalUrl={canonicalPostUrl}
+  ogImage={ogImage}
   ogType="article"
   structuredData={articleStructuredData}
 >
@@ -179,7 +182,7 @@ const articleStructuredData = {
       <header class="article-header">
         <p class="article-kicker">OpenClaw blog</p>
         <h1>{post.data.title}</h1>
-        <p class="dek">{post.data.description}</p>
+        <p class="dek" set:html={descriptionHtml} />
 
         {post.data.image && (
           <img src={post.data.image} alt={post.data.title} class="article-header-image" />
@@ -415,6 +418,16 @@ const articleStructuredData = {
     line-height: 1.65;
   }
 
+  .dek :global(a) {
+    color: var(--coral-bright);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+
+  .dek :global(a:hover) {
+    color: var(--cyan-bright);
+  }
+
   .article-header-image {
     display: block;
     width: 100%;
@@ -437,6 +450,7 @@ const articleStructuredData = {
 
   .authors-container {
     display: flex;
+    align-items: flex-start;
     flex-wrap: wrap;
     gap: 18px 24px;
   }
@@ -448,7 +462,7 @@ const articleStructuredData = {
   }
 
   .author-info-compact {
-    align-items: center;
+    align-items: flex-start;
   }
 
   .author-avatar {
@@ -609,12 +623,93 @@ const articleStructuredData = {
     padding-left: 1.35rem;
   }
 
+  .article-content :global(ol) {
+    margin: 0 0 28px;
+    padding-left: 0;
+    list-style-position: inside;
+  }
+
   .article-content :global(li) {
     margin: 0.25em 0;
   }
 
+  .article-content :global(ol li) {
+    margin-bottom: 12px;
+    padding-left: 0;
+  }
+
   .article-content :global(li::marker) {
     color: var(--coral-bright);
+  }
+
+  .article-content :global(table) {
+    width: 100%;
+    max-width: 100%;
+    margin: 28px 0 30px;
+    border-collapse: separate;
+    border-spacing: 0;
+    overflow: hidden;
+    table-layout: fixed;
+    box-sizing: border-box;
+    border: 1px solid var(--border-subtle);
+    border-radius: 12px;
+    background: var(--surface-card-strong);
+    box-shadow: 0 16px 40px rgba(0, 0, 0, 0.18);
+    font-variant-numeric: tabular-nums;
+  }
+
+  .article-content :global(th),
+  .article-content :global(td) {
+    padding: 14px 16px;
+    border-bottom: 1px solid var(--border-subtle);
+    vertical-align: middle;
+  }
+
+  .article-content :global(th) {
+    color: var(--text-primary);
+    font-size: 0.95rem;
+    font-weight: 700;
+    line-height: 1.35;
+    text-align: left;
+    background: rgba(255, 255, 255, 0.035);
+  }
+
+  .article-content :global(td) {
+    color: var(--text-secondary);
+    font-size: 0.98rem;
+    line-height: 1.45;
+  }
+
+  .article-content :global(tbody tr:nth-child(odd) td) {
+    background: rgba(255, 255, 255, 0.018);
+  }
+
+  .article-content :global(tbody tr:last-child td) {
+    border-bottom: 0;
+  }
+
+  .article-content :global(th:first-child),
+  .article-content :global(td:first-child) {
+    width: 48%;
+  }
+
+  .article-content :global(th:nth-child(2)),
+  .article-content :global(td:nth-child(2)) {
+    width: 22%;
+  }
+
+  .article-content :global(th:nth-child(3)),
+  .article-content :global(td:nth-child(3)) {
+    width: 30%;
+  }
+
+  .article-content :global(th:nth-child(n + 2)),
+  .article-content :global(td:nth-child(n + 2)) {
+    text-align: right;
+  }
+
+  .article-content :global(td:nth-child(n + 2)) {
+    white-space: nowrap;
   }
 
   .article-content :global(strong) {
@@ -1194,6 +1289,16 @@ const articleStructuredData = {
 
     .article-content :global(.bar-row strong) {
       text-align: left;
+    }
+
+    .article-content :global(th),
+    .article-content :global(td) {
+      padding: 12px 10px;
+      font-size: 0.86rem;
+    }
+
+    .article-content :global(th) {
+      font-size: 0.82rem;
     }
 
     .article h1 {
