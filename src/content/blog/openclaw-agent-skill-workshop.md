@@ -1,7 +1,7 @@
 ---
 title: "Skill Workshop: Turn Agent Work Into Reusable Skills"
 description: "Review, revise, and apply proposed skills before they become part of how OpenClaw agents work."
-date: 2026-06-01
+date: 2026-06-01T22:22:00.000Z
 author: "Gideon Adegbesan"
 draft: false
 tags: ["skills", "agents", "workflow"]

@@ -809,6 +809,11 @@ const articleStructuredData = {
     overflow: hidden;
   }
 
+  .article-content :global(figure:not(.chart-card) img) {
+    margin: 0;
+    border-radius: 8px;
+  }
+
   .article-content :global(figure:not(.chart-card) figcaption) {
     margin-top: 12px;
     color: var(--text-muted);
@@ -1114,6 +1119,13 @@ const articleStructuredData = {
 
   .article-content :global(.evidence-figure) {
     margin: 36px 0 40px;
+  }
+
+  .article-content :global(.evidence-figure img) {
+    display: block;
+    width: 100%;
+    height: auto;
+    border-radius: 8px;
   }
 
   .reader-toc a {
