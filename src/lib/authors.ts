@@ -54,6 +54,17 @@ const authorProfiles: BlogAuthor[] = [
     handle: 'steipete',
   },
   {
+    name: 'Gideon Adegbesan',
+    title: 'Member of Technical Staff',
+    org: 'OpenClaw Foundation',
+    handle: 'shakker',
+    links: [
+      { label: '@shakker', url: 'https://x.com/shakker' },
+      { label: 'LinkedIn', url: 'https://www.linkedin.com/in/gideonpraise' },
+    ],
+    avatar: '/blog/authors/gideon-adegbesan.jpg',
+  },
+  {
     name: 'Nik Pash',
     title: 'Core Maintainer',
     org: 'OpenClaw / OpenAI',

@@ -804,6 +804,19 @@ const articleStructuredData = {
     line-height: 1.7;
   }
 
+  .article-content :global(figure:not(.chart-card)) {
+    max-width: 100%;
+    overflow: hidden;
+  }
+
+  .article-content :global(figure:not(.chart-card) figcaption) {
+    margin-top: 12px;
+    color: var(--text-muted);
+    font-size: 0.9rem;
+    line-height: 1.55;
+    text-align: center;
+  }
+
   .article-content :global(.metric-grid) {
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -1101,21 +1114,6 @@ const articleStructuredData = {
 
   .article-content :global(.evidence-figure) {
     margin: 36px 0 40px;
-  }
-
-  .article-content :global(.evidence-figure img) {
-    display: block;
-    width: 100%;
-    height: auto;
-    border-radius: 8px;
-  }
-
-  .article-content :global(.evidence-figure figcaption) {
-    margin-top: 12px;
-    color: var(--text-muted);
-    font-size: 0.9rem;
-    line-height: 1.55;
-    text-align: center;
   }
 
   .reader-toc a {
