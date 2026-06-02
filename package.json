@@ -6,6 +6,7 @@
     "dev": "astro dev",
     "build": "astro build",
     "test": "bun test",
+    "test:built-assets": "bun run build && node tests/assert-built-assets.mjs",
     "avatars:cache": "node scripts/cache-avatars.mjs",
     "preview": "astro preview"
   },
