@@ -1,0 +1,516 @@
+---
+import Icon from './Icon.astro';
+
+interface Props {
+  src: string;
+  title: string;
+}
+
+const { src, title } = Astro.props;
+const waveformSrc = src.replace(/\.mp3$/, '.waveform.json');
+---
+
+<div class="blog-audio-player" data-blog-audio-player data-waveform-src={waveformSrc}>
+  <audio src={src} preload="metadata" data-audio-el></audio>
+  <button class="audio-play" type="button" aria-label={`Play audio for ${title}`} data-audio-play>
+    <span class="play-icon" aria-hidden="true"><Icon icon="lucide:play" size={18} /></span>
+    <span class="pause-icon" aria-hidden="true"><Icon icon="lucide:pause" size={18} /></span>
+  </button>
+  <div class="audio-body">
+    <div class="audio-controls">
+      <div class="audio-track" data-audio-track role="slider" tabindex="0" aria-label="Audio progress" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
+        <canvas class="audio-waveform" data-audio-waveform width="520" height="44" aria-hidden="true"></canvas>
+        <span class="audio-hover-line" data-audio-hover-line hidden></span>
+        <span class="audio-preview" data-audio-preview hidden></span>
+      </div>
+      <div class="audio-heading" aria-live="polite" data-audio-heading hidden></div>
+      <span class="audio-time" data-audio-time>0:00 / --:--</span>
+      <button class="audio-rate" type="button" aria-label="Playback speed" data-audio-rate>1x</button>
+    </div>
+  </div>
+</div>
+
+<script>
+  type HeadingSection = {
+    end: number;
+    title: string;
+  };
+
+  type WaveformData = {
+    peaks?: number[];
+  };
+
+  const formatAudioTime = (value: number): string => {
+    if (!Number.isFinite(value) || value < 0) return '--:--';
+    const totalSeconds = Math.floor(value);
+    const minutes = Math.floor(totalSeconds / 60);
+    const seconds = String(totalSeconds % 60).padStart(2, '0');
+    return `${minutes}:${seconds}`;
+  };
+
+  const getNodeTextWeight = (node: Node): number => {
+    const text = node.textContent?.replace(/\s+/g, ' ').trim() ?? '';
+    return text.length;
+  };
+
+  const getHeadingSections = (player: HTMLElement): HeadingSection[] => {
+    const article = player.closest('article');
+    const content = article?.querySelector<HTMLElement>('[data-article-content]');
+    if (!content) return [];
+
+    const headings = Array.from(content.querySelectorAll<HTMLHeadingElement>('h2, h3'));
+    const firstHeading = headings[0];
+    const title = article?.querySelector('h1')?.textContent?.replace(/\s+/g, ' ').trim() ?? '';
+    let introWeight = title.length;
+    for (const node of content.childNodes) {
+      if (node === firstHeading) break;
+      if (node instanceof HTMLHeadingElement && (node.tagName === 'H2' || node.tagName === 'H3')) break;
+      introWeight += getNodeTextWeight(node);
+    }
+    let total = 0;
+    const sections: HeadingSection[] = [];
+
+    if (title && introWeight > title.length) {
+      total += Math.max(introWeight, 160);
+      sections.push({
+        end: total,
+        title,
+      });
+    }
+
+    sections.push(...headings.map((heading) => {
+      let weight = Math.max(getNodeTextWeight(heading), 80);
+
+      for (let node = heading.nextSibling; node; node = node.nextSibling) {
+        if (node instanceof HTMLHeadingElement && (node.tagName === 'H2' || node.tagName === 'H3')) break;
+        weight += getNodeTextWeight(node);
+      }
+
+      total += Math.max(weight, 120);
+      return {
+        end: total,
+        title: heading.textContent?.replace(/\s+/g, ' ').trim() ?? '',
+      };
+    }).filter((section) => section.title));
+
+    return sections;
+  };
+
+  const getSectionForRatio = (sections: HeadingSection[], total: number, ratio: number): HeadingSection | undefined => {
+    const currentPosition = Math.min(Math.max(ratio, 0), 1) * total;
+    return sections.find((section) => currentPosition <= section.end) ?? sections.at(-1);
+  };
+
+  const getCssColor = (element: HTMLElement, property: string): string => {
+    return getComputedStyle(element).getPropertyValue(property).trim();
+  };
+
+  const initBlogAudioPlayers = () => {
+    document.querySelectorAll<HTMLElement>('[data-blog-audio-player]:not([data-audio-bound])').forEach((player) => {
+      const audio = player.querySelector<HTMLAudioElement>('[data-audio-el]');
+      const playButton = player.querySelector<HTMLButtonElement>('[data-audio-play]');
+      const track = player.querySelector<HTMLElement>('[data-audio-track]');
+      const waveform = player.querySelector<HTMLCanvasElement>('[data-audio-waveform]');
+      const hoverLine = player.querySelector<HTMLElement>('[data-audio-hover-line]');
+      const preview = player.querySelector<HTMLElement>('[data-audio-preview]');
+      const time = player.querySelector<HTMLElement>('[data-audio-time]');
+      const rateButton = player.querySelector<HTMLButtonElement>('[data-audio-rate]');
+      const heading = player.querySelector<HTMLElement>('[data-audio-heading]');
+      const waveformSrc = player.dataset.waveformSrc;
+      if (!audio || !playButton || !track || !waveform || !hoverLine || !preview || !time || !rateButton || !heading) return;
+
+      const rates = [1, 1.25, 1.5, 0.85];
+      const headingSections = getHeadingSections(player);
+      const headingTotal = headingSections.at(-1)?.end ?? 0;
+      const context = waveform.getContext('2d');
+      let peaks: number[] = [];
+      let hoverRatio: number | null = null;
+      let rateIndex = 0;
+
+      const getCurrentRatio = () => {
+        if (!Number.isFinite(audio.duration) || audio.duration <= 0) return 0;
+        return Math.min(Math.max(audio.currentTime / audio.duration, 0), 1);
+      };
+
+      const drawWaveform = () => {
+        if (!context) return;
+        const rect = waveform.getBoundingClientRect();
+        const dpr = window.devicePixelRatio || 1;
+        const width = Math.max(1, Math.floor(rect.width * dpr));
+        const height = Math.max(1, Math.floor(rect.height * dpr));
+        if (waveform.width !== width || waveform.height !== height) {
+          waveform.width = width;
+          waveform.height = height;
+        }
+
+        context.clearRect(0, 0, width, height);
+
+        const sourceValues = peaks.length > 0 ? peaks : Array.from({ length: 80 }, () => 0.18);
+        const gap = 2 * dpr;
+        const minBarWidth = 2 * dpr;
+        const barCount = Math.max(1, Math.min(sourceValues.length, Math.floor((width + gap) / (minBarWidth + gap))));
+        const values = Array.from({ length: barCount }, (_, index) => {
+          const sourceIndex = Math.min(sourceValues.length - 1, Math.floor(index * sourceValues.length / barCount));
+          return sourceValues[sourceIndex] ?? 0.18;
+        });
+        const barWidth = Math.max(minBarWidth, Math.floor((width - gap * (values.length - 1)) / values.length));
+        const progressX = width * getCurrentRatio();
+        const hoverX = hoverRatio === null ? null : width * hoverRatio;
+        const idleColor = getCssColor(player, '--audio-wave-idle') || 'rgba(145, 160, 184, 0.46)';
+        const hoverColor = getCssColor(player, '--audio-wave-hover') || 'rgba(145, 160, 184, 0.72)';
+        const activeColor = getCssColor(player, '--cyan-bright') || '#00e5cc';
+        const center = height / 2;
+
+        values.forEach((value, index) => {
+          const x = index * (barWidth + gap);
+          const barHeight = Math.max(4 * dpr, value * height * 0.9);
+          const y = center - barHeight / 2;
+          context.fillStyle = x <= progressX ? activeColor : hoverX !== null && x <= hoverX ? hoverColor : idleColor;
+          context.fillRect(x, y, barWidth, barHeight);
+        });
+      };
+
+      const setAudioRatio = (ratio: number) => {
+        if (!Number.isFinite(audio.duration) || audio.duration <= 0) return;
+        audio.currentTime = Math.min(Math.max(ratio, 0), 1) * audio.duration;
+        syncTime();
+      };
+
+      const getPointerRatio = (event: PointerEvent) => {
+        const rect = track.getBoundingClientRect();
+        return rect.width > 0 ? (event.clientX - rect.left) / rect.width : 0;
+      };
+
+      const syncHeading = () => {
+        if (headingSections.length === 0 || headingTotal === 0 || !Number.isFinite(audio.duration) || audio.duration <= 0) {
+          heading.hidden = true;
+          return;
+        }
+
+        const currentRatio = Math.min(audio.currentTime / audio.duration, 1);
+        const currentSection = getSectionForRatio(headingSections, headingTotal, currentRatio);
+        heading.textContent = currentSection?.title ?? '';
+        heading.hidden = !heading.textContent;
+      };
+
+      const syncPreview = (event: PointerEvent) => {
+        if (headingSections.length === 0 || headingTotal === 0) return;
+        const ratio = getPointerRatio(event);
+        hoverRatio = Math.min(Math.max(ratio, 0), 1);
+        const currentSection = getSectionForRatio(headingSections, headingTotal, ratio);
+        preview.textContent = currentSection?.title ?? '';
+        preview.hidden = !preview.textContent;
+        const left = `${hoverRatio * 100}%`;
+        preview.style.left = left;
+        hoverLine.style.left = left;
+        hoverLine.hidden = false;
+        drawWaveform();
+      };
+
+      const syncTime = () => {
+        const duration = audio.duration;
+        const current = audio.currentTime;
+        time.textContent = `${formatAudioTime(current)} / ${formatAudioTime(duration)}`;
+        track.setAttribute('aria-valuenow', String(Math.round(getCurrentRatio() * 100)));
+        drawWaveform();
+        syncHeading();
+      };
+
+      const syncPlayState = () => {
+        player.toggleAttribute('data-playing', !audio.paused);
+        playButton.setAttribute('aria-label', audio.paused ? 'Play audio' : 'Pause audio');
+      };
+
+      playButton.addEventListener('click', async () => {
+        if (audio.paused) {
+          await audio.play().catch(() => {});
+        } else {
+          audio.pause();
+        }
+        syncPlayState();
+      });
+
+      rateButton.addEventListener('click', () => {
+        rateIndex = (rateIndex + 1) % rates.length;
+        const rate = rates[rateIndex];
+        audio.playbackRate = rate;
+        rateButton.textContent = `${rate}x`;
+      });
+
+      track.addEventListener('pointerenter', syncPreview);
+      track.addEventListener('pointermove', syncPreview);
+      track.addEventListener('pointerdown', (event) => {
+        setAudioRatio(getPointerRatio(event));
+      });
+      track.addEventListener('pointerleave', () => {
+        hoverRatio = null;
+        preview.hidden = true;
+        hoverLine.hidden = true;
+        drawWaveform();
+      });
+      track.addEventListener('keydown', (event) => {
+        if (!Number.isFinite(audio.duration) || audio.duration <= 0) return;
+        if (event.key === 'ArrowLeft' || event.key === 'ArrowDown') {
+          event.preventDefault();
+          audio.currentTime = Math.max(0, audio.currentTime - 5);
+          syncTime();
+        }
+        if (event.key === 'ArrowRight' || event.key === 'ArrowUp') {
+          event.preventDefault();
+          audio.currentTime = Math.min(audio.duration, audio.currentTime + 5);
+          syncTime();
+        }
+      });
+
+      audio.addEventListener('loadedmetadata', syncTime);
+      audio.addEventListener('timeupdate', syncTime);
+      audio.addEventListener('play', syncPlayState);
+      audio.addEventListener('pause', syncPlayState);
+      audio.addEventListener('ended', () => {
+        syncPlayState();
+        syncTime();
+      });
+
+      player.setAttribute('data-audio-bound', 'true');
+      syncTime();
+      syncPlayState();
+
+      if (waveformSrc) {
+        fetch(waveformSrc)
+          .then((response) => response.ok ? response.json() : null)
+          .then((data: WaveformData | null) => {
+            peaks = Array.isArray(data?.peaks) ? data.peaks.filter((peak) => Number.isFinite(peak)) : [];
+            drawWaveform();
+          })
+          .catch(() => {
+            drawWaveform();
+          });
+      }
+
+      new ResizeObserver(drawWaveform).observe(track);
+    });
+  };
+
+  initBlogAudioPlayers();
+  document.addEventListener('astro:page-load', initBlogAudioPlayers);
+</script>
+
+<style>
+  .blog-audio-player {
+    --audio-wave-idle: color-mix(in srgb, var(--text-muted) 48%, transparent);
+    --audio-wave-hover: color-mix(in srgb, var(--text-primary) 64%, transparent);
+    display: grid;
+    grid-template-columns: 44px minmax(0, 1fr);
+    align-items: start;
+    gap: 12px;
+    width: 100%;
+    margin-top: 28px;
+    padding: 12px 0;
+  }
+
+  .audio-play,
+  .audio-rate {
+    border: 0;
+    background: transparent;
+    color: var(--text-primary);
+    font: inherit;
+  }
+
+  .audio-play {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 44px;
+    height: 44px;
+    padding: 0;
+    border-radius: 8px;
+  }
+
+  .play-icon,
+  .pause-icon {
+    position: absolute;
+    inset: 0;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .pause-icon {
+    transform: translateY(-1px);
+  }
+
+  .audio-play:hover,
+  .audio-rate:hover {
+    color: var(--cyan-bright);
+  }
+
+  .pause-icon,
+  [data-playing] .play-icon {
+    display: none;
+  }
+
+  [data-playing] .pause-icon {
+    display: inline-flex;
+  }
+
+  .audio-body {
+    min-width: 0;
+  }
+
+  .audio-controls {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto auto;
+    align-items: center;
+    gap: 12px;
+    min-height: 40px;
+  }
+
+  .audio-time {
+    grid-column: 2;
+    grid-row: 1;
+    color: var(--text-muted);
+    font-family: var(--font-mono);
+    font-size: 0.78rem;
+    white-space: nowrap;
+  }
+
+  .audio-track {
+    position: relative;
+    grid-column: 1;
+    grid-row: 1;
+    width: 100%;
+    min-width: 0;
+    height: 44px;
+    cursor: pointer;
+    outline: none;
+  }
+
+  .audio-track:focus-visible {
+    border-radius: 8px;
+    box-shadow: 0 0 0 2px color-mix(in srgb, var(--cyan-bright) 54%, transparent);
+  }
+
+  .audio-waveform {
+    display: block;
+    width: 100%;
+    height: 44px;
+  }
+
+  .audio-hover-line {
+    position: absolute;
+    top: 4px;
+    bottom: 4px;
+    width: 1px;
+    background: var(--text-primary);
+    opacity: 0.78;
+    pointer-events: none;
+    transform: translateX(-50%);
+  }
+
+  .audio-hover-line[hidden] {
+    display: none;
+  }
+
+  .audio-preview {
+    position: absolute;
+    bottom: calc(100% + 8px);
+    left: 0;
+    z-index: 2;
+    max-width: min(320px, calc(100vw - 48px));
+    padding: 6px 8px;
+    border: 1px solid var(--border-subtle);
+    border-radius: 8px;
+    background: var(--bg-deep);
+    color: var(--text-primary);
+    font-size: 0.82rem;
+    line-height: 1.25;
+    pointer-events: none;
+    transform: translateX(-50%);
+    white-space: nowrap;
+    box-shadow: 0 10px 26px rgba(0, 0, 0, 0.22);
+  }
+
+  .audio-preview[hidden] {
+    display: none;
+  }
+
+  .audio-rate {
+    grid-column: 3;
+    grid-row: 1;
+    min-width: 34px;
+    height: 34px;
+    padding: 0;
+    color: var(--text-secondary);
+    font-weight: 750;
+  }
+
+  .audio-heading {
+    grid-column: 1 / -1;
+    grid-row: 2;
+    margin-top: -1px;
+    overflow: hidden;
+    color: var(--text-primary);
+    font-size: 0.95rem;
+    line-height: 1.35;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .audio-heading[hidden] {
+    display: none;
+  }
+
+  @media (max-width: 560px) {
+    .blog-audio-player {
+      grid-template-columns: 36px minmax(0, 1fr);
+      gap: 10px;
+    }
+
+    .audio-play {
+      width: 36px;
+      height: 36px;
+    }
+
+    .audio-controls {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto auto;
+      column-gap: 10px;
+      row-gap: 5px;
+      min-height: 36px;
+    }
+
+    .audio-track {
+      grid-column: 1 / -1;
+      grid-row: 1;
+      height: 38px;
+    }
+
+    .audio-waveform {
+      height: 38px;
+    }
+
+    .audio-time {
+      grid-column: 1;
+      grid-row: 2;
+      font-size: 0.72rem;
+    }
+
+    .audio-rate {
+      grid-column: 3;
+      grid-row: 2;
+      height: 24px;
+      min-width: 28px;
+      font-size: 0.88rem;
+    }
+
+    .audio-heading {
+      grid-column: 1 / -1;
+      grid-row: 3;
+      margin-top: 0;
+      color: var(--text-secondary);
+      font-size: 0.78rem;
+      line-height: 1.25;
+    }
+  }
+</style>

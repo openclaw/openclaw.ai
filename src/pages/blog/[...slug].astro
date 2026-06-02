@@ -1,5 +1,8 @@
 ---
 import Layout from '../../layouts/Layout.astro';
+import { existsSync } from 'node:fs';
+import { join } from 'node:path';
+import BlogAudioPlayer from '../../components/BlogAudioPlayer.astro';
 import Icon from '../../components/Icon.astro';
 import SiteTopbar from '../../components/SiteTopbar.astro';
 import { render } from 'astro:content';
@@ -117,6 +120,8 @@ const relatedPosts = allPosts
 
 const canonicalPostUrl = absoluteUrl(blogPostPath(post));
 const ogImage = `/og/blog/${post.id}.png`;
+const audioSrc = `/audio/blog/${post.id}.mp3`;
+const hasAudio = existsSync(join(process.cwd(), 'public', audioSrc.slice(1)));
 const articleImageUrl = absoluteUrl(ogImage);
 const descriptionHtml = post.data.descriptionHtml ?? post.data.description;
 const structuredAuthors = authors.map((author) => {
@@ -187,6 +192,8 @@ const articleStructuredData = {
         {post.data.image && (
           <img src={post.data.image} alt={post.data.title} class="article-header-image" />
         )}
+
+        {hasAudio && <BlogAudioPlayer src={audioSrc} title={post.data.title} />}
 
         <div class="article-meta">
           <div class="authors-container">
@@ -443,8 +450,8 @@ const articleStructuredData = {
     justify-content: space-between;
     flex-wrap: wrap;
     gap: 18px;
-    margin-top: 30px;
-    padding-top: 22px;
+    margin-top: 8px;
+    padding-top: 10px;
     border-top: 1px solid var(--border-subtle);
   }
 
