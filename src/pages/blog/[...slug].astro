@@ -290,6 +290,74 @@ const articleStructuredData = {
     )}
   </main>
 
+<script>
+  const articleContent = document.querySelector('[data-article-content]');
+  const expandedImageFrames = new Set<HTMLElement>();
+
+  function getImageFrame(image: HTMLImageElement): HTMLElement {
+    const figure = image.closest('figure:not(.chart-card)');
+    return figure instanceof HTMLElement ? figure : image;
+  }
+
+  function collapseImageFrame(frame: HTMLElement) {
+    frame.classList.remove('is-expanded');
+    expandedImageFrames.delete(frame);
+
+    const image = frame instanceof HTMLImageElement ? frame : frame.querySelector('img[data-expandable-image]');
+    if (image instanceof HTMLImageElement) {
+      image.setAttribute('aria-expanded', 'false');
+      image.setAttribute('aria-label', 'Expand image');
+    }
+  }
+
+  if (articleContent) {
+    const expandableImages = articleContent.querySelectorAll<HTMLImageElement>('img');
+
+    expandableImages.forEach((image) => {
+      if (image.closest('.chart-card, a, button')) return;
+
+      const frame = getImageFrame(image);
+      frame.dataset.expandableFrame = '';
+      image.dataset.expandableImage = '';
+      image.tabIndex = 0;
+      image.role = 'button';
+      image.setAttribute('aria-expanded', 'false');
+      image.setAttribute('aria-label', 'Expand image');
+
+      function toggleImage() {
+        const nextExpanded = !frame.classList.contains('is-expanded');
+
+        expandedImageFrames.forEach((expandedFrame) => {
+          if (expandedFrame !== frame) collapseImageFrame(expandedFrame);
+        });
+
+        frame.classList.toggle('is-expanded', nextExpanded);
+        image.setAttribute('aria-expanded', String(nextExpanded));
+        image.setAttribute('aria-label', nextExpanded ? 'Collapse image' : 'Expand image');
+
+        if (nextExpanded) {
+          expandedImageFrames.add(frame);
+          frame.scrollIntoView({ block: 'nearest', inline: 'center' });
+        } else {
+          expandedImageFrames.delete(frame);
+        }
+      }
+
+      image.addEventListener('click', toggleImage);
+      image.addEventListener('keydown', (event) => {
+        if (event.key !== 'Enter' && event.key !== ' ') return;
+        event.preventDefault();
+        toggleImage();
+      });
+    });
+
+    document.addEventListener('keydown', (event) => {
+      if (event.key !== 'Escape') return;
+      expandedImageFrames.forEach(collapseImageFrame);
+    });
+  }
+</script>
+
 </Layout>
 
 <style>
@@ -806,7 +874,7 @@ const articleStructuredData = {
 
   .article-content :global(figure:not(.chart-card)) {
     max-width: 100%;
-    overflow: hidden;
+    overflow: visible;
   }
 
   .article-content :global(figure:not(.chart-card) img) {
@@ -1115,6 +1183,48 @@ const articleStructuredData = {
     height: auto;
     margin: 28px 0 32px;
     border-radius: 12px;
+  }
+
+  .article-content :global([data-expandable-frame]) {
+    transition:
+      width 180ms ease,
+      max-width 180ms ease,
+      transform 180ms ease,
+      margin 180ms ease;
+  }
+
+  .article-content :global(img[data-expandable-image]) {
+    cursor: zoom-in;
+    transition:
+      box-shadow 180ms ease,
+      filter 180ms ease,
+      transform 180ms ease;
+  }
+
+  .article-content :global(img[data-expandable-image]:hover) {
+    filter: brightness(1.04);
+  }
+
+  .article-content :global(img[data-expandable-image]:focus-visible) {
+    outline: 2px solid var(--cyan-bright);
+    outline-offset: 4px;
+  }
+
+  .article-content :global([data-expandable-frame].is-expanded) {
+    position: relative;
+    z-index: 2;
+    width: min(1120px, calc(100vw - 48px));
+    max-width: calc(100vw - 48px);
+    margin-left: 50%;
+    transform: translateX(-50%);
+  }
+
+  .article-content :global(img[data-expandable-image].is-expanded),
+  .article-content :global([data-expandable-frame].is-expanded img[data-expandable-image]) {
+    cursor: zoom-out;
+    box-shadow:
+      0 24px 80px rgba(0, 0, 0, 0.32),
+      0 0 0 1px color-mix(in srgb, var(--cyan-bright) 22%, var(--border-subtle));
   }
 
   .article-content :global(.evidence-figure) {
