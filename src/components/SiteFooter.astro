@@ -1,0 +1,128 @@
+---
+const navLinks = [
+  { id: 'home', label: 'Home', href: '/' },
+  { id: 'blog', label: 'Blog', href: '/blog' },
+  { id: 'showcase', label: 'Showcase', href: '/showcase' },
+  { id: 'press', label: 'Press', href: '/press' },
+  { id: 'shoutouts', label: 'Shoutouts', href: '/shoutouts' },
+  { id: 'integrations', label: 'Integrations', href: '/integrations' },
+  { id: 'security', label: 'Security', href: '/blog#security' },
+];
+
+const {
+  current,
+  credit = 'full',
+  spacing = 'roomy',
+  showDisclaimer = false,
+} = Astro.props;
+
+const links = navLinks.filter((link) => link.id !== current);
+---
+
+<footer class:list={['footer', `footer--${spacing}`]}>
+  <nav class="footer-nav">
+    {links.map((link, index) => (
+      <>
+        {index > 0 && <span class="footer-separator">·</span>}
+        <a href={link.href}>{link.label}</a>
+      </>
+    ))}
+  </nav>
+  {credit === 'simple' ? (
+    <p>Built by <a href="https://molty.me" target="_blank" rel="noopener">Molty</a> 🦞</p>
+  ) : (
+    <p>Built by <a href="https://molty.me" target="_blank" rel="noopener">Molty</a> 🦞, a space lobster AI with a <a href="https://soul.md" target="_blank" rel="noopener">soul</a>, by <a href="https://steipete.me" target="_blank" rel="noopener">Peter Steinberger</a> & <a href="https://github.com/openclaw/openclaw#community" target="_blank" rel="noopener">community</a>.</p>
+  )}
+  {showDisclaimer && <p class="disclaimer">Independent project, not affiliated with Anthropic.</p>}
+</footer>
+
+<style>
+  .footer {
+    text-align: center;
+    font-size: 0.9rem;
+    color: var(--text-muted);
+  }
+
+  .footer--home {
+    margin-top: auto;
+    padding-top: 40px;
+    animation: fadeInUp 0.8s ease-out 0.75s both;
+  }
+
+  .footer--roomy {
+    margin-top: auto;
+    padding-top: 48px;
+  }
+
+  .footer--compact {
+    padding-top: 24px;
+  }
+
+  .footer--article {
+    margin-top: 48px;
+    padding-top: 24px;
+  }
+
+  .footer-nav {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    column-gap: 8px;
+    row-gap: 8px;
+    margin-bottom: 16px;
+    font-size: 0.95rem;
+  }
+
+  .footer-separator {
+    color: var(--text-muted);
+    margin: 0 4px;
+  }
+
+  .footer a {
+    color: var(--coral-bright);
+    text-decoration: none;
+    transition: color 0.2s ease;
+  }
+
+  .footer a:hover {
+    color: var(--cyan-bright);
+  }
+
+  .disclaimer {
+    margin-top: 12px;
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    opacity: 0.7;
+  }
+
+  @media (max-width: 480px) {
+    .footer-nav {
+      gap: 6px;
+      font-size: 0.85rem;
+    }
+
+    .footer a {
+      display: inline-block;
+    }
+
+    .footer-separator {
+      margin: 0 2px;
+    }
+  }
+
+  @media (min-width: 481px) and (max-width: 768px) {
+    .footer-nav {
+      gap: 10px;
+      font-size: 0.9rem;
+    }
+
+    .footer a {
+      display: inline-block;
+    }
+
+    .footer-separator {
+      margin: 0 6px;
+    }
+  }
+</style>
