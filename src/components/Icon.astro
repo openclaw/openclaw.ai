@@ -48,7 +48,7 @@ import {
   Sparkles, Box, Network, Rocket, Layers, Database, Wrench, Wand, Gauge,
   Cpu, Headphones, Fingerprint, Boxes, Workflow, Plug, FlaskConical,
   BookOpen, ServerCog, Cloud, MapPin, Music, Speaker, FileCode, Bug,
-  PackageOpen, KeyRound, Compass
+  PackageOpen, KeyRound, Compass, Download
 } from '@lucide/astro';
 
 const { icon, color = 'currentColor', size = 24, class: className = '' } = Astro.props;
@@ -112,6 +112,7 @@ const lucideIcons: Record<string, any> = {
   'lucide:package-open': PackageOpen,
   'lucide:key-round': KeyRound,
   'lucide:compass': Compass,
+  'lucide:download': Download,
 };
 
 const isStringIcon = typeof icon === 'string';

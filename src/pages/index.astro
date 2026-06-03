@@ -124,7 +124,7 @@ function formatBlogDate(date: Date): string {
             <button class="mode-btn active" data-mode="oneliner">One-liner</button>
             <button class="mode-btn" data-mode="quick">npm</button>
             <button class="mode-btn" data-mode="hackable">Hackable</button>
-            <button class="mode-btn" data-mode="macos">macOS</button>
+            <button class="mode-btn" data-mode="macos">Apps</button>
           </div>
           <div class="pm-switch" id="pm-switch" style="display: none;">
             <button class="pm-btn active" data-pm="npm">npm</button>
@@ -219,20 +219,32 @@ function formatBlogDate(date: Date): string {
           </div>
         </div>
         <div id="code-macos" class="code-content" style="display: none;">
-          <div class="macos-app-content">
-            <div class="macos-description">
-              <span class="macos-tagline">Companion App (Beta)</span>
-              <span class="macos-subtitle">Menubar access to your lobster. Works great alongside the CLI.</span>
+          <div class="app-download-content">
+            <div class="app-download-intro">
+              <span class="app-download-tagline">Companion Apps (Beta)</span>
+              <span class="app-download-subtitle">Native controls for the gateway, chat, setup, and node features.</span>
             </div>
-            <a href="https://github.com/openclaw/openclaw/releases/latest" class="macos-download-btn" target="_blank" rel="noopener">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
-                <polyline points="7 10 12 15 17 10"/>
-                <line x1="12" y1="15" x2="12" y2="3"/>
-              </svg>
-              Download for macOS
-            </a>
-            <span class="macos-meta">Requires macOS 15+ · Universal Binary</span>
+            <div class="app-download-grid">
+              <div class="app-download-card">
+                <span class="app-download-platform">macOS</span>
+                <a href="https://github.com/openclaw/openclaw/releases/latest" class="app-download-btn" target="_blank" rel="noopener">
+                  <Icon icon="lucide:download" color="currentColor" size={20} />
+                  Download macOS
+                </a>
+                <span class="app-download-meta">Requires macOS 15+ · Universal Binary</span>
+              </div>
+              <div class="app-download-card">
+                <span class="app-download-platform">Windows Hub</span>
+                <div class="windows-download-actions">
+                  <a href="https://github.com/openclaw/openclaw-windows-node/releases/latest/download/OpenClawCompanion-Setup-x64.exe" class="app-download-btn" target="_blank" rel="noopener">
+                    <Icon icon="lucide:download" color="currentColor" size={20} />
+                    Download x64
+                  </a>
+                  <a href="https://github.com/openclaw/openclaw-windows-node/releases/latest/download/OpenClawCompanion-Setup-arm64.exe" class="app-download-link" target="_blank" rel="noopener">ARM64</a>
+                </div>
+                <span class="app-download-meta">Windows 10 20H2+ or Windows 11 · Tray, setup, chat, node mode</span>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -357,7 +369,7 @@ function formatBlogDate(date: Date): string {
         if (pmSwitch) pmSwitch.style.display = showPmControls ? 'flex' : 'none';
         if (hackableSwitch) hackableSwitch.style.display = showHackableControls ? 'flex' : 'none';
         if (betaSwitch) betaSwitch.style.display = showBetaControls ? 'flex' : 'none';
-        // Show placeholder when no switches visible (macOS mode) to prevent layout shift
+        // Show placeholder when no switches visible (Apps mode) to prevent layout shift
         const noSwitchesVisible = !showOsControls && !showPmControls && !showHackableControls && !showBetaControls;
         if (switchPlaceholder) switchPlaceholder.style.display = noSwitchesVisible ? 'block' : 'none';
       }
@@ -1770,8 +1782,8 @@ function formatBlogDate(date: Date): string {
     text-align: center;
   }
 
-  /* macOS App Download Section */
-  .macos-app-content {
+  /* Companion App Download Section */
+  .app-download-content {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -1780,25 +1792,50 @@ function formatBlogDate(date: Date): string {
     text-align: center;
   }
 
-  .macos-description {
+  .app-download-intro,
+  .app-download-card {
     display: flex;
     flex-direction: column;
-    gap: 4px;
+    align-items: center;
+    gap: 8px;
   }
 
-  .macos-tagline {
+  .app-download-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 20px;
+    width: min(100%, 720px);
+  }
+
+  .app-download-card {
+    justify-content: flex-start;
+    min-width: 0;
+    padding: 18px;
+    border: 1px solid var(--border-subtle);
+    border-radius: 12px;
+    background: rgba(255, 255, 255, 0.03);
+  }
+
+  .app-download-tagline {
     font-family: var(--font-display);
     font-size: 1.1rem;
     font-weight: 600;
     color: var(--text-primary);
   }
 
-  .macos-subtitle {
+  .app-download-subtitle {
     font-size: 0.9rem;
     color: var(--text-muted);
   }
 
-  .macos-download-btn {
+  .app-download-platform {
+    font-family: var(--font-display);
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: var(--text-primary);
+  }
+
+  .app-download-btn {
     display: inline-flex;
     align-items: center;
     gap: 10px;
@@ -1816,17 +1853,41 @@ function formatBlogDate(date: Date): string {
     box-shadow: 0 4px 20px var(--shadow-coral-mid);
   }
 
-  .macos-download-btn:hover {
+  .app-download-btn:hover {
     transform: translateY(-2px);
     box-shadow: 0 8px 30px var(--shadow-coral-strong);
   }
 
-  .macos-download-btn svg {
+  .app-download-btn svg {
     width: 20px;
     height: 20px;
   }
 
-  .macos-meta {
+  .windows-download-actions {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+
+  .app-download-link {
+    display: inline-flex;
+    align-items: center;
+    min-height: 46px;
+    padding: 0 6px;
+    color: var(--coral-bright);
+    font-family: var(--font-display);
+    font-size: 0.95rem;
+    font-weight: 600;
+    text-decoration: none;
+  }
+
+  .app-download-link:hover {
+    color: var(--text-primary);
+  }
+
+  .app-download-meta {
     font-size: 0.8rem;
     color: var(--text-muted);
   }
@@ -2410,7 +2471,16 @@ function formatBlogDate(date: Date): string {
       gap: 6px;
     }
 
-    .macos-download-btn {
+    .app-download-grid {
+      grid-template-columns: 1fr;
+      gap: 14px;
+    }
+
+    .app-download-card {
+      padding: 14px;
+    }
+
+    .app-download-btn {
       padding: 12px 20px;
       font-size: 0.9rem;
     }
