@@ -337,7 +337,6 @@ const articleStructuredData = {
 
         if (nextExpanded) {
           expandedImageFrames.add(frame);
-          frame.scrollIntoView({ block: 'nearest', inline: 'center' });
         } else {
           expandedImageFrames.delete(frame);
         }
@@ -1185,20 +1184,11 @@ const articleStructuredData = {
     border-radius: 12px;
   }
 
-  .article-content :global([data-expandable-frame]) {
-    transition:
-      width 180ms ease,
-      max-width 180ms ease,
-      transform 180ms ease,
-      margin 180ms ease;
-  }
-
   .article-content :global(img[data-expandable-image]) {
     cursor: zoom-in;
     transition:
       box-shadow 180ms ease,
-      filter 180ms ease,
-      transform 180ms ease;
+      filter 180ms ease;
   }
 
   .article-content :global(img[data-expandable-image]:hover) {
