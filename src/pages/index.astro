@@ -240,7 +240,10 @@ function formatBlogDate(date: Date): string {
                     <Icon icon="lucide:download" color="currentColor" size={20} />
                     Download x64
                   </a>
-                  <a href="https://github.com/openclaw/openclaw-windows-node/releases/latest/download/OpenClawCompanion-Setup-arm64.exe" class="app-download-link" target="_blank" rel="noopener">ARM64</a>
+                  <a href="https://github.com/openclaw/openclaw-windows-node/releases/latest/download/OpenClawCompanion-Setup-arm64.exe" class="app-download-btn app-download-btn-secondary" target="_blank" rel="noopener">
+                    <Icon icon="lucide:download" color="currentColor" size={20} />
+                    Download ARM64
+                  </a>
                 </div>
                 <span class="app-download-meta">Windows 10 20H2+ or Windows 11 · Tray, setup, chat, node mode</span>
               </div>
@@ -1838,7 +1841,9 @@ function formatBlogDate(date: Date): string {
   .app-download-btn {
     display: inline-flex;
     align-items: center;
+    justify-content: center;
     gap: 10px;
+    min-width: 190px;
     padding: 14px 28px;
     background: linear-gradient(135deg, var(--coral-bright) 0%, var(--coral-dark) 100%);
     border: none;
@@ -1847,15 +1852,26 @@ function formatBlogDate(date: Date): string {
     font-family: var(--font-display);
     font-size: 1rem;
     font-weight: 600;
+    white-space: nowrap;
     text-decoration: none;
     cursor: pointer;
     transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
     box-shadow: 0 4px 20px var(--shadow-coral-mid);
   }
 
+  .app-download-btn-secondary {
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid var(--border-subtle);
+    box-shadow: none;
+  }
+
   .app-download-btn:hover {
     transform: translateY(-2px);
     box-shadow: 0 8px 30px var(--shadow-coral-strong);
+  }
+
+  .app-download-btn-secondary:hover {
+    box-shadow: 0 8px 24px rgba(255, 255, 255, 0.08);
   }
 
   .app-download-btn svg {
@@ -1865,26 +1881,10 @@ function formatBlogDate(date: Date): string {
 
   .windows-download-actions {
     display: flex;
+    flex-direction: column;
     align-items: center;
     justify-content: center;
-    gap: 12px;
-    flex-wrap: wrap;
-  }
-
-  .app-download-link {
-    display: inline-flex;
-    align-items: center;
-    min-height: 46px;
-    padding: 0 6px;
-    color: var(--coral-bright);
-    font-family: var(--font-display);
-    font-size: 0.95rem;
-    font-weight: 600;
-    text-decoration: none;
-  }
-
-  .app-download-link:hover {
-    color: var(--text-primary);
+    gap: 10px;
   }
 
   .app-download-meta {
