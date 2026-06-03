@@ -1,5 +1,6 @@
 ---
 import Layout from '../layouts/Layout.astro';
+import SiteFooter from '../components/SiteFooter.astro';
 import showcaseData from '../data/showcase.json';
 import featuredBuilds from '../data/community-builds.json';
 import { getCachedXAvatarSrc, getInitialsAvatarSrc } from '../lib/avatars';
@@ -111,22 +112,7 @@ const categoryLabels: Record<string, string> = {
       Looking for more? Check out <a href="https://docs.openclaw.ai/start/showcase" target="_blank" rel="noopener">even more examples in our docs</a> →
     </p>
 
-    <footer class="footer">
-      <nav class="footer-nav">
-        <a href="/">Home</a>
-        <span class="footer-separator">·</span>
-        <a href="/blog">Blog</a>
-        <span class="footer-separator">·</span>
-        <a href="/press">Press</a>
-        <span class="footer-separator">·</span>
-        <a href="/shoutouts">Shoutouts</a>
-        <span class="footer-separator">·</span>
-        <a href="/integrations">Integrations</a>
-        <span class="footer-separator">·</span>
-        <a href="/blog#security">Security</a>
-      </nav>
-      <p>Built by <a href="https://molty.me" target="_blank" rel="noopener">Molty</a> 🦞</p>
-    </footer>
+    <SiteFooter current="showcase" credit="simple" />
   </main>
 </Layout>
 
@@ -529,36 +515,6 @@ const categoryLabels: Record<string, string> = {
     text-decoration: underline;
   }
 
-  .footer {
-    margin-top: auto;
-    padding-top: 48px;
-    text-align: center;
-    font-size: 0.9rem;
-    color: var(--text-muted);
-  }
-
-  .footer-nav {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    align-items: center;
-    column-gap: 8px;
-    row-gap: 8px;
-    margin-bottom: 16px;
-  }
-
-  .footer-separator {
-    color: var(--text-muted);
-  }
-
-  .footer a {
-    color: var(--coral-bright);
-    text-decoration: none;
-  }
-
-  .footer a:hover {
-    color: var(--cyan-bright);
-  }
 
   @media (max-width: 640px) {
     .container {

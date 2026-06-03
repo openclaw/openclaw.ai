@@ -1,6 +1,7 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import SiteTopbar from '../components/SiteTopbar.astro';
+import SiteFooter from '../components/SiteFooter.astro';
 import { siGithub } from 'simple-icons';
 
 const siIcon = (icon: any) => icon.path;
@@ -614,20 +615,7 @@ function logoSrc(project: Project) {
       </div>
     </section>
 
-    <footer class="footer">
-      <nav class="footer-nav">
-        <a href="/">Home</a>
-        <span class="footer-separator">·</span>
-        <a href="/integrations">Integrations</a>
-        <span class="footer-separator">·</span>
-        <a href="/blog">Blog</a>
-        <span class="footer-separator">·</span>
-        <a href="/showcase">Showcase</a>
-        <span class="footer-separator">·</span>
-        <a href="/press">Press</a>
-      </nav>
-      <p>Built by <a href="https://molty.me" target="_blank" rel="noopener">Molty</a> 🦞, a space lobster AI with a <a href="https://soul.md" target="_blank" rel="noopener">soul</a>, by <a href="https://steipete.me" target="_blank" rel="noopener">Peter Steinberger</a> & <a href="https://github.com/openclaw/openclaw#community" target="_blank" rel="noopener">community</a>.</p>
-    </footer>
+    <SiteFooter current="ecosystem" spacing="compact" />
   </main>
 </Layout>
 
@@ -1134,33 +1122,6 @@ function logoSrc(project: Project) {
     box-shadow: 0 14px 34px rgba(0, 229, 204, 0.14);
   }
 
-  .footer {
-    text-align: center;
-    font-size: 0.9rem;
-    color: var(--text-muted);
-    padding-top: 24px;
-  }
-
-  .footer-nav {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    align-items: center;
-    column-gap: 8px;
-    row-gap: 8px;
-    margin-bottom: 16px;
-    font-size: 0.95rem;
-  }
-
-  .footer-separator { color: var(--text-muted); }
-
-  .footer a {
-    color: var(--coral-bright);
-    text-decoration: none;
-    transition: color 0.2s ease;
-  }
-
-  .footer a:hover { color: var(--cyan-bright); }
 
   @media (max-width: 480px) {
     .container { padding: 24px 16px 60px; }
