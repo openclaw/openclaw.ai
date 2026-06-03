@@ -15,6 +15,10 @@ function readText(relativePath: string): string {
   return readFileSync(repoPath(relativePath), 'utf8');
 }
 
+function readJson(relativePath: string): unknown {
+  return JSON.parse(readText(relativePath));
+}
+
 function readBytes(relativePath: string): Buffer {
   return readFileSync(repoPath(relativePath));
 }
@@ -64,5 +68,36 @@ describe('static public assets', () => {
     expect(homepage).toContain("{ name: 'Twitter', icon: siIcon(siX)");
     expect(homepage).toContain("{ name: 'Browser', icon: siIcon(siGooglechrome)");
     expect(homepage).toContain("{ name: 'Gmail', icon: siIcon(siGmail)");
+  });
+
+  test('keeps Vercel security headers aligned with static site resource origins', () => {
+    const config = readJson('vercel.json') as {
+      headers?: Array<{
+        source?: string;
+        headers?: Array<{ key?: string; value?: string }>;
+      }>;
+    };
+    const globalHeaders = config.headers?.find((entry) => entry.source === '/(.*)')?.headers ?? [];
+    const headerMap = new Map(globalHeaders.map((header) => [header.key, header.value]));
+    const csp = headerMap.get('Content-Security-Policy') ?? '';
+
+    expect(headerMap.get('X-Content-Type-Options')).toBe('nosniff');
+    expect(headerMap.get('X-Frame-Options')).toBe('DENY');
+    expect(headerMap.get('Referrer-Policy')).toBe('strict-origin-when-cross-origin');
+    expect(headerMap.get('Permissions-Policy')).toBe('camera=(), microphone=(), geolocation=()');
+
+    for (const requiredDirective of [
+      "default-src 'self'",
+      "script-src 'self' 'unsafe-inline' https://va.vercel-scripts.com",
+      "style-src 'self' 'unsafe-inline' https://api.fontshare.com",
+      "font-src 'self' https://cdn.fontshare.com",
+      "img-src 'self' data: https://ui-avatars.com https://pbs.twimg.com",
+      "connect-src 'self' https://vitals.vercel-analytics.com",
+      "frame-ancestors 'none'",
+      "form-action 'self' https://buttondown.com",
+      "base-uri 'self'",
+    ]) {
+      expect(csp).toContain(requiredDirective);
+    }
   });
 });
