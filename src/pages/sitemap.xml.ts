@@ -12,6 +12,7 @@ const staticPaths = [
   '/showcase',
   '/shoutouts',
   '/cat',
+  '/cats',
 ];
 
 export async function GET() {
