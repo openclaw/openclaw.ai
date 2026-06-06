@@ -26,16 +26,22 @@ require_contains() {
 }
 
 for script in "${SCRIPTS[@]}"; do
-  if grep -Fq 'fetch --tags origin' "$script"; then
-    fail "$(relative_path "$script"): exact version checkout must not fetch every tag"
-  fi
+  # Moving git refs should avoid tag fetches. Unknown refs fall back to tags
+  # only after branch detection has ruled out a branch checkout.
+  # shellcheck disable=SC2016
+  require_contains "$script" 'fetch --no-tags origin main'
+  # shellcheck disable=SC2016
+  require_contains "$script" 'fetch --no-tags origin "refs/heads/${ref}:refs/remotes/origin/${ref}"'
+  require_contains "$script" 'pull --rebase --no-tags || true'
 
-  # Exact version installs should fetch only the requested tag. Fetching the
-  # full tag namespace pulls a very large OpenClaw history pack in clean clones.
-  # shellcheck disable=SC2016
-  require_contains "$script" 'ls-remote --exit-code --tags origin "refs/tags/${ref}"'
-  # shellcheck disable=SC2016
-  require_contains "$script" 'fetch --depth 1 --no-tags origin "refs/tags/${ref}:refs/tags/${ref}"'
+  branch_check_line="$(grep -nF 'ls-remote --exit-code --heads origin "$ref"' "$script" | head -n1 | cut -d: -f1 || true)"
+  tag_fetch_line="$(grep -nF 'fetch --tags origin' "$script" | head -n1 | cut -d: -f1 || true)"
+  if [[ -z "$branch_check_line" || -z "$tag_fetch_line" ]]; then
+    fail "$(relative_path "$script"): missing branch check or tag fallback fetch"
+  fi
+  if (( branch_check_line >= tag_fetch_line )); then
+    fail "$(relative_path "$script"): tag fallback must happen after branch detection"
+  fi
 done
 
 echo "install shell unit checks passed"
