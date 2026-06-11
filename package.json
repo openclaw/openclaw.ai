@@ -22,7 +22,7 @@
     "@vercel/analytics": "^2.0.1",
     "astro": "^6.4.4",
     "js-yaml": "^4.2.0",
-    "sharp": "0.34.5",
+    "sharp": "0.35.0",
     "simple-icons": "^16.23.0"
   },
   "devDependencies": {
