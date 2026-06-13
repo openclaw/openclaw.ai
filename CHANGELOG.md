@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+- Website: redirect `openclaw.ai/docs` to the canonical `docs.openclaw.ai` host while preserving deeper paths and queries.
 - Website: add Discord to the top navigation and align Blog, Docs, and GitHub links with inline icons.
 - Blog: credit Josh Avant on the auto mode exec approvals post.
 - Ecosystem: promote clawpdf into the TypeScript libraries section with its canonical site link.

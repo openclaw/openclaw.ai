@@ -24,6 +24,42 @@ function readBytes(relativePath: string): Buffer {
 }
 
 describe('static public assets', () => {
+  test('redirects legacy docs paths to the canonical docs host', () => {
+    const config = readJson('vercel.json') as {
+      redirects?: Array<{
+        source?: string;
+        has?: Array<{ type?: string; key?: string; value?: string }>;
+        destination?: string;
+        statusCode?: number;
+      }>;
+    };
+
+    expect(config.redirects).toContainEqual({
+      source: '/docs',
+      has: [{ type: 'header', key: 'host', value: 'openclaw.ai' }],
+      destination: 'https://docs.openclaw.ai/',
+      statusCode: 308,
+    });
+    expect(config.redirects).toContainEqual({
+      source: '/docs/:path*',
+      has: [{ type: 'header', key: 'host', value: 'openclaw.ai' }],
+      destination: 'https://docs.openclaw.ai/:path*',
+      statusCode: 308,
+    });
+    expect(config.redirects).toContainEqual({
+      source: '/docs/',
+      has: [{ type: 'header', key: 'host', value: 'openclaw.ai' }],
+      destination: 'https://docs.openclaw.ai/',
+      statusCode: 308,
+    });
+    expect(config.redirects).toContainEqual({
+      source: '/docs/:path*/',
+      has: [{ type: 'header', key: 'host', value: 'openclaw.ai' }],
+      destination: 'https://docs.openclaw.ai/:path*/',
+      statusCode: 308,
+    });
+  });
+
   test('keeps legacy root logo aliases byte-for-byte with the canonical PNG logo', () => {
     const canonicalLogo = readBytes('public/openclaw-logo-text-dark.png');
     const pngSignature = Buffer.from([0x89, 0x50, 0x4e, 0x47]);

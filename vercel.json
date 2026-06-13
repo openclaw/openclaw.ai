@@ -26,56 +26,130 @@
       ]
     }
   ],
-  "routes": [
+  "redirects": [
     {
-      "src": "^/publications/?$",
-      "status": 308,
-      "headers": { "Location": "/publications/clawhub-security-signals.pdf" }
+      "source": "/docs",
+      "has": [{ "type": "header", "key": "host", "value": "openclaw.ai" }],
+      "destination": "https://docs.openclaw.ai/",
+      "statusCode": 308
     },
     {
-      "src": "^/publications/clawhub-security-signals/?$",
-      "status": 308,
-      "headers": { "Location": "/publications/clawhub-security-signals.pdf" }
+      "source": "/docs/",
+      "has": [{ "type": "header", "key": "host", "value": "openclaw.ai" }],
+      "destination": "https://docs.openclaw.ai/",
+      "statusCode": 308
     },
     {
-      "src": "^/discord/?$",
-      "has": [{ "type": "host", "value": "openclaw.ai" }],
-      "status": 302,
-      "headers": { "Location": "https://discord.gg/clawd" }
+      "source": "/docs/:path*",
+      "has": [{ "type": "header", "key": "host", "value": "openclaw.ai" }],
+      "destination": "https://docs.openclaw.ai/:path*",
+      "statusCode": 308
     },
     {
-      "src": "^/blog/performance-size-supply-chain-sweep/?$",
-      "status": 308,
-      "headers": { "Location": "/blog/lighter-core-sharper-claws/" }
+      "source": "/docs/:path*/",
+      "has": [{ "type": "header", "key": "host", "value": "openclaw.ai" }],
+      "destination": "https://docs.openclaw.ai/:path*/",
+      "statusCode": 308
     },
     {
-      "src": "^/(.*)$",
-      "has": [{ "type": "host", "value": "blog.openclaw.ai" }],
-      "status": 308,
-      "headers": { "Location": "https://openclaw.ai/blog/$1" }
+      "source": "/publications",
+      "destination": "/publications/clawhub-security-signals.pdf",
+      "statusCode": 308
     },
     {
-      "src": "^/(.*)$",
-      "has": [{ "type": "host", "value": "trust.openclaw.ai" }],
-      "status": 308,
-      "headers": { "Location": "https://openclaw.ai/blog#security" }
+      "source": "/publications/",
+      "destination": "/publications/clawhub-security-signals.pdf",
+      "statusCode": 308
     },
     {
-      "src": "^/trust(/.*)?$",
-      "status": 308,
-      "headers": { "Location": "/blog#security" }
+      "source": "/publications/clawhub-security-signals",
+      "destination": "/publications/clawhub-security-signals.pdf",
+      "statusCode": 308
     },
     {
-      "src": "^/(.*)$",
-      "has": [{ "type": "host", "value": "clawd.bot" }],
-      "status": 308,
-      "headers": { "Location": "https://openclaw.ai/$1" }
+      "source": "/publications/clawhub-security-signals/",
+      "destination": "/publications/clawhub-security-signals.pdf",
+      "statusCode": 308
     },
     {
-      "src": "^/(.*)$",
-      "has": [{ "type": "host", "value": "www.clawd.bot" }],
-      "status": 308,
-      "headers": { "Location": "https://openclaw.ai/$1" }
+      "source": "/discord",
+      "has": [{ "type": "header", "key": "host", "value": "openclaw.ai" }],
+      "destination": "https://discord.gg/clawd",
+      "statusCode": 302
+    },
+    {
+      "source": "/discord/",
+      "has": [{ "type": "header", "key": "host", "value": "openclaw.ai" }],
+      "destination": "https://discord.gg/clawd",
+      "statusCode": 302
+    },
+    {
+      "source": "/blog/performance-size-supply-chain-sweep",
+      "destination": "/blog/lighter-core-sharper-claws/",
+      "statusCode": 308
+    },
+    {
+      "source": "/blog/performance-size-supply-chain-sweep/",
+      "destination": "/blog/lighter-core-sharper-claws/",
+      "statusCode": 308
+    },
+    {
+      "source": "/:path*",
+      "has": [{ "type": "header", "key": "host", "value": "blog.openclaw.ai" }],
+      "destination": "https://openclaw.ai/blog/:path*",
+      "statusCode": 308
+    },
+    {
+      "source": "/:path*/",
+      "has": [{ "type": "header", "key": "host", "value": "blog.openclaw.ai" }],
+      "destination": "https://openclaw.ai/blog/:path*/",
+      "statusCode": 308
+    },
+    {
+      "source": "/:path*",
+      "has": [{ "type": "header", "key": "host", "value": "trust.openclaw.ai" }],
+      "destination": "https://openclaw.ai/blog#security",
+      "statusCode": 308
+    },
+    {
+      "source": "/:path*/",
+      "has": [{ "type": "header", "key": "host", "value": "trust.openclaw.ai" }],
+      "destination": "https://openclaw.ai/blog#security",
+      "statusCode": 308
+    },
+    {
+      "source": "/trust/:path*",
+      "destination": "/blog#security",
+      "statusCode": 308
+    },
+    {
+      "source": "/trust/:path*/",
+      "destination": "/blog#security",
+      "statusCode": 308
+    },
+    {
+      "source": "/:path*",
+      "has": [{ "type": "header", "key": "host", "value": "clawd.bot" }],
+      "destination": "https://openclaw.ai/:path*",
+      "statusCode": 308
+    },
+    {
+      "source": "/:path*/",
+      "has": [{ "type": "header", "key": "host", "value": "clawd.bot" }],
+      "destination": "https://openclaw.ai/:path*/",
+      "statusCode": 308
+    },
+    {
+      "source": "/:path*",
+      "has": [{ "type": "header", "key": "host", "value": "www.clawd.bot" }],
+      "destination": "https://openclaw.ai/:path*",
+      "statusCode": 308
+    },
+    {
+      "source": "/:path*/",
+      "has": [{ "type": "header", "key": "host", "value": "www.clawd.bot" }],
+      "destination": "https://openclaw.ai/:path*/",
+      "statusCode": 308
     }
   ]
 }
