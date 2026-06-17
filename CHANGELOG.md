@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+- Ecosystem: add ffmpeg-wasm, imsgcrawl, and photoscrawl to the project directory.
 - Website: redirect `openclaw.ai/docs` to the canonical `docs.openclaw.ai` host while preserving deeper paths and queries.
 - Ecosystem: add libterminal to the TypeScript libraries section with terminal banner art.
 - Website: add Discord to the top navigation and align Blog, Docs, and GitHub links with inline icons.

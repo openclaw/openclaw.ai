@@ -1,0 +1,31 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 540">
+  <defs>
+    <radialGradient id="g" cx="74%" cy="24%" r="72%">
+      <stop offset="0" stop-color="#7CC4FF" stop-opacity=".26"/>
+      <stop offset=".45" stop-color="#001b22" stop-opacity=".36"/>
+      <stop offset="1" stop-color="#050812"/>
+    </radialGradient>
+    <linearGradient id="line" x1="0" x2="1">
+      <stop stop-color="#ff6f4d"/>
+      <stop offset="1" stop-color="#00e5cc"/>
+    </linearGradient>
+  </defs>
+  <rect width="960" height="540" fill="url(#g)"/>
+  <g opacity=".18" stroke="url(#line)" stroke-width="2" fill="none">
+    <path d="M0 420C220 300 350 500 570 330S800 190 960 260"/>
+    <path d="M0 110C200 210 310 40 520 135s310 170 440 70"/>
+  </g>
+  <g opacity=".16" stroke="#8da0c8" stroke-width="1">
+    <path d="M0 0v540"/><path d="M120 0v540"/><path d="M240 0v540"/><path d="M360 0v540"/><path d="M480 0v540"/><path d="M600 0v540"/><path d="M720 0v540"/><path d="M840 0v540"/><path d="M960 0v540"/>
+    <path d="M0 0h960"/><path d="M0 108h960"/><path d="M0 216h960"/><path d="M0 324h960"/><path d="M0 432h960"/><path d="M0 540h960"/>
+  </g>
+  <g filter="drop-shadow(0 0 28px #7CC4FF55)">
+    <path d="M242 170h350c58 0 105 42 105 94s-47 94-105 94H450l-88 70 22-70H242c-58 0-105-42-105-94s47-94 105-94z" fill="none" stroke="#7CC4FF" stroke-width="8" stroke-linejoin="round"/>
+    <path d="M342 240h260M342 288h190" stroke="#7CC4FF" stroke-width="14" stroke-linecap="round" opacity=".78"/>
+    <circle cx="258" cy="264" r="18" fill="#00E5CC"/>
+    <path d="M676 286c58 10 101 48 101 94 0 52-47 94-105 94h-68l-74 48 18-48h-28" fill="none" stroke="#FF6F4D" stroke-width="8" stroke-linecap="round" stroke-linejoin="round" opacity=".72"/>
+  </g>
+  <circle cx="820" cy="110" r="5" fill="#00e5cc" opacity=".7"/>
+  <circle cx="170" cy="420" r="4" fill="#ff6f4d" opacity=".75"/>
+  <circle cx="770" cy="405" r="3" fill="#fff" opacity=".42"/>
+</svg>
