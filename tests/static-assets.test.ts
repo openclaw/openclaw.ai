@@ -269,6 +269,15 @@ describe('static public assets', () => {
     expect(topbar).toMatch(/@media \(max-width: 720px\) \{[\s\S]*?\.site-menu \{[\s\S]*?display: block;/);
   });
 
+  test('uses a matching lobster icon and install-focused ClawHub CTA', () => {
+    const homePage = readText('src/pages/index.astro');
+
+    expect(homePage).toContain('data-icon="clawhub-lobster"');
+    expect(homePage).not.toContain('src="/ecosystem/logos/clawhub.png"');
+    expect(homePage).toContain('<span class="cta-sub">Install skills and plugins</span>');
+    expect(homePage).not.toContain('<span class="cta-sub">Download skills</span>');
+  });
+
   test('omits the redundant integrations section navigation', () => {
     const integrationsPage = readText('src/pages/integrations.astro');
 
