@@ -2,6 +2,7 @@ import { describe, expect, test } from 'bun:test';
 import { existsSync, readFileSync, readdirSync, statSync } from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { channels, companionNodes, featuredProviders, gatewayHosts } from '../src/data/integrations';
 import { resolveAuthorProfile } from '../src/lib/authors';
 import { getCachedXAvatarSrc, getInitialsAvatarSrc } from '../src/lib/avatars';
 
@@ -95,15 +96,185 @@ describe('static public assets', () => {
   });
 
   test('keeps Google and X simple-icon assets wired into public pages', () => {
-    const integrationsPage = readText('src/pages/integrations.astro');
+    const integrationsCatalog = readText('src/data/integrations.ts');
     const homepage = readText('src/pages/index.astro');
 
-    expect(integrationsPage).toContain("{ name: 'Google', icon: siIcon(siGoogle)");
-    expect(integrationsPage).toContain("{ name: 'xAI', icon: siIcon(siX)");
-    expect(integrationsPage).toContain("{ name: 'Twitter/X', icon: siIcon(siX)");
+    expect(integrationsCatalog).toContain('icon: siIcon(siGoogle)');
+    expect(integrationsCatalog).toContain('icon: siIcon(siX)');
     expect(homepage).toContain("{ name: 'Twitter', icon: siIcon(siX)");
     expect(homepage).toContain("{ name: 'Browser', icon: siIcon(siGooglechrome)");
     expect(homepage).toContain("{ name: 'Gmail', icon: siIcon(siGmail)");
+  });
+
+  test('keeps the integrations catalog off removed and stale capability claims', () => {
+    const integrationsCatalog = readText('src/data/integrations.ts');
+    const integrationsPage = readText('src/pages/integrations.astro');
+    const homepage = readText('src/pages/index.astro');
+    const ecosystemPage = readText('src/pages/ecosystem.astro');
+
+    expect(integrationsCatalog).toContain("{ value: '27', label: 'chat channels' }");
+    expect(integrationsCatalog).not.toContain('documented chat channels');
+    expect(integrationsCatalog).not.toContain("label: 'Catalog snapshot");
+    expect(integrationsCatalog).toContain("{ name: 'OpenAI'");
+    expect(integrationsCatalog).not.toContain('currentModelExamples');
+    expect(integrationsCatalog).not.toContain('BlueBubbles');
+    expect(integrationsCatalog).not.toContain('/providers/glm');
+    expect(integrationsPage).not.toContain('50+ integrations');
+    expect(integrationsPage).toContain("'built-in': 'Bundled'");
+    expect(integrationsPage).toContain("included: 'Bundled'");
+    expect(integrationsPage).toContain("official: 'Official plugin'");
+    expect(integrationsPage).not.toContain('Official install');
+    expect(integrationsPage).not.toContain('Current catalog examples');
+    expect(integrationsPage).not.toContain('model-snapshot');
+    expect(integrationsPage).not.toContain('class="eyebrow"');
+    expect(integrationsPage).not.toContain('.eyebrow');
+    expect(homepage).not.toContain('50+ integrations');
+    expect(ecosystemPage).not.toContain('100+ community skills');
+  });
+
+  test('animates catalog snapshot values while respecting reduced motion', () => {
+    const integrationsPage = readText('src/pages/integrations.astro');
+
+    expect(integrationsPage).toContain('data-count-up={stat.value}');
+    expect(integrationsPage).toContain("matchMedia('(prefers-reduced-motion: reduce)')");
+    expect(integrationsPage).toContain('requestAnimationFrame');
+  });
+
+  test('keeps automation links clear of their grid dividers', () => {
+    const integrationsPage = readText('src/pages/integrations.astro');
+
+    expect(integrationsPage).toMatch(/\.automation-links li \{[\s\S]*?padding-left: 12px;/);
+  });
+
+  test('keeps integration examples on current live destinations', () => {
+    const integrationsCatalog = readText('src/data/integrations.ts');
+
+    expect(integrationsCatalog).not.toContain('clawhub.ai/steipete/homeassistant');
+    expect(integrationsCatalog).not.toContain('clawhub.ai/steipete/bird');
+    expect(integrationsCatalog).not.toContain('clawhub.ai/skills?q=home%20assistant');
+    expect(integrationsCatalog).toContain('clawhub.ai/skills?q=home+assistant');
+    expect(integrationsCatalog).toContain('clawhub.ai/skills?q=twitter');
+    expect(integrationsCatalog).toContain('#byteplus-(international)');
+    expect(integrationsCatalog).toContain(
+      '#providers-via-models.providers-(custom%2Fbase-url)',
+    );
+  });
+
+  test('sorts channels by current package distribution before name', () => {
+    const statusRank = {
+      'built-in': 0,
+      included: 0,
+      official: 1,
+      external: 2,
+      community: 3,
+      gateway: 3,
+      node: 3,
+    };
+    const expectedOrder = [...channels].sort((left, right) => {
+      return statusRank[left.status] - statusRank[right.status]
+        || left.name.localeCompare(right.name);
+    });
+    const statusFor = (name: string) => channels.find((channel) => channel.name === name)?.status;
+
+    expect(channels.map((channel) => channel.name)).toEqual(
+      expectedOrder.map((channel) => channel.name),
+    );
+    expect(statusFor('Discord')).toBe('official');
+    expect(statusFor('Mattermost')).toBe('included');
+    expect(statusFor('WeChat / Weixin')).toBe('external');
+  });
+
+  test('collapses the channel catalog after three responsive rows', () => {
+    const integrationsPage = readText('src/pages/integrations.astro');
+
+    expect(integrationsPage).toContain('id="channel-catalog"');
+    expect(integrationsPage).toContain('aria-controls="channel-catalog"');
+    expect(integrationsPage).toContain('data-channel-expander');
+    expect(integrationsPage).toContain('See all channels');
+    expect(integrationsPage).toContain('Show fewer channels');
+    expect(integrationsPage).toContain('<span class="channel-expander-icon"');
+    expect(integrationsPage).toMatch(
+      /\.channel-expander:focus-visible \{[\s\S]*?outline: none;[\s\S]*?box-shadow: 0 0 0 1px var\(--cyan-bright\);/,
+    );
+    expect(integrationsPage).toContain('nth-child(n + 13)');
+    expect(integrationsPage).toContain('nth-child(n + 10)');
+    expect(integrationsPage).toContain('nth-child(n + 7)');
+    expect(integrationsPage).toContain('nth-child(n + 4)');
+  });
+
+  test('uses real local or vector brand marks for branded integration cards', () => {
+    const semanticChannelIcons = new Set(['IRC', 'Voice Call', 'WebChat']);
+    const brandedItems = [
+      ...channels.filter((item) => !semanticChannelIcons.has(item.name)),
+      ...featuredProviders,
+      ...gatewayHosts.filter((item) => item.name === 'Windows'),
+      ...companionNodes.filter((item) => item.name === 'Windows Hub'),
+    ];
+
+    expect(
+      brandedItems.filter((item) => item.icon.startsWith('lucide:') && !item.logo),
+    ).toEqual([]);
+
+    for (const item of brandedItems) {
+      if (!item.logo) continue;
+      expect(item.logo.startsWith('/integrations/logos/')).toBe(true);
+      expect(existsSync(repoPath(`public${item.logo}`))).toBe(true);
+    }
+  });
+
+  test('keeps integration cards neutral at rest', () => {
+    const integrationsPage = readText('src/pages/integrations.astro');
+
+    expect(integrationsPage).not.toContain('.catalog-card::before');
+    expect(integrationsPage).not.toContain('border-top: 2px solid var(--accent)');
+    expect(integrationsPage).not.toContain('.status-included');
+    expect(integrationsPage).not.toContain('.status-official');
+    expect(integrationsPage).not.toContain('.status-external');
+  });
+
+  test('keeps the integrations hero aligned with the site page-header pattern', () => {
+    const integrationsPage = readText('src/pages/integrations.astro');
+
+    expect(integrationsPage).not.toContain('hero-kicker');
+    expect(integrationsPage).not.toContain('The OpenClaw ecosystem');
+    expect(integrationsPage).toContain('<h1 class="hero-title">Integrations</h1>');
+    expect(integrationsPage).toMatch(/\.hero \{[\s\S]*?text-align: center;/);
+    expect(integrationsPage).toMatch(/\.hero-title \{[\s\S]*?background: linear-gradient/);
+    expect(integrationsPage).toMatch(/\.hero-actions,[\s\S]*?justify-content: center;/);
+  });
+
+  test('includes integrations in the shared site navigation', () => {
+    const topbar = readText('src/components/SiteTopbar.astro');
+    const integrationsPage = readText('src/pages/integrations.astro');
+
+    expect(topbar).toContain("| 'integrations'");
+    expect(topbar).toContain("{ href: '/integrations', label: 'Integrations' }");
+    expect(topbar).toContain("if (active === 'integrations') return item.href === '/integrations'");
+    expect(integrationsPage).toContain("import SiteTopbar from '../components/SiteTopbar.astro'");
+    expect(integrationsPage).toContain('<SiteTopbar active="integrations" />');
+    expect(integrationsPage).not.toContain('Back to home');
+    expect(integrationsPage).not.toContain('.back-link');
+  });
+
+  test('uses a compact expandable site navigation on mobile', () => {
+    const topbar = readText('src/components/SiteTopbar.astro');
+
+    expect(topbar).toContain("import { FileText, Megaphone, Menu, X } from '@lucide/astro'");
+    expect(topbar).toContain('class="site-nav site-nav-desktop"');
+    expect(topbar).toContain('<details class="site-menu">');
+    expect(topbar).toContain('class="site-menu-toggle"');
+    expect(topbar).toContain('aria-label="Toggle main navigation"');
+    expect(topbar).toContain('class="site-menu-panel"');
+    expect(topbar).toMatch(/@media \(max-width: 720px\) \{[\s\S]*?\.site-nav\.site-nav-desktop \{[\s\S]*?display: none;/);
+    expect(topbar).toMatch(/@media \(max-width: 720px\) \{[\s\S]*?\.site-menu \{[\s\S]*?display: block;/);
+  });
+
+  test('omits the redundant integrations section navigation', () => {
+    const integrationsPage = readText('src/pages/integrations.astro');
+
+    expect(integrationsPage).not.toContain('aria-label="Integration categories"');
+    expect(integrationsPage).not.toContain('class="catalog-nav"');
+    expect(integrationsPage).not.toContain('.catalog-nav');
   });
 
   test('keeps Vercel security headers aligned with static site resource origins', () => {
