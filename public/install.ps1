@@ -1262,6 +1262,7 @@ function Install-OpenClawFromGit {
     $prevPnpmWorkspaceConcurrency = $env:PNPM_CONFIG_WORKSPACE_CONCURRENCY
     $prevPnpmVerifyDepsBeforeRun = $env:PNPM_CONFIG_VERIFY_DEPS_BEFORE_RUN
     $prevPnpmSideEffectsCache = $env:PNPM_CONFIG_SIDE_EFFECTS_CACHE
+    $prevNodeLlamaPostinstall = $env:NODE_LLAMA_CPP_POSTINSTALL
     $prevNodeOptions = $env:NODE_OPTIONS
     $pnpmCommand = Get-PnpmCommandPath
     if (-not $pnpmCommand) {
@@ -1273,6 +1274,7 @@ function Install-OpenClawFromGit {
     $env:PNPM_CONFIG_WORKSPACE_CONCURRENCY = "1"
     $env:PNPM_CONFIG_VERIFY_DEPS_BEFORE_RUN = "false"
     $env:PNPM_CONFIG_SIDE_EFFECTS_CACHE = "false"
+    $env:NODE_LLAMA_CPP_POSTINSTALL = "skip"
     $pushedRepoLocation = $false
     try {
         Push-Location -LiteralPath $RepoDir
@@ -1320,6 +1322,7 @@ function Install-OpenClawFromGit {
         $env:PNPM_CONFIG_WORKSPACE_CONCURRENCY = $prevPnpmWorkspaceConcurrency
         $env:PNPM_CONFIG_VERIFY_DEPS_BEFORE_RUN = $prevPnpmVerifyDepsBeforeRun
         $env:PNPM_CONFIG_SIDE_EFFECTS_CACHE = $prevPnpmSideEffectsCache
+        $env:NODE_LLAMA_CPP_POSTINSTALL = $prevNodeLlamaPostinstall
         $env:NODE_OPTIONS = $prevNodeOptions
     }
 
