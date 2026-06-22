@@ -172,6 +172,22 @@ function Check-Node {
 }
 
 function Get-WindowsPortableArchitecture {
+    # Native ARM64 Windows may run Windows PowerShell under x64 emulation, so
+    # process env vars can report AMD64 even when the host CPU is ARM64.
+    try {
+        $processor = Get-CimInstance -ClassName Win32_Processor -ErrorAction Stop | Select-Object -First 1
+        if ($processor -and $processor.Architecture -eq 12) {
+            return "arm64"
+        }
+    } catch {}
+
+    try {
+        $computerSystem = Get-CimInstance -ClassName Win32_ComputerSystem -ErrorAction Stop | Select-Object -First 1
+        if ($computerSystem -and $computerSystem.SystemType -match "ARM64") {
+            return "arm64"
+        }
+    } catch {}
+
     foreach ($architecture in @($env:PROCESSOR_ARCHITEW6432, $env:PROCESSOR_ARCHITECTURE)) {
         if ($architecture -match "ARM64") {
             return "arm64"
