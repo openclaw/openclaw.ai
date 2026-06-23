@@ -1,14 +1,20 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 540">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 420" role="img" aria-labelledby="title desc">
+  <title id="title">Crabline deterministic channel QA</title>
+  <desc id="desc">A coral crab crossing a cyan test waveform over a dark navy background.</desc>
   <defs>
-    <radialGradient id="g" cx="74%" cy="24%" r="72%"><stop offset="0" stop-color="#D9C28A" stop-opacity=".24"/><stop offset=".45" stop-color="#001b22" stop-opacity=".35"/><stop offset="1" stop-color="#050812"/></radialGradient>
-    <linearGradient id="line" x1="0" x2="1"><stop stop-color="#ff6f4d"/><stop offset="1" stop-color="#00e5cc"/></linearGradient>
+    <linearGradient id="bg" x1="0" x2="1" y1="0" y2="1"><stop stop-color="#07192c"/><stop offset="1" stop-color="#102f43"/></linearGradient>
+    <linearGradient id="wave" x1="0" x2="1"><stop stop-color="#00e5cc"/><stop offset="1" stop-color="#ffb347"/></linearGradient>
   </defs>
-  <rect width="960" height="540" fill="url(#g)"/>
-  <g opacity=".18" stroke="url(#line)" stroke-width="2" fill="none">
-    <path d="M0 420C220 300 350 500 570 330S800 190 960 260"/>
-    <path d="M0 110C200 210 310 40 520 135s310 170 440 70"/>
+  <rect width="1200" height="420" rx="28" fill="url(#bg)"/>
+  <path d="M40 300h140l35-100 45 155 48-120 44 65h160l38-88 46 118 46-75 38 45h300" fill="none" stroke="url(#wave)" stroke-linecap="round" stroke-linejoin="round" stroke-width="10" opacity=".85"/>
+  <g transform="translate(120 88)" fill="none" stroke="#ff6f4d" stroke-linecap="round" stroke-linejoin="round" stroke-width="12">
+    <path d="M85 102c-42-32-71-36-102-16m102 30c-46 0-76 15-104 48m230-62c42-32 71-36 102-16m-102 30c46 0 76 15 104 48"/>
+    <path d="M78 150c-32 30-44 61-35 92m192-92c32 30 44 61 35 92"/>
+    <ellipse cx="160" cy="122" rx="88" ry="68" fill="#ff6f4d"/>
+    <circle cx="126" cy="95" r="9" fill="#07192c" stroke="none"/><circle cx="194" cy="95" r="9" fill="#07192c" stroke="none"/>
+    <path d="M131 134c18 15 40 15 58 0"/>
   </g>
-  <g opacity=".16" stroke="#8da0c8" stroke-width="1"><path d="M0 0v540"/><path d="M120 0v540"/><path d="M240 0v540"/><path d="M360 0v540"/><path d="M480 0v540"/><path d="M600 0v540"/><path d="M720 0v540"/><path d="M840 0v540"/><path d="M960 0v540"/><path d="M0 0h960"/><path d="M0 108h960"/><path d="M0 216h960"/><path d="M0 324h960"/><path d="M0 432h960"/><path d="M0 540h960"/></g>
-  <g filter="drop-shadow(0 0 28px #D9C28A55)"><rect stroke="#D9C28A" stroke-width="6" stroke-linecap="round" stroke-linejoin="round" fill="none" opacity=".9" x="230" y="170" width="220" height="150" rx="34"/><rect stroke="#D9C28A" stroke-width="6" stroke-linecap="round" stroke-linejoin="round" fill="none" opacity=".9" x="510" y="250" width="220" height="150" rx="34"/><path stroke="#D9C28A" stroke-width="6" stroke-linecap="round" stroke-linejoin="round" fill="none" opacity=".9" d="M450 245h60"/></g>
-  <circle cx="820" cy="110" r="5" fill="#00e5cc" opacity=".7"/><circle cx="170" cy="420" r="4" fill="#ff6f4d" opacity=".75"/><circle cx="770" cy="405" r="3" fill="#fff" opacity=".42"/>
+  <text x="470" y="145" fill="#fff" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="64" font-weight="700">crabline</text>
+  <text x="474" y="205" fill="#9ddbd5" font-family="ui-sans-serif, system-ui, sans-serif" font-size="26">deterministic messaging-channel QA</text>
+  <text x="474" y="255" fill="#ffcf86" font-family="ui-sans-serif, system-ui, sans-serif" font-size="22">local mocks · fake provider APIs · reproducible evidence</text>
 </svg>
