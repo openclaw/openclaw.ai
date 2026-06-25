@@ -20,8 +20,8 @@
     "@astrojs/rss": "^4.0.18",
     "@lucide/astro": "^1.17.0",
     "@vercel/analytics": "^2.0.1",
-    "astro": "^6.4.4",
-    "js-yaml": "^4.2.0",
+    "astro": "^7.0.3",
+    "js-yaml": "^5.1.0",
     "sharp": "0.34.5",
     "simple-icons": "^16.23.0"
   },
