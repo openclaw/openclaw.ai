@@ -1,0 +1,83 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-label="ClawScan logo">
+  <defs>
+    <linearGradient id="bg" x1="58" y1="48" x2="452" y2="462" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#03070d"/>
+      <stop offset="0.55" stop-color="#06121a"/>
+      <stop offset="1" stop-color="#081811"/>
+    </linearGradient>
+    <radialGradient id="dishFill" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(202 214) rotate(39) scale(218 157)">
+      <stop offset="0" stop-color="#ff9a5a"/>
+      <stop offset="0.34" stop-color="#e64c2e"/>
+      <stop offset="0.68" stop-color="#8e1d18"/>
+      <stop offset="1" stop-color="#1d070a"/>
+    </radialGradient>
+    <linearGradient id="rim" x1="58" y1="92" x2="384" y2="356" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#ff8e55"/>
+      <stop offset="0.44" stop-color="#f04b27"/>
+      <stop offset="1" stop-color="#2b0808"/>
+    </linearGradient>
+    <linearGradient id="metal" x1="170" y1="246" x2="425" y2="152" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#ffd49a"/>
+      <stop offset="0.52" stop-color="#d74a2f"/>
+      <stop offset="1" stop-color="#291018"/>
+    </linearGradient>
+    <linearGradient id="horn" x1="332" y1="93" x2="421" y2="181" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#ffb36a"/>
+      <stop offset="0.42" stop-color="#c83a25"/>
+      <stop offset="1" stop-color="#090d13"/>
+    </linearGradient>
+    <filter id="soft" x="-30%" y="-30%" width="160%" height="160%">
+      <feGaussianBlur in="SourceAlpha" stdDeviation="4" result="shadow"/>
+      <feOffset in="shadow" dx="0" dy="12" result="offset"/>
+      <feColorMatrix in="offset" type="matrix" values="0 0 0 0 0.02 0 0 0 0 0.04 0 0 0 0 0.04 0 0 0 0.45 0"/>
+      <feMerge>
+        <feMergeNode/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+
+  <rect width="512" height="512" rx="104" fill="url(#bg)"/>
+  <circle cx="392" cy="118" r="82" fill="#00e5cc" opacity="0.08"/>
+  <circle cx="105" cy="404" r="105" fill="#ff3d21" opacity="0.07"/>
+
+  <g fill="none" stroke="#00e5cc" stroke-width="3" stroke-linecap="round" opacity="0.16">
+    <path d="M71 160h68M88 352h106M344 422h88"/>
+    <path d="M118 104h32M361 74h44M364 344h45"/>
+  </g>
+
+  <g filter="url(#soft)">
+    <!-- Base and mast from the source emoji. -->
+    <ellipse cx="143" cy="409" rx="77" ry="28" fill="#10161d"/>
+    <ellipse cx="143" cy="402" rx="70" ry="24" fill="#22313c"/>
+    <path d="M153 398 153 317" stroke="#d65a32" stroke-width="17" stroke-linecap="round"/>
+    <circle cx="153" cy="317" r="30" fill="#2c2020"/>
+    <circle cx="153" cy="317" r="19" fill="#10191e"/>
+    <path d="M121 353c-21-4-34-17-33-34 1-19 21-29 47-22" fill="#1b252b"/>
+    <path d="M103 327c-22-6-32-20-27-36 6-17 27-22 50-11" fill="#26333b"/>
+
+    <!-- Back strut and feed support. -->
+    <path d="M366 167 405 333" stroke="#d65a32" stroke-width="10" stroke-linecap="round"/>
+    <path d="M379 165 421 330" stroke="#00e5cc" stroke-width="4" stroke-linecap="round" opacity="0.35"/>
+    <path d="M126 223 356 144" stroke="url(#metal)" stroke-width="12" stroke-linecap="round"/>
+    <path d="M133 230 361 150" stroke="#00e5cc" stroke-width="4" stroke-linecap="round" opacity="0.42"/>
+
+    <!-- Lobster-colored tilted dish, intentionally close to the emoji silhouette. -->
+    <g transform="rotate(-38 211 221)">
+      <ellipse cx="211" cy="221" rx="172" ry="96" fill="url(#dishFill)"/>
+      <ellipse cx="211" cy="221" rx="174" ry="98" fill="none" stroke="url(#rim)" stroke-width="18"/>
+      <path d="M70 211c61-54 172-82 280-36" fill="none" stroke="#ffb35f" stroke-width="4" opacity="0.3"/>
+      <path d="M96 258c62-31 148-43 236-13" fill="none" stroke="#02070b" stroke-width="4" opacity="0.36"/>
+      <path d="M72 221h276" stroke="#00e5cc" stroke-width="5" opacity="0.28"/>
+      <path d="M211 125v190" stroke="#ff6f4d" stroke-width="3.5" opacity="0.34"/>
+    </g>
+
+    <!-- Receiver and collar. -->
+    <g transform="rotate(-38 368 138)">
+      <rect x="331" y="108" width="88" height="59" rx="24" fill="url(#horn)"/>
+      <rect x="337" y="115" width="76" height="46" rx="21" fill="#05080d" opacity="0.38"/>
+      <ellipse cx="324" cy="140" rx="17" ry="22" fill="#151f24"/>
+      <ellipse cx="324" cy="140" rx="10" ry="15" fill="#ff8d54"/>
+    </g>
+  </g>
+</svg>
