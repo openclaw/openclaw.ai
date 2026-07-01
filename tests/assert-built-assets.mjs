@@ -52,11 +52,21 @@ assert.ok(
 
 const homePage = readText('dist/index.html');
 const integrationsPage = readText('dist/integrations/index.html');
+const ecosystemPage = readText('dist/ecosystem/index.html');
 
 assertContains(homePage, siX.path, 'dist/index.html');
 assertContains(homePage, siGooglechrome.path, 'dist/index.html');
 assertContains(homePage, siGmail.path, 'dist/index.html');
 assertContains(integrationsPage, siGoogle.path, 'dist/integrations/index.html');
 assertContains(integrationsPage, siX.path, 'dist/integrations/index.html');
+
+const ecosystemAssetPaths = new Set(
+  [...ecosystemPage.matchAll(/(?:src|href)="(\/ecosystem\/[^"#?]+)"/g)].map(
+    ([, assetPath]) => assetPath,
+  ),
+);
+for (const assetPath of ecosystemAssetPaths) {
+  assertFileExists(`dist${assetPath}`);
+}
 
 console.log('built asset compatibility checks passed');
