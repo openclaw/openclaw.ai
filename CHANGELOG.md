@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+- Dependencies: update Astro to 7.0.4 and js-yaml to 5.2.0, add Astro 7-compatible Lucide icons, and preserve the existing generated HTML whitespace behavior (#176, thanks @dependabot).
 - Ecosystem: add ClawScan, a composable security scanning harness for agent skills (#177, thanks @Patrick-Erichsen).
 - Ecosystem: add ffmpeg-wasm, imsgcrawl, and photoscrawl to the project directory.
 - Website: redirect `openclaw.ai/docs` to the canonical `docs.openclaw.ai` host while preserving deeper paths and queries.
