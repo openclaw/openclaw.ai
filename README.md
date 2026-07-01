@@ -25,7 +25,7 @@ bun run dev
 
 ## Contributing
 
-See [CONTRIBUTING.md](./CONTRIBUTING.md) before opening a PR.
+Read [VISION.md](./VISION.md) for product direction and [CONTRIBUTING.md](./CONTRIBUTING.md) before opening a PR.
 
 ## Build
 
