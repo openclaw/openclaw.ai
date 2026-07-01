@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+- Ecosystem: add ClawScan, a composable security scanning harness for agent skills (#177, thanks @Patrick-Erichsen).
 - Ecosystem: add ffmpeg-wasm, imsgcrawl, and photoscrawl to the project directory.
 - Website: redirect `openclaw.ai/docs` to the canonical `docs.openclaw.ai` host while preserving deeper paths and queries.
 - Ecosystem: add libterminal to the TypeScript libraries section with terminal banner art.
