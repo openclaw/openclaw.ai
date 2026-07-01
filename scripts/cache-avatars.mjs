@@ -2,7 +2,7 @@
 import fs from 'node:fs/promises';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
-import yaml from 'js-yaml';
+import { load as loadYaml } from 'js-yaml';
 import sharp from 'sharp';
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
@@ -37,7 +37,7 @@ async function collectBlogHandles(handles) {
     const match = /^---\n([\s\S]*?)\n---/.exec(content);
     if (!match) continue;
 
-    const frontmatter = yaml.load(match[1]) ?? {};
+    const frontmatter = loadYaml(match[1]) ?? {};
     if (frontmatter.authorHandle) handles.add(normalizeHandle(frontmatter.authorHandle));
     for (const author of frontmatter.authors ?? []) {
       if (author?.handle && !author.avatar) handles.add(normalizeHandle(author.handle));
