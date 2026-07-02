@@ -4,6 +4,7 @@
 
 - Dependencies: update Astro to 7.0.4, js-yaml to 5.2.0, RSS to 4.0.19, Simple Icons to 16.24.1, and Sharp to 0.35.3; add Astro 7-compatible Lucide icons and preserve the existing generated HTML whitespace behavior (#172, #176, thanks @dependabot).
 - Ecosystem: add ClawScan, a composable security scanning harness for agent skills (#177, thanks @Patrick-Erichsen).
+- Ecosystem: render the Crabline card from its existing SVG banner instead of requesting a missing PNG.
 - Ecosystem: add ffmpeg-wasm, imsgcrawl, and photoscrawl to the project directory.
 - Website: redirect `openclaw.ai/docs` to the canonical `docs.openclaw.ai` host while preserving deeper paths and queries.
 - Ecosystem: add libterminal to the TypeScript libraries section with terminal banner art.
