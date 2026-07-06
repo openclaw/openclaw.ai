@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Testimonials: add 4 more shoutouts from the archive — @satyanadella on the Windows partnership, @ycombinator's Startup School announcement, Microsoft's @jennifermarsman on MXC sandboxing, and @BradGroux — with cached avatars.
+
 - Press: show outlet favicons on press cards (homepage and press page) with locally cached icons, and add Lenny's Newsletter's "From skeptic to true believer" and Axios' story of the OpenClaw agent that almost got itself a job.
 - Press: add Semafor's enterprise piece with Jensen Huang's "every company needs an OpenClaw strategy" quote (featured), Semafor's Anthropic-builds-its-own-OpenClaw exclusive, and MIT Technology Review on China's OpenClaw gold rush.
 - Press: sort coverage strictly newest-first with machine-readable dates, demote the Moltbook social-network story from the homepage highlights, and add Microsoft's Build 2026 keynote announcement of OpenClaw running natively on Windows (featured).
