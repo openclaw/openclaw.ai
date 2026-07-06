@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="ClickClack">
+<defs>
+  <linearGradient id="cc-coral" x1="0" y1="0" x2="0" y2="1">
+    <stop offset="0" stop-color="#ff7967"/>
+    <stop offset="1" stop-color="#d33a2c"/>
+  </linearGradient>
+</defs>
+<rect width="64" height="64" rx="14" fill="url(#cc-coral)"/>
+<g fill="#fbf6ee" stroke="#1a0e0a" stroke-width="2" stroke-linejoin="round">
+  <path d="M22 24 C16 24 12 28 12 34 C12 40 16 44 22 44 L22 39 C19 39 17 37 17 34 C17 31 19 29 22 29 L26 29 L26 26 L24 24 Z"/>
+  <path d="M42 24 C48 24 52 28 52 34 C52 40 48 44 42 44 L42 39 C45 39 47 37 47 34 C47 31 45 29 42 29 L38 29 L38 26 L40 24 Z"/>
+</g>
+<g fill="#1a0e0a">
+  <circle cx="20" cy="34" r="2"/>
+  <circle cx="44" cy="34" r="2"/>
+</g>
+<circle cx="32" cy="34" r="3" fill="none" stroke="#9fd9d9" stroke-width="2"/>
+<circle cx="32" cy="34" r="1.2" fill="#9fd9d9"/>
+</svg>

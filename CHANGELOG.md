@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+- Integrations: add the ClickClack and Raft channels, list ClawRouter, Gradium, Inworld, OpenCode Go, and the Claude Max API proxy in the provider directory, and update catalog stats (29 chat channels, 62 provider entries) to match current docs.
 - Press: expand the press page with 7 more verified pieces — Fast Company's AI 20 profile of the creator (featured), Business Insider on Google's 'Remy' answer to OpenClaw, GeekWire inside Microsoft's Project Lobster, BBC News and Fortune on China's lobster craze, and two VentureBeat analyses of the OpenClaw moment.
 - Press: refresh Featured In with 2026 Q2 coverage — TechCrunch on Microsoft's OpenClaw-inspired Scout, the iOS/Android launch, Red Hat's enterprise-hardening work, and CNBC on China's lobster rush; new homepage highlight order.
 - Testimonials: add 11 new shoutouts from the archive, including @sama, @elonmusk, @garrytan, @growing_daniel, @donasarkar, and @OmarShahine, with cached avatars.
