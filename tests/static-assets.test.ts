@@ -112,7 +112,7 @@ describe('static public assets', () => {
     const homepage = readText('src/pages/index.astro');
     const ecosystemPage = readText('src/pages/ecosystem.astro');
 
-    expect(integrationsCatalog).toContain("{ value: '27', label: 'chat channels' }");
+    expect(integrationsCatalog).toContain("{ value: '29', label: 'chat channels' }");
     expect(integrationsCatalog).not.toContain('documented chat channels');
     expect(integrationsCatalog).not.toContain("label: 'Catalog snapshot");
     expect(integrationsCatalog).toContain("{ name: 'OpenAI'");

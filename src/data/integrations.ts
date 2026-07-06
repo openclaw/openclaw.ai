@@ -61,14 +61,15 @@ export type CatalogGroup = {
 
 export const catalogSnapshot = {
   stats: [
-    { value: '27', label: 'chat channels' },
-    { value: '57', label: 'provider directory entries' },
+    { value: '29', label: 'chat channels' },
+    { value: '62', label: 'provider directory entries' },
     { value: '72', label: 'plugins included in core' },
     { value: '54', label: 'official installable plugins' },
   ],
 };
 
 const channelCatalog: CatalogItem[] = [
+  { name: 'ClickClack', desc: 'Self-hosted ClickClack workspaces through first-class bot tokens.', docs: 'https://docs.openclaw.ai/channels/clickclack', icon: 'lucide:message-circle', logo: '/integrations/logos/clickclack.svg', color: '#FF6B4A', status: 'official' },
   { name: 'Discord', desc: 'Servers, channels, DMs, commands, and app events.', docs: 'https://docs.openclaw.ai/channels/discord', icon: siIcon(siDiscord), color: '#5865F2', status: 'official' },
   { name: 'Feishu / Lark', desc: 'Workplace chats and tools over WebSocket.', docs: 'https://docs.openclaw.ai/channels/feishu', icon: 'lucide:message-circle', logo: '/integrations/logos/lark.svg', color: '#3370FF', status: 'official' },
   { name: 'Google Chat', desc: 'Spaces and direct messages through a Chat app.', docs: 'https://docs.openclaw.ai/channels/googlechat', icon: siIcon(siGoogle), color: '#34A853', status: 'official' },
@@ -81,6 +82,7 @@ const channelCatalog: CatalogItem[] = [
   { name: 'Nextcloud Talk', desc: 'Self-hosted chat through Nextcloud Talk.', docs: 'https://docs.openclaw.ai/channels/nextcloud-talk', icon: siIcon(siNextcloud), color: '#0082C9', status: 'official' },
   { name: 'Nostr', desc: 'Decentralized encrypted direct messages.', docs: 'https://docs.openclaw.ai/channels/nostr', icon: 'lucide:message-circle', logo: '/integrations/logos/nostr.svg', color: '#8F2CFF', status: 'official' },
   { name: 'QQ Bot', desc: 'Private chats, group chats, and rich media.', docs: 'https://docs.openclaw.ai/channels/qqbot', icon: siIcon(siQq), color: '#1EBAFC', status: 'official' },
+  { name: 'Raft', desc: 'Raft External Agents through the Raft CLI wake bridge.', docs: 'https://docs.openclaw.ai/channels/raft', icon: 'lucide:workflow', logo: '/integrations/logos/raft.svg', color: '#FBF6EE', status: 'official' },
   { name: 'Signal', desc: 'Privacy-focused messaging through signal-cli.', docs: 'https://docs.openclaw.ai/channels/signal', icon: siIcon(siSignal), color: '#3A76F0', status: 'included' },
   { name: 'Slack', desc: 'Channels, DMs, commands, and app events.', docs: 'https://docs.openclaw.ai/channels/slack', icon: 'lucide:hash', logo: '/integrations/logos/slack.svg', color: '#E01E5A', status: 'official' },
   { name: 'SMS', desc: 'Twilio-backed text messaging through the Gateway.', docs: 'https://docs.openclaw.ai/channels/sms', icon: 'lucide:message-circle', logo: '/integrations/logos/twilio.svg', color: '#F12E45', status: 'included' },
@@ -134,6 +136,8 @@ export const providerGroups: CatalogGroup[] = [
       { name: 'Mistral', docs: 'https://docs.openclaw.ai/providers/mistral' },
       { name: 'DeepSeek', docs: 'https://docs.openclaw.ai/providers/deepseek' },
       { name: 'OpenCode', docs: 'https://docs.openclaw.ai/providers/opencode' },
+      { name: 'OpenCode Go', docs: 'https://docs.openclaw.ai/providers/opencode-go' },
+      { name: 'Claude Max API proxy', docs: 'https://docs.openclaw.ai/providers/claude-max-api-proxy' },
       { name: 'GitHub Copilot', docs: 'https://docs.openclaw.ai/providers/github-copilot' },
       { name: 'Alibaba Model Studio', docs: 'https://docs.openclaw.ai/providers/alibaba' },
       { name: 'Xiaomi', docs: 'https://docs.openclaw.ai/providers/xiaomi' },
@@ -161,6 +165,7 @@ export const providerGroups: CatalogGroup[] = [
       { name: 'Cloudflare AI Gateway', docs: 'https://docs.openclaw.ai/providers/cloudflare-ai-gateway' },
       { name: 'Vercel AI Gateway', docs: 'https://docs.openclaw.ai/providers/vercel-ai-gateway' },
       { name: 'OpenRouter', docs: 'https://docs.openclaw.ai/providers/openrouter' },
+      { name: 'ClawRouter', docs: 'https://docs.openclaw.ai/providers/clawrouter' },
       { name: 'LiteLLM', docs: 'https://docs.openclaw.ai/providers/litellm' },
       { name: 'Microsoft Foundry', docs: 'https://docs.openclaw.ai/concepts/model-providers' },
       { name: 'Groq', docs: 'https://docs.openclaw.ai/providers/groq' },
@@ -208,6 +213,8 @@ export const providerGroups: CatalogGroup[] = [
       { name: 'PixVerse', docs: 'https://docs.openclaw.ai/providers/pixverse' },
       { name: 'Deepgram', docs: 'https://docs.openclaw.ai/providers/deepgram' },
       { name: 'ElevenLabs', docs: 'https://docs.openclaw.ai/providers/elevenlabs' },
+      { name: 'Gradium', docs: 'https://docs.openclaw.ai/providers/gradium' },
+      { name: 'Inworld', docs: 'https://docs.openclaw.ai/providers/inworld' },
       { name: 'Azure Speech', docs: 'https://docs.openclaw.ai/providers/azure-speech' },
       { name: 'SenseAudio', docs: 'https://docs.openclaw.ai/providers/senseaudio' },
       { name: 'Perplexity search', docs: 'https://docs.openclaw.ai/providers/perplexity-provider' },
