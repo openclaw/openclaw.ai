@@ -57,7 +57,15 @@ const pixelsPerSecond = 50;
 const duration1 = (row1.length / 2 * pixelsPerItem) / pixelsPerSecond;
 const duration2 = (row2.length / 2 * pixelsPerItem) / pixelsPerSecond;
 const featuredBuilds = communityBuilds.slice(0, 4);
-const featuredPress = pressArticles.slice(0, 4);
+const featuredPress = pressArticles.slice(0, 4).map((article) => {
+  let favicon: string | null = null;
+  try {
+    favicon = `https://www.google.com/s2/favicons?domain=${new URL(article.url).hostname}&sz=64`;
+  } catch {
+    // leave outlets without a parseable URL logo-less
+  }
+  return { ...article, favicon };
+});
 
 function formatBlogDate(date: Date): string {
   return date.toLocaleDateString('en-US', {
@@ -648,6 +656,11 @@ const asciiAurora = (() => {
 
         <div class="blog-preview-grid">
           <a href={`/blog/${latestPost.id}`} class="blog-feature">
+            <span class="blog-thumb">
+              {latestPost.data.image
+                ? <img src={latestPost.data.image} alt="" loading="lazy" />
+                : <span class="blog-thumb-dither" aria-hidden="true"></span>}
+            </span>
             <span class="blog-feature-badge">Latest</span>
             <span class="blog-date">{formatBlogDate(latestPost.data.date)}</span>
             <h3>{latestPost.data.title}</h3>
@@ -659,6 +672,11 @@ const asciiAurora = (() => {
           <div class="blog-recents">
             {recentBlogPosts.map((post) => (
               <a href={`/blog/${post.id}`} class="blog-recent">
+                <span class="blog-thumb">
+                  {post.data.image
+                    ? <img src={post.data.image} alt="" loading="lazy" />
+                    : <span class="blog-thumb-dither" aria-hidden="true"></span>}
+                </span>
                 <span class="blog-date">{formatBlogDate(post.data.date)}</span>
                 <h3>{post.data.title}</h3>
                 <p>{post.data.description}</p>
@@ -734,7 +752,10 @@ const asciiAurora = (() => {
         {featuredBuilds.map((build) => (
           <a href={sanitizeUrl(build.href)} target="_blank" rel="noopener" class="build-card">
             <div class="build-card-header">
-              <span class="build-source">{build.source}</span>
+              <span class="build-source">
+                <svg class="build-source-icon" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d={siIcon(siX)} /></svg>
+                {build.source}
+              </span>
               <span class="build-open">Open →</span>
             </div>
             <h3 class="build-title">{build.title}</h3>
@@ -766,7 +787,10 @@ const asciiAurora = (() => {
             class:list={['press-card', article.featured && 'press-featured']}
           >
             <div class="press-meta">
-              <span class="press-name">{article.outlet}</span>
+              <span class="press-name">
+                {article.favicon && <img class="press-favicon" src={article.favicon} alt="" loading="lazy" width="16" height="16" />}
+                {article.outlet}
+              </span>
               <span class="press-date">{article.displayDate}</span>
             </div>
             <h3 class="press-title">{article.title}</h3>
@@ -1403,12 +1427,24 @@ const asciiAurora = (() => {
   .build-source {
     display: inline-flex;
     align-items: center;
+    gap: 8px;
     color: var(--coral-bright);
     font-family: var(--font-mono);
     font-size: 0.72rem;
     font-weight: 600;
     letter-spacing: 0.08em;
     text-transform: uppercase;
+  }
+
+  .build-source-icon {
+    width: 13px;
+    height: 13px;
+    color: var(--text-muted);
+    transition: color 0.2s ease;
+  }
+
+  .build-card:hover .build-source-icon {
+    color: var(--text-primary);
   }
 
   .build-open,
@@ -1504,12 +1540,30 @@ const asciiAurora = (() => {
   }
 
   .press-name {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
     font-family: var(--font-mono);
     font-size: 0.72rem;
     font-weight: 600;
     color: var(--coral-bright);
     letter-spacing: 0.08em;
     text-transform: uppercase;
+  }
+
+  /* Outlet favicon: muted until the card is hovered, like the Foundation
+     people page */
+  .press-favicon {
+    width: 16px;
+    height: 16px;
+    filter: grayscale(1);
+    opacity: 0.65;
+    transition: filter 0.2s ease, opacity 0.2s ease;
+  }
+
+  .press-card:hover .press-favicon {
+    filter: grayscale(0);
+    opacity: 1;
   }
 
   .press-date {
@@ -2105,6 +2159,43 @@ const asciiAurora = (() => {
     display: none;
   }
 
+  /* Post thumbnail bleeding to the cell edges; grayscale until hover */
+  .blog-thumb {
+    display: block;
+    width: calc(100% + 52px);
+    margin: -32px -26px 20px;
+    aspect-ratio: 16 / 9;
+    overflow: hidden;
+    border-bottom: 1px solid var(--border-subtle);
+    background: var(--bg-surface);
+  }
+
+  .blog-thumb img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    filter: grayscale(1);
+    transition: filter 0.25s ease;
+  }
+
+  .blog-feature:hover .blog-thumb img,
+  .blog-recent:hover .blog-thumb img {
+    filter: grayscale(0);
+  }
+
+  /* Dither placeholder for posts without artwork */
+  .blog-thumb-dither {
+    display: block;
+    height: 100%;
+    background-image:
+      radial-gradient(var(--surface-coral-soft) 1.2px, transparent 1.2px),
+      radial-gradient(var(--surface-coral-soft) 1.2px, transparent 1.2px);
+    background-size: 9px 9px;
+    background-position: 0 0, 4.5px 4.5px;
+    mask-image: radial-gradient(ellipse 90% 110% at 50% -20%, black 30%, transparent 80%);
+    -webkit-mask-image: radial-gradient(ellipse 90% 110% at 50% -20%, black 30%, transparent 80%);
+  }
+
   .blog-date {
     display: inline-flex;
     align-items: center;
@@ -2280,6 +2371,11 @@ const asciiAurora = (() => {
     .blog-feature,
     .blog-recent {
       padding: 24px 20px;
+    }
+
+    .blog-thumb {
+      width: calc(100% + 40px);
+      margin: -24px -20px 16px;
     }
 
     .testimonials-track {
