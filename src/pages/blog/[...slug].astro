@@ -118,6 +118,11 @@ const relatedPosts = allPosts
 const canonicalPostUrl = absoluteUrl(blogPostPath(post));
 const ogImage = `/og/blog/${post.id}.png`;
 const articleImageUrl = absoluteUrl(ogImage);
+
+function getAuthorProfileUrl(author: BlogAuthor): string | null {
+  const link = getSortedAuthorLinkMeta(author).find((meta) => sanitizeUrl(meta.url) !== '#');
+  return link ? link.url : null;
+}
 const descriptionHtml = post.data.descriptionHtml ?? post.data.description;
 const structuredAuthors = authors.map((author) => {
   const profileUrl = getSortedAuthorLinkMeta(author).find((link) => sanitizeUrl(link.url) !== '#')?.url;
@@ -159,76 +164,43 @@ const articleStructuredData = {
 >
   <SiteTopbar active="blog" />
   <main class="reader-shell">
-    <aside class="reader-sidebar" aria-label="Blog navigation">
-      <a class="back-link" href="/blog">All posts</a>
-      <div class="side-card">
-        <p class="side-kicker">Filed under</p>
-        <div class="side-tags">
-          {post.data.tags.map((tag) => <span>{tag}</span>)}
-        </div>
-      </div>
-      <div class="side-card">
-        <p class="side-kicker">Related docs</p>
-        <a href="https://docs.openclaw.ai/gateway/security" target="_blank" rel="noopener">Security</a>
-        <a href="https://docs.openclaw.ai/plugins" target="_blank" rel="noopener">Plugins</a>
-        <a href="https://docs.openclaw.ai/providers/openai" target="_blank" rel="noopener">OpenAI</a>
-      </div>
-    </aside>
-
     <article class="article">
       <header class="article-header">
-        <p class="article-kicker">OpenClaw blog</p>
+        <a class="back-link" href="/blog"><span aria-hidden="true">←</span> All posts</a>
         <h1>{post.data.title}</h1>
         <p class="dek" set:html={descriptionHtml} />
+
+        <div class="byline">
+          <div class="byline-avatars">
+            {authors.map((author) => (
+              <img
+                src={getAuthorAvatar(author)}
+                alt=""
+                loading="lazy"
+                title={[author.name, author.title, author.org].filter(Boolean).join(' — ')}
+                onerror={`this.src='${getInitialsAvatarSrc(author.name, 88)}'`}
+              />
+            ))}
+          </div>
+          <div class="byline-names">
+            {authors.map((author, index) => {
+              const profileUrl = getAuthorProfileUrl(author);
+              return (
+                <>
+                  {index > 0 && <span class="byline-sep">·</span>}
+                  {profileUrl
+                    ? <a href={sanitizeUrl(profileUrl)} target="_blank" rel="noopener" title={[author.title, author.org].filter(Boolean).join(', ')}>{author.name}</a>
+                    : <span title={[author.title, author.org].filter(Boolean).join(', ')}>{author.name}</span>}
+                </>
+              );
+            })}
+          </div>
+          <span class="byline-meta">{formatDate(post.data.date)} · {estimateReadTime(post.body || '')}</span>
+        </div>
 
         {post.data.image && (
           <img src={post.data.image} alt={post.data.title} class="article-header-image" />
         )}
-
-        <div class="article-meta">
-          <div class="authors-container">
-            {authors.map((author) => (
-              <div class:list={['author-info', !(author.title || author.org) && 'author-info-compact']}>
-                <img
-                  src={getAuthorAvatar(author)}
-                  alt={author.name}
-                  class="author-avatar"
-                  loading="lazy"
-                  onerror={`this.src='${getInitialsAvatarSrc(author.name, 88)}'`}
-                />
-                <div class:list={['author-details', !(author.title || author.org) && 'author-details-compact']}>
-                  <span class="author-name">{author.name}</span>
-                  {(author.title || author.org) && (
-                    <span class="author-title">
-                      {author.title && <span class="author-role">{author.title}</span>}
-                      {author.org && <span class="author-org">{author.org}</span>}
-                    </span>
-                  )}
-                  {getAuthorLinks(author).length > 0 && (
-                    <div class="author-links">
-                      {getSortedAuthorLinkMeta(author).map((linkMeta) => (
-                          <a
-                            href={sanitizeUrl(linkMeta.url)}
-                            class:list={['author-link', linkMeta.icon && 'author-link-icon']}
-                            target="_blank"
-                            rel="noopener"
-                            aria-label={linkMeta.ariaLabel}
-                            title={linkMeta.displayLabel}
-                          >
-                            {linkMeta.icon ? <Icon icon={linkMeta.icon} size={13} /> : linkMeta.displayLabel}
-                          </a>
-                      ))}
-                    </div>
-                  )}
-                </div>
-              </div>
-            ))}
-          </div>
-          <div class="meta-right">
-            <span>{formatDate(post.data.date)}</span>
-            <span>{estimateReadTime(post.body || '')}</span>
-          </div>
-        </div>
       </header>
 
       <div class="article-content" data-article-content>
@@ -236,6 +208,9 @@ const articleStructuredData = {
       </div>
 
       <footer class="article-footer">
+        <div class="footer-tags" aria-label="Filed under">
+          {post.data.tags.map((tag) => <span>{tag}</span>)}
+        </div>
         <section class="share-section">
           <span>Share this post</span>
           <a
@@ -277,14 +252,22 @@ const articleStructuredData = {
       </footer>
     </article>
 
-    {toc.length > 0 && (
-      <aside class="reader-toc" aria-label="On this page">
-        <h2>On this page</h2>
-        {toc.map((item) => (
-          <a class:list={[`toc-l${item.level}`]} href={`#${item.id}`}>{item.title}</a>
-        ))}
-      </aside>
-    )}
+    <aside class="reader-toc" aria-label="On this page">
+      {toc.length > 0 && (
+        <>
+          <h2>On this page</h2>
+          {toc.map((item) => (
+            <a class:list={[`toc-l${item.level}`]} href={`#${item.id}`}>{item.title}</a>
+          ))}
+        </>
+      )}
+      <div class="toc-related">
+        <h2>Related docs</h2>
+        <a href="https://docs.openclaw.ai/gateway/security" target="_blank" rel="noopener">Security</a>
+        <a href="https://docs.openclaw.ai/plugins" target="_blank" rel="noopener">Plugins</a>
+        <a href="https://docs.openclaw.ai/providers/openai" target="_blank" rel="noopener">OpenAI</a>
+      </div>
+    </aside>
   </main>
 
 <script>
@@ -361,14 +344,14 @@ const articleStructuredData = {
     position: relative;
     z-index: 1;
     display: grid;
-    grid-template-columns: 220px minmax(0, 760px) 230px;
-    gap: 58px;
-    max-width: 1420px;
+    grid-template-columns: minmax(0, 720px) 220px;
+    justify-content: center;
+    gap: 72px;
+    max-width: 1200px;
     margin: 0 auto;
     padding: 54px 32px 96px;
   }
 
-  .reader-sidebar,
   .reader-toc {
     position: sticky;
     top: 92px;
@@ -378,35 +361,38 @@ const articleStructuredData = {
   }
 
   .back-link,
-  .side-card a,
   .reader-toc a {
     color: var(--text-muted);
     font-family: var(--font-mono);
     font-size: 0.8rem;
     font-weight: 500;
     text-decoration: none;
+    transition: color 0.15s ease;
   }
 
   .back-link:hover,
-  .side-card a:hover,
   .reader-toc a:hover {
     color: var(--text-primary);
   }
 
-  .side-card {
-    margin-top: 26px;
-    padding-top: 22px;
+  .back-link {
+    display: inline-block;
+    margin-bottom: 26px;
+    font-size: 0.76rem;
+  }
+
+  .toc-related {
+    margin-top: 30px;
+    padding-top: 24px;
     border-top: 1px solid var(--border-subtle);
   }
 
-  .side-card a {
-    display: block;
-    padding: 6px 0;
-    font-size: 0.78rem;
-    line-height: 1.5;
+  .toc-related:first-child {
+    margin-top: 0;
+    padding-top: 0;
+    border-top: none;
   }
 
-  .side-kicker,
   .article-kicker,
   .reader-toc h2 {
     margin: 0 0 12px;
@@ -418,23 +404,6 @@ const articleStructuredData = {
     text-transform: uppercase;
   }
 
-  .side-tags {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 7px;
-  }
-
-  .side-tags span {
-    display: inline-flex;
-    align-items: center;
-    min-height: 24px;
-    padding: 0 9px;
-    border: 1px solid var(--border-subtle);
-    color: var(--text-secondary);
-    font-family: var(--font-mono);
-    font-size: 0.7rem;
-    font-weight: 500;
-  }
 
   .article {
     min-width: 0;
@@ -477,134 +446,67 @@ const articleStructuredData = {
     width: 100%;
     max-height: 360px;
     object-fit: contain;
-    margin-top: 28px;
-    border-radius: 0;
+    margin-top: 30px;
+    background: #0a0a0c;
   }
 
-  .article-meta {
+  /* Byline: one ruled strip — avatars, names, date, read time */
+  .byline {
     display: flex;
     align-items: center;
-    justify-content: space-between;
     flex-wrap: wrap;
-    gap: 18px;
-    margin-top: 30px;
-    padding-top: 22px;
+    gap: 10px;
+    margin-top: 24px;
+    padding: 14px 0;
     border-top: 1px solid var(--border-subtle);
+    border-bottom: 1px solid var(--border-subtle);
   }
 
-  .authors-container {
+  .byline-avatars {
     display: flex;
-    align-items: flex-start;
-    flex-wrap: wrap;
-    gap: 18px 24px;
+    align-items: center;
   }
 
-  .author-info {
-    display: flex;
-    align-items: flex-start;
-    gap: 11px;
-  }
-
-  .author-info-compact {
-    align-items: flex-start;
-  }
-
-  .author-avatar {
-    width: 34px;
-    height: 34px;
-    margin-top: 1px;
+  .byline-avatars img {
+    width: 28px;
+    height: 28px;
     border-radius: 50%;
-    border: 1px solid var(--border-subtle);
+    border: 2px solid var(--bg-deep);
     background: var(--bg-elevated);
     filter: grayscale(1);
     transition: filter 0.25s ease;
   }
 
-  .author-info:hover .author-avatar {
+  .byline-avatars img + img {
+    margin-left: -8px;
+  }
+
+  .byline:hover .byline-avatars img {
     filter: grayscale(0);
   }
 
-  .author-details {
-    display: flex;
-    flex-direction: column;
-    gap: 3px;
-    min-width: 0;
-  }
-
-  .author-details-compact {
-    gap: 2px;
-  }
-
-  .author-name {
+  .byline-names {
     color: var(--text-primary);
-    font-size: 0.92rem;
+    font-size: 0.9rem;
     font-weight: 600;
   }
 
-  .author-title {
-    display: flex;
-    flex-wrap: wrap;
-    column-gap: 6px;
-    max-width: 300px;
-    color: var(--text-muted);
-    font-family: var(--font-mono);
-    font-size: 0.7rem;
-    line-height: 1.4;
-  }
-
-  .author-role {
-    font-weight: 500;
-  }
-
-  .author-org {
-    font-weight: 500;
-  }
-
-  .author-links {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 5px;
-    margin-top: 3px;
-  }
-
-  .author-details-compact .author-links {
-    margin-top: 1px;
-  }
-
-  .author-link {
-    color: var(--text-muted);
-    font-family: var(--font-mono);
-    font-size: 0.74rem;
+  .byline-names a {
+    color: inherit;
     text-decoration: none;
-    transition: color 140ms ease;
   }
 
-  .author-link:hover {
-    color: var(--text-primary);
+  .byline-names a:hover {
+    color: var(--coral-bright);
   }
 
-  .author-link-icon {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    width: 20px;
-    height: 20px;
+  .byline-sep {
+    margin: 0 6px;
     color: var(--text-muted);
-    transition: color 140ms ease;
   }
 
-  .author-link-icon:hover {
-    color: var(--text-primary);
-  }
-
-  .author-link-icon :global(svg) {
-    display: block;
-  }
-
-  .meta-right {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 12px;
+  .byline-meta {
+    margin-left: auto;
     color: var(--text-muted);
     font-family: var(--font-mono);
     font-size: 0.74rem;
@@ -1219,6 +1121,25 @@ const articleStructuredData = {
     border-top: 1px solid var(--border-subtle);
   }
 
+  .footer-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 7px;
+    margin-bottom: 22px;
+  }
+
+  .footer-tags span {
+    display: inline-flex;
+    align-items: center;
+    min-height: 24px;
+    padding: 0 9px;
+    border: 1px solid var(--border-subtle);
+    color: var(--text-secondary);
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    font-weight: 500;
+  }
+
   .share-section {
     display: flex;
     flex-wrap: wrap;
@@ -1348,8 +1269,8 @@ const articleStructuredData = {
 
   @media (max-width: 1080px) {
     .reader-shell {
-      grid-template-columns: 180px minmax(0, 1fr);
-      gap: 34px;
+      grid-template-columns: minmax(0, 720px);
+      gap: 0;
     }
 
     .reader-toc {
@@ -1361,15 +1282,6 @@ const articleStructuredData = {
     .reader-shell {
       display: block;
       padding: 34px 20px 76px;
-    }
-
-    .reader-sidebar {
-      position: static;
-      margin-bottom: 28px;
-    }
-
-    .side-card {
-      display: none;
     }
 
     .article-content :global(.metric-grid),
@@ -1398,10 +1310,14 @@ const articleStructuredData = {
     }
 
     .article h1 {
-      font-size: clamp(2.2rem, 12vw, 3.2rem);
+      font-size: clamp(1.7rem, 7.5vw, 2.2rem);
     }
 
-    .article-meta,
+    .byline-meta {
+      flex-basis: 100%;
+      margin-left: 38px;
+    }
+
     .cta-box {
       align-items: flex-start;
       flex-direction: column;
