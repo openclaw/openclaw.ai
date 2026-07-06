@@ -407,7 +407,9 @@ const articleStructuredData = {
   .side-card a,
   .reader-toc a {
     color: var(--text-muted);
-    font-weight: 650;
+    font-family: var(--font-mono);
+    font-size: 0.8rem;
+    font-weight: 500;
     text-decoration: none;
   }
 
@@ -426,7 +428,8 @@ const articleStructuredData = {
   .side-card a {
     display: block;
     padding: 6px 0;
-    font-size: 0.9rem;
+    font-size: 0.78rem;
+    line-height: 1.5;
   }
 
   .side-kicker,
@@ -434,9 +437,10 @@ const articleStructuredData = {
   .reader-toc h2 {
     margin: 0 0 12px;
     color: var(--coral-bright);
-    font-size: 0.76rem;
-    font-weight: 800;
-    letter-spacing: 0.12em;
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    font-weight: 600;
+    letter-spacing: 0.1em;
     text-transform: uppercase;
   }
 
@@ -451,12 +455,11 @@ const articleStructuredData = {
     align-items: center;
     min-height: 24px;
     padding: 0 9px;
-    border: 1px solid color-mix(in srgb, var(--cyan-bright) 26%, var(--border-subtle));
-    border-radius: 0;
-    background: var(--surface-cyan-soft);
-    color: var(--cyan-bright);
-    font-size: 0.72rem;
-    font-weight: 750;
+    border: 1px solid var(--border-subtle);
+    color: var(--text-secondary);
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    font-weight: 500;
   }
 
   .article {
@@ -471,10 +474,10 @@ const articleStructuredData = {
     margin: 0;
     color: var(--text-primary);
     font-family: var(--font-display);
-    font-size: clamp(2.35rem, 6vw, 4.25rem);
-    font-weight: 700;
-    line-height: 0.98;
-    letter-spacing: 0;
+    font-size: clamp(1.9rem, 4.2vw, 2.9rem);
+    font-weight: 600;
+    line-height: 1.12;
+    letter-spacing: -0.02em;
   }
 
   .dek {
@@ -632,13 +635,13 @@ const articleStructuredData = {
     --release-data-ink: color-mix(in srgb, var(--cyan-bright) 58%, var(--text-primary));
     --release-risk-ink: color-mix(in srgb, var(--coral-bright) 46%, var(--text-primary));
     --release-track: color-mix(in srgb, var(--surface-card-strong) 72%, var(--bg-deep));
-    --article-inline-code-bg: color-mix(in srgb, var(--bg-deep) 82%, var(--bg-elevated));
-    --article-code-bg: #070b12;
-    --article-code-border: rgba(126, 153, 183, 0.18);
-    --article-code-text: #c8d2dc;
+    --article-inline-code-bg: color-mix(in srgb, var(--bg-deep) 60%, var(--bg-surface));
+    --article-code-bg: #0c0c0f;
+    --article-code-border: rgba(154, 154, 162, 0.2);
+    --article-code-text: #cfcfd6;
     color: var(--text-secondary);
-    font-size: 1rem;
-    line-height: 1.82;
+    font-size: 1.02rem;
+    line-height: 1.78;
   }
 
   :global(html[data-theme='light']) .article-content {
@@ -670,19 +673,23 @@ const articleStructuredData = {
   }
 
   .article-content :global(h2) {
-    margin: 2.6em 0 0.65em;
+    margin: 2.4em 0 0.7em;
+    padding-top: 1.1em;
+    border-top: 1px solid var(--border-subtle);
     color: var(--text-primary);
     font-family: var(--font-display);
-    font-size: 1.62rem;
-    line-height: 1.16;
-    letter-spacing: 0;
+    font-size: 1.45rem;
+    font-weight: 600;
+    line-height: 1.25;
+    letter-spacing: -0.015em;
   }
 
   .article-content :global(h3) {
     margin: 1.9em 0 0.55em;
     color: var(--text-primary);
-    font-size: 1.12rem;
-    line-height: 1.3;
+    font-size: 1.1rem;
+    font-weight: 600;
+    line-height: 1.35;
   }
 
   .article-content :global(ul),
@@ -733,12 +740,15 @@ const articleStructuredData = {
   }
 
   .article-content :global(th) {
-    color: var(--text-primary);
-    font-size: 0.95rem;
-    font-weight: 700;
-    line-height: 1.35;
+    color: var(--text-muted);
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    line-height: 1.4;
     text-align: left;
-    background: rgba(255, 255, 255, 0.035);
+    background: rgba(255, 255, 255, 0.03);
   }
 
   .article-content :global(td) {
@@ -791,7 +801,7 @@ const articleStructuredData = {
   }
 
   .article-content :global(a:hover) {
-    color: var(--cyan-bright);
+    color: color-mix(in srgb, var(--coral-bright) 70%, var(--text-primary));
   }
 
   .article-content :global(code) {
@@ -806,12 +816,12 @@ const articleStructuredData = {
 
   .article-content :global(pre) {
     overflow: auto;
-    padding: 14px 16px;
+    padding: 18px 20px;
     border: 1px solid var(--article-code-border);
-    border-radius: 0;
     background: var(--article-code-bg);
     color: var(--article-code-text);
-    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.035);
+    font-size: 0.86rem;
+    line-height: 1.65;
   }
 
   .article-content :global(pre.astro-code) {
@@ -858,14 +868,7 @@ const articleStructuredData = {
     padding: 18px 20px;
     border: 1px solid color-mix(in srgb, var(--coral-bright) 38%, var(--border-subtle));
     border-left: 4px solid var(--coral-bright);
-    border-radius: 0;
-    background:
-      linear-gradient(
-        135deg,
-        color-mix(in srgb, var(--coral-bright) 10%, transparent),
-        color-mix(in srgb, var(--cyan-bright) 6%, transparent)
-      ),
-      color-mix(in srgb, var(--surface-card-strong) 70%, transparent);
+    background: color-mix(in srgb, var(--coral-bright) 6%, var(--bg-surface));
     color: var(--text-primary);
     font-size: 0.98rem;
     line-height: 1.7;
