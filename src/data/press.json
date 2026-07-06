@@ -36,12 +36,57 @@
     "featured": true
   },
   {
+    "outlet": "Fast Company",
+    "title": "How Peter Steinberger built OpenClaw",
+    "url": "https://www.fastcompany.com/91550800/how-peter-steinberger-built-openclaw",
+    "displayDate": "Jun 2026",
+    "author": "Fast Company",
+    "summary": "Fast Company puts OpenClaw’s creator on its AI 20 for 2026 with the definitive origin story: building in public, a Discord as the showroom, and half a million systems running the lobster.",
+    "featured": true
+  },
+  {
+    "outlet": "Business Insider",
+    "title": "Google is building an AI agent that could be its answer to OpenClaw",
+    "url": "https://www.businessinsider.com/google-ai-agent-openclaw-remy-gemini-assistant-2026-5",
+    "displayDate": "May 5, 2026",
+    "author": "Hugh Langley",
+    "summary": "Google reportedly builds ‘Remy,’ a 24/7 personal agent inside Gemini positioned as its answer to OpenClaw — more proof the category the lobster defined is now industry-wide.",
+    "featured": false
+  },
+  {
+    "outlet": "GeekWire",
+    "title": "Microsoft’s OpenClaw team takes on the personal assistant challenge",
+    "url": "https://www.geekwire.com/2026/microsofts-openclaw-team-takes-on-the-personal-assistant-challenge/",
+    "displayDate": "May 4, 2026",
+    "author": "Mary Jo Foley",
+    "summary": "Inside Microsoft’s ‘Project Lobster’: a CVP-led team, ClawPilot desktops on Mac and Windows, and thousands of daily internal users building the enterprise-grade OpenClaw.",
+    "featured": false
+  },
+  {
     "outlet": "TechCrunch",
     "title": "Red Hat’s OpenClaw maintainer just made enterprise Claw deployments a lot safer",
     "url": "https://techcrunch.com/2026/04/28/red-hats-openclaw-maintainer-just-made-enterprise-claw-deployments-a-lot-safer/",
     "displayDate": "Apr 28, 2026",
     "author": "Julie Bort",
     "summary": "Enterprise-grade credibility: Red Hat maintainer work lands upstream to make production OpenClaw deployments meaningfully safer.",
+    "featured": false
+  },
+  {
+    "outlet": "BBC News",
+    "title": "How China fell for a lobster: What an AI assistant tells us about Beijing’s ambition",
+    "url": "https://www.bbc.com/news/articles/cy41n17e23go",
+    "displayDate": "Apr 6, 2026",
+    "author": "Fan Wang and Yan Chen",
+    "summary": "The BBC on China’s lobster frenzy: students to retirees lining up at Tencent and Baidu for custom claws, and what ‘raising lobsters’ reveals about Beijing’s AI ambitions.",
+    "featured": false
+  },
+  {
+    "outlet": "Fortune",
+    "title": "‘Raise a lobster’: How OpenClaw is the latest craze transforming China’s AI sector",
+    "url": "https://fortune.com/2026/03/14/openclaw-china-ai-agent-boom-open-source-lobster-craze-minimax-qwen/",
+    "displayDate": "Mar 14, 2026",
+    "author": "Nicholas Gordon",
+    "summary": "Fortune on the craze transforming China’s AI sector — and how OpenClaw became a shot in the arm for the country’s open-source model builders.",
     "featured": false
   },
   {
@@ -72,6 +117,15 @@
     "featured": false
   },
   {
+    "outlet": "VentureBeat",
+    "title": "OpenAI’s acquisition of OpenClaw signals the beginning of the end of the ChatGPT era",
+    "url": "https://venturebeat.com/technology/openais-acquisition-of-openclaw-signals-the-beginning-of-the-end-of-the",
+    "displayDate": "Feb 17, 2026",
+    "author": "Sam Witteveen",
+    "summary": "VentureBeat’s verdict on the OpenAI move: the industry’s center of gravity is shifting from what AI can say to what AI can do — and OpenClaw is the reason.",
+    "featured": false
+  },
+  {
     "outlet": "TechCrunch",
     "title": "OpenClaw creator Peter Steinberger joins OpenAI",
     "url": "https://techcrunch.com/2026/02/15/openclaw-creator-peter-steinberger-joins-openai/",
@@ -96,6 +150,15 @@
     "displayDate": "Feb 15, 2026",
     "author": "Business Insider",
     "summary": "A positive business-profile angle on OpenClaw’s breakout moment and why Steinberger chose leverage and reach over starting another company.",
+    "featured": false
+  },
+  {
+    "outlet": "VentureBeat",
+    "title": "What the OpenClaw moment means for enterprises: 5 big takeaways",
+    "url": "https://venturebeat.com/technology/what-the-openclaw-moment-means-for-enterprises-5-big-takeaways",
+    "displayDate": "Feb 6, 2026",
+    "author": "Carl Franzen",
+    "summary": "The ‘OpenClaw moment’ as VentureBeat sees it: autonomous agents have escaped the lab, and enterprises are rethinking data prep, pricing, and workflows around it.",
     "featured": false
   }
 ]
