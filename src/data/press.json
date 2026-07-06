@@ -1,6 +1,33 @@
 [
   {
     "outlet": "TechCrunch",
+    "title": "Microsoft launches Scout, an OpenClaw-inspired personal assistant",
+    "url": "https://techcrunch.com/2026/06/02/microsoft-launches-scout-an-openclaw-inspired-personal-assistant/",
+    "displayDate": "Jun 2, 2026",
+    "author": "Russell Brandom",
+    "summary": "The clearest validation yet: Microsoft ships a personal assistant openly inspired by OpenClaw, bringing the agent workflows the lobster made mainstream to the Microsoft 365 ecosystem.",
+    "featured": true
+  },
+  {
+    "outlet": "TechCrunch",
+    "title": "OpenClaw is finally available on Android and iOS",
+    "url": "https://techcrunch.com/2026/06/30/openclaw-is-finally-available-on-android-and-ios/",
+    "displayDate": "Jun 30, 2026",
+    "author": "Lucas Ropek",
+    "summary": "The open-source agent that captivated the internet lands on phones: native iOS and Android apps with chat, Talk mode, and remote action approvals paired to your own Gateway.",
+    "featured": false
+  },
+  {
+    "outlet": "CNBC",
+    "title": "Lobster buffet: China’s tech firms feast on OpenClaw as companies race to deploy AI agents",
+    "url": "https://www.cnbc.com/2026/03/12/china-openclaw-ai-agent-adoption-tech-companies-government-support-lobster-shrimp.html",
+    "displayDate": "Mar 12, 2026",
+    "author": "Evelyn Cheng and Dylan Butts",
+    "summary": "The lobster rush goes global: Tencent, Alibaba, and Baidu race to offer one-click OpenClaw deployments as adoption spreads across China’s tech industry.",
+    "featured": false
+  },
+  {
+    "outlet": "TechCrunch",
     "title": "OpenClaw’s AI assistants are now building their own social network",
     "url": "https://techcrunch.com/2026/01/30/openclaws-ai-assistants-are-now-building-their-own-social-network/",
     "displayDate": "Jan 30, 2026",
@@ -10,12 +37,12 @@
   },
   {
     "outlet": "TechCrunch",
-    "title": "OpenClaw creator Peter Steinberger joins OpenAI",
-    "url": "https://techcrunch.com/2026/02/15/openclaw-creator-peter-steinberger-joins-openai/",
-    "displayDate": "Feb 15, 2026",
-    "author": "Anthony Ha",
-    "summary": "A clean, positive headline around the next chapter for OpenClaw: founder momentum, OpenAI backing, and the long-term foundation path.",
-    "featured": true
+    "title": "Red Hat’s OpenClaw maintainer just made enterprise Claw deployments a lot safer",
+    "url": "https://techcrunch.com/2026/04/28/red-hats-openclaw-maintainer-just-made-enterprise-claw-deployments-a-lot-safer/",
+    "displayDate": "Apr 28, 2026",
+    "author": "Julie Bort",
+    "summary": "Enterprise-grade credibility: Red Hat maintainer work lands upstream to make production OpenClaw deployments meaningfully safer.",
+    "featured": false
   },
   {
     "outlet": "The Verge",
@@ -24,6 +51,33 @@
     "displayDate": "Mar 7, 2026",
     "author": "The Verge",
     "summary": "A strong community story about ClawCon, the people building around OpenClaw, and the feeling that personal agents have escaped the lab.",
+    "featured": false
+  },
+  {
+    "outlet": "TechCrunch",
+    "title": "OpenClaw creator’s advice to AI builders is to be more playful and allow yourself time to improve",
+    "url": "https://techcrunch.com/2026/02/25/openclaw-creators-advice-to-ai-builders-is-to-be-more-playful-and-allow-yourself-time-to-improve/",
+    "displayDate": "Feb 25, 2026",
+    "author": "Sarah Perez",
+    "summary": "A builder-focused piece with the right tone for the homepage: experimentation, agency, and why OpenClaw resonated with makers so quickly.",
+    "featured": false
+  },
+  {
+    "outlet": "Business Insider",
+    "title": "'Eccentric but brilliant': OpenClaw's creator got feedback from Mark Zuckerberg",
+    "url": "https://www.businessinsider.com/openclaw-creator-peter-steinberger-gets-feedback-from-mark-zuckerberg",
+    "displayDate": "Feb 19, 2026",
+    "author": "Business Insider",
+    "summary": "Good social proof for the site: OpenClaw getting attention and detailed product feedback from the very top of the industry.",
+    "featured": false
+  },
+  {
+    "outlet": "TechCrunch",
+    "title": "OpenClaw creator Peter Steinberger joins OpenAI",
+    "url": "https://techcrunch.com/2026/02/15/openclaw-creator-peter-steinberger-joins-openai/",
+    "displayDate": "Feb 15, 2026",
+    "author": "Anthony Ha",
+    "summary": "A clean, positive headline around the next chapter for OpenClaw: founder momentum, OpenAI backing, and the long-term foundation path.",
     "featured": false
   },
   {
@@ -42,24 +96,6 @@
     "displayDate": "Feb 15, 2026",
     "author": "Business Insider",
     "summary": "A positive business-profile angle on OpenClaw’s breakout moment and why Steinberger chose leverage and reach over starting another company.",
-    "featured": false
-  },
-  {
-    "outlet": "Business Insider",
-    "title": "'Eccentric but brilliant': OpenClaw's creator got feedback from Mark Zuckerberg",
-    "url": "https://www.businessinsider.com/openclaw-creator-peter-steinberger-gets-feedback-from-mark-zuckerberg",
-    "displayDate": "Feb 19, 2026",
-    "author": "Business Insider",
-    "summary": "Good social proof for the site: OpenClaw getting attention and detailed product feedback from the very top of the industry.",
-    "featured": false
-  },
-  {
-    "outlet": "TechCrunch",
-    "title": "OpenClaw creator’s advice to AI builders is to be more playful and allow yourself time to improve",
-    "url": "https://techcrunch.com/2026/02/25/openclaw-creators-advice-to-ai-builders-is-to-be-more-playful-and-allow-yourself-time-to-improve/",
-    "displayDate": "Feb 25, 2026",
-    "author": "Sarah Perez",
-    "summary": "A builder-focused piece with the right tone for the homepage: experimentation, agency, and why OpenClaw resonated with makers so quickly.",
     "featured": false
   }
 ]
