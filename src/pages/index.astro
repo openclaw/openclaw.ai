@@ -908,17 +908,21 @@ function formatBlogDate(date: Date): string {
     animation: fadeInUp 0.8s ease-out;
   }
 
-  /* Aurora wash behind the hero so the top of the page has a focal glow */
+  /* Aurora wash behind the hero so the top of the page has a focal glow.
+     Kept inside the container (it clips horizontal overflow) and masked at the
+     edges so the glow fades out seamlessly instead of getting cut. */
   .hero::before {
     content: '';
     position: absolute;
-    inset: -100px -140px -60px;
+    inset: -60px 0;
     z-index: -1;
     pointer-events: none;
     background:
-      radial-gradient(42% 50% at 30% 28%, color-mix(in srgb, var(--coral-bright) 14%, transparent), transparent 70%),
-      radial-gradient(38% 46% at 72% 22%, color-mix(in srgb, var(--cyan-bright) 10%, transparent), transparent 70%),
-      radial-gradient(52% 60% at 50% 72%, color-mix(in srgb, var(--coral-mid) 7%, transparent), transparent 72%);
+      radial-gradient(40% 48% at 32% 30%, color-mix(in srgb, var(--coral-bright) 14%, transparent), transparent 68%),
+      radial-gradient(36% 44% at 70% 24%, color-mix(in srgb, var(--cyan-bright) 10%, transparent), transparent 68%),
+      radial-gradient(50% 58% at 50% 72%, color-mix(in srgb, var(--coral-mid) 7%, transparent), transparent 70%);
+    -webkit-mask-image: linear-gradient(to right, transparent, black 16%, black 84%, transparent);
+    mask-image: linear-gradient(to right, transparent, black 16%, black 84%, transparent);
     animation: auroraDrift 16s ease-in-out infinite alternate;
   }
 
@@ -1358,13 +1362,11 @@ function formatBlogDate(date: Date): string {
     height: 46px;
     margin-bottom: 16px;
     border-radius: 12px;
-    border: 1px solid color-mix(in srgb, var(--coral-bright) 24%, transparent);
     background: var(--surface-coral-soft);
-    transition: box-shadow 0.25s ease, border-color 0.25s ease;
+    transition: box-shadow 0.25s ease;
   }
 
   .feature-card:hover .feature-icon {
-    border-color: color-mix(in srgb, var(--coral-bright) 45%, transparent);
     box-shadow: 0 0 20px color-mix(in srgb, var(--coral-bright) 25%, transparent);
   }
 
@@ -2039,7 +2041,6 @@ function formatBlogDate(date: Date): string {
     width: 32px;
     height: 32px;
     border-radius: 10px;
-    border: 1px solid color-mix(in srgb, var(--coral-bright) 30%, transparent);
     background: var(--surface-coral-soft);
     color: var(--coral-bright);
     font-size: 0.95rem;
@@ -2049,15 +2050,15 @@ function formatBlogDate(date: Date): string {
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 40px;
-    flex-wrap: wrap;
+    gap: clamp(20px, 4.5vw, 44px);
+    flex-wrap: nowrap;
   }
 
   .sponsor-card {
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 12px 20px;
+    padding: 8px 2px;
     border-radius: 12px;
     text-decoration: none;
     transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
@@ -2121,13 +2122,14 @@ function formatBlogDate(date: Date): string {
     display: block;
   }
 
-  @media (max-width: 480px) {
+  @media (max-width: 640px) {
     .sponsors-grid {
-      gap: 16px;
+      gap: 16px 24px;
+      flex-wrap: wrap;
     }
 
     .sponsor-card {
-      padding: 16px 24px;
+      padding: 4px 2px;
     }
 
     .sponsor-logo {
