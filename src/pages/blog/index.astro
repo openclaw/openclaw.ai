@@ -164,8 +164,8 @@ function getAuthorAvatar(author: BlogAuthor): string {
     z-index: 0;
     pointer-events: none;
     background:
-      radial-gradient(720px circle at 9% 4%, rgba(255, 77, 77, 0.12), transparent 54%),
-      radial-gradient(660px circle at 86% 0%, rgba(0, 229, 204, 0.08), transparent 56%);
+      radial-gradient(720px circle at 9% 4%, rgba(245, 101, 74, 0.12), transparent 54%),
+      radial-gradient(660px circle at 86% 0%, rgba(79, 200, 174, 0.08), transparent 56%);
   }
 
   .publication-shell {
@@ -220,7 +220,7 @@ function getAuthorAvatar(author: BlogAuthor): string {
     margin-top: 28px;
     padding: 16px;
     border: 1px solid var(--border-subtle);
-    border-radius: 8px;
+    border-radius: 0;
     background: color-mix(in srgb, var(--surface-card-strong) 88%, transparent);
     color: var(--text-secondary);
     font-size: 0.88rem;
@@ -271,7 +271,7 @@ function getAuthorAvatar(author: BlogAuthor): string {
     margin-bottom: 28px;
     padding: 28px;
     border: 1px solid color-mix(in srgb, var(--cyan-bright) 24%, var(--border-subtle));
-    border-radius: 8px;
+    border-radius: 0;
     background:
       linear-gradient(135deg, color-mix(in srgb, var(--cyan-bright) 10%, transparent), transparent 48%),
       linear-gradient(90deg, color-mix(in srgb, var(--coral-bright) 7%, transparent), transparent 38%),
@@ -349,7 +349,7 @@ function getAuthorAvatar(author: BlogAuthor): string {
     min-height: 24px;
     padding: 0 9px;
     border: 1px solid color-mix(in srgb, var(--cyan-bright) 26%, var(--border-subtle));
-    border-radius: 999px;
+    border-radius: 0;
     background: var(--surface-cyan-soft);
     color: var(--cyan-bright);
     font-size: 0.74rem;
@@ -429,7 +429,7 @@ function getAuthorAvatar(author: BlogAuthor): string {
       flex: 0 0 auto;
       padding: 7px 11px;
       border: 1px solid var(--border-subtle);
-      border-radius: 999px;
+      border-radius: 0;
       background: var(--surface-card);
     }
 

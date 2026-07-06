@@ -39,14 +39,15 @@ const links = navLinks.filter((link) => link.id !== current);
 <style>
   .footer {
     text-align: center;
-    font-size: 0.9rem;
+    font-family: var(--font-mono);
+    font-size: 0.76rem;
     color: var(--text-muted);
   }
 
   .footer--home {
     margin-top: auto;
-    padding-top: 40px;
-    animation: fadeInUp 0.8s ease-out 0.75s both;
+    padding: 36px 0 40px;
+    border-top: 1px solid var(--border-subtle);
   }
 
   .footer--roomy {
@@ -71,22 +72,22 @@ const links = navLinks.filter((link) => link.id !== current);
     column-gap: 8px;
     row-gap: 8px;
     margin-bottom: 16px;
-    font-size: 0.95rem;
   }
 
   .footer-separator {
     color: var(--text-muted);
     margin: 0 4px;
+    opacity: 0.5;
   }
 
   .footer a {
-    color: var(--coral-bright);
+    color: var(--text-secondary);
     text-decoration: none;
-    transition: color 0.2s ease;
+    transition: color 0.15s ease;
   }
 
   .footer a:hover {
-    color: var(--cyan-bright);
+    color: var(--coral-bright);
   }
 
   .disclaimer {

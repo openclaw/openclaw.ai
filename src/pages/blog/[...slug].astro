@@ -379,8 +379,8 @@ const articleStructuredData = {
     z-index: 0;
     pointer-events: none;
     background:
-      radial-gradient(720px circle at 9% 4%, rgba(255, 77, 77, 0.10), transparent 54%),
-      radial-gradient(660px circle at 86% 0%, rgba(0, 229, 204, 0.07), transparent 56%);
+      radial-gradient(720px circle at 9% 4%, rgba(245, 101, 74, 0.10), transparent 54%),
+      radial-gradient(660px circle at 86% 0%, rgba(79, 200, 174, 0.07), transparent 56%);
   }
 
   .reader-shell {
@@ -452,7 +452,7 @@ const articleStructuredData = {
     min-height: 24px;
     padding: 0 9px;
     border: 1px solid color-mix(in srgb, var(--cyan-bright) 26%, var(--border-subtle));
-    border-radius: 999px;
+    border-radius: 0;
     background: var(--surface-cyan-soft);
     color: var(--cyan-bright);
     font-size: 0.72rem;
@@ -501,7 +501,7 @@ const articleStructuredData = {
     max-height: 360px;
     object-fit: contain;
     margin-top: 28px;
-    border-radius: 8px;
+    border-radius: 0;
   }
 
   .article-meta {
@@ -600,7 +600,7 @@ const articleStructuredData = {
     width: 24px;
     height: 24px;
     border: 1px solid var(--border-subtle);
-    border-radius: 7px;
+    border-radius: 0;
     background: var(--surface-card);
     color: var(--text-primary);
     transition: border-color 140ms ease, color 140ms ease, transform 140ms ease;
@@ -609,7 +609,7 @@ const articleStructuredData = {
   .author-link-icon:hover {
     border-color: var(--coral-bright);
     color: var(--coral-bright);
-    transform: translateY(-1px);
+    transform: none;
   }
 
   .author-link-icon :global(svg) {
@@ -719,9 +719,9 @@ const articleStructuredData = {
     table-layout: fixed;
     box-sizing: border-box;
     border: 1px solid var(--border-subtle);
-    border-radius: 12px;
+    border-radius: 0;
     background: var(--surface-card-strong);
-    box-shadow: 0 16px 40px rgba(0, 0, 0, 0.18);
+    box-shadow: none;
     font-variant-numeric: tabular-nums;
   }
 
@@ -797,7 +797,7 @@ const articleStructuredData = {
   .article-content :global(code) {
     padding: 0.08em 0.36em;
     border: 1px solid var(--border-subtle);
-    border-radius: 5px;
+    border-radius: 0;
     background: var(--article-inline-code-bg);
     color: var(--cyan-bright);
     font-family: var(--font-mono);
@@ -808,7 +808,7 @@ const articleStructuredData = {
     overflow: auto;
     padding: 14px 16px;
     border: 1px solid var(--article-code-border);
-    border-radius: 8px;
+    border-radius: 0;
     background: var(--article-code-bg);
     color: var(--article-code-text);
     box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.035);
@@ -858,7 +858,7 @@ const articleStructuredData = {
     padding: 18px 20px;
     border: 1px solid color-mix(in srgb, var(--coral-bright) 38%, var(--border-subtle));
     border-left: 4px solid var(--coral-bright);
-    border-radius: 8px;
+    border-radius: 0;
     background:
       linear-gradient(
         135deg,
@@ -878,7 +878,7 @@ const articleStructuredData = {
 
   .article-content :global(figure:not(.chart-card) img) {
     margin: 0;
-    border-radius: 8px;
+    border-radius: 0;
   }
 
   .article-content :global(figure:not(.chart-card) figcaption) {
@@ -898,7 +898,7 @@ const articleStructuredData = {
 
   .article-content :global(.metric-card) {
     border: 1px solid var(--release-card-border);
-    border-radius: 8px;
+    border-radius: 0;
     background:
       linear-gradient(180deg, var(--release-card-highlight), transparent 76%),
       var(--release-card-bg);
@@ -933,14 +933,14 @@ const articleStructuredData = {
     margin: 14px 0 12px;
     padding: 9px;
     border: 1px solid color-mix(in srgb, var(--text-muted) 18%, var(--border-subtle));
-    border-radius: 7px;
+    border-radius: 0;
     background: color-mix(in srgb, var(--release-track) 66%, transparent);
   }
 
   .article-content :global(.metric-spark i) {
     display: block;
     height: max(5px, var(--h));
-    border-radius: 4px 4px 2px 2px;
+    border-radius: 0;
     background: var(--release-data-ink);
     opacity: 0.86;
   }
@@ -988,7 +988,7 @@ const articleStructuredData = {
   .article-content :global(.chart-card) {
     margin: 0;
     border: 1px solid var(--release-card-border);
-    border-radius: 8px;
+    border-radius: 0;
     background:
       linear-gradient(180deg, var(--release-card-highlight), transparent 72%),
       var(--release-card-bg);
@@ -1036,7 +1036,7 @@ const articleStructuredData = {
     overflow: hidden;
     height: 12px;
     border: 1px solid color-mix(in srgb, var(--text-muted) 20%, var(--border-subtle));
-    border-radius: 999px;
+    border-radius: 0;
     background: var(--release-track);
   }
 
@@ -1076,7 +1076,7 @@ const articleStructuredData = {
 
   .article-content :global(.mini-card) {
     border: 1px solid var(--release-card-border);
-    border-radius: 8px;
+    border-radius: 0;
     background:
       linear-gradient(180deg, var(--release-card-highlight), transparent 76%),
       var(--release-card-bg);
@@ -1132,7 +1132,7 @@ const articleStructuredData = {
   .article-content :global(.timeline-list > div) {
     position: relative;
     border: 1px solid var(--release-card-border);
-    border-radius: 8px;
+    border-radius: 0;
     background:
       linear-gradient(180deg, var(--release-card-highlight), transparent 76%),
       var(--release-card-bg);
@@ -1147,7 +1147,7 @@ const articleStructuredData = {
     top: 22px;
     width: 10px;
     height: 10px;
-    border-radius: 999px;
+    border-radius: 0;
     background: var(--release-data-ink);
     box-shadow: 0 0 0 5px color-mix(in srgb, var(--release-data-ink) 14%, transparent);
   }
@@ -1181,7 +1181,7 @@ const articleStructuredData = {
     max-width: 100%;
     height: auto;
     margin: 28px 0 32px;
-    border-radius: 12px;
+    border-radius: 0;
   }
 
   .article-content :global(img[data-expandable-image]) {
@@ -1225,7 +1225,7 @@ const articleStructuredData = {
     display: block;
     width: 100%;
     height: auto;
-    border-radius: 8px;
+    border-radius: 0;
   }
 
   .reader-toc a {
@@ -1262,7 +1262,7 @@ const articleStructuredData = {
     min-height: 34px;
     padding: 0 12px;
     border: 1px solid var(--border-subtle);
-    border-radius: 8px;
+    border-radius: 0;
     background: var(--surface-card);
     color: var(--text-primary);
     font-weight: 750;
@@ -1336,7 +1336,7 @@ const articleStructuredData = {
     margin-top: 38px;
     padding: 26px 28px;
     border: 1px solid color-mix(in srgb, var(--cyan-bright) 30%, var(--border-subtle));
-    border-radius: 8px;
+    border-radius: 0;
     background:
       linear-gradient(135deg, color-mix(in srgb, var(--cyan-bright) 14%, transparent), transparent 42%),
       linear-gradient(90deg, color-mix(in srgb, var(--coral-bright) 10%, transparent), transparent 34%),

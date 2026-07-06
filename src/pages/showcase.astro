@@ -29,7 +29,7 @@ const categoryLabels: Record<string, string> = {
     <header class="header">
       <a href="/" class="back-link">← Back to home</a>
       <h1 class="title">
-        <span class="claw-accent">⟩</span> What People Are Building
+        <span class="claw-accent">◆</span> What People Are Building
       </h1>
       <p class="subtitle">The strongest OpenClaw builds we could verify in public: X threads, shipped workflows, and real automation.</p>
     </header>
@@ -144,9 +144,9 @@ const categoryLabels: Record<string, string> = {
     position: fixed;
     inset: 0;
     background:
-      radial-gradient(ellipse 80% 50% at 20% 20%, rgba(255, 77, 77, 0.12), transparent 50%),
-      radial-gradient(ellipse 60% 60% at 80% 30%, rgba(0, 229, 204, 0.08), transparent 50%),
-      radial-gradient(ellipse 90% 70% at 50% 90%, rgba(255, 77, 77, 0.06), transparent 50%);
+      radial-gradient(ellipse 80% 50% at 20% 20%, rgba(245, 101, 74, 0.12), transparent 50%),
+      radial-gradient(ellipse 60% 60% at 80% 30%, rgba(79, 200, 174, 0.08), transparent 50%),
+      radial-gradient(ellipse 90% 70% at 50% 90%, rgba(245, 101, 74, 0.06), transparent 50%);
     pointer-events: none;
     z-index: 0;
   }
@@ -165,7 +165,7 @@ const categoryLabels: Record<string, string> = {
   .header {
     text-align: center;
     margin-bottom: 48px;
-    animation: fadeInUp 0.6s ease-out;
+    
   }
 
   @keyframes fadeInUp {
@@ -196,6 +196,8 @@ const categoryLabels: Record<string, string> = {
 
   .claw-accent {
     color: var(--coral-bright);
+    font-size: 0.5em;
+    vertical-align: 0.22em;
   }
 
   .subtitle {
@@ -240,10 +242,10 @@ const categoryLabels: Record<string, string> = {
     flex-direction: column;
     gap: 14px;
     padding: 22px;
-    border-radius: 18px;
+    border-radius: 0;
     border: 1px solid var(--border-subtle);
     background:
-      linear-gradient(135deg, rgba(255, 77, 77, 0.06), transparent 40%),
+      linear-gradient(135deg, rgba(245, 101, 74, 0.06), transparent 40%),
       var(--surface-card-strong);
     backdrop-filter: blur(10px);
     text-decoration: none;
@@ -252,9 +254,9 @@ const categoryLabels: Record<string, string> = {
   }
 
   .featured-card:hover {
-    transform: translateY(-4px);
+    transform: none;
     border-color: var(--coral-bright);
-    box-shadow: 0 16px 48px var(--shadow-coral-soft);
+    box-shadow: none;
   }
 
   .featured-topline,
@@ -271,7 +273,7 @@ const categoryLabels: Record<string, string> = {
     align-items: center;
     min-height: 28px;
     padding: 0 10px;
-    border-radius: 999px;
+    border-radius: 0;
     border: 1px solid var(--border-subtle);
     background: var(--surface-overlay);
     color: var(--text-muted);
@@ -330,7 +332,7 @@ const categoryLabels: Record<string, string> = {
     flex-direction: column;
     gap: 16px;
     padding: 24px;
-    border-radius: 16px;
+    border-radius: 0;
     border: 1px solid var(--border-subtle);
     background: var(--surface-card-strong);
     backdrop-filter: blur(8px);
@@ -345,8 +347,8 @@ const categoryLabels: Record<string, string> = {
 
   .showcase-card:hover {
     border-color: var(--coral-bright);
-    transform: translateY(-4px);
-    box-shadow: 0 16px 48px var(--shadow-coral-soft);
+    transform: none;
+    box-shadow: none;
   }
 
   .card-header {
@@ -405,7 +407,7 @@ const categoryLabels: Record<string, string> = {
   .tweet-image {
     width: 100%;
     height: auto;
-    border-radius: 8px;
+    border-radius: 0;
     border: 1px solid var(--border-subtle);
     object-fit: cover;
     max-height: 200px;
@@ -426,7 +428,7 @@ const categoryLabels: Record<string, string> = {
   .cta-section {
     text-align: center;
     padding: 48px 24px;
-    border-radius: 20px;
+    border-radius: 0;
     border: 1px solid var(--border-subtle);
     background: var(--surface-card-strong);
     backdrop-filter: blur(12px);
@@ -458,7 +460,7 @@ const categoryLabels: Record<string, string> = {
     align-items: center;
     gap: 8px;
     padding: 12px 24px;
-    border-radius: 10px;
+    border-radius: 0;
     font-family: var(--font-display);
     font-weight: 600;
     font-size: 0.95rem;
@@ -469,12 +471,12 @@ const categoryLabels: Record<string, string> = {
   .cta-primary {
     background: linear-gradient(135deg, var(--coral-bright) 0%, var(--coral-dark) 100%);
     color: white;
-    box-shadow: 0 4px 20px var(--shadow-coral-mid);
+    box-shadow: none;
   }
 
   .cta-primary:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 8px 30px rgba(255, 77, 77, 0.4);
+    transform: none;
+    box-shadow: none;
   }
 
   .cta-hub {
@@ -484,8 +486,8 @@ const categoryLabels: Record<string, string> = {
   }
 
   .cta-hub:hover {
-    background: rgba(0, 229, 204, 0.25);
-    transform: translateY(-2px);
+    background: rgba(79, 200, 174, 0.25);
+    transform: none;
   }
 
   .cta-secondary {
@@ -496,7 +498,7 @@ const categoryLabels: Record<string, string> = {
 
   .cta-secondary:hover {
     background: rgba(88, 101, 242, 0.25);
-    transform: translateY(-2px);
+    transform: none;
   }
 
   .more-examples {
