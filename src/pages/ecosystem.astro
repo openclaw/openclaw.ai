@@ -197,7 +197,7 @@ const infra: Project[] = [
     name: 'clawbench',
     icon: 'lucide:gauge',
     color: ROSE,
-    desc: 'Agent benchmark that scores the full stack — harness, config, model — not just the LLM.',
+    desc: 'Agent benchmark that scores harness, config, and model together instead of the LLM alone.',
     repo: 'https://github.com/openclaw/clawbench',
   },
   {
@@ -533,7 +533,7 @@ function logoSrc(project: Project) {
       <p class="eyebrow">The OpenClaw ecosystem</p>
       <h1 class="title">A whole reef of claws.</h1>
       <p class="description">
-        OpenClaw is more than the assistant. It is a federation of ~70 open source
+        The assistant is one repo. Around it sit ~70 open source
         projects — hosted agents, local-first crawlers, SDKs, skill registries, and
         native tooling — that share a runtime, a protocol, and a sense of humor.
       </p>
@@ -601,7 +601,7 @@ function logoSrc(project: Project) {
       </h2>
       <p class="section-desc">
         The rest of the public surface: NixOS modules, runtime libraries, infra,
-        experiments, docs source. Click any to dive in.
+        experiments, docs source. Click any to open the repo.
       </p>
       <details class="more-details">
         <summary>

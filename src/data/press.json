@@ -6,7 +6,7 @@
     "displayDate": "Jun 30, 2026",
     "date": "2026-06-30",
     "author": "Lucas Ropek",
-    "summary": "The open-source agent that captivated the internet lands on phones: native iOS and Android apps with chat, Talk mode, and remote action approvals paired to your own Gateway.",
+    "summary": "OpenClaw lands on phones: native iOS and Android apps with chat, Talk mode, and remote action approvals paired to your own Gateway.",
     "featured": false
   },
   {
@@ -16,7 +16,7 @@
     "displayDate": "Jun 2026",
     "date": "2026-06-19",
     "author": "Fast Company",
-    "summary": "Fast Company puts OpenClaw’s creator on its AI 20 for 2026 with the definitive origin story: building in public, a Discord as the showroom, and half a million systems running the lobster.",
+    "summary": "Fast Company puts OpenClaw’s creator on its AI 20 for 2026: building in public, a Discord as the showroom, and half a million systems running the lobster.",
     "featured": false
   },
   {
@@ -36,7 +36,7 @@
     "displayDate": "Jun 2, 2026",
     "date": "2026-06-02",
     "author": "Russell Brandom",
-    "summary": "The clearest validation yet: Microsoft ships a personal assistant openly inspired by OpenClaw, bringing the agent workflows the lobster made mainstream to the Microsoft 365 ecosystem.",
+    "summary": "Microsoft ships a personal assistant openly inspired by OpenClaw, bringing agent workflows to the Microsoft 365 ecosystem.",
     "featured": true
   },
   {
@@ -46,7 +46,7 @@
     "displayDate": "May 5, 2026",
     "date": "2026-05-05",
     "author": "Hugh Langley",
-    "summary": "Google reportedly builds ‘Remy,’ a 24/7 personal agent inside Gemini positioned as its answer to OpenClaw — more proof the category the lobster defined is now industry-wide.",
+    "summary": "Google reportedly builds ‘Remy,’ a 24/7 personal agent inside Gemini, positioned as its answer to OpenClaw.",
     "featured": false
   },
   {
@@ -66,7 +66,7 @@
     "displayDate": "Apr 28, 2026",
     "date": "2026-04-28",
     "author": "Julie Bort",
-    "summary": "Enterprise-grade credibility: Red Hat maintainer work lands upstream to make production OpenClaw deployments meaningfully safer.",
+    "summary": "Red Hat maintainer work lands upstream to make production OpenClaw deployments safer.",
     "featured": false
   },
   {
@@ -86,7 +86,7 @@
     "displayDate": "Apr 3, 2026",
     "date": "2026-04-03",
     "author": "Rachyl Jones",
-    "summary": "The trifecta completes: after Microsoft and Google, Anthropic is building its own answer to OpenClaw as customer demand for agent platforms keeps growing.",
+    "summary": "After Microsoft and Google, Anthropic is building its own answer to OpenClaw as customer demand for agent platforms grows.",
     "featured": false
   },
   {
@@ -96,7 +96,7 @@
     "displayDate": "Mar 29, 2026",
     "date": "2026-03-29",
     "author": "Claire Vo and Lenny Rachitsky",
-    "summary": "From deleted calendar to nine specialized agents running family scheduling, sales, and homework help — Claire Vo’s conversion story on the biggest product newsletter there is.",
+    "summary": "Claire Vo on going from a deleted calendar to nine specialized agents that run family scheduling, sales research, and homework help.",
     "featured": false
   },
   {
@@ -116,7 +116,7 @@
     "displayDate": "Mar 14, 2026",
     "date": "2026-03-14",
     "author": "Nicholas Gordon",
-    "summary": "Fortune on the craze transforming China’s AI sector — and how OpenClaw became a shot in the arm for the country’s open-source model builders.",
+    "summary": "Fortune on the craze reshaping China’s AI sector — and how OpenClaw pushed the country’s open-source model builders forward.",
     "featured": false
   },
   {
@@ -146,7 +146,7 @@
     "displayDate": "Mar 7, 2026",
     "date": "2026-03-07",
     "author": "The Verge",
-    "summary": "A strong community story about ClawCon, the people building around OpenClaw, and the feeling that personal agents have escaped the lab.",
+    "summary": "The Verge visits ClawCon and meets the people running their calendars, households, and side businesses through OpenClaw.",
     "featured": false
   },
   {
@@ -166,7 +166,7 @@
     "displayDate": "Feb 25, 2026",
     "date": "2026-02-25",
     "author": "Sarah Perez",
-    "summary": "A builder-focused piece with the right tone for the homepage: experimentation, agency, and why OpenClaw resonated with makers so quickly.",
+    "summary": "Why makers picked up OpenClaw so quickly: experimentation, agency, and workflows they own end to end.",
     "featured": false
   },
   {
@@ -176,7 +176,7 @@
     "displayDate": "Feb 19, 2026",
     "date": "2026-02-19",
     "author": "Business Insider",
-    "summary": "Good social proof for the site: OpenClaw getting attention and detailed product feedback from the very top of the industry.",
+    "summary": "Mark Zuckerberg sends OpenClaw’s creator detailed product feedback: ‘eccentric but brilliant.’",
     "featured": false
   },
   {
@@ -186,7 +186,7 @@
     "displayDate": "Feb 17, 2026",
     "date": "2026-02-17",
     "author": "Sam Witteveen",
-    "summary": "VentureBeat’s verdict on the OpenAI move: the industry’s center of gravity is shifting from what AI can say to what AI can do — and OpenClaw is the reason.",
+    "summary": "VentureBeat on the OpenAI move: the industry’s attention is moving from what AI can say to what AI can do.",
     "featured": false
   },
   {
@@ -196,7 +196,7 @@
     "displayDate": "Feb 15, 2026",
     "date": "2026-02-15",
     "author": "Anthony Ha",
-    "summary": "A clean, positive headline around the next chapter for OpenClaw: founder momentum, OpenAI backing, and the long-term foundation path.",
+    "summary": "Steinberger joins OpenAI; OpenClaw continues under long-term foundation governance.",
     "featured": false
   },
   {
@@ -206,7 +206,7 @@
     "displayDate": "Feb 15, 2026",
     "date": "2026-02-15",
     "author": "The Verge",
-    "summary": "Another positive institutional signal: OpenClaw’s creator moving into a major platform role while the project continues as open source.",
+    "summary": "OpenClaw’s creator takes a platform role at OpenAI while the project continues as open source under the foundation.",
     "featured": false
   },
   {
@@ -216,7 +216,7 @@
     "displayDate": "Feb 15, 2026",
     "date": "2026-02-15",
     "author": "Business Insider",
-    "summary": "A positive business-profile angle on OpenClaw’s breakout moment and why Steinberger chose leverage and reach over starting another company.",
+    "summary": "Why Steinberger passed on building a company around OpenClaw and joined OpenAI instead.",
     "featured": false
   },
   {
@@ -236,7 +236,7 @@
     "displayDate": "Jan 30, 2026",
     "date": "2026-01-30",
     "author": "Anna Heim",
-    "summary": "The first big read on the OpenClaw takeoff: the rebrand, the viral growth, and why the project captured the open-source AI crowd.",
+    "summary": "The first long piece on the OpenClaw takeoff: the rebrand, the growth numbers, and who was building with it.",
     "featured": false
   }
 ]
