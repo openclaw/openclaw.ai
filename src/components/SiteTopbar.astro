@@ -1,5 +1,5 @@
 ---
-import { FileText, Megaphone, Menu, X } from '@lucide/astro';
+import { FileText, Megaphone } from '@lucide/astro';
 import { siDiscord, siGithub } from 'simple-icons';
 
 type SimpleIcon = {
@@ -89,8 +89,11 @@ function isActive(item: NavItem) {
   </nav>
   <details class="site-menu">
     <summary class="site-menu-toggle" aria-label="Toggle main navigation">
-      <span class="site-menu-icon site-menu-icon-open" aria-hidden="true"><Menu size={18} /></span>
-      <span class="site-menu-icon site-menu-icon-close" aria-hidden="true"><X size={18} /></span>
+      <span class="site-burger" aria-hidden="true">
+        <span></span>
+        <span></span>
+        <span></span>
+      </span>
     </summary>
     <nav class="site-menu-panel" aria-label="Main">
       {items.map((item) => (
@@ -223,15 +226,13 @@ function isActive(item: NavItem) {
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      width: 36px;
-      height: 36px;
-      border: 1px solid var(--border-subtle);
-      border-radius: 0;
-      background: var(--surface-card);
-      color: var(--text-secondary);
+      padding: 8px 4px;
+      border: none;
+      background: none;
+      color: var(--text-muted);
       cursor: pointer;
       list-style: none;
-      transition: border-color 0.16s ease, background 0.16s ease, color 0.16s ease;
+      transition: color 150ms ease;
     }
 
     .site-menu-toggle::-webkit-details-marker {
@@ -240,28 +241,40 @@ function isActive(item: NavItem) {
 
     .site-menu-toggle:hover,
     .site-menu[open] .site-menu-toggle {
-      border-color: var(--border-accent);
-      background: var(--surface-card-strong);
       color: var(--text-primary);
     }
 
     .site-menu-toggle:focus-visible {
-      outline: 2px solid var(--cyan-bright);
+      outline: 2px solid var(--coral-bright);
       outline-offset: 2px;
     }
 
-    .site-menu-icon {
-      display: inline-flex;
-      line-height: 0;
+    /* Burger: three lines morphing into an X, per the Foundation site */
+    .site-burger {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
     }
 
-    .site-menu-icon-close,
-    .site-menu[open] .site-menu-icon-open {
-      display: none;
+    .site-burger span {
+      display: block;
+      width: 18px;
+      height: 1.6px;
+      border-radius: 1px;
+      background: currentColor;
+      transition: transform 250ms ease, opacity 200ms ease;
     }
 
-    .site-menu[open] .site-menu-icon-close {
-      display: inline-flex;
+    .site-menu[open] .site-burger span:nth-child(1) {
+      transform: translateY(5.6px) rotate(45deg);
+    }
+
+    .site-menu[open] .site-burger span:nth-child(2) {
+      opacity: 0;
+    }
+
+    .site-menu[open] .site-burger span:nth-child(3) {
+      transform: translateY(-5.6px) rotate(-45deg);
     }
 
     .site-menu-panel {

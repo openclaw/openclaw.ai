@@ -84,15 +84,19 @@ const asciiAurora = (() => {
   for (let y = 0; y < ROWS; y++) {
     let line = '';
     for (let x = 0; x < COLS; x++) {
-      const dx = x - COLS / 2;
-      const dy = (y + 12) * 1.9; // origin sits above the top edge
-      const dist = Math.sqrt(dx * dx + dy * dy);
-      // Sharp rings with dark water between them, brightest near the origin
-      const band = 0.5 + 0.5 * Math.sin(dist * 0.22);
+      // Interference of two ripple sources above the top edge — the client
+      // script drifts their phases in opposite directions.
+      const dy = (y + 12) * 1.9;
+      const dx1 = x - COLS * 0.38;
+      const dx2 = x - COLS * 0.62;
+      const d1 = Math.sqrt(dx1 * dx1 + dy * dy);
+      const d2 = Math.sqrt(dx2 * dx2 + dy * dy);
+      const band = (Math.sin(d1 * 0.3) + Math.sin(d2 * 0.3) + 2) / 4;
+      const dxm = x - COLS / 2;
       const env =
-        Math.min(Math.max(1.2 - dist / 110, 0), 1) *
-        Math.exp(-((dx / (COLS * 0.3)) * (dx / (COLS * 0.3))));
-      let v = Math.pow(band, 3) * env * 1.2;
+        Math.min(Math.max(1.15 - Math.min(d1, d2) / 95, 0), 1) *
+        Math.exp(-((dxm / (COLS * 0.36)) * (dxm / (COLS * 0.36))));
+      let v = Math.pow(band, 3) * env * 1.3;
       if (v < 0.05) v = 0;
       v = Math.min(Math.max(v, 0), 1);
       const threshold = (BAYER[y % 4][x % 4] + 0.5) / 16;
@@ -552,14 +556,18 @@ const asciiAurora = (() => {
           for (let y = 0; y < ROWS; y++) {
             let line = '';
             for (let x = 0; x < COLS; x++) {
-              const dx = x - COLS / 2;
               const dy = (y + 12) * 1.9;
-              const dist = Math.sqrt(dx * dx + dy * dy);
-              const band = 0.5 + 0.5 * Math.sin(dist * 0.22 - t * 0.3);
+              const dx1 = x - COLS * 0.38;
+              const dx2 = x - COLS * 0.62;
+              const d1 = Math.sqrt(dx1 * dx1 + dy * dy);
+              const d2 = Math.sqrt(dx2 * dx2 + dy * dy);
+              const band =
+                (Math.sin(d1 * 0.3 - t * 0.32) + Math.sin(d2 * 0.3 + t * 0.26) + 2) / 4;
+              const dxm = x - COLS / 2;
               const env =
-                Math.min(Math.max(1.2 - dist / 110, 0), 1) *
-                Math.exp(-((dx / (COLS * 0.3)) * (dx / (COLS * 0.3))));
-              let v = Math.pow(band, 3) * env * 1.2;
+                Math.min(Math.max(1.15 - Math.min(d1, d2) / 95, 0), 1) *
+                Math.exp(-((dxm / (COLS * 0.36)) * (dxm / (COLS * 0.36))));
+              let v = Math.pow(band, 3) * env * 1.3;
               if (v < 0.05) v = 0;
               v = Math.min(Math.max(v, 0), 1);
               const threshold = (BAYER[y & 3][x & 3] + 0.5) / 16;

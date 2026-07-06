@@ -231,58 +231,100 @@ const structuredDataItems = structuredData ? Array.isArray(structuredData) ? str
 
       .theme-toggle {
         position: fixed;
-        top: 11px;
-        right: 24px;
+        top: 14px;
+        right: 28px;
         z-index: 999;
-        width: 40px;
-        height: 40px;
-        display: grid;
-        place-items: center;
-        padding: 0;
-        border-radius: 0;
-        border: 1px solid var(--border-subtle);
-        background: var(--surface-card-strong);
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        padding: 4px;
+        border: none;
+        background: none;
+        color: var(--text-muted);
         cursor: pointer;
-        backdrop-filter: blur(10px);
-        transition: all 0.2s ease;
+        transition: color 150ms ease;
       }
 
       .theme-toggle:hover {
-        border-color: var(--border-accent);
-        transform: none;
-        box-shadow: none;
+        color: var(--text-primary);
       }
 
       .theme-toggle:focus-visible {
-        outline: 2px solid var(--cyan-bright);
+        outline: 2px solid var(--coral-bright);
         outline-offset: 2px;
       }
 
-      .theme-toggle-icon {
-        font-size: 1.05rem;
-        line-height: 1;
-        color: var(--text-secondary);
-        transition: transform 0.2s ease, color 0.2s ease;
+      .theme-toggle svg {
+        width: 17px;
+        height: 17px;
       }
 
-      .theme-toggle:hover .theme-toggle-icon {
-        color: var(--text-primary);
-        transform: rotate(10deg) scale(1.04);
+      /* Sun-and-moon morph: in dark mode the core circle is large with a
+         mask bite (moon); in light mode it shrinks and the rays rotate in. */
+      .theme-toggle .tt-core {
+        fill: currentColor;
+        r: 9px;
+        transition: r 260ms ease;
       }
 
-      @media (max-width: 640px) {
+      .theme-toggle .tt-hole {
+        cx: 17px;
+        cy: 7px;
+        transition: cx 300ms ease, cy 300ms ease;
+      }
+
+      .theme-toggle .tt-rays {
+        opacity: 0;
+        stroke: currentColor;
+        stroke-linecap: round;
+        stroke-width: 1.6;
+        transform: rotate(-40deg) scale(0.6);
+        transform-origin: center;
+        transition: opacity 220ms ease, transform 320ms ease;
+      }
+
+      html[data-theme='light'] .theme-toggle .tt-core {
+        r: 4.4px;
+      }
+
+      html[data-theme='light'] .theme-toggle .tt-hole {
+        cx: 32px;
+        cy: -8px;
+      }
+
+      html[data-theme='light'] .theme-toggle .tt-rays {
+        opacity: 1;
+        transform: rotate(0deg) scale(1);
+      }
+
+      @media (max-width: 720px) {
         .theme-toggle {
-          top: 11px;
-          right: 12px;
-          width: 36px;
-          height: 36px;
+          top: 16px;
+          right: 16px;
         }
       }
     </style>
   </head>
   <body>
     <button class="theme-toggle" type="button" data-theme-toggle aria-label="Switch color theme">
-      <span class="theme-toggle-icon" data-theme-icon aria-hidden="true"></span>
+      <!-- Sun-and-moon morph, ported from the OpenClaw Foundation site -->
+      <svg viewBox="0 0 24 24" aria-hidden="true">
+        <mask id="tt-moon">
+          <rect width="24" height="24" fill="#fff" />
+          <circle class="tt-hole" cx="17" cy="7" r="7" fill="#000" />
+        </mask>
+        <circle class="tt-core" cx="12" cy="12" mask="url(#tt-moon)" />
+        <g class="tt-rays">
+          <line x1="12" y1="1.6" x2="12" y2="3.8" />
+          <line x1="12" y1="20.2" x2="12" y2="22.4" />
+          <line x1="1.6" y1="12" x2="3.8" y2="12" />
+          <line x1="20.2" y1="12" x2="22.4" y2="12" />
+          <line x1="4.6" y1="4.6" x2="6.2" y2="6.2" />
+          <line x1="17.8" y1="17.8" x2="19.4" y2="19.4" />
+          <line x1="4.6" y1="19.4" x2="6.2" y2="17.8" />
+          <line x1="17.8" y1="6.2" x2="19.4" y2="4.6" />
+        </g>
+      </svg>
     </button>
     <slot />
     <Analytics />
@@ -292,14 +334,12 @@ const structuredDataItems = structuredData ? Array.isArray(structuredData) ? str
         const key = 'oc-theme';
         const root = document.documentElement;
         const toggle = document.querySelector('[data-theme-toggle]');
-        const icon = document.querySelector('[data-theme-icon]');
-        if (!toggle || !icon) return;
+        if (!toggle) return;
 
         const applyTheme = (theme, persist = true) => {
           root.dataset.theme = theme;
           root.style.colorScheme = theme;
           const isDark = theme === 'dark';
-          icon.textContent = isDark ? '☀' : '☾';
           toggle.setAttribute('aria-label', isDark ? 'Switch to light mode' : 'Switch to dark mode');
           toggle.setAttribute('title', isDark ? 'Switch to light mode' : 'Switch to dark mode');
           if (persist) {
