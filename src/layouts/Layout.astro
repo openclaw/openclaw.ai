@@ -214,6 +214,27 @@ const structuredDataItems = structuredData ? Array.isArray(structuredData) ? str
           var(--bg-deep);
       }
 
+      /* Film grain: adds texture so large dark surfaces don't band or look flat */
+      body::after {
+        content: '';
+        position: fixed;
+        inset: 0;
+        z-index: 2000;
+        pointer-events: none;
+        opacity: 0.05;
+        mix-blend-mode: overlay;
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+        background-size: 180px 180px;
+      }
+
+      html[data-theme='light'] body::after {
+        opacity: 0.03;
+      }
+
+      h1, h2, h3 {
+        text-wrap: balance;
+      }
+
       ::selection {
         background: var(--coral-bright);
         color: var(--bg-deep);
