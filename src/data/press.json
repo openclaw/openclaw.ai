@@ -1,47 +1,42 @@
 [
   {
     "outlet": "TechCrunch",
-    "title": "Microsoft launches Scout, an OpenClaw-inspired personal assistant",
-    "url": "https://techcrunch.com/2026/06/02/microsoft-launches-scout-an-openclaw-inspired-personal-assistant/",
-    "displayDate": "Jun 2, 2026",
-    "author": "Russell Brandom",
-    "summary": "The clearest validation yet: Microsoft ships a personal assistant openly inspired by OpenClaw, bringing the agent workflows the lobster made mainstream to the Microsoft 365 ecosystem.",
-    "featured": true
-  },
-  {
-    "outlet": "TechCrunch",
     "title": "OpenClaw is finally available on Android and iOS",
     "url": "https://techcrunch.com/2026/06/30/openclaw-is-finally-available-on-android-and-ios/",
     "displayDate": "Jun 30, 2026",
+    "date": "2026-06-30",
     "author": "Lucas Ropek",
     "summary": "The open-source agent that captivated the internet lands on phones: native iOS and Android apps with chat, Talk mode, and remote action approvals paired to your own Gateway.",
     "featured": false
-  },
-  {
-    "outlet": "CNBC",
-    "title": "Lobster buffet: China’s tech firms feast on OpenClaw as companies race to deploy AI agents",
-    "url": "https://www.cnbc.com/2026/03/12/china-openclaw-ai-agent-adoption-tech-companies-government-support-lobster-shrimp.html",
-    "displayDate": "Mar 12, 2026",
-    "author": "Evelyn Cheng and Dylan Butts",
-    "summary": "The lobster rush goes global: Tencent, Alibaba, and Baidu race to offer one-click OpenClaw deployments as adoption spreads across China’s tech industry.",
-    "featured": false
-  },
-  {
-    "outlet": "TechCrunch",
-    "title": "OpenClaw’s AI assistants are now building their own social network",
-    "url": "https://techcrunch.com/2026/01/30/openclaws-ai-assistants-are-now-building-their-own-social-network/",
-    "displayDate": "Jan 30, 2026",
-    "author": "Anna Heim",
-    "summary": "A strong first-read on the OpenClaw takeoff: rebrand, viral growth, Moltbook, and why the project captured the open-source AI crowd.",
-    "featured": true
   },
   {
     "outlet": "Fast Company",
     "title": "How Peter Steinberger built OpenClaw",
     "url": "https://www.fastcompany.com/91550800/how-peter-steinberger-built-openclaw",
     "displayDate": "Jun 2026",
+    "date": "2026-06-19",
     "author": "Fast Company",
     "summary": "Fast Company puts OpenClaw’s creator on its AI 20 for 2026 with the definitive origin story: building in public, a Discord as the showroom, and half a million systems running the lobster.",
+    "featured": false
+  },
+  {
+    "outlet": "Microsoft",
+    "title": "Build 2026: Furthering Windows as the trusted platform for development",
+    "url": "https://blogs.windows.com/windowsdeveloper/2026/06/02/build-2026-furthering-windows-as-the-trusted-platform-for-development/",
+    "displayDate": "Jun 2, 2026",
+    "date": "2026-06-02",
+    "author": "Pavan Davuluri, EVP Windows + Devices",
+    "summary": "Straight from the Build keynote: OpenClaw runs natively on Windows inside Microsoft Execution Containers — “the Windows node and gateway run contained, so your system stays secure.”",
+    "featured": true
+  },
+  {
+    "outlet": "TechCrunch",
+    "title": "Microsoft launches Scout, an OpenClaw-inspired personal assistant",
+    "url": "https://techcrunch.com/2026/06/02/microsoft-launches-scout-an-openclaw-inspired-personal-assistant/",
+    "displayDate": "Jun 2, 2026",
+    "date": "2026-06-02",
+    "author": "Russell Brandom",
+    "summary": "The clearest validation yet: Microsoft ships a personal assistant openly inspired by OpenClaw, bringing the agent workflows the lobster made mainstream to the Microsoft 365 ecosystem.",
     "featured": true
   },
   {
@@ -49,6 +44,7 @@
     "title": "Google is building an AI agent that could be its answer to OpenClaw",
     "url": "https://www.businessinsider.com/google-ai-agent-openclaw-remy-gemini-assistant-2026-5",
     "displayDate": "May 5, 2026",
+    "date": "2026-05-05",
     "author": "Hugh Langley",
     "summary": "Google reportedly builds ‘Remy,’ a 24/7 personal agent inside Gemini positioned as its answer to OpenClaw — more proof the category the lobster defined is now industry-wide.",
     "featured": false
@@ -58,6 +54,7 @@
     "title": "Microsoft’s OpenClaw team takes on the personal assistant challenge",
     "url": "https://www.geekwire.com/2026/microsofts-openclaw-team-takes-on-the-personal-assistant-challenge/",
     "displayDate": "May 4, 2026",
+    "date": "2026-05-04",
     "author": "Mary Jo Foley",
     "summary": "Inside Microsoft’s ‘Project Lobster’: a CVP-led team, ClawPilot desktops on Mac and Windows, and thousands of daily internal users building the enterprise-grade OpenClaw.",
     "featured": false
@@ -67,6 +64,7 @@
     "title": "Red Hat’s OpenClaw maintainer just made enterprise Claw deployments a lot safer",
     "url": "https://techcrunch.com/2026/04/28/red-hats-openclaw-maintainer-just-made-enterprise-claw-deployments-a-lot-safer/",
     "displayDate": "Apr 28, 2026",
+    "date": "2026-04-28",
     "author": "Julie Bort",
     "summary": "Enterprise-grade credibility: Red Hat maintainer work lands upstream to make production OpenClaw deployments meaningfully safer.",
     "featured": false
@@ -76,6 +74,7 @@
     "title": "How China fell for a lobster: What an AI assistant tells us about Beijing’s ambition",
     "url": "https://www.bbc.com/news/articles/cy41n17e23go",
     "displayDate": "Apr 6, 2026",
+    "date": "2026-04-06",
     "author": "Fan Wang and Yan Chen",
     "summary": "The BBC on China’s lobster frenzy: students to retirees lining up at Tencent and Baidu for custom claws, and what ‘raising lobsters’ reveals about Beijing’s AI ambitions.",
     "featured": false
@@ -85,8 +84,19 @@
     "title": "‘Raise a lobster’: How OpenClaw is the latest craze transforming China’s AI sector",
     "url": "https://fortune.com/2026/03/14/openclaw-china-ai-agent-boom-open-source-lobster-craze-minimax-qwen/",
     "displayDate": "Mar 14, 2026",
+    "date": "2026-03-14",
     "author": "Nicholas Gordon",
     "summary": "Fortune on the craze transforming China’s AI sector — and how OpenClaw became a shot in the arm for the country’s open-source model builders.",
+    "featured": false
+  },
+  {
+    "outlet": "CNBC",
+    "title": "Lobster buffet: China’s tech firms feast on OpenClaw as companies race to deploy AI agents",
+    "url": "https://www.cnbc.com/2026/03/12/china-openclaw-ai-agent-adoption-tech-companies-government-support-lobster-shrimp.html",
+    "displayDate": "Mar 12, 2026",
+    "date": "2026-03-12",
+    "author": "Evelyn Cheng and Dylan Butts",
+    "summary": "The lobster rush goes global: Tencent, Alibaba, and Baidu race to offer one-click OpenClaw deployments as adoption spreads across China’s tech industry.",
     "featured": false
   },
   {
@@ -94,6 +104,7 @@
     "title": "The OpenClaw superfan meetup serves optimism and lobster",
     "url": "https://www.theverge.com/ai-artificial-intelligence/890517/openclaw-clawcon-meetup-nyc-open-source-ai",
     "displayDate": "Mar 7, 2026",
+    "date": "2026-03-07",
     "author": "The Verge",
     "summary": "A strong community story about ClawCon, the people building around OpenClaw, and the feeling that personal agents have escaped the lab.",
     "featured": false
@@ -103,6 +114,7 @@
     "title": "OpenClaw creator’s advice to AI builders is to be more playful and allow yourself time to improve",
     "url": "https://techcrunch.com/2026/02/25/openclaw-creators-advice-to-ai-builders-is-to-be-more-playful-and-allow-yourself-time-to-improve/",
     "displayDate": "Feb 25, 2026",
+    "date": "2026-02-25",
     "author": "Sarah Perez",
     "summary": "A builder-focused piece with the right tone for the homepage: experimentation, agency, and why OpenClaw resonated with makers so quickly.",
     "featured": false
@@ -112,6 +124,7 @@
     "title": "'Eccentric but brilliant': OpenClaw's creator got feedback from Mark Zuckerberg",
     "url": "https://www.businessinsider.com/openclaw-creator-peter-steinberger-gets-feedback-from-mark-zuckerberg",
     "displayDate": "Feb 19, 2026",
+    "date": "2026-02-19",
     "author": "Business Insider",
     "summary": "Good social proof for the site: OpenClaw getting attention and detailed product feedback from the very top of the industry.",
     "featured": false
@@ -121,6 +134,7 @@
     "title": "OpenAI’s acquisition of OpenClaw signals the beginning of the end of the ChatGPT era",
     "url": "https://venturebeat.com/technology/openais-acquisition-of-openclaw-signals-the-beginning-of-the-end-of-the",
     "displayDate": "Feb 17, 2026",
+    "date": "2026-02-17",
     "author": "Sam Witteveen",
     "summary": "VentureBeat’s verdict on the OpenAI move: the industry’s center of gravity is shifting from what AI can say to what AI can do — and OpenClaw is the reason.",
     "featured": false
@@ -130,6 +144,7 @@
     "title": "OpenClaw creator Peter Steinberger joins OpenAI",
     "url": "https://techcrunch.com/2026/02/15/openclaw-creator-peter-steinberger-joins-openai/",
     "displayDate": "Feb 15, 2026",
+    "date": "2026-02-15",
     "author": "Anthony Ha",
     "summary": "A clean, positive headline around the next chapter for OpenClaw: founder momentum, OpenAI backing, and the long-term foundation path.",
     "featured": false
@@ -139,6 +154,7 @@
     "title": "OpenClaw creator Peter Steinberger joins OpenAI",
     "url": "https://www.theverge.com/openai/630450/peter-steinberger-openclaw-openai",
     "displayDate": "Feb 15, 2026",
+    "date": "2026-02-15",
     "author": "The Verge",
     "summary": "Another positive institutional signal: OpenClaw’s creator moving into a major platform role while the project continues as open source.",
     "featured": false
@@ -148,6 +164,7 @@
     "title": "OpenClaw's creator is heading to OpenAI. He says it could've been a 'huge company,' but building one didn't excite him.",
     "url": "https://www.businessinsider.com/sam-altman-hires-openclaw-creator-peter-steinberger-personal-ai-agents-2026-2",
     "displayDate": "Feb 15, 2026",
+    "date": "2026-02-15",
     "author": "Business Insider",
     "summary": "A positive business-profile angle on OpenClaw’s breakout moment and why Steinberger chose leverage and reach over starting another company.",
     "featured": false
@@ -157,8 +174,19 @@
     "title": "What the OpenClaw moment means for enterprises: 5 big takeaways",
     "url": "https://venturebeat.com/technology/what-the-openclaw-moment-means-for-enterprises-5-big-takeaways",
     "displayDate": "Feb 6, 2026",
+    "date": "2026-02-06",
     "author": "Carl Franzen",
     "summary": "The ‘OpenClaw moment’ as VentureBeat sees it: autonomous agents have escaped the lab, and enterprises are rethinking data prep, pricing, and workflows around it.",
+    "featured": false
+  },
+  {
+    "outlet": "TechCrunch",
+    "title": "OpenClaw’s AI assistants are now building their own social network",
+    "url": "https://techcrunch.com/2026/01/30/openclaws-ai-assistants-are-now-building-their-own-social-network/",
+    "displayDate": "Jan 30, 2026",
+    "date": "2026-01-30",
+    "author": "Anna Heim",
+    "summary": "The first big read on the OpenClaw takeoff: the rebrand, the viral growth, and why the project captured the open-source AI crowd.",
     "featured": false
   }
 ]

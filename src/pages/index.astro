@@ -57,7 +57,9 @@ const pixelsPerSecond = 50;
 const duration1 = (row1.length / 2 * pixelsPerItem) / pixelsPerSecond;
 const duration2 = (row2.length / 2 * pixelsPerItem) / pixelsPerSecond;
 const featuredBuilds = communityBuilds.slice(0, 4);
-const featuredPress = pressArticles.slice(0, 4);
+const featuredPress = [...pressArticles]
+  .sort((a, b) => b.date.localeCompare(a.date))
+  .slice(0, 4);
 
 function formatBlogDate(date: Date): string {
   return date.toLocaleDateString('en-US', {
