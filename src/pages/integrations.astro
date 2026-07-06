@@ -13,18 +13,7 @@ import {
   featuredProviders,
   gatewayHosts,
   providerGroups,
-  type CatalogStatus,
 } from '../data/integrations';
-
-const statusLabels: Record<CatalogStatus, string> = {
-  'built-in': 'Bundled',
-  included: 'Bundled',
-  official: 'Official plugin',
-  external: 'External plugin',
-  community: 'Community',
-  gateway: 'Gateway host',
-  node: 'Companion node',
-};
 ---
 
 <Layout
@@ -70,8 +59,8 @@ const statusLabels: Record<CatalogStatus, string> = {
           <p class="section-kicker">Message OpenClaw anywhere</p>
           <h2>Chat channels</h2>
           <p>
-            Run several channels at once and route each conversation through the Gateway.
-            Bundled channels ship with OpenClaw; official and external plugins install separately.
+            Run several channels at once and route each conversation through the
+            Gateway. Every channel installs in one command or during onboarding.
           </p>
         </div>
         <a href="https://docs.openclaw.ai/channels" target="_blank" rel="noopener">
@@ -88,7 +77,6 @@ const statusLabels: Record<CatalogStatus, string> = {
             class="catalog-card"
             style={`--accent: ${item.color}`}
           >
-            <span class:list={['status-badge', `status-${item.status}`]}>{statusLabels[item.status]}</span>
             <span class="card-icon">
               {item.logo
                 ? <img src={item.logo} alt="" class="brand-logo" width="30" height="30" loading="lazy" decoding="async" />
@@ -138,7 +126,6 @@ const statusLabels: Record<CatalogStatus, string> = {
             class="catalog-card provider-card"
             style={`--accent: ${item.color}`}
           >
-            <span class:list={['status-badge', `status-${item.status}`]}>{statusLabels[item.status]}</span>
             <span class="card-icon">
               {item.logo
                 ? <img src={item.logo} alt="" class="brand-logo" width="30" height="30" loading="lazy" decoding="async" />
@@ -539,7 +526,7 @@ const statusLabels: Record<CatalogStatus, string> = {
 
   .catalog-stats {
     display: grid;
-    grid-template-columns: repeat(4, minmax(0, 1fr));
+    grid-template-columns: repeat(3, minmax(0, 1fr));
     margin: 0;
     border-top: 1px solid var(--border-subtle);
   }
@@ -697,7 +684,6 @@ const statusLabels: Record<CatalogStatus, string> = {
 
   .catalog-card h3 {
     margin: 0 0 5px;
-    padding-right: 12px;
     font-family: var(--font-display);
     font-size: 1rem;
     line-height: 1.2;
@@ -711,23 +697,6 @@ const statusLabels: Record<CatalogStatus, string> = {
     line-height: 1.45;
   }
 
-  .status-badge {
-    position: absolute;
-    top: 12px;
-    right: 10px;
-    max-width: 96px;
-    padding: 3px 6px;
-    border: 1px solid var(--border-subtle);
-    border-radius: 0;
-    background: var(--bg-surface);
-    color: var(--text-muted);
-    font-family: var(--font-mono);
-    font-size: 0.58rem;
-    font-weight: 700;
-    line-height: 1.2;
-    text-align: center;
-    text-transform: uppercase;
-  }
 
   .link-group li {
     display: inline-flex;
