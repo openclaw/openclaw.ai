@@ -24,9 +24,8 @@ const outletIcon = (url: string) => `/press/icons/${new URL(url).hostname.replac
         <span class="claw-accent">◆</span> Press
       </h1>
       <p class="subtitle">
-        Reporting on OpenClaw: the product, the company news around it, and the people running it.
+        Reporting on OpenClaw's product, company news, and people, with articles added when outlets report something new and every link pointing to the original piece.
       </p>
-      <p class="note">Articles are added when an outlet reports something new about OpenClaw. Every link goes to the original piece.</p>
     </header>
 
     <div class="press-grid">
@@ -145,21 +144,11 @@ const outletIcon = (url: string) => `/press/icons/${new URL(url).hostname.replac
     vertical-align: 0.22em;
   }
 
-  .subtitle,
-  .note {
+  .subtitle {
     max-width: 700px;
     margin: 0 auto;
-  }
-
-  .subtitle {
     color: var(--text-secondary);
     font-size: 1.08rem;
-    margin-bottom: 10px;
-  }
-
-  .note {
-    color: var(--text-muted);
-    font-size: 0.95rem;
   }
 
   .press-grid {
