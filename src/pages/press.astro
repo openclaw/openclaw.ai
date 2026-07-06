@@ -5,6 +5,8 @@ import pressArticles from '../data/press.json';
 import { sanitizeUrl } from '../lib/sanitize-url';
 
 const sortedPress = [...pressArticles].sort((a, b) => b.date.localeCompare(a.date));
+
+const outletIcon = (url: string) => `/press/icons/${new URL(url).hostname.replace(/^www\./, '')}.png`;
 ---
 
 <Layout
@@ -36,7 +38,10 @@ const sortedPress = [...pressArticles].sort((a, b) => b.date.localeCompare(a.dat
           class:list={['press-card', article.featured && 'press-featured']}
         >
           <div class="press-meta">
-            <span class="press-outlet">{article.outlet}</span>
+            <span class="press-outlet">
+              <img src={outletIcon(article.url)} alt="" class="press-outlet-icon" width="18" height="18" loading="lazy" decoding="async" />
+              {article.outlet}
+            </span>
             <span class="press-date">{article.displayDate}</span>
           </div>
           <h2 class="press-title">{article.title}</h2>
@@ -194,11 +199,25 @@ const sortedPress = [...pressArticles].sort((a, b) => b.date.localeCompare(a.dat
   }
 
   .press-outlet {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
     color: var(--coral-bright);
     font-size: 0.82rem;
     font-weight: 700;
     letter-spacing: 0.08em;
     text-transform: uppercase;
+  }
+
+  /* White chip behind favicons so dark marks (BBC, MIT TR) stay visible on dark cards */
+  .press-outlet-icon {
+    width: 18px;
+    height: 18px;
+    flex-shrink: 0;
+    border-radius: 5px;
+    background: rgba(255, 255, 255, 0.92);
+    padding: 2px;
+    object-fit: contain;
   }
 
   .press-date {

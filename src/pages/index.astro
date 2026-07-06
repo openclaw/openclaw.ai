@@ -61,6 +61,8 @@ const featuredPress = [...pressArticles]
   .sort((a, b) => b.date.localeCompare(a.date))
   .slice(0, 4);
 
+const outletIcon = (url: string) => `/press/icons/${new URL(url).hostname.replace(/^www\./, '')}.png`;
+
 function formatBlogDate(date: Date): string {
   return date.toLocaleDateString('en-US', {
     month: 'short',
@@ -730,7 +732,10 @@ function formatBlogDate(date: Date): string {
             class:list={['press-card', article.featured && 'press-featured']}
           >
             <div class="press-meta">
-              <span class="press-name">{article.outlet}</span>
+              <span class="press-name">
+                <img src={outletIcon(article.url)} alt="" class="press-name-icon" width="18" height="18" loading="lazy" decoding="async" />
+                {article.outlet}
+              </span>
               <span class="press-date">{article.displayDate}</span>
             </div>
             <h3 class="press-title">{article.title}</h3>
@@ -1611,11 +1616,25 @@ function formatBlogDate(date: Date): string {
   }
 
   .press-name {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
     font-size: 0.82rem;
     font-weight: 600;
     color: var(--coral-bright);
     letter-spacing: 0.08em;
     text-transform: uppercase;
+  }
+
+  /* White chip behind favicons so dark marks stay visible on dark cards */
+  .press-name-icon {
+    width: 18px;
+    height: 18px;
+    flex-shrink: 0;
+    border-radius: 5px;
+    background: rgba(255, 255, 255, 0.92);
+    padding: 2px;
+    object-fit: contain;
   }
 
   .press-date {

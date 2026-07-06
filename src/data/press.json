@@ -20,16 +20,6 @@
     "featured": false
   },
   {
-    "outlet": "TechCrunch",
-    "title": "Microsoft launches Scout, an OpenClaw-inspired personal assistant",
-    "url": "https://techcrunch.com/2026/06/02/microsoft-launches-scout-an-openclaw-inspired-personal-assistant/",
-    "displayDate": "Jun 2, 2026",
-    "date": "2026-06-02",
-    "author": "Russell Brandom",
-    "summary": "The clearest validation yet: Microsoft ships a personal assistant openly inspired by OpenClaw, bringing the agent workflows the lobster made mainstream to the Microsoft 365 ecosystem.",
-    "featured": true
-  },
-  {
     "outlet": "Microsoft",
     "title": "Build 2026: Furthering Windows as the trusted platform for development",
     "url": "https://blogs.windows.com/windowsdeveloper/2026/06/02/build-2026-furthering-windows-as-the-trusted-platform-for-development/",
@@ -37,6 +27,16 @@
     "date": "2026-06-02",
     "author": "Pavan Davuluri, EVP Windows + Devices",
     "summary": "Straight from the Build keynote: OpenClaw runs natively on Windows inside Microsoft Execution Containers — “the Windows node and gateway run contained, so your system stays secure.”",
+    "featured": true
+  },
+  {
+    "outlet": "TechCrunch",
+    "title": "Microsoft launches Scout, an OpenClaw-inspired personal assistant",
+    "url": "https://techcrunch.com/2026/06/02/microsoft-launches-scout-an-openclaw-inspired-personal-assistant/",
+    "displayDate": "Jun 2, 2026",
+    "date": "2026-06-02",
+    "author": "Russell Brandom",
+    "summary": "The clearest validation yet: Microsoft ships a personal assistant openly inspired by OpenClaw, bringing the agent workflows the lobster made mainstream to the Microsoft 365 ecosystem.",
     "featured": true
   },
   {
@@ -90,6 +90,16 @@
     "featured": false
   },
   {
+    "outlet": "Lenny’s Newsletter",
+    "title": "From skeptic to true believer: How OpenClaw changed my life",
+    "url": "https://www.lennysnewsletter.com/p/how-openclaw-changed-my-life-claire-vo",
+    "displayDate": "Mar 29, 2026",
+    "date": "2026-03-29",
+    "author": "Claire Vo and Lenny Rachitsky",
+    "summary": "From deleted calendar to nine specialized agents running family scheduling, sales, and homework help — Claire Vo’s conversion story on the biggest product newsletter there is.",
+    "featured": false
+  },
+  {
     "outlet": "Semafor",
     "title": "OpenClaw is coming for businesses",
     "url": "https://www.semafor.com/article/03/27/2026/openclaw-is-coming-for-businesses",
@@ -140,6 +150,16 @@
     "featured": false
   },
   {
+    "outlet": "Axios",
+    "title": "OpenClaw agent based on Anthropic Claude Opus almost gets job",
+    "url": "https://www.axios.com/2026/03/04/openclaw-agent-future",
+    "displayDate": "Mar 4, 2026",
+    "date": "2026-03-04",
+    "author": "Axios",
+    "summary": "Agents in the wild: an OpenClaw agent named Octavius Fabrius gets a virtual credit card, hunts for work to pay it back, and lands a trial copywriting gig.",
+    "featured": false
+  },
+  {
     "outlet": "TechCrunch",
     "title": "OpenClaw creator’s advice to AI builders is to be more playful and allow yourself time to improve",
     "url": "https://techcrunch.com/2026/02/25/openclaw-creators-advice-to-ai-builders-is-to-be-more-playful-and-allow-yourself-time-to-improve/",
@@ -170,13 +190,13 @@
     "featured": false
   },
   {
-    "outlet": "Business Insider",
-    "title": "OpenClaw's creator is heading to OpenAI. He says it could've been a 'huge company,' but building one didn't excite him.",
-    "url": "https://www.businessinsider.com/sam-altman-hires-openclaw-creator-peter-steinberger-personal-ai-agents-2026-2",
+    "outlet": "TechCrunch",
+    "title": "OpenClaw creator Peter Steinberger joins OpenAI",
+    "url": "https://techcrunch.com/2026/02/15/openclaw-creator-peter-steinberger-joins-openai/",
     "displayDate": "Feb 15, 2026",
     "date": "2026-02-15",
-    "author": "Business Insider",
-    "summary": "A positive business-profile angle on OpenClaw’s breakout moment and why Steinberger chose leverage and reach over starting another company.",
+    "author": "Anthony Ha",
+    "summary": "A clean, positive headline around the next chapter for OpenClaw: founder momentum, OpenAI backing, and the long-term foundation path.",
     "featured": false
   },
   {
@@ -190,13 +210,13 @@
     "featured": false
   },
   {
-    "outlet": "TechCrunch",
-    "title": "OpenClaw creator Peter Steinberger joins OpenAI",
-    "url": "https://techcrunch.com/2026/02/15/openclaw-creator-peter-steinberger-joins-openai/",
+    "outlet": "Business Insider",
+    "title": "OpenClaw's creator is heading to OpenAI. He says it could've been a 'huge company,' but building one didn't excite him.",
+    "url": "https://www.businessinsider.com/sam-altman-hires-openclaw-creator-peter-steinberger-personal-ai-agents-2026-2",
     "displayDate": "Feb 15, 2026",
     "date": "2026-02-15",
-    "author": "Anthony Ha",
-    "summary": "A clean, positive headline around the next chapter for OpenClaw: founder momentum, OpenAI backing, and the long-term foundation path.",
+    "author": "Business Insider",
+    "summary": "A positive business-profile angle on OpenClaw’s breakout moment and why Steinberger chose leverage and reach over starting another company.",
     "featured": false
   },
   {

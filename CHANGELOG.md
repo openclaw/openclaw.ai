@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+- Press: show outlet favicons on press cards (homepage and press page) with locally cached icons, and add Lenny's Newsletter's "From skeptic to true believer" and Axios' story of the OpenClaw agent that almost got itself a job.
 - Press: add Semafor's enterprise piece with Jensen Huang's "every company needs an OpenClaw strategy" quote (featured), Semafor's Anthropic-builds-its-own-OpenClaw exclusive, and MIT Technology Review on China's OpenClaw gold rush.
 - Press: sort coverage strictly newest-first with machine-readable dates, demote the Moltbook social-network story from the homepage highlights, and add Microsoft's Build 2026 keynote announcement of OpenClaw running natively on Windows (featured).
 - Integrations: add the ClickClack and Raft channels, list ClawRouter, Gradium, Inworld, OpenCode Go, and the Claude Max API proxy in the provider directory, and update catalog stats (29 chat channels, 62 provider entries) to match current docs.
