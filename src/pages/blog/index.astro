@@ -1,9 +1,9 @@
 ---
 import Layout from '../../layouts/Layout.astro';
 import SiteTopbar from '../../components/SiteTopbar.astro';
+import SiteFooter from '../../components/SiteFooter.astro';
 import { getPublishedBlogPosts } from '../../lib/blog';
 import { resolveAuthorProfile, type BlogAuthor } from '../../lib/authors';
-import { getCachedXAvatarSrc, getInitialsAvatarSrc } from '../../lib/avatars';
 
 const posts = await getPublishedBlogPosts();
 const [featured, ...rest] = posts;
@@ -48,44 +48,32 @@ function firstAuthor(post: (typeof posts)[number]): BlogAuthor {
     avatar: post.data.authorAvatar,
   });
 }
-
-function getAuthorAvatar(author: BlogAuthor): string {
-  return author.avatar ?? (author.handle ? getCachedXAvatarSrc(author.handle, author.name, 88) : '/openclaw-logo-text-dark.png');
-}
 ---
 
 <Layout title="Blog - OpenClaw" description="OpenClaw updates, security notes, release context, and product essays.">
   <SiteTopbar active="blog" />
-  <div class="stars"></div>
-  <div class="nebula"></div>
 
-  <main class="publication-shell">
-    <aside class="pub-sidebar" aria-label="Blog sections">
-      <p class="rail-kicker">Journal</p>
-      <a class="rail-link active" href="/blog">Latest</a>
-      {tags.map((tag) => <a class="rail-link" href={`/blog#${tag}`}>{formatTagLabel(tag)}</a>)}
-      <div class="rail-card">
-        <span class="rail-card-mark">Ask</span>
-        <p>Need implementation details? Jump from an essay into the docs without changing mental mode.</p>
-        <a href="https://docs.openclaw.ai/" target="_blank" rel="noopener">Open docs</a>
-      </div>
-    </aside>
-
-    <section class="blog-main">
-      <header class="blog-hero">
+  <main class="shell">
+    <div class="rail">
+      <header class="blog-head">
         <p class="eyebrow">OpenClaw blog</p>
         <h1>What we’re building, fixing, and learning.</h1>
-        <p>
+        <p class="lede">
           Security writeups, release context, model/runtime notes, and the occasional lobster-shaped aside.
         </p>
+        <nav class="tag-row" aria-label="Browse by topic">
+          <a class="tag-link active" href="/blog">Latest</a>
+          {tags.map((tag) => <a class="tag-link" href={`/blog#${tag}`}>{formatTagLabel(tag)}</a>)}
+        </nav>
       </header>
 
-      {featured && postAnchors.get(featured.id)?.map((tag) => <span id={tag} class="tag-anchor" aria-hidden="true"></span>)}
-      {featured && (
-        <a class="featured-post" href={`/blog/${featured.id}`}>
-          <div class="featured-copy">
+      <section class="posts">
+        {featured && postAnchors.get(featured.id)?.map((tag) => <span id={tag} class="tag-anchor" aria-hidden="true"></span>)}
+        {featured && (
+          <a class="featured-post" href={`/blog/${featured.id}`}>
             <div class="post-meta">
-              <span>{formatDate(featured.data.date)}</span>
+              <span class="post-date">{formatDate(featured.data.date)}</span>
+              <span>{firstAuthor(featured).name}</span>
               <span>{estimateReadTime(featured.body || '')}</span>
             </div>
             <h2>{featured.data.title}</h2>
@@ -93,194 +81,138 @@ function getAuthorAvatar(author: BlogAuthor): string {
             <div class="post-tags">
               {featured.data.tags.map((tag) => <span>{formatTagLabel(tag)}</span>)}
             </div>
-          </div>
-          <div class="featured-author">
-            {(() => {
-              const author = firstAuthor(featured);
-              return (
-                <>
-                  <img
-                    src={getAuthorAvatar(author)}
-                    alt={author.name}
-                    loading="lazy"
-                    onerror={`this.src='${getInitialsAvatarSrc(author.name, 88)}'`}
-                  />
-                  <span>{author.name}</span>
-                </>
-              );
-            })()}
-          </div>
-        </a>
-      )}
+          </a>
+        )}
 
-      <div class="post-list">
-        {rest.map((post) => (
-          <>
-            {postAnchors.get(post.id)?.map((tag) => <span id={tag} class="tag-anchor" aria-hidden="true"></span>)}
-            <a class="post-row" href={`/blog/${post.id}`}>
-              <div class="post-date">{formatDate(post.data.date)}</div>
-              <div class="post-body">
-                <h2>{post.data.title}</h2>
-                <p>{post.data.description}</p>
-                <div class="row-footer">
-                  <span>{firstAuthor(post).name}</span>
-                  <span>{estimateReadTime(post.body || '')}</span>
-                  {post.data.tags.slice(0, 3).map((tag) => <span class="tag">{formatTagLabel(tag)}</span>)}
+        <div class="post-list">
+          {rest.map((post) => (
+            <>
+              {postAnchors.get(post.id)?.map((tag) => <span id={tag} class="tag-anchor" aria-hidden="true"></span>)}
+              <a class="post-row" href={`/blog/${post.id}`}>
+                <div class="post-date">{formatDate(post.data.date)}</div>
+                <div class="post-body">
+                  <h2>{post.data.title}</h2>
+                  <p>{post.data.description}</p>
+                  <div class="row-footer">
+                    <span>{firstAuthor(post).name}</span>
+                    <span>·</span>
+                    <span>{estimateReadTime(post.body || '')}</span>
+                    {post.data.tags.slice(0, 3).map((tag) => <span class="tag">{formatTagLabel(tag)}</span>)}
+                  </div>
                 </div>
-              </div>
-            </a>
-          </>
-        ))}
-      </div>
-    </section>
+              </a>
+            </>
+          ))}
+        </div>
+      </section>
 
-    <aside class="pub-toc" aria-label="Reading paths">
-      <h2>Reading paths</h2>
-      <a href="https://docs.openclaw.ai/gateway/security" target="_blank" rel="noopener">Security docs</a>
-      <a href="https://docs.openclaw.ai/providers/openai" target="_blank" rel="noopener">OpenAI provider</a>
-      <a href="https://docs.openclaw.ai/plugins" target="_blank" rel="noopener">Plugins</a>
-      <a href="https://docs.openclaw.ai/start/showcase" target="_blank" rel="noopener">Showcase</a>
-    </aside>
+      <SiteFooter current="blog" spacing="roomy" />
+    </div>
   </main>
 </Layout>
 
 <style>
-  .stars {
-    position: fixed;
-    inset: 0;
-    z-index: 0;
-    pointer-events: none;
-    background-image:
-      radial-gradient(1px 1px at 24px 34px, rgba(255,255,255,0.65), transparent),
-      radial-gradient(1px 1px at 110px 80px, rgba(0,229,204,0.42), transparent),
-      radial-gradient(1px 1px at 210px 42px, rgba(255,77,77,0.36), transparent);
-    background-size: 290px 180px;
-    opacity: 0.4;
-  }
-
-  .nebula {
-    position: fixed;
-    inset: 0;
-    z-index: 0;
-    pointer-events: none;
-    background:
-      radial-gradient(720px circle at 9% 4%, rgba(245, 101, 74, 0.12), transparent 54%),
-      radial-gradient(660px circle at 86% 0%, rgba(79, 200, 174, 0.08), transparent 56%);
-  }
-
-  .publication-shell {
+  .shell {
     position: relative;
     z-index: 1;
-    display: grid;
-    grid-template-columns: 220px minmax(0, 780px) 220px;
-    gap: 54px;
-    max-width: 1400px;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .rail {
+    width: 100%;
+    max-width: 1060px;
     margin: 0 auto;
-    padding: 58px 32px 96px;
+    padding: 0 48px;
+    border-left: 1px solid var(--border-subtle);
+    border-right: 1px solid var(--border-subtle);
+    flex: 1;
+    display: flex;
+    flex-direction: column;
   }
 
-  .pub-sidebar,
-  .pub-toc {
-    position: sticky;
-    top: 92px;
-    align-self: start;
+  .blog-head {
+    padding: 56px 0 0;
   }
 
-  .rail-kicker,
-  .eyebrow,
-  .pub-toc h2 {
+  .eyebrow {
     color: var(--coral-bright);
-    font-size: 0.78rem;
-    font-weight: 800;
-    letter-spacing: 0.12em;
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    font-weight: 600;
+    letter-spacing: 0.1em;
     text-transform: uppercase;
   }
 
-  .rail-kicker {
-    margin-bottom: 14px;
-  }
-
-  .rail-link,
-  .pub-toc a {
-    display: block;
-    padding: 7px 0;
-    color: var(--text-muted);
-    font-size: 0.92rem;
-    font-weight: 600;
-    text-decoration: none;
-  }
-
-  .rail-link:hover,
-  .rail-link.active,
-  .pub-toc a:hover {
-    color: var(--text-primary);
-  }
-
-  .rail-card {
-    margin-top: 28px;
-    padding: 16px;
-    border: 1px solid var(--border-subtle);
-    border-radius: 0;
-    background: color-mix(in srgb, var(--surface-card-strong) 88%, transparent);
-    color: var(--text-secondary);
-    font-size: 0.88rem;
-    line-height: 1.55;
-  }
-
-  .rail-card-mark {
-    display: block;
-    margin-bottom: 8px;
-    color: var(--cyan-bright);
-    font-weight: 800;
-  }
-
-  .rail-card a {
-    display: inline-flex;
-    margin-top: 12px;
-    color: var(--coral-bright);
-    font-weight: 700;
-    text-decoration: none;
-  }
-
-  .blog-hero {
-    margin-bottom: 34px;
-  }
-
-  .blog-hero h1 {
-    max-width: 720px;
-    margin: 8px 0 14px;
+  .blog-head h1 {
+    max-width: 640px;
+    margin: 14px 0 14px;
     font-family: var(--font-display);
-    font-size: clamp(2.4rem, 6vw, 4.5rem);
-    line-height: 0.98;
-    letter-spacing: 0;
+    font-size: clamp(1.9rem, 4vw, 2.7rem);
+    font-weight: 600;
+    line-height: 1.12;
+    letter-spacing: -0.02em;
     color: var(--text-primary);
   }
 
-  .blog-hero p:last-child {
-    max-width: 650px;
-    color: var(--text-secondary);
-    font-size: 1.08rem;
+  .lede {
+    max-width: 620px;
+    color: var(--text-muted);
+    font-size: 0.98rem;
     line-height: 1.7;
   }
 
+  .tag-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 26px;
+    padding-bottom: 26px;
+    border-bottom: 1px solid var(--border-subtle);
+  }
+
+  .tag-link {
+    display: inline-flex;
+    align-items: center;
+    min-height: 28px;
+    padding: 0 10px;
+    border: 1px solid var(--border-subtle);
+    color: var(--text-muted);
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    font-weight: 500;
+    text-decoration: none;
+    transition: background 0.15s ease, color 0.15s ease;
+  }
+
+  .tag-link:hover,
+  .tag-link.active {
+    background: var(--bg-surface);
+    color: var(--text-primary);
+  }
+
+  .tag-link.active {
+    color: var(--coral-bright);
+  }
+
+  .posts {
+    padding: 40px 0 24px;
+  }
+
   .featured-post {
-    position: relative;
-    display: grid;
-    grid-template-columns: minmax(0, 1fr) auto;
-    gap: 24px;
-    margin-bottom: 28px;
-    padding: 28px;
-    border: 1px solid color-mix(in srgb, var(--cyan-bright) 24%, var(--border-subtle));
-    border-radius: 0;
-    background:
-      linear-gradient(135deg, color-mix(in srgb, var(--cyan-bright) 10%, transparent), transparent 48%),
-      linear-gradient(90deg, color-mix(in srgb, var(--coral-bright) 7%, transparent), transparent 38%),
-      var(--surface-card-strong);
-    box-shadow:
-      inset 0 1px 0 var(--surface-inset-highlight),
-      0 18px 48px color-mix(in srgb, var(--cyan-bright) 8%, transparent);
+    display: block;
+    margin-bottom: 40px;
+    padding: 30px 28px;
+    border: 1px solid var(--border-subtle);
+    background: var(--bg-surface);
     color: inherit;
     text-decoration: none;
+    transition: background 0.15s ease;
+  }
+
+  .featured-post:hover {
+    background: var(--bg-elevated);
   }
 
   .featured-post:hover h2,
@@ -292,47 +224,38 @@ function getAuthorAvatar(author: BlogAuthor): string {
   .row-footer {
     display: flex;
     flex-wrap: wrap;
+    align-items: center;
     gap: 10px;
     color: var(--text-muted);
-    font-size: 0.84rem;
-    font-weight: 600;
+    font-family: var(--font-mono);
+    font-size: 0.74rem;
+    font-weight: 500;
+  }
+
+  .post-date {
+    color: var(--coral-bright);
   }
 
   .featured-post h2,
   .post-row h2 {
-    margin: 10px 0 10px;
+    margin: 12px 0 10px;
     font-family: var(--font-display);
     color: var(--text-primary);
-    letter-spacing: 0;
+    letter-spacing: -0.015em;
     transition: color 0.16s ease;
   }
 
   .featured-post h2 {
-    font-size: clamp(1.7rem, 4vw, 2.5rem);
-    line-height: 1.08;
+    font-size: clamp(1.4rem, 3vw, 1.9rem);
+    line-height: 1.2;
   }
 
   .featured-post p,
   .post-row p {
+    max-width: 720px;
     color: var(--text-secondary);
+    font-size: 0.95rem;
     line-height: 1.68;
-  }
-
-  .featured-author {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    align-self: end;
-    color: var(--text-secondary);
-    font-size: 0.9rem;
-    font-weight: 700;
-  }
-
-  .featured-author img {
-    width: 36px;
-    height: 36px;
-    border-radius: 50%;
-    border: 1px solid var(--border-subtle);
   }
 
   .post-tags {
@@ -348,12 +271,11 @@ function getAuthorAvatar(author: BlogAuthor): string {
     align-items: center;
     min-height: 24px;
     padding: 0 9px;
-    border: 1px solid color-mix(in srgb, var(--cyan-bright) 26%, var(--border-subtle));
-    border-radius: 0;
-    background: var(--surface-cyan-soft);
-    color: var(--cyan-bright);
-    font-size: 0.74rem;
-    font-weight: 700;
+    border: 1px solid var(--border-subtle);
+    color: var(--text-secondary);
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    font-weight: 500;
   }
 
   .post-list {
@@ -371,79 +293,60 @@ function getAuthorAvatar(author: BlogAuthor): string {
     display: grid;
     grid-template-columns: 128px minmax(0, 1fr);
     gap: 24px;
-    padding: 24px 0;
+    padding: 26px 0;
     border-bottom: 1px solid var(--border-subtle);
     color: inherit;
     text-decoration: none;
   }
 
-  .post-date {
+  .post-row .post-date {
     color: var(--text-muted);
     font-family: var(--font-mono);
-    font-size: 0.82rem;
+    font-size: 0.78rem;
+    padding-top: 3px;
   }
 
   .post-row h2 {
-    font-size: 1.35rem;
-    line-height: 1.2;
+    margin-top: 0;
+    font-size: 1.2rem;
+    line-height: 1.3;
   }
 
   .row-footer {
-    margin-top: 14px;
-  }
-
-  .pub-toc h2 {
-    margin-bottom: 14px;
-  }
-
-  @media (max-width: 1080px) {
-    .publication-shell {
-      grid-template-columns: 190px minmax(0, 1fr);
-    }
-
-    .pub-toc {
-      display: none;
-    }
+    margin-top: 12px;
   }
 
   @media (max-width: 760px) {
-    .publication-shell {
-      display: block;
-      padding: 34px 20px 72px;
+    .rail {
+      padding: 0 20px;
+      border-left: none;
+      border-right: none;
     }
 
-    .pub-sidebar {
-      position: static;
-      display: flex;
-      gap: 10px;
-      margin-bottom: 30px;
+    .blog-head {
+      padding-top: 40px;
+    }
+
+    .tag-row {
       overflow-x: auto;
+      flex-wrap: nowrap;
+      padding-bottom: 20px;
     }
 
-    .rail-kicker,
-    .rail-card {
-      display: none;
-    }
-
-    .rail-link {
+    .tag-link {
       flex: 0 0 auto;
-      padding: 7px 11px;
-      border: 1px solid var(--border-subtle);
-      border-radius: 0;
-      background: var(--surface-card);
     }
 
-    .featured-post,
+    .featured-post {
+      padding: 22px 20px;
+    }
+
     .post-row {
       display: block;
     }
 
-    .featured-author {
-      margin-top: 18px;
-    }
-
-    .post-date {
-      margin-bottom: 9px;
+    .post-row .post-date {
+      margin-bottom: 8px;
     }
   }
 </style>

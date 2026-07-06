@@ -158,9 +158,6 @@ const articleStructuredData = {
   structuredData={articleStructuredData}
 >
   <SiteTopbar active="blog" />
-  <div class="stars"></div>
-  <div class="nebula"></div>
-
   <main class="reader-shell">
     <aside class="reader-sidebar" aria-label="Blog navigation">
       <a class="back-link" href="/blog">All posts</a>
@@ -360,29 +357,6 @@ const articleStructuredData = {
 </Layout>
 
 <style>
-  .stars {
-    position: fixed;
-    inset: 0;
-    z-index: 0;
-    pointer-events: none;
-    background-image:
-      radial-gradient(1px 1px at 24px 34px, rgba(255,255,255,0.65), transparent),
-      radial-gradient(1px 1px at 110px 80px, rgba(0,229,204,0.42), transparent),
-      radial-gradient(1px 1px at 210px 42px, rgba(255,77,77,0.36), transparent);
-    background-size: 290px 180px;
-    opacity: 0.34;
-  }
-
-  .nebula {
-    position: fixed;
-    inset: 0;
-    z-index: 0;
-    pointer-events: none;
-    background:
-      radial-gradient(720px circle at 9% 4%, rgba(245, 101, 74, 0.10), transparent 54%),
-      radial-gradient(660px circle at 86% 0%, rgba(79, 200, 174, 0.07), transparent 56%);
-  }
-
   .reader-shell {
     position: relative;
     z-index: 1;
@@ -536,12 +510,18 @@ const articleStructuredData = {
   }
 
   .author-avatar {
-    width: 44px;
-    height: 44px;
+    width: 34px;
+    height: 34px;
     margin-top: 1px;
     border-radius: 50%;
     border: 1px solid var(--border-subtle);
     background: var(--bg-elevated);
+    filter: grayscale(1);
+    transition: filter 0.25s ease;
+  }
+
+  .author-info:hover .author-avatar {
+    filter: grayscale(0);
   }
 
   .author-details {
@@ -557,26 +537,27 @@ const articleStructuredData = {
 
   .author-name {
     color: var(--text-primary);
-    font-weight: 750;
+    font-size: 0.92rem;
+    font-weight: 600;
   }
 
   .author-title {
     display: flex;
-    flex-direction: column;
-    gap: 1px;
-    max-width: 260px;
+    flex-wrap: wrap;
+    column-gap: 6px;
+    max-width: 300px;
     color: var(--text-muted);
-    font-size: 0.8rem;
-    line-height: 1.22;
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    line-height: 1.4;
   }
 
   .author-role {
-    font-weight: 700;
+    font-weight: 500;
   }
 
   .author-org {
-    font-weight: 560;
-    color: color-mix(in srgb, var(--text-muted) 82%, var(--text-primary));
+    font-weight: 500;
   }
 
   .author-links {
@@ -591,28 +572,29 @@ const articleStructuredData = {
   }
 
   .author-link {
-    color: var(--coral-bright);
-    font-size: 0.85rem;
+    color: var(--text-muted);
+    font-family: var(--font-mono);
+    font-size: 0.74rem;
     text-decoration: none;
+    transition: color 140ms ease;
+  }
+
+  .author-link:hover {
+    color: var(--text-primary);
   }
 
   .author-link-icon {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    width: 24px;
-    height: 24px;
-    border: 1px solid var(--border-subtle);
-    border-radius: 0;
-    background: var(--surface-card);
-    color: var(--text-primary);
-    transition: border-color 140ms ease, color 140ms ease, transform 140ms ease;
+    width: 20px;
+    height: 20px;
+    color: var(--text-muted);
+    transition: color 140ms ease;
   }
 
   .author-link-icon:hover {
-    border-color: var(--coral-bright);
-    color: var(--coral-bright);
-    transform: none;
+    color: var(--text-primary);
   }
 
   .author-link-icon :global(svg) {
@@ -622,10 +604,10 @@ const articleStructuredData = {
   .meta-right {
     display: flex;
     flex-wrap: wrap;
-    gap: 10px;
+    gap: 12px;
     color: var(--text-muted);
     font-family: var(--font-mono);
-    font-size: 0.84rem;
+    font-size: 0.74rem;
   }
 
   .article-content {
@@ -902,11 +884,8 @@ const articleStructuredData = {
   .article-content :global(.metric-card) {
     border: 1px solid var(--release-card-border);
     border-radius: 0;
-    background:
-      linear-gradient(180deg, var(--release-card-highlight), transparent 76%),
-      var(--release-card-bg);
+    background: var(--release-card-bg);
     padding: 18px;
-    box-shadow: inset 0 1px 0 var(--surface-inset-highlight);
   }
 
   .article-content :global(.metric-card span) {
@@ -992,11 +971,8 @@ const articleStructuredData = {
     margin: 0;
     border: 1px solid var(--release-card-border);
     border-radius: 0;
-    background:
-      linear-gradient(180deg, var(--release-card-highlight), transparent 72%),
-      var(--release-card-bg);
+    background: var(--release-card-bg);
     padding: 18px;
-    box-shadow: inset 0 1px 0 var(--surface-inset-highlight);
   }
 
   .article-content :global(.chart-card figcaption) {
@@ -1080,11 +1056,8 @@ const articleStructuredData = {
   .article-content :global(.mini-card) {
     border: 1px solid var(--release-card-border);
     border-radius: 0;
-    background:
-      linear-gradient(180deg, var(--release-card-highlight), transparent 76%),
-      var(--release-card-bg);
+    background: var(--release-card-bg);
     padding: 16px;
-    box-shadow: inset 0 1px 0 var(--surface-inset-highlight);
   }
 
   .article-content :global(.mini-card span) {
@@ -1136,11 +1109,8 @@ const articleStructuredData = {
     position: relative;
     border: 1px solid var(--release-card-border);
     border-radius: 0;
-    background:
-      linear-gradient(180deg, var(--release-card-highlight), transparent 76%),
-      var(--release-card-bg);
+    background: var(--release-card-bg);
     padding: 16px 18px 16px 46px;
-    box-shadow: inset 0 1px 0 var(--surface-inset-highlight);
   }
 
   .article-content :global(.timeline-list > div::before) {
@@ -1262,14 +1232,15 @@ const articleStructuredData = {
   .cta-box a {
     display: inline-flex;
     align-items: center;
-    min-height: 34px;
-    padding: 0 12px;
+    min-height: 32px;
+    padding: 0 11px;
     border: 1px solid var(--border-subtle);
-    border-radius: 0;
-    background: var(--surface-card);
-    color: var(--text-primary);
-    font-weight: 750;
+    color: var(--text-secondary);
+    font-family: var(--font-mono);
+    font-size: 0.76rem;
+    font-weight: 500;
     text-decoration: none;
+    transition: background 0.15s ease, color 0.15s ease;
   }
 
   .share-link-icon {
@@ -1284,8 +1255,8 @@ const articleStructuredData = {
 
   .share-link:hover,
   .cta-box a:hover {
-    border-color: var(--coral-bright);
-    color: var(--coral-bright);
+    background: var(--bg-surface);
+    color: var(--text-primary);
   }
 
   .related-posts {
@@ -1338,15 +1309,8 @@ const articleStructuredData = {
     gap: 24px;
     margin-top: 38px;
     padding: 26px 28px;
-    border: 1px solid color-mix(in srgb, var(--cyan-bright) 30%, var(--border-subtle));
-    border-radius: 0;
-    background:
-      linear-gradient(135deg, color-mix(in srgb, var(--cyan-bright) 14%, transparent), transparent 42%),
-      linear-gradient(90deg, color-mix(in srgb, var(--coral-bright) 10%, transparent), transparent 34%),
-      var(--surface-card-strong);
-    box-shadow:
-      inset 0 1px 0 var(--surface-inset-highlight),
-      0 20px 54px color-mix(in srgb, var(--cyan-bright) 10%, transparent);
+    border: 1px solid var(--border-subtle);
+    background: var(--bg-surface);
   }
 
   .cta-box::before {
@@ -1354,7 +1318,7 @@ const articleStructuredData = {
     position: absolute;
     inset: 0 auto 0 0;
     width: 3px;
-    background: linear-gradient(180deg, var(--coral-bright), var(--cyan-bright));
+    background: var(--coral-bright);
   }
 
   .cta-box > * {
@@ -1370,15 +1334,16 @@ const articleStructuredData = {
   .cta-box a {
     min-height: 42px;
     padding: 0 18px;
-    border-color: color-mix(in srgb, var(--cyan-bright) 42%, var(--border-subtle));
-    background: color-mix(in srgb, var(--cyan-bright) 14%, var(--surface-card-strong));
-    box-shadow: inset 0 1px 0 var(--surface-inset-highlight);
+    border-color: var(--coral-bright);
+    background: var(--coral-bright);
+    color: var(--on-accent);
+    font-weight: 600;
   }
 
   .cta-box a:hover {
-    border-color: var(--cyan-bright);
-    color: var(--cyan-bright);
-    background: color-mix(in srgb, var(--cyan-bright) 18%, var(--surface-card-strong));
+    background: color-mix(in srgb, var(--coral-bright) 82%, #fff);
+    border-color: color-mix(in srgb, var(--coral-bright) 82%, #fff);
+    color: var(--on-accent);
   }
 
   @media (max-width: 1080px) {
