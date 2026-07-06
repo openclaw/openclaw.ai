@@ -4,12 +4,13 @@ export function GET() {
   return new Response([
     'User-agent: *',
     'Allow: /',
-    `Sitemap: ${absoluteUrl('/sitemap.xml')}`,
-    `Sitemap: ${absoluteUrl('/news-sitemap.xml')}`,
+    '',
+    `Sitemap: ${absoluteUrl('/sitemap-index.xml')}`,
     '',
   ].join('\n'), {
     headers: {
       'Content-Type': 'text/plain; charset=utf-8',
+      'Cache-Control': 'public, max-age=3600',
     },
   });
 }

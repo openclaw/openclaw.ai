@@ -1,9 +1,10 @@
 ---
 import Layout from '../../../layouts/Layout.astro';
+import Icon from '../../../components/Icon.astro';
 import SiteTopbar from '../../../components/SiteTopbar.astro';
 import SiteFooter from '../../../components/SiteFooter.astro';
 import { getPublishedBlogPosts } from '../../../lib/blog';
-import { authorSlug, resolveAuthorProfile, type BlogAuthor } from '../../../lib/authors';
+import { authorSlug, getSortedAuthorLinkMeta, resolveAuthorProfile, type BlogAuthor } from '../../../lib/authors';
 import { getCachedXAvatarSrc, getInitialsAvatarSrc } from '../../../lib/avatars';
 import { sanitizeUrl } from '../../../lib/sanitize-url';
 import { absoluteUrl } from '../../../lib/seo';
@@ -59,13 +60,7 @@ function estimateReadTime(content: string): string {
 const avatar =
   author.avatar ?? (author.handle ? getCachedXAvatarSrc(author.handle, author.name, 176) : getInitialsAvatarSrc(author.name, 176));
 
-const socialLinks = (author.links ?? []).filter((link) => sanitizeUrl(link.url) !== '#');
-if (socialLinks.length === 0 && author.handle) {
-  socialLinks.push({ label: `@${author.handle}`, url: `https://x.com/${author.handle}` });
-}
-if (author.url && sanitizeUrl(author.url) !== '#' && !socialLinks.some((link) => link.url === author.url)) {
-  socialLinks.push({ label: 'Website', url: author.url });
-}
+const socialLinks = getSortedAuthorLinkMeta(author).filter((link) => sanitizeUrl(link.url) !== '#');
 
 const roleLine = [author.title, author.org].filter(Boolean).join(', ');
 const pageTitle = `${author.name} - OpenClaw Blog`;
@@ -108,7 +103,10 @@ const structuredData = {
             {socialLinks.length > 0 && (
               <div class="author-social">
                 {socialLinks.map((link) => (
-                  <a href={sanitizeUrl(link.url)} target="_blank" rel="noopener">{link.label}</a>
+                  <a href={sanitizeUrl(link.url)} target="_blank" rel="noopener" aria-label={link.ariaLabel}>
+                    {link.icon && <Icon icon={link.icon} size={13} color="currentColor" />}
+                    {link.displayLabel}
+                  </a>
                 ))}
               </div>
             )}
@@ -235,6 +233,7 @@ const structuredData = {
   .author-social a {
     display: inline-flex;
     align-items: center;
+    gap: 7px;
     min-height: 28px;
     padding: 0 10px;
     border: 1px solid var(--border-subtle);

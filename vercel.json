@@ -5,7 +5,7 @@
       "headers": [
         {
           "key": "Content-Security-Policy",
-          "value": "default-src 'self'; script-src 'self' 'unsafe-inline' https://va.vercel-scripts.com; style-src 'self' 'unsafe-inline' https://api.fontshare.com; font-src 'self' https://cdn.fontshare.com; img-src 'self' data: https://ui-avatars.com https://pbs.twimg.com; connect-src 'self' https://vitals.vercel-analytics.com; frame-ancestors 'none'; form-action 'self' https://buttondown.com; base-uri 'self'"
+          "value": "default-src 'self'; script-src 'self' 'unsafe-inline' https://va.vercel-scripts.com; style-src 'self' 'unsafe-inline' https://api.fontshare.com; font-src 'self' https://cdn.fontshare.com; img-src 'self' data: https://ui-avatars.com https://pbs.twimg.com https://www.google.com; connect-src 'self' https://vitals.vercel-analytics.com; frame-ancestors 'none'; form-action 'self' https://buttondown.com; base-uri 'self'"
         },
         {
           "key": "X-Content-Type-Options",
@@ -24,30 +24,99 @@
           "value": "camera=(), microphone=(), geolocation=()"
         }
       ]
+    },
+    {
+      "source": "/assets/(.*)",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=31536000, immutable"
+        }
+      ]
+    },
+    {
+      "source": "/(.*)\\.(png|jpg|jpeg|gif|svg|webp|ico|avif)",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=604800, stale-while-revalidate=86400"
+        }
+      ]
+    },
+    {
+      "source": "/(sitemap\\.xml|sitemap-index\\.xml|news-sitemap\\.xml|robots\\.txt|llms\\.txt|rss\\.xml)",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=3600, stale-while-revalidate=600"
+        }
+      ]
+    },
+    {
+      "source": "/(install\\.sh|install-cli\\.sh|install\\.ps1)",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=300, must-revalidate"
+        }
+      ]
+    },
+    {
+      "source": "/publications/(.*)",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=86400, stale-while-revalidate=3600"
+        }
+      ]
     }
   ],
   "redirects": [
     {
       "source": "/docs",
-      "has": [{ "type": "header", "key": "host", "value": "openclaw.ai" }],
+      "has": [
+        {
+          "type": "header",
+          "key": "host",
+          "value": "openclaw.ai"
+        }
+      ],
       "destination": "https://docs.openclaw.ai/",
       "statusCode": 308
     },
     {
       "source": "/docs/",
-      "has": [{ "type": "header", "key": "host", "value": "openclaw.ai" }],
+      "has": [
+        {
+          "type": "header",
+          "key": "host",
+          "value": "openclaw.ai"
+        }
+      ],
       "destination": "https://docs.openclaw.ai/",
       "statusCode": 308
     },
     {
       "source": "/docs/:path*",
-      "has": [{ "type": "header", "key": "host", "value": "openclaw.ai" }],
+      "has": [
+        {
+          "type": "header",
+          "key": "host",
+          "value": "openclaw.ai"
+        }
+      ],
       "destination": "https://docs.openclaw.ai/:path*",
       "statusCode": 308
     },
     {
       "source": "/docs/:path*/",
-      "has": [{ "type": "header", "key": "host", "value": "openclaw.ai" }],
+      "has": [
+        {
+          "type": "header",
+          "key": "host",
+          "value": "openclaw.ai"
+        }
+      ],
       "destination": "https://docs.openclaw.ai/:path*/",
       "statusCode": 308
     },
@@ -73,13 +142,25 @@
     },
     {
       "source": "/discord",
-      "has": [{ "type": "header", "key": "host", "value": "openclaw.ai" }],
+      "has": [
+        {
+          "type": "header",
+          "key": "host",
+          "value": "openclaw.ai"
+        }
+      ],
       "destination": "https://discord.gg/clawd",
       "statusCode": 302
     },
     {
       "source": "/discord/",
-      "has": [{ "type": "header", "key": "host", "value": "openclaw.ai" }],
+      "has": [
+        {
+          "type": "header",
+          "key": "host",
+          "value": "openclaw.ai"
+        }
+      ],
       "destination": "https://discord.gg/clawd",
       "statusCode": 302
     },
@@ -95,25 +176,49 @@
     },
     {
       "source": "/:path*",
-      "has": [{ "type": "header", "key": "host", "value": "blog.openclaw.ai" }],
+      "has": [
+        {
+          "type": "header",
+          "key": "host",
+          "value": "blog.openclaw.ai"
+        }
+      ],
       "destination": "https://openclaw.ai/blog/:path*",
       "statusCode": 308
     },
     {
       "source": "/:path*/",
-      "has": [{ "type": "header", "key": "host", "value": "blog.openclaw.ai" }],
+      "has": [
+        {
+          "type": "header",
+          "key": "host",
+          "value": "blog.openclaw.ai"
+        }
+      ],
       "destination": "https://openclaw.ai/blog/:path*/",
       "statusCode": 308
     },
     {
       "source": "/:path*",
-      "has": [{ "type": "header", "key": "host", "value": "trust.openclaw.ai" }],
+      "has": [
+        {
+          "type": "header",
+          "key": "host",
+          "value": "trust.openclaw.ai"
+        }
+      ],
       "destination": "https://openclaw.ai/blog#security",
       "statusCode": 308
     },
     {
       "source": "/:path*/",
-      "has": [{ "type": "header", "key": "host", "value": "trust.openclaw.ai" }],
+      "has": [
+        {
+          "type": "header",
+          "key": "host",
+          "value": "trust.openclaw.ai"
+        }
+      ],
       "destination": "https://openclaw.ai/blog#security",
       "statusCode": 308
     },
@@ -129,25 +234,49 @@
     },
     {
       "source": "/:path*",
-      "has": [{ "type": "header", "key": "host", "value": "clawd.bot" }],
+      "has": [
+        {
+          "type": "header",
+          "key": "host",
+          "value": "clawd.bot"
+        }
+      ],
       "destination": "https://openclaw.ai/:path*",
       "statusCode": 308
     },
     {
       "source": "/:path*/",
-      "has": [{ "type": "header", "key": "host", "value": "clawd.bot" }],
+      "has": [
+        {
+          "type": "header",
+          "key": "host",
+          "value": "clawd.bot"
+        }
+      ],
       "destination": "https://openclaw.ai/:path*/",
       "statusCode": 308
     },
     {
       "source": "/:path*",
-      "has": [{ "type": "header", "key": "host", "value": "www.clawd.bot" }],
+      "has": [
+        {
+          "type": "header",
+          "key": "host",
+          "value": "www.clawd.bot"
+        }
+      ],
       "destination": "https://openclaw.ai/:path*",
       "statusCode": 308
     },
     {
       "source": "/:path*/",
-      "has": [{ "type": "header", "key": "host", "value": "www.clawd.bot" }],
+      "has": [
+        {
+          "type": "header",
+          "key": "host",
+          "value": "www.clawd.bot"
+        }
+      ],
       "destination": "https://openclaw.ai/:path*/",
       "statusCode": 308
     }
