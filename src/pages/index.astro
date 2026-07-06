@@ -84,10 +84,10 @@ function formatBlogDate(date: Date): string {
   });
 }
 
-// Full-bleed dither field behind the hero: deep-ocean caustics. Interfering
-// surface waves make bright filaments that fade with depth, quantized through
-// a 4x4 Bayer matrix. This is the static first frame; a client script
-// re-renders the same field over time.
+// Dither field behind the hero: a sonar fan of concentric arcs rising from
+// behind the lobster mark below, brightest at the source and fading toward
+// the corners, quantized through a 4x4 Bayer matrix. This is the static
+// first frame; a client script re-renders the same field over time.
 const asciiAurora = (() => {
   const CHARS = ' .:-=+xX#8@';
   const COLS = 220;
@@ -102,15 +102,19 @@ const asciiAurora = (() => {
   for (let y = 0; y < ROWS; y++) {
     let line = '';
     for (let x = 0; x < COLS; x++) {
-      // Two crossing wave trains; ridges appear where they cancel, like
-      // light caustics on the sea floor. Brightness falls off with depth.
-      const nx = x * 0.16;
-      const ny = y * 0.42;
-      const w1 = Math.sin(nx + Math.sin(ny * 0.7));
-      const w2 = Math.sin(nx * 0.62 + 1.7 + Math.sin(ny * 0.9 + 2.1));
-      const ridge = 1 - Math.abs(w1 + w2) / 2;
-      const depth = Math.pow(Math.max(1 - y / ROWS, 0), 1.5);
-      let v = Math.pow(ridge, 5) * depth * 1.45;
+      // Rings radiate from an origin just below the band (where the lobster
+      // sits). An angular envelope shapes them into a fan: bright overhead,
+      // dark at the horizontal edges.
+      const dx = x - COLS / 2;
+      const dyr = (ROWS + 5 - y) * 1.9;
+      const dist = Math.sqrt(dx * dx + dyr * dyr);
+      const ring = 0.5 + 0.5 * Math.sin(dist * 0.3);
+      const angle = Math.atan2(dyr, dx);
+      const fan = Math.pow(Math.sin(angle), 2);
+      const decay = Math.min(Math.max(1.15 - dist / 110, 0), 1);
+      // Quiet zone around the origin keeps the mascot and eyebrow readable
+      const inner = Math.min(Math.max((dist - 24) / 18, 0), 1);
+      let v = Math.pow(ring, 3.5) * fan * decay * inner * 1.4;
       if (v < 0.05) v = 0;
       v = Math.min(Math.max(v, 0), 1);
       const threshold = (BAYER[y % 4][x % 4] + 0.5) / 16;
@@ -562,8 +566,8 @@ const asciiAurora = (() => {
         });
       });
 
-      // Animated dither caustics: re-render the hero field with the wave
-      // phases slowly drifting, ~10fps. Mirrors the static SSR frame.
+      // Animated sonar fan: the rings pulse slowly outward from behind the
+      // lobster mark, ~10fps. Mirrors the static SSR frame.
       const auroraPre = document.querySelector('.hero-art pre');
       const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
       if (auroraPre && !reducedMotion) {
@@ -588,13 +592,15 @@ const asciiAurora = (() => {
           for (let y = 0; y < ROWS; y++) {
             let line = '';
             for (let x = 0; x < COLS; x++) {
-              const nx = x * 0.16;
-              const ny = y * 0.42;
-              const w1 = Math.sin(nx + t * 0.28 + Math.sin(ny * 0.7 - t * 0.2));
-              const w2 = Math.sin(nx * 0.62 + 1.7 - t * 0.22 + Math.sin(ny * 0.9 + 2.1 + t * 0.17));
-              const ridge = 1 - Math.abs(w1 + w2) / 2;
-              const depth = Math.pow(Math.max(1 - y / ROWS, 0), 1.5);
-              let v = Math.pow(ridge, 5) * depth * 1.45;
+              const dx = x - COLS / 2;
+              const dyr = (ROWS + 5 - y) * 1.9;
+              const dist = Math.sqrt(dx * dx + dyr * dyr);
+              const ring = 0.5 + 0.5 * Math.sin(dist * 0.3 - t * 0.35);
+              const angle = Math.atan2(dyr, dx);
+              const fan = Math.pow(Math.sin(angle), 2);
+              const decay = Math.min(Math.max(1.15 - dist / 110, 0), 1);
+              const inner = Math.min(Math.max((dist - 24) / 18, 0), 1);
+              let v = Math.pow(ring, 3.5) * fan * decay * inner * 1.4;
               if (v < 0.05) v = 0;
               v = Math.min(Math.max(v, 0), 1);
               const threshold = (BAYER[y & 3][x & 3] + 0.5) / 16;
@@ -987,8 +993,8 @@ const asciiAurora = (() => {
     overflow: hidden;
     pointer-events: none;
     user-select: none;
-    mask-image: linear-gradient(180deg, black 30%, transparent 94%);
-    -webkit-mask-image: linear-gradient(180deg, black 30%, transparent 94%);
+    mask-image: linear-gradient(0deg, transparent 8%, black 32%, black 60%, transparent 100%);
+    -webkit-mask-image: linear-gradient(0deg, transparent 8%, black 32%, black 60%, transparent 100%);
   }
 
   .hero-art pre {
@@ -998,8 +1004,8 @@ const asciiAurora = (() => {
     font-size: 11px;
     line-height: 1.3;
     letter-spacing: 1px;
-    color: var(--cyan-bright);
-    opacity: 0.55;
+    color: var(--coral-bright);
+    opacity: 0.65;
   }
 
   html[data-theme='light'] .hero-art pre {
