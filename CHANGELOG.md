@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+- Press: expand the press page with 7 more verified pieces — Fast Company's AI 20 profile of the creator (featured), Business Insider on Google's 'Remy' answer to OpenClaw, GeekWire inside Microsoft's Project Lobster, BBC News and Fortune on China's lobster craze, and two VentureBeat analyses of the OpenClaw moment.
 - Press: refresh Featured In with 2026 Q2 coverage — TechCrunch on Microsoft's OpenClaw-inspired Scout, the iOS/Android launch, Red Hat's enterprise-hardening work, and CNBC on China's lobster rush; new homepage highlight order.
 - Testimonials: add 11 new shoutouts from the archive, including @sama, @elonmusk, @garrytan, @growing_daniel, @donasarkar, and @OmarShahine, with cached avatars.
 - Website: homepage facelift — hero call-to-action buttons, aurora glow and film-grain texture, larger section headers with chevron markers, refined feature and blog cards, glowing quick-start terminal, cleaner sponsor logo wall, and a wider 960px layout with more breathing room between sections.
