@@ -1,5 +1,5 @@
 ---
-import { FileText, Megaphone, Menu, X } from '@lucide/astro';
+import { FileText, Megaphone } from '@lucide/astro';
 import { siDiscord, siGithub } from 'simple-icons';
 
 type SimpleIcon = {
@@ -89,8 +89,11 @@ function isActive(item: NavItem) {
   </nav>
   <details class="site-menu">
     <summary class="site-menu-toggle" aria-label="Toggle main navigation">
-      <span class="site-menu-icon site-menu-icon-open" aria-hidden="true"><Menu size={18} /></span>
-      <span class="site-menu-icon site-menu-icon-close" aria-hidden="true"><X size={18} /></span>
+      <span class="site-burger" aria-hidden="true">
+        <span></span>
+        <span></span>
+        <span></span>
+      </span>
     </summary>
     <nav class="site-menu-panel" aria-label="Main">
       {items.map((item) => (
@@ -125,11 +128,12 @@ function isActive(item: NavItem) {
     align-items: center;
     justify-content: space-between;
     gap: 24px;
-    min-height: 62px;
-    padding: 0 82px 0 32px;
+    min-height: 54px;
+    padding: 0 76px 0 32px;
     border-bottom: 1px solid var(--border-subtle);
-    background: color-mix(in srgb, var(--bg-deep) 88%, transparent);
-    backdrop-filter: blur(18px);
+    background: color-mix(in srgb, var(--bg-deep) 72%, transparent);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
   }
 
   .site-brand {
@@ -139,20 +143,20 @@ function isActive(item: NavItem) {
     color: var(--text-primary);
     text-decoration: none;
     font-family: var(--font-display);
-    font-weight: 700;
-    letter-spacing: 0;
+    font-weight: 600;
+    font-size: 0.95rem;
+    letter-spacing: 0.02em;
   }
 
   .site-brand img {
-    width: 24px;
-    height: 24px;
-    filter: drop-shadow(0 0 12px var(--logo-glow));
+    width: 22px;
+    height: 22px;
   }
 
   .site-nav {
     display: flex;
     align-items: center;
-    gap: 8px;
+    gap: 26px;
     overflow-x: auto;
     white-space: nowrap;
   }
@@ -166,14 +170,13 @@ function isActive(item: NavItem) {
     align-items: center;
     gap: 6px;
     min-height: 34px;
-    padding: 0 12px;
-    border: 1px solid transparent;
-    border-radius: 8px;
     color: var(--text-muted);
-    font-size: 0.9rem;
-    font-weight: 600;
+    font-family: var(--font-mono);
+    font-size: 0.76rem;
+    font-weight: 500;
+    letter-spacing: 0.02em;
     text-decoration: none;
-    transition: color 0.16s ease, background 0.16s ease, border-color 0.16s ease;
+    transition: color 0.15s ease;
   }
 
   .site-nav-icon {
@@ -192,11 +195,8 @@ function isActive(item: NavItem) {
     fill: none;
   }
 
-  .site-nav-link:hover,
-  .site-nav-link.active {
+  .site-nav-link:hover {
     color: var(--text-primary);
-    background: var(--surface-card);
-    border-color: var(--border-subtle);
   }
 
   .site-nav-link.active {
@@ -208,8 +208,8 @@ function isActive(item: NavItem) {
       align-items: center;
       flex-direction: row;
       gap: 16px;
-      min-height: 62px;
-      padding: 0 58px 0 16px;
+      min-height: 52px;
+      padding: 0 58px 0 20px;
     }
 
     .site-nav.site-nav-desktop {
@@ -226,15 +226,13 @@ function isActive(item: NavItem) {
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      width: 36px;
-      height: 36px;
-      border: 1px solid var(--border-subtle);
-      border-radius: 8px;
-      background: var(--surface-card);
-      color: var(--text-secondary);
+      padding: 8px 4px;
+      border: none;
+      background: none;
+      color: var(--text-muted);
       cursor: pointer;
       list-style: none;
-      transition: border-color 0.16s ease, background 0.16s ease, color 0.16s ease;
+      transition: color 150ms ease;
     }
 
     .site-menu-toggle::-webkit-details-marker {
@@ -243,33 +241,45 @@ function isActive(item: NavItem) {
 
     .site-menu-toggle:hover,
     .site-menu[open] .site-menu-toggle {
-      border-color: var(--border-accent);
-      background: var(--surface-card-strong);
       color: var(--text-primary);
     }
 
     .site-menu-toggle:focus-visible {
-      outline: 2px solid var(--cyan-bright);
+      outline: 2px solid var(--coral-bright);
       outline-offset: 2px;
     }
 
-    .site-menu-icon {
-      display: inline-flex;
-      line-height: 0;
+    /* Burger: three lines morphing into an X, per the Foundation site */
+    .site-burger {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
     }
 
-    .site-menu-icon-close,
-    .site-menu[open] .site-menu-icon-open {
-      display: none;
+    .site-burger span {
+      display: block;
+      width: 18px;
+      height: 1.6px;
+      border-radius: 1px;
+      background: currentColor;
+      transition: transform 250ms ease, opacity 200ms ease;
     }
 
-    .site-menu[open] .site-menu-icon-close {
-      display: inline-flex;
+    .site-menu[open] .site-burger span:nth-child(1) {
+      transform: translateY(5.6px) rotate(45deg);
+    }
+
+    .site-menu[open] .site-burger span:nth-child(2) {
+      opacity: 0;
+    }
+
+    .site-menu[open] .site-burger span:nth-child(3) {
+      transform: translateY(-5.6px) rotate(-45deg);
     }
 
     .site-menu-panel {
       position: fixed;
-      top: 62px;
+      top: 52px;
       right: 12px;
       left: 12px;
       z-index: 92;
@@ -277,9 +287,9 @@ function isActive(item: NavItem) {
       gap: 4px;
       padding: 8px;
       border: 1px solid var(--border-subtle);
-      border-radius: 8px;
+      border-radius: 0;
       background: color-mix(in srgb, var(--bg-deep) 96%, transparent);
-      box-shadow: 0 16px 36px var(--surface-overlay);
+      box-shadow: none;
       backdrop-filter: blur(18px);
     }
 

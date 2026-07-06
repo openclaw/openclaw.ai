@@ -11,9 +11,7 @@ const { title, link } = Astro.props;
 ---
 
 <div class="section-header">
-  <h2 class="section-title">
-    <span class="claw-accent">⟩</span> {title}
-  </h2>
+  <h2 class="section-title">{title}</h2>
   {link && (
     <a href={link.href} class="section-link">
       {link.text} <span class="sr-only">related content</span>
@@ -26,59 +24,34 @@ const { title, link } = Astro.props;
   .section-header {
     display: flex;
     justify-content: space-between;
-    align-items: flex-end;
+    align-items: baseline;
     gap: 16px;
-    margin-bottom: 28px;
+    margin-bottom: 20px;
   }
 
+  /* Foundation-style section label: mono, uppercase, accent */
   .section-title {
-    font-family: var(--font-display);
-    font-size: clamp(1.5rem, 3.2vw, 1.95rem);
+    font-family: var(--font-mono);
+    font-size: 0.8rem;
     font-weight: 600;
-    letter-spacing: -0.02em;
-    line-height: 1.15;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--coral-bright);
     margin-bottom: 0;
-    display: flex;
-    align-items: center;
-    gap: 14px;
   }
 
   .section-link {
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    font-size: 0.9rem;
-    color: var(--coral-bright);
+    font-family: var(--font-mono);
+    font-size: 0.76rem;
+    color: var(--text-muted);
     text-decoration: none;
-    font-weight: 600;
-    white-space: nowrap;
+    font-weight: 500;
+    flex-shrink: 0;
     transition: color 0.2s ease;
   }
 
   .section-link:hover {
-    color: var(--cyan-bright);
-  }
-
-  .section-link span[aria-hidden] {
-    display: inline-block;
-    transition: transform 0.2s ease;
-  }
-
-  .section-link:hover span[aria-hidden] {
-    transform: translateX(3px);
-  }
-
-  .claw-accent {
-    display: inline-grid;
-    place-items: center;
-    width: 32px;
-    height: 32px;
-    flex-shrink: 0;
-    border-radius: 10px;
-    background: var(--surface-coral-soft);
-    color: var(--coral-bright);
-    font-weight: 700;
-    font-size: 0.95rem;
+    color: var(--text-primary);
   }
 
   .sr-only {

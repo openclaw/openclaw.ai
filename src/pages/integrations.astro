@@ -13,18 +13,7 @@ import {
   featuredProviders,
   gatewayHosts,
   providerGroups,
-  type CatalogStatus,
 } from '../data/integrations';
-
-const statusLabels: Record<CatalogStatus, string> = {
-  'built-in': 'Bundled',
-  included: 'Bundled',
-  official: 'Official plugin',
-  external: 'External plugin',
-  community: 'Community',
-  gateway: 'Gateway host',
-  node: 'Companion node',
-};
 ---
 
 <Layout
@@ -36,6 +25,7 @@ const statusLabels: Record<CatalogStatus, string> = {
 
   <main class="page-shell">
     <header class="hero">
+      <p class="section-kicker">Works with everything</p>
       <h1 class="hero-title">Integrations</h1>
       <p class="hero-lede">
         Connect OpenClaw to the chats, models, tools, and devices you already use.
@@ -69,8 +59,8 @@ const statusLabels: Record<CatalogStatus, string> = {
           <p class="section-kicker">Message OpenClaw anywhere</p>
           <h2>Chat channels</h2>
           <p>
-            Run several channels at once and route each conversation through the Gateway.
-            Bundled channels ship with OpenClaw; official and external plugins install separately.
+            Run several channels at once and route each conversation through the
+            Gateway. Every channel installs in one command or during onboarding.
           </p>
         </div>
         <a href="https://docs.openclaw.ai/channels" target="_blank" rel="noopener">
@@ -87,7 +77,6 @@ const statusLabels: Record<CatalogStatus, string> = {
             class="catalog-card"
             style={`--accent: ${item.color}`}
           >
-            <span class:list={['status-badge', `status-${item.status}`]}>{statusLabels[item.status]}</span>
             <span class="card-icon">
               {item.logo
                 ? <img src={item.logo} alt="" class="brand-logo" width="30" height="30" loading="lazy" decoding="async" />
@@ -137,7 +126,6 @@ const statusLabels: Record<CatalogStatus, string> = {
             class="catalog-card provider-card"
             style={`--accent: ${item.color}`}
           >
-            <span class:list={['status-badge', `status-${item.status}`]}>{statusLabels[item.status]}</span>
             <span class="card-icon">
               {item.logo
                 ? <img src={item.logo} alt="" class="brand-logo" width="30" height="30" loading="lazy" decoding="async" />
@@ -404,17 +392,26 @@ const statusLabels: Record<CatalogStatus, string> = {
   .page-shell {
     position: relative;
     z-index: 1;
-    width: min(1180px, calc(100% - 32px));
+    width: 100%;
+    max-width: 1060px;
     margin: 0 auto;
-    padding: 32px 0 48px;
+    padding: 0 48px 48px;
+    border-left: 1px solid var(--border-subtle);
+    border-right: 1px solid var(--border-subtle);
+  }
+
+  @media (max-width: 720px) {
+    .page-shell {
+      padding: 0 20px 40px;
+      border-left: none;
+      border-right: none;
+    }
   }
 
   .hero {
-    max-width: 840px;
-    margin: 0 auto;
-    padding: 40px 0 44px;
-    text-align: center;
-    animation: fadeInUp 0.6s ease-out;
+    max-width: 760px;
+    padding: 56px 0 44px;
+    text-align: left;
   }
 
   @keyframes fadeInUp {
@@ -429,76 +426,73 @@ const statusLabels: Record<CatalogStatus, string> = {
   }
 
   .section-heading > a {
-    color: var(--coral-bright);
-    font-size: 0.9rem;
-    font-weight: 700;
+    color: var(--text-muted);
+    font-family: var(--font-mono);
+    font-size: 0.76rem;
+    font-weight: 500;
     text-decoration: none;
+    transition: color 0.15s ease;
   }
 
   .section-heading > a:hover {
-    color: var(--cyan-bright);
+    color: var(--text-primary);
   }
 
   .section-kicker {
-    color: var(--cyan-bright);
+    color: var(--coral-bright);
     font-family: var(--font-mono);
     font-size: 0.74rem;
-    font-weight: 700;
-    letter-spacing: 0;
+    font-weight: 600;
+    letter-spacing: 0.08em;
     text-transform: uppercase;
   }
 
   .hero-title {
-    margin: 0;
+    margin: 12px 0 0;
     font-family: var(--font-display);
-    font-size: clamp(2.5rem, 8vw, 3.75rem);
-    font-weight: 700;
-    line-height: 1.05;
-    letter-spacing: 0;
-    background: linear-gradient(135deg, var(--text-primary) 0%, var(--coral-bright) 50%, var(--cyan-bright) 100%);
-    background-size: 200% 200%;
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
+    font-size: clamp(1.9rem, 4vw, 2.7rem);
+    font-weight: 600;
+    line-height: 1.12;
+    letter-spacing: -0.02em;
+    color: var(--text-primary);
   }
 
   .hero-lede {
-    max-width: 760px;
-    margin: 16px auto 0;
+    max-width: 640px;
+    margin: 14px 0 0;
     color: var(--text-secondary);
-    font-size: 1.1rem;
-    line-height: 1.6;
+    font-size: 1.02rem;
+    line-height: 1.65;
   }
 
   .hero-copy {
-    max-width: 700px;
-    margin: 10px auto 0;
+    max-width: 640px;
+    margin: 10px 0 0;
     color: var(--text-muted);
-    font-size: 0.95rem;
-    line-height: 1.6;
+    font-size: 0.92rem;
+    line-height: 1.65;
   }
 
   .hero-actions,
   .community-actions {
     display: flex;
     flex-wrap: wrap;
-    justify-content: center;
     gap: 10px;
-    margin-top: 24px;
+    margin-top: 26px;
   }
 
   .action {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    min-height: 42px;
-    padding: 0 16px;
+    min-height: 44px;
+    padding: 0 22px;
     border: 1px solid var(--border-subtle);
-    border-radius: 6px;
-    font-size: 0.9rem;
-    font-weight: 700;
+    font-family: var(--font-mono);
+    font-size: 0.82rem;
+    font-weight: 600;
     text-decoration: none;
-    transition: border-color 0.18s ease, background 0.18s ease, color 0.18s ease, transform 0.18s ease;
+    transition: border-color 0.15s ease, background 0.15s ease, color 0.15s ease;
   }
 
   .action span {
@@ -506,36 +500,35 @@ const statusLabels: Record<CatalogStatus, string> = {
   }
 
   .action:hover {
-    transform: translateY(-1px);
+    transform: none;
   }
 
   .action-primary {
     border-color: var(--coral-bright);
     background: var(--coral-bright);
-    color: #050810;
+    color: var(--on-accent);
   }
 
   .action-primary:hover {
-    background: var(--cyan-bright);
-    border-color: var(--cyan-bright);
+    background: color-mix(in srgb, var(--coral-bright) 82%, #fff);
+    border-color: color-mix(in srgb, var(--coral-bright) 82%, #fff);
   }
 
   .action-secondary {
-    background: var(--surface-card-strong);
+    background: var(--bg-deep);
     color: var(--text-primary);
   }
 
   .action-secondary:hover {
-    border-color: var(--cyan-bright);
-    color: var(--cyan-bright);
+    background: var(--bg-surface);
+    border-color: color-mix(in srgb, var(--text-muted) 55%, transparent);
   }
 
   .catalog-stats {
     display: grid;
-    grid-template-columns: repeat(4, minmax(0, 1fr));
-    margin: 8px 0 26px;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    margin: 0;
     border-top: 1px solid var(--border-subtle);
-    border-bottom: 1px solid var(--border-subtle);
   }
 
   .stat {
@@ -553,8 +546,11 @@ const statusLabels: Record<CatalogStatus, string> = {
 
   .stat dt {
     color: var(--text-muted);
-    font-size: 0.78rem;
-    line-height: 1.35;
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    line-height: 1.4;
   }
 
   .stat dd {
@@ -567,7 +563,9 @@ const statusLabels: Record<CatalogStatus, string> = {
   }
 
   .catalog-section {
-    margin-bottom: 76px;
+    margin: 0;
+    padding: 56px 0;
+    border-top: 1px solid var(--border-subtle);
     scroll-margin-top: 82px;
   }
 
@@ -577,16 +575,15 @@ const statusLabels: Record<CatalogStatus, string> = {
     align-items: end;
     gap: 28px;
     margin-bottom: 24px;
-    padding-bottom: 18px;
-    border-bottom: 1px solid var(--border-subtle);
   }
 
   .section-heading h2 {
-    margin: 4px 0 7px;
+    margin: 10px 0 8px;
     font-family: var(--font-display);
-    font-size: 2rem;
-    line-height: 1.12;
-    letter-spacing: 0;
+    font-size: 1.35rem;
+    font-weight: 600;
+    line-height: 1.2;
+    letter-spacing: -0.015em;
   }
 
   .section-heading p:not(.section-kicker) {
@@ -598,7 +595,9 @@ const statusLabels: Record<CatalogStatus, string> = {
   .catalog-grid {
     display: grid;
     grid-template-columns: repeat(4, minmax(0, 1fr));
-    gap: 12px;
+    gap: 1px;
+    background: var(--border-subtle);
+    border: 1px solid var(--border-subtle);
   }
 
   .channel-grid.is-collapsed > .catalog-card:nth-child(n + 13) {
@@ -614,12 +613,12 @@ const statusLabels: Record<CatalogStatus, string> = {
     margin: 18px auto 0;
     padding: 0 12px;
     border: 1px solid var(--border-subtle);
-    border-radius: 5px;
-    background: var(--surface-card);
+    border-radius: 0;
+    background: var(--bg-deep);
     color: var(--text-secondary);
-    font: inherit;
-    font-size: 0.76rem;
-    font-weight: 700;
+    font-family: var(--font-mono);
+    font-size: 0.74rem;
+    font-weight: 600;
     cursor: pointer;
     transition: border-color 0.18s ease, background 0.18s ease, box-shadow 0.18s ease, color 0.18s ease;
   }
@@ -656,21 +655,17 @@ const statusLabels: Record<CatalogStatus, string> = {
     display: flex;
     flex-direction: column;
     min-height: 148px;
-    padding: 18px;
+    padding: 20px;
     overflow: hidden;
-    border: 1px solid var(--border-subtle);
-    border-radius: 8px;
-    background: var(--surface-card);
+    background: var(--bg-deep);
     color: var(--text-primary);
     text-decoration: none;
-    transition: transform 0.18s ease, border-color 0.18s ease, background 0.18s ease;
+    transition: background 0.15s ease;
   }
 
   .catalog-card:hover,
   .catalog-card:focus-visible {
-    transform: translateY(-2px);
-    border-color: color-mix(in srgb, var(--accent) 70%, var(--border-subtle));
-    background: var(--surface-card-strong);
+    background: var(--bg-surface);
   }
 
   .card-icon {
@@ -689,7 +684,6 @@ const statusLabels: Record<CatalogStatus, string> = {
 
   .catalog-card h3 {
     margin: 0 0 5px;
-    padding-right: 12px;
     font-family: var(--font-display);
     font-size: 1rem;
     line-height: 1.2;
@@ -703,23 +697,6 @@ const statusLabels: Record<CatalogStatus, string> = {
     line-height: 1.45;
   }
 
-  .status-badge {
-    position: absolute;
-    top: 12px;
-    right: 10px;
-    max-width: 96px;
-    padding: 3px 6px;
-    border: 1px solid var(--border-subtle);
-    border-radius: 4px;
-    background: var(--bg-surface);
-    color: var(--text-muted);
-    font-family: var(--font-mono);
-    font-size: 0.58rem;
-    font-weight: 700;
-    line-height: 1.2;
-    text-align: center;
-    text-transform: uppercase;
-  }
 
   .link-group li {
     display: inline-flex;
@@ -732,16 +709,16 @@ const statusLabels: Record<CatalogStatus, string> = {
   .group-grid {
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 12px;
+    gap: 1px;
+    background: var(--border-subtle);
+    border: 1px solid var(--border-subtle);
     margin-top: 12px;
   }
 
   .link-group {
     min-width: 0;
-    padding: 20px;
-    border: 1px solid var(--border-subtle);
-    border-radius: 8px;
-    background: var(--surface-card);
+    padding: 22px 20px;
+    background: var(--bg-deep);
   }
 
   .link-group-heading {
@@ -784,18 +761,19 @@ const statusLabels: Record<CatalogStatus, string> = {
     display: inline-flex;
     align-items: center;
     min-height: 28px;
-    padding: 0 8px;
+    padding: 0 9px;
     border: 1px solid var(--border-subtle);
-    border-radius: 4px;
     color: var(--text-secondary);
-    font-size: 0.7rem;
-    font-weight: 700;
+    font-family: var(--font-mono);
+    font-size: 0.68rem;
+    font-weight: 500;
     text-decoration: none;
+    transition: background 0.15s ease, color 0.15s ease;
   }
 
   .link-group a:hover,
   .link-group a:focus-visible {
-    border-color: var(--accent);
+    background: var(--bg-surface);
     color: var(--text-primary);
   }
 
@@ -831,7 +809,7 @@ const statusLabels: Record<CatalogStatus, string> = {
     width: 38px;
     height: 38px;
     border: 1px solid var(--border-accent);
-    border-radius: 8px;
+    border-radius: 0;
     background: var(--surface-coral-soft);
   }
 
@@ -872,7 +850,7 @@ const statusLabels: Record<CatalogStatus, string> = {
   }
 
   .automation-links a:hover {
-    color: var(--cyan-bright);
+    color: var(--text-primary);
   }
 
   .platform-columns {

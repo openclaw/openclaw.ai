@@ -33,20 +33,22 @@ const links = navLinks.filter((link) => link.id !== current);
   ) : (
     <p>Built by <a href="https://molty.me" target="_blank" rel="noopener">Molty</a> 🦞, a space lobster AI with a <a href="https://soul.md" target="_blank" rel="noopener">soul</a>, by <a href="https://steipete.me" target="_blank" rel="noopener">Peter Steinberger</a> & <a href="https://github.com/openclaw/openclaw#community" target="_blank" rel="noopener">community</a>.</p>
   )}
+  <p class="foundation-note">An <a href="https://openclaw.org" target="_blank" rel="noopener">OpenClaw Foundation</a> project.</p>
   {showDisclaimer && <p class="disclaimer">Independent project, not affiliated with Anthropic.</p>}
 </footer>
 
 <style>
   .footer {
     text-align: center;
-    font-size: 0.9rem;
+    font-family: var(--font-mono);
+    font-size: 0.76rem;
     color: var(--text-muted);
   }
 
   .footer--home {
     margin-top: auto;
-    padding-top: 40px;
-    animation: fadeInUp 0.8s ease-out 0.75s both;
+    padding: 36px 0 40px;
+    border-top: 1px solid var(--border-subtle);
   }
 
   .footer--roomy {
@@ -71,27 +73,32 @@ const links = navLinks.filter((link) => link.id !== current);
     column-gap: 8px;
     row-gap: 8px;
     margin-bottom: 16px;
-    font-size: 0.95rem;
   }
 
   .footer-separator {
     color: var(--text-muted);
     margin: 0 4px;
+    opacity: 0.5;
   }
 
   .footer a {
-    color: var(--coral-bright);
+    color: var(--text-secondary);
     text-decoration: none;
-    transition: color 0.2s ease;
+    transition: color 0.15s ease;
   }
 
   .footer a:hover {
-    color: var(--cyan-bright);
+    color: var(--coral-bright);
+  }
+
+  .foundation-note {
+    margin-top: 10px;
+    color: var(--text-secondary);
   }
 
   .disclaimer {
-    margin-top: 12px;
-    font-size: 0.8rem;
+    margin-top: 8px;
+    font-size: 0.72rem;
     color: var(--text-muted);
     opacity: 0.7;
   }

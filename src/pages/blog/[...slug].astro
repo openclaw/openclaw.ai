@@ -4,11 +4,11 @@ import Icon from '../../components/Icon.astro';
 import SiteTopbar from '../../components/SiteTopbar.astro';
 import { render } from 'astro:content';
 import { getPublishedBlogPosts } from '../../lib/blog';
-import { resolveAuthorProfile, type AuthorLink, type BlogAuthor } from '../../lib/authors';
+import { authorSlug, getSortedAuthorLinkMeta, resolveAuthorProfile, type BlogAuthor } from '../../lib/authors';
 import { getCachedXAvatarSrc, getInitialsAvatarSrc } from '../../lib/avatars';
 import { sanitizeUrl } from '../../lib/sanitize-url';
 import { absoluteUrl, blogPostPath } from '../../lib/seo';
-import { siGithub, siX } from 'simple-icons';
+import { siX } from 'simple-icons';
 
 export async function getStaticPaths() {
   const posts = await getPublishedBlogPosts();
@@ -22,7 +22,6 @@ const { post } = Astro.props;
 const allPosts = await getPublishedBlogPosts();
 const { Content, headings } = await render(post);
 
-type AuthorLinkMeta = AuthorLink & { displayLabel: string; icon?: string; ariaLabel: string; order: number };
 const rawAuthors: BlogAuthor[] = post.data.authors
   ?? (post.data.author
     ? [{
@@ -38,50 +37,7 @@ function getAuthorAvatar(author: BlogAuthor): string {
   return author.avatar ?? (author.handle ? getCachedXAvatarSrc(author.handle, author.name, 88) : '/openclaw-logo-text-dark.png');
 }
 
-function getAuthorLinks(author: BlogAuthor): AuthorLink[] {
-  if (author.links?.length) return author.links;
-  const url = author.url ?? (author.handle ? `https://x.com/${author.handle}` : null);
-  if (!url) return [];
-  return [{
-    label: author.handle ? `@${author.handle}` : new URL(url).hostname.replace(/^www\./, ''),
-    url,
-  }];
-}
-
 const siIcon = (icon: { path: string }) => icon.path;
-const linkedinIcon = 'M20.45 20.45h-3.55v-5.57c0-1.33-.03-3.04-1.85-3.04-1.85 0-2.14 1.45-2.14 2.94v5.67H9.35V9h3.41v1.56h.05c.48-.9 1.64-1.85 3.37-1.85 3.6 0 4.27 2.37 4.27 5.46v6.28zM5.34 7.43a2.06 2.06 0 1 1 0-4.13 2.06 2.06 0 0 1 0 4.13zM7.12 20.45H3.56V9h3.56v11.45zM22.23 0H1.77C.79 0 0 .77 0 1.73v20.54C0 23.23.79 24 1.77 24h20.45c.98 0 1.78-.77 1.78-1.73V1.73C24 .77 23.2 0 22.23 0z';
-
-function getAuthorLinkMeta(author: BlogAuthor, link: AuthorLink): AuthorLinkMeta {
-  const label = link.label.trim();
-  const normalizedLabel = label.toLowerCase();
-  let hostname = '';
-
-  try {
-    hostname = new URL(link.url).hostname.replace(/^www\./, '').toLowerCase();
-  } catch {
-    hostname = '';
-  }
-
-  if (hostname === 'x.com' || hostname === 'twitter.com' || normalizedLabel === 'x' || normalizedLabel.startsWith('@')) {
-    return { ...link, displayLabel: 'X', icon: siIcon(siX), ariaLabel: `${author.name} on X`, order: 0 };
-  }
-
-  if (hostname.endsWith('linkedin.com') || normalizedLabel.includes('linkedin')) {
-    return { ...link, displayLabel: 'LinkedIn', icon: linkedinIcon, ariaLabel: `${author.name} on LinkedIn`, order: 1 };
-  }
-
-  if (hostname === 'github.com' || normalizedLabel.includes('github')) {
-    return { ...link, displayLabel: 'GitHub', icon: siIcon(siGithub), ariaLabel: `${author.name} on GitHub`, order: 2 };
-  }
-
-  return { ...link, displayLabel: label, ariaLabel: `${author.name}: ${label}`, order: 3 };
-}
-
-function getSortedAuthorLinkMeta(author: BlogAuthor): AuthorLinkMeta[] {
-  return getAuthorLinks(author)
-    .map((link, index) => ({ ...getAuthorLinkMeta(author, link), index }))
-    .sort((a, b) => a.order - b.order || a.index - b.index);
-}
 
 function formatDate(date: Date): string {
   return date.toLocaleDateString('en-US', {
@@ -118,13 +74,17 @@ const relatedPosts = allPosts
 const canonicalPostUrl = absoluteUrl(blogPostPath(post));
 const ogImage = `/og/blog/${post.id}.png`;
 const articleImageUrl = absoluteUrl(ogImage);
+
 const descriptionHtml = post.data.descriptionHtml ?? post.data.description;
 const structuredAuthors = authors.map((author) => {
-  const profileUrl = getSortedAuthorLinkMeta(author).find((link) => sanitizeUrl(link.url) !== '#')?.url;
+  const sameAs = getSortedAuthorLinkMeta(author)
+    .map((link) => link.url)
+    .filter((url) => sanitizeUrl(url) !== '#');
   return {
     '@type': 'Person',
     name: author.name,
-    ...(profileUrl ? { url: profileUrl } : {}),
+    url: absoluteUrl(`/blog/authors/${authorSlug(author.name)}`),
+    ...(sameAs.length ? { sameAs } : {}),
   };
 });
 const articleStructuredData = {
@@ -158,80 +118,43 @@ const articleStructuredData = {
   structuredData={articleStructuredData}
 >
   <SiteTopbar active="blog" />
-  <div class="stars"></div>
-  <div class="nebula"></div>
-
   <main class="reader-shell">
-    <aside class="reader-sidebar" aria-label="Blog navigation">
-      <a class="back-link" href="/blog">All posts</a>
-      <div class="side-card">
-        <p class="side-kicker">Filed under</p>
-        <div class="side-tags">
-          {post.data.tags.map((tag) => <span>{tag}</span>)}
-        </div>
-      </div>
-      <div class="side-card">
-        <p class="side-kicker">Related docs</p>
-        <a href="https://docs.openclaw.ai/gateway/security" target="_blank" rel="noopener">Security</a>
-        <a href="https://docs.openclaw.ai/plugins" target="_blank" rel="noopener">Plugins</a>
-        <a href="https://docs.openclaw.ai/providers/openai" target="_blank" rel="noopener">OpenAI</a>
-      </div>
-    </aside>
-
     <article class="article">
       <header class="article-header">
-        <p class="article-kicker">OpenClaw blog</p>
+        <a class="back-link" href="/blog"><span aria-hidden="true">←</span> All posts</a>
         <h1>{post.data.title}</h1>
         <p class="dek" set:html={descriptionHtml} />
+
+        <div class="byline">
+          <div class="byline-avatars">
+            {authors.map((author) => (
+              <a href={`/blog/authors/${authorSlug(author.name)}`} title={[author.name, author.title, author.org].filter(Boolean).join(' — ')}>
+                <img
+                  src={getAuthorAvatar(author)}
+                  alt={author.name}
+                  loading="lazy"
+                  onerror={`this.src='${getInitialsAvatarSrc(author.name, 88)}'`}
+                />
+              </a>
+            ))}
+          </div>
+          <div class="byline-names">
+            {authors.map((author, index) => (
+              <>
+                {index > 0 && <span class="byline-sep">·</span>}
+                <a
+                  href={`/blog/authors/${authorSlug(author.name)}`}
+                  title={[author.title, author.org].filter(Boolean).join(', ')}
+                >{author.name}</a>
+              </>
+            ))}
+          </div>
+          <span class="byline-meta">{formatDate(post.data.date)} · {estimateReadTime(post.body || '')}</span>
+        </div>
 
         {post.data.image && (
           <img src={post.data.image} alt={post.data.title} class="article-header-image" />
         )}
-
-        <div class="article-meta">
-          <div class="authors-container">
-            {authors.map((author) => (
-              <div class:list={['author-info', !(author.title || author.org) && 'author-info-compact']}>
-                <img
-                  src={getAuthorAvatar(author)}
-                  alt={author.name}
-                  class="author-avatar"
-                  loading="lazy"
-                  onerror={`this.src='${getInitialsAvatarSrc(author.name, 88)}'`}
-                />
-                <div class:list={['author-details', !(author.title || author.org) && 'author-details-compact']}>
-                  <span class="author-name">{author.name}</span>
-                  {(author.title || author.org) && (
-                    <span class="author-title">
-                      {author.title && <span class="author-role">{author.title}</span>}
-                      {author.org && <span class="author-org">{author.org}</span>}
-                    </span>
-                  )}
-                  {getAuthorLinks(author).length > 0 && (
-                    <div class="author-links">
-                      {getSortedAuthorLinkMeta(author).map((linkMeta) => (
-                          <a
-                            href={sanitizeUrl(linkMeta.url)}
-                            class:list={['author-link', linkMeta.icon && 'author-link-icon']}
-                            target="_blank"
-                            rel="noopener"
-                            aria-label={linkMeta.ariaLabel}
-                            title={linkMeta.displayLabel}
-                          >
-                            {linkMeta.icon ? <Icon icon={linkMeta.icon} size={13} /> : linkMeta.displayLabel}
-                          </a>
-                      ))}
-                    </div>
-                  )}
-                </div>
-              </div>
-            ))}
-          </div>
-          <div class="meta-right">
-            <span>{formatDate(post.data.date)}</span>
-            <span>{estimateReadTime(post.body || '')}</span>
-          </div>
-        </div>
       </header>
 
       <div class="article-content" data-article-content>
@@ -239,6 +162,9 @@ const articleStructuredData = {
       </div>
 
       <footer class="article-footer">
+        <div class="footer-tags" aria-label="Filed under">
+          {post.data.tags.map((tag) => <span>{tag}</span>)}
+        </div>
         <section class="share-section">
           <span>Share this post</span>
           <a
@@ -280,14 +206,22 @@ const articleStructuredData = {
       </footer>
     </article>
 
-    {toc.length > 0 && (
-      <aside class="reader-toc" aria-label="On this page">
-        <h2>On this page</h2>
-        {toc.map((item) => (
-          <a class:list={[`toc-l${item.level}`]} href={`#${item.id}`}>{item.title}</a>
-        ))}
-      </aside>
-    )}
+    <aside class="reader-toc" aria-label="On this page">
+      {toc.length > 0 && (
+        <>
+          <h2>On this page</h2>
+          {toc.map((item) => (
+            <a class:list={[`toc-l${item.level}`]} href={`#${item.id}`}>{item.title}</a>
+          ))}
+        </>
+      )}
+      <div class="toc-related">
+        <h2>Related docs</h2>
+        <a href="https://docs.openclaw.ai/gateway/security" target="_blank" rel="noopener">Security</a>
+        <a href="https://docs.openclaw.ai/plugins" target="_blank" rel="noopener">Plugins</a>
+        <a href="https://docs.openclaw.ai/providers/openai" target="_blank" rel="noopener">OpenAI</a>
+      </div>
+    </aside>
   </main>
 
 <script>
@@ -360,41 +294,18 @@ const articleStructuredData = {
 </Layout>
 
 <style>
-  .stars {
-    position: fixed;
-    inset: 0;
-    z-index: 0;
-    pointer-events: none;
-    background-image:
-      radial-gradient(1px 1px at 24px 34px, rgba(255,255,255,0.65), transparent),
-      radial-gradient(1px 1px at 110px 80px, rgba(0,229,204,0.42), transparent),
-      radial-gradient(1px 1px at 210px 42px, rgba(255,77,77,0.36), transparent);
-    background-size: 290px 180px;
-    opacity: 0.34;
-  }
-
-  .nebula {
-    position: fixed;
-    inset: 0;
-    z-index: 0;
-    pointer-events: none;
-    background:
-      radial-gradient(720px circle at 9% 4%, rgba(255, 77, 77, 0.10), transparent 54%),
-      radial-gradient(660px circle at 86% 0%, rgba(0, 229, 204, 0.07), transparent 56%);
-  }
-
   .reader-shell {
     position: relative;
     z-index: 1;
     display: grid;
-    grid-template-columns: 220px minmax(0, 760px) 230px;
-    gap: 58px;
-    max-width: 1420px;
+    grid-template-columns: minmax(0, 720px) 220px;
+    justify-content: center;
+    gap: 72px;
+    max-width: 1200px;
     margin: 0 auto;
     padding: 54px 32px 96px;
   }
 
-  .reader-sidebar,
   .reader-toc {
     position: sticky;
     top: 92px;
@@ -404,60 +315,49 @@ const articleStructuredData = {
   }
 
   .back-link,
-  .side-card a,
   .reader-toc a {
     color: var(--text-muted);
-    font-weight: 650;
+    font-family: var(--font-mono);
+    font-size: 0.8rem;
+    font-weight: 500;
     text-decoration: none;
+    transition: color 0.15s ease;
   }
 
   .back-link:hover,
-  .side-card a:hover,
   .reader-toc a:hover {
     color: var(--text-primary);
   }
 
-  .side-card {
-    margin-top: 26px;
-    padding-top: 22px;
+  .back-link {
+    display: inline-block;
+    margin-bottom: 26px;
+    font-size: 0.76rem;
+  }
+
+  .toc-related {
+    margin-top: 30px;
+    padding-top: 24px;
     border-top: 1px solid var(--border-subtle);
   }
 
-  .side-card a {
-    display: block;
-    padding: 6px 0;
-    font-size: 0.9rem;
+  .toc-related:first-child {
+    margin-top: 0;
+    padding-top: 0;
+    border-top: none;
   }
 
-  .side-kicker,
   .article-kicker,
   .reader-toc h2 {
     margin: 0 0 12px;
     color: var(--coral-bright);
-    font-size: 0.76rem;
-    font-weight: 800;
-    letter-spacing: 0.12em;
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    font-weight: 600;
+    letter-spacing: 0.1em;
     text-transform: uppercase;
   }
 
-  .side-tags {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 7px;
-  }
-
-  .side-tags span {
-    display: inline-flex;
-    align-items: center;
-    min-height: 24px;
-    padding: 0 9px;
-    border: 1px solid color-mix(in srgb, var(--cyan-bright) 26%, var(--border-subtle));
-    border-radius: 999px;
-    background: var(--surface-cyan-soft);
-    color: var(--cyan-bright);
-    font-size: 0.72rem;
-    font-weight: 750;
-  }
 
   .article {
     min-width: 0;
@@ -471,10 +371,10 @@ const articleStructuredData = {
     margin: 0;
     color: var(--text-primary);
     font-family: var(--font-display);
-    font-size: clamp(2.35rem, 6vw, 4.25rem);
-    font-weight: 700;
-    line-height: 0.98;
-    letter-spacing: 0;
+    font-size: clamp(1.9rem, 4.2vw, 2.9rem);
+    font-weight: 600;
+    line-height: 1.12;
+    letter-spacing: -0.02em;
   }
 
   .dek {
@@ -500,129 +400,75 @@ const articleStructuredData = {
     width: 100%;
     max-height: 360px;
     object-fit: contain;
-    margin-top: 28px;
-    border-radius: 8px;
+    margin-top: 30px;
+    background: #0a0a0c;
   }
 
-  .article-meta {
+  /* Byline: one ruled strip — avatars, names, date, read time */
+  .byline {
     display: flex;
     align-items: center;
-    justify-content: space-between;
     flex-wrap: wrap;
-    gap: 18px;
-    margin-top: 30px;
-    padding-top: 22px;
+    gap: 10px;
+    margin-top: 24px;
+    padding: 14px 0;
     border-top: 1px solid var(--border-subtle);
+    border-bottom: 1px solid var(--border-subtle);
   }
 
-  .authors-container {
+  .byline-avatars {
     display: flex;
-    align-items: flex-start;
-    flex-wrap: wrap;
-    gap: 18px 24px;
+    align-items: center;
   }
 
-  .author-info {
-    display: flex;
-    align-items: flex-start;
-    gap: 11px;
-  }
-
-  .author-info-compact {
-    align-items: flex-start;
-  }
-
-  .author-avatar {
-    width: 44px;
-    height: 44px;
-    margin-top: 1px;
+  .byline-avatars a {
+    display: inline-flex;
     border-radius: 50%;
-    border: 1px solid var(--border-subtle);
+  }
+
+  .byline-avatars a + a {
+    margin-left: -8px;
+  }
+
+  .byline-avatars img {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    border: 2px solid var(--bg-deep);
     background: var(--bg-elevated);
+    filter: grayscale(1);
+    transition: filter 0.25s ease;
   }
 
-  .author-details {
-    display: flex;
-    flex-direction: column;
-    gap: 3px;
-    min-width: 0;
+  .byline:hover .byline-avatars img {
+    filter: grayscale(0);
   }
 
-  .author-details-compact {
-    gap: 2px;
-  }
-
-  .author-name {
+  .byline-names {
     color: var(--text-primary);
-    font-weight: 750;
+    font-size: 0.9rem;
+    font-weight: 600;
   }
 
-  .author-title {
-    display: flex;
-    flex-direction: column;
-    gap: 1px;
-    max-width: 260px;
-    color: var(--text-muted);
-    font-size: 0.8rem;
-    line-height: 1.22;
-  }
-
-  .author-role {
-    font-weight: 700;
-  }
-
-  .author-org {
-    font-weight: 560;
-    color: color-mix(in srgb, var(--text-muted) 82%, var(--text-primary));
-  }
-
-  .author-links {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 5px;
-    margin-top: 3px;
-  }
-
-  .author-details-compact .author-links {
-    margin-top: 1px;
-  }
-
-  .author-link {
-    color: var(--coral-bright);
-    font-size: 0.85rem;
+  .byline-names a {
+    color: inherit;
     text-decoration: none;
   }
 
-  .author-link-icon {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    width: 24px;
-    height: 24px;
-    border: 1px solid var(--border-subtle);
-    border-radius: 7px;
-    background: var(--surface-card);
-    color: var(--text-primary);
-    transition: border-color 140ms ease, color 140ms ease, transform 140ms ease;
-  }
-
-  .author-link-icon:hover {
-    border-color: var(--coral-bright);
+  .byline-names a:hover {
     color: var(--coral-bright);
-    transform: translateY(-1px);
   }
 
-  .author-link-icon :global(svg) {
-    display: block;
+  .byline-sep {
+    margin: 0 6px;
+    color: var(--text-muted);
   }
 
-  .meta-right {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 10px;
+  .byline-meta {
+    margin-left: auto;
     color: var(--text-muted);
     font-family: var(--font-mono);
-    font-size: 0.84rem;
+    font-size: 0.74rem;
   }
 
   .article-content {
@@ -632,13 +478,13 @@ const articleStructuredData = {
     --release-data-ink: color-mix(in srgb, var(--cyan-bright) 58%, var(--text-primary));
     --release-risk-ink: color-mix(in srgb, var(--coral-bright) 46%, var(--text-primary));
     --release-track: color-mix(in srgb, var(--surface-card-strong) 72%, var(--bg-deep));
-    --article-inline-code-bg: color-mix(in srgb, var(--bg-deep) 82%, var(--bg-elevated));
-    --article-code-bg: #070b12;
-    --article-code-border: rgba(126, 153, 183, 0.18);
-    --article-code-text: #c8d2dc;
+    --article-inline-code-bg: color-mix(in srgb, var(--bg-deep) 60%, var(--bg-surface));
+    --article-code-bg: #0c0c0f;
+    --article-code-border: rgba(154, 154, 162, 0.2);
+    --article-code-text: #cfcfd6;
     color: var(--text-secondary);
-    font-size: 1rem;
-    line-height: 1.82;
+    font-size: 1.02rem;
+    line-height: 1.78;
   }
 
   :global(html[data-theme='light']) .article-content {
@@ -670,19 +516,23 @@ const articleStructuredData = {
   }
 
   .article-content :global(h2) {
-    margin: 2.6em 0 0.65em;
+    margin: 2.4em 0 0.7em;
+    padding-top: 1.1em;
+    border-top: 1px solid var(--border-subtle);
     color: var(--text-primary);
     font-family: var(--font-display);
-    font-size: 1.62rem;
-    line-height: 1.16;
-    letter-spacing: 0;
+    font-size: 1.45rem;
+    font-weight: 600;
+    line-height: 1.25;
+    letter-spacing: -0.015em;
   }
 
   .article-content :global(h3) {
     margin: 1.9em 0 0.55em;
     color: var(--text-primary);
-    font-size: 1.12rem;
-    line-height: 1.3;
+    font-size: 1.1rem;
+    font-weight: 600;
+    line-height: 1.35;
   }
 
   .article-content :global(ul),
@@ -719,9 +569,9 @@ const articleStructuredData = {
     table-layout: fixed;
     box-sizing: border-box;
     border: 1px solid var(--border-subtle);
-    border-radius: 12px;
+    border-radius: 0;
     background: var(--surface-card-strong);
-    box-shadow: 0 16px 40px rgba(0, 0, 0, 0.18);
+    box-shadow: none;
     font-variant-numeric: tabular-nums;
   }
 
@@ -733,12 +583,15 @@ const articleStructuredData = {
   }
 
   .article-content :global(th) {
-    color: var(--text-primary);
-    font-size: 0.95rem;
-    font-weight: 700;
-    line-height: 1.35;
+    color: var(--text-muted);
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    line-height: 1.4;
     text-align: left;
-    background: rgba(255, 255, 255, 0.035);
+    background: rgba(255, 255, 255, 0.03);
   }
 
   .article-content :global(td) {
@@ -791,13 +644,13 @@ const articleStructuredData = {
   }
 
   .article-content :global(a:hover) {
-    color: var(--cyan-bright);
+    color: color-mix(in srgb, var(--coral-bright) 70%, var(--text-primary));
   }
 
   .article-content :global(code) {
     padding: 0.08em 0.36em;
     border: 1px solid var(--border-subtle);
-    border-radius: 5px;
+    border-radius: 0;
     background: var(--article-inline-code-bg);
     color: var(--cyan-bright);
     font-family: var(--font-mono);
@@ -806,12 +659,12 @@ const articleStructuredData = {
 
   .article-content :global(pre) {
     overflow: auto;
-    padding: 14px 16px;
+    padding: 18px 20px;
     border: 1px solid var(--article-code-border);
-    border-radius: 8px;
     background: var(--article-code-bg);
     color: var(--article-code-text);
-    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.035);
+    font-size: 0.86rem;
+    line-height: 1.65;
   }
 
   .article-content :global(pre.astro-code) {
@@ -858,14 +711,7 @@ const articleStructuredData = {
     padding: 18px 20px;
     border: 1px solid color-mix(in srgb, var(--coral-bright) 38%, var(--border-subtle));
     border-left: 4px solid var(--coral-bright);
-    border-radius: 8px;
-    background:
-      linear-gradient(
-        135deg,
-        color-mix(in srgb, var(--coral-bright) 10%, transparent),
-        color-mix(in srgb, var(--cyan-bright) 6%, transparent)
-      ),
-      color-mix(in srgb, var(--surface-card-strong) 70%, transparent);
+    background: color-mix(in srgb, var(--coral-bright) 6%, var(--bg-surface));
     color: var(--text-primary);
     font-size: 0.98rem;
     line-height: 1.7;
@@ -878,7 +724,7 @@ const articleStructuredData = {
 
   .article-content :global(figure:not(.chart-card) img) {
     margin: 0;
-    border-radius: 8px;
+    border-radius: 0;
   }
 
   .article-content :global(figure:not(.chart-card) figcaption) {
@@ -898,12 +744,9 @@ const articleStructuredData = {
 
   .article-content :global(.metric-card) {
     border: 1px solid var(--release-card-border);
-    border-radius: 8px;
-    background:
-      linear-gradient(180deg, var(--release-card-highlight), transparent 76%),
-      var(--release-card-bg);
+    border-radius: 0;
+    background: var(--release-card-bg);
     padding: 18px;
-    box-shadow: inset 0 1px 0 var(--surface-inset-highlight);
   }
 
   .article-content :global(.metric-card span) {
@@ -933,14 +776,14 @@ const articleStructuredData = {
     margin: 14px 0 12px;
     padding: 9px;
     border: 1px solid color-mix(in srgb, var(--text-muted) 18%, var(--border-subtle));
-    border-radius: 7px;
+    border-radius: 0;
     background: color-mix(in srgb, var(--release-track) 66%, transparent);
   }
 
   .article-content :global(.metric-spark i) {
     display: block;
     height: max(5px, var(--h));
-    border-radius: 4px 4px 2px 2px;
+    border-radius: 0;
     background: var(--release-data-ink);
     opacity: 0.86;
   }
@@ -988,12 +831,9 @@ const articleStructuredData = {
   .article-content :global(.chart-card) {
     margin: 0;
     border: 1px solid var(--release-card-border);
-    border-radius: 8px;
-    background:
-      linear-gradient(180deg, var(--release-card-highlight), transparent 72%),
-      var(--release-card-bg);
+    border-radius: 0;
+    background: var(--release-card-bg);
     padding: 18px;
-    box-shadow: inset 0 1px 0 var(--surface-inset-highlight);
   }
 
   .article-content :global(.chart-card figcaption) {
@@ -1036,7 +876,7 @@ const articleStructuredData = {
     overflow: hidden;
     height: 12px;
     border: 1px solid color-mix(in srgb, var(--text-muted) 20%, var(--border-subtle));
-    border-radius: 999px;
+    border-radius: 0;
     background: var(--release-track);
   }
 
@@ -1076,12 +916,9 @@ const articleStructuredData = {
 
   .article-content :global(.mini-card) {
     border: 1px solid var(--release-card-border);
-    border-radius: 8px;
-    background:
-      linear-gradient(180deg, var(--release-card-highlight), transparent 76%),
-      var(--release-card-bg);
+    border-radius: 0;
+    background: var(--release-card-bg);
     padding: 16px;
-    box-shadow: inset 0 1px 0 var(--surface-inset-highlight);
   }
 
   .article-content :global(.mini-card span) {
@@ -1132,12 +969,9 @@ const articleStructuredData = {
   .article-content :global(.timeline-list > div) {
     position: relative;
     border: 1px solid var(--release-card-border);
-    border-radius: 8px;
-    background:
-      linear-gradient(180deg, var(--release-card-highlight), transparent 76%),
-      var(--release-card-bg);
+    border-radius: 0;
+    background: var(--release-card-bg);
     padding: 16px 18px 16px 46px;
-    box-shadow: inset 0 1px 0 var(--surface-inset-highlight);
   }
 
   .article-content :global(.timeline-list > div::before) {
@@ -1147,7 +981,7 @@ const articleStructuredData = {
     top: 22px;
     width: 10px;
     height: 10px;
-    border-radius: 999px;
+    border-radius: 0;
     background: var(--release-data-ink);
     box-shadow: 0 0 0 5px color-mix(in srgb, var(--release-data-ink) 14%, transparent);
   }
@@ -1181,7 +1015,7 @@ const articleStructuredData = {
     max-width: 100%;
     height: auto;
     margin: 28px 0 32px;
-    border-radius: 12px;
+    border-radius: 0;
   }
 
   .article-content :global(img[data-expandable-image]) {
@@ -1225,7 +1059,7 @@ const articleStructuredData = {
     display: block;
     width: 100%;
     height: auto;
-    border-radius: 8px;
+    border-radius: 0;
   }
 
   .reader-toc a {
@@ -1246,6 +1080,25 @@ const articleStructuredData = {
     border-top: 1px solid var(--border-subtle);
   }
 
+  .footer-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 7px;
+    margin-bottom: 22px;
+  }
+
+  .footer-tags span {
+    display: inline-flex;
+    align-items: center;
+    min-height: 24px;
+    padding: 0 9px;
+    border: 1px solid var(--border-subtle);
+    color: var(--text-secondary);
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    font-weight: 500;
+  }
+
   .share-section {
     display: flex;
     flex-wrap: wrap;
@@ -1259,14 +1112,15 @@ const articleStructuredData = {
   .cta-box a {
     display: inline-flex;
     align-items: center;
-    min-height: 34px;
-    padding: 0 12px;
+    min-height: 32px;
+    padding: 0 11px;
     border: 1px solid var(--border-subtle);
-    border-radius: 8px;
-    background: var(--surface-card);
-    color: var(--text-primary);
-    font-weight: 750;
+    color: var(--text-secondary);
+    font-family: var(--font-mono);
+    font-size: 0.76rem;
+    font-weight: 500;
     text-decoration: none;
+    transition: background 0.15s ease, color 0.15s ease;
   }
 
   .share-link-icon {
@@ -1281,8 +1135,8 @@ const articleStructuredData = {
 
   .share-link:hover,
   .cta-box a:hover {
-    border-color: var(--coral-bright);
-    color: var(--coral-bright);
+    background: var(--bg-surface);
+    color: var(--text-primary);
   }
 
   .related-posts {
@@ -1335,15 +1189,8 @@ const articleStructuredData = {
     gap: 24px;
     margin-top: 38px;
     padding: 26px 28px;
-    border: 1px solid color-mix(in srgb, var(--cyan-bright) 30%, var(--border-subtle));
-    border-radius: 8px;
-    background:
-      linear-gradient(135deg, color-mix(in srgb, var(--cyan-bright) 14%, transparent), transparent 42%),
-      linear-gradient(90deg, color-mix(in srgb, var(--coral-bright) 10%, transparent), transparent 34%),
-      var(--surface-card-strong);
-    box-shadow:
-      inset 0 1px 0 var(--surface-inset-highlight),
-      0 20px 54px color-mix(in srgb, var(--cyan-bright) 10%, transparent);
+    border: 1px solid var(--border-subtle);
+    background: var(--bg-surface);
   }
 
   .cta-box::before {
@@ -1351,7 +1198,7 @@ const articleStructuredData = {
     position: absolute;
     inset: 0 auto 0 0;
     width: 3px;
-    background: linear-gradient(180deg, var(--coral-bright), var(--cyan-bright));
+    background: var(--coral-bright);
   }
 
   .cta-box > * {
@@ -1367,21 +1214,22 @@ const articleStructuredData = {
   .cta-box a {
     min-height: 42px;
     padding: 0 18px;
-    border-color: color-mix(in srgb, var(--cyan-bright) 42%, var(--border-subtle));
-    background: color-mix(in srgb, var(--cyan-bright) 14%, var(--surface-card-strong));
-    box-shadow: inset 0 1px 0 var(--surface-inset-highlight);
+    border-color: var(--coral-bright);
+    background: var(--coral-bright);
+    color: var(--on-accent);
+    font-weight: 600;
   }
 
   .cta-box a:hover {
-    border-color: var(--cyan-bright);
-    color: var(--cyan-bright);
-    background: color-mix(in srgb, var(--cyan-bright) 18%, var(--surface-card-strong));
+    background: color-mix(in srgb, var(--coral-bright) 82%, #fff);
+    border-color: color-mix(in srgb, var(--coral-bright) 82%, #fff);
+    color: var(--on-accent);
   }
 
   @media (max-width: 1080px) {
     .reader-shell {
-      grid-template-columns: 180px minmax(0, 1fr);
-      gap: 34px;
+      grid-template-columns: minmax(0, 720px);
+      gap: 0;
     }
 
     .reader-toc {
@@ -1393,15 +1241,6 @@ const articleStructuredData = {
     .reader-shell {
       display: block;
       padding: 34px 20px 76px;
-    }
-
-    .reader-sidebar {
-      position: static;
-      margin-bottom: 28px;
-    }
-
-    .side-card {
-      display: none;
     }
 
     .article-content :global(.metric-grid),
@@ -1430,10 +1269,14 @@ const articleStructuredData = {
     }
 
     .article h1 {
-      font-size: clamp(2.2rem, 12vw, 3.2rem);
+      font-size: clamp(1.7rem, 7.5vw, 2.2rem);
     }
 
-    .article-meta,
+    .byline-meta {
+      flex-basis: 100%;
+      margin-left: 38px;
+    }
+
     .cta-box {
       align-items: flex-start;
       flex-direction: column;

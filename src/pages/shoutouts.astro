@@ -18,7 +18,7 @@ const allTestimonials = [...testimonials, ...extraTestimonials];
     <header class="header">
       <a href="/" class="back-link">← Back to home</a>
       <h1 class="title">
-        <span class="claw-accent">⟩</span> Shoutouts
+        <span class="claw-accent">◆</span> Shoutouts
       </h1>
       <p class="subtitle">What the community is saying about OpenClaw</p>
     </header>
@@ -75,9 +75,9 @@ const allTestimonials = [...testimonials, ...extraTestimonials];
     position: fixed;
     inset: 0;
     background:
-      radial-gradient(ellipse 80% 50% at 20% 20%, rgba(255, 77, 77, 0.12), transparent 50%),
-      radial-gradient(ellipse 60% 60% at 80% 30%, rgba(0, 229, 204, 0.08), transparent 50%),
-      radial-gradient(ellipse 90% 70% at 50% 90%, rgba(255, 77, 77, 0.06), transparent 50%);
+      radial-gradient(ellipse 80% 50% at 20% 20%, rgba(245, 101, 74, 0.12), transparent 50%),
+      radial-gradient(ellipse 60% 60% at 80% 30%, rgba(79, 200, 174, 0.08), transparent 50%),
+      radial-gradient(ellipse 90% 70% at 50% 90%, rgba(245, 101, 74, 0.06), transparent 50%);
     pointer-events: none;
     z-index: 0;
   }
@@ -96,7 +96,7 @@ const allTestimonials = [...testimonials, ...extraTestimonials];
   .header {
     text-align: center;
     margin-bottom: 48px;
-    animation: fadeInUp 0.6s ease-out;
+    
   }
 
   @keyframes fadeInUp {
@@ -133,6 +133,8 @@ const allTestimonials = [...testimonials, ...extraTestimonials];
 
   .claw-accent {
     color: var(--coral-bright);
+    font-size: 0.5em;
+    vertical-align: 0.22em;
   }
 
   .subtitle {
@@ -144,7 +146,7 @@ const allTestimonials = [...testimonials, ...extraTestimonials];
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
     gap: 20px;
-    animation: fadeInUp 0.6s ease-out 0.15s both;
+    
   }
 
   .shoutout-card {
@@ -152,7 +154,7 @@ const allTestimonials = [...testimonials, ...extraTestimonials];
     align-items: flex-start;
     gap: 14px;
     padding: 20px;
-    border-radius: 14px;
+    border-radius: 0;
     border: 1px solid var(--border-subtle);
     background: var(--surface-card-strong);
     backdrop-filter: blur(8px);
@@ -163,8 +165,8 @@ const allTestimonials = [...testimonials, ...extraTestimonials];
 
   .shoutout-card:hover {
     border-color: var(--coral-bright);
-    transform: translateY(-3px);
-    box-shadow: 0 12px 32px rgba(255, 77, 77, 0.15);
+    transform: none;
+    box-shadow: none;
   }
 
   .shoutout-avatar {
