@@ -429,22 +429,24 @@ const statusLabels: Record<CatalogStatus, string> = {
   }
 
   .section-heading > a {
-    color: var(--coral-bright);
-    font-size: 0.9rem;
-    font-weight: 700;
+    color: var(--text-muted);
+    font-family: var(--font-mono);
+    font-size: 0.76rem;
+    font-weight: 500;
     text-decoration: none;
+    transition: color 0.15s ease;
   }
 
   .section-heading > a:hover {
-    color: var(--cyan-bright);
+    color: var(--text-primary);
   }
 
   .section-kicker {
-    color: var(--cyan-bright);
+    color: var(--coral-bright);
     font-family: var(--font-mono);
     font-size: 0.74rem;
-    font-weight: 700;
-    letter-spacing: 0;
+    font-weight: 600;
+    letter-spacing: 0.08em;
     text-transform: uppercase;
   }
 
@@ -487,14 +489,14 @@ const statusLabels: Record<CatalogStatus, string> = {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    min-height: 42px;
-    padding: 0 16px;
+    min-height: 44px;
+    padding: 0 22px;
     border: 1px solid var(--border-subtle);
-    border-radius: 0;
-    font-size: 0.9rem;
-    font-weight: 700;
+    font-family: var(--font-mono);
+    font-size: 0.82rem;
+    font-weight: 600;
     text-decoration: none;
-    transition: border-color 0.18s ease, background 0.18s ease, color 0.18s ease, transform 0.18s ease;
+    transition: border-color 0.15s ease, background 0.15s ease, color 0.15s ease;
   }
 
   .action span {
@@ -508,22 +510,22 @@ const statusLabels: Record<CatalogStatus, string> = {
   .action-primary {
     border-color: var(--coral-bright);
     background: var(--coral-bright);
-    color: var(--bg-deep);
+    color: var(--on-accent);
   }
 
   .action-primary:hover {
-    background: var(--cyan-bright);
-    border-color: var(--cyan-bright);
+    background: color-mix(in srgb, var(--coral-bright) 82%, #fff);
+    border-color: color-mix(in srgb, var(--coral-bright) 82%, #fff);
   }
 
   .action-secondary {
-    background: var(--surface-card-strong);
+    background: var(--bg-deep);
     color: var(--text-primary);
   }
 
   .action-secondary:hover {
-    border-color: var(--cyan-bright);
-    color: var(--cyan-bright);
+    background: var(--bg-surface);
+    border-color: color-mix(in srgb, var(--text-muted) 55%, transparent);
   }
 
   .catalog-stats {
@@ -549,8 +551,11 @@ const statusLabels: Record<CatalogStatus, string> = {
 
   .stat dt {
     color: var(--text-muted);
-    font-size: 0.78rem;
-    line-height: 1.35;
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    line-height: 1.4;
   }
 
   .stat dd {
@@ -594,7 +599,9 @@ const statusLabels: Record<CatalogStatus, string> = {
   .catalog-grid {
     display: grid;
     grid-template-columns: repeat(4, minmax(0, 1fr));
-    gap: 12px;
+    gap: 1px;
+    background: var(--border-subtle);
+    border: 1px solid var(--border-subtle);
   }
 
   .channel-grid.is-collapsed > .catalog-card:nth-child(n + 13) {
@@ -611,11 +618,11 @@ const statusLabels: Record<CatalogStatus, string> = {
     padding: 0 12px;
     border: 1px solid var(--border-subtle);
     border-radius: 0;
-    background: var(--surface-card);
+    background: var(--bg-deep);
     color: var(--text-secondary);
-    font: inherit;
-    font-size: 0.76rem;
-    font-weight: 700;
+    font-family: var(--font-mono);
+    font-size: 0.74rem;
+    font-weight: 600;
     cursor: pointer;
     transition: border-color 0.18s ease, background 0.18s ease, box-shadow 0.18s ease, color 0.18s ease;
   }
@@ -652,21 +659,17 @@ const statusLabels: Record<CatalogStatus, string> = {
     display: flex;
     flex-direction: column;
     min-height: 148px;
-    padding: 18px;
+    padding: 20px;
     overflow: hidden;
-    border: 1px solid var(--border-subtle);
-    border-radius: 0;
-    background: var(--surface-card);
+    background: var(--bg-deep);
     color: var(--text-primary);
     text-decoration: none;
-    transition: transform 0.18s ease, border-color 0.18s ease, background 0.18s ease;
+    transition: background 0.15s ease;
   }
 
   .catalog-card:hover,
   .catalog-card:focus-visible {
-    transform: none;
-    border-color: color-mix(in srgb, var(--accent) 70%, var(--border-subtle));
-    background: var(--surface-card-strong);
+    background: var(--bg-surface);
   }
 
   .card-icon {
@@ -728,16 +731,16 @@ const statusLabels: Record<CatalogStatus, string> = {
   .group-grid {
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 12px;
+    gap: 1px;
+    background: var(--border-subtle);
+    border: 1px solid var(--border-subtle);
     margin-top: 12px;
   }
 
   .link-group {
     min-width: 0;
-    padding: 20px;
-    border: 1px solid var(--border-subtle);
-    border-radius: 0;
-    background: var(--surface-card);
+    padding: 22px 20px;
+    background: var(--bg-deep);
   }
 
   .link-group-heading {
@@ -780,18 +783,19 @@ const statusLabels: Record<CatalogStatus, string> = {
     display: inline-flex;
     align-items: center;
     min-height: 28px;
-    padding: 0 8px;
+    padding: 0 9px;
     border: 1px solid var(--border-subtle);
-    border-radius: 0;
     color: var(--text-secondary);
-    font-size: 0.7rem;
-    font-weight: 700;
+    font-family: var(--font-mono);
+    font-size: 0.68rem;
+    font-weight: 500;
     text-decoration: none;
+    transition: background 0.15s ease, color 0.15s ease;
   }
 
   .link-group a:hover,
   .link-group a:focus-visible {
-    border-color: var(--accent);
+    background: var(--bg-surface);
     color: var(--text-primary);
   }
 
@@ -868,7 +872,7 @@ const statusLabels: Record<CatalogStatus, string> = {
   }
 
   .automation-links a:hover {
-    color: var(--cyan-bright);
+    color: var(--text-primary);
   }
 
   .platform-columns {
