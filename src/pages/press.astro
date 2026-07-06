@@ -3,6 +3,8 @@ import Layout from '../layouts/Layout.astro';
 import SiteFooter from '../components/SiteFooter.astro';
 import pressArticles from '../data/press.json';
 import { sanitizeUrl } from '../lib/sanitize-url';
+
+const sortedPress = [...pressArticles].sort((a, b) => b.date.localeCompare(a.date));
 ---
 
 <Layout
@@ -26,7 +28,7 @@ import { sanitizeUrl } from '../lib/sanitize-url';
     </header>
 
     <div class="press-grid">
-      {pressArticles.map((article) => (
+      {sortedPress.map((article) => (
         <a
           href={sanitizeUrl(article.url)}
           target="_blank"
