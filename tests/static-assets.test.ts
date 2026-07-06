@@ -278,6 +278,15 @@ describe('static public assets', () => {
     expect(homePage).not.toContain('<span class="cta-sub">Download skills</span>');
   });
 
+  test('keeps the homepage hero lobster eyes dark in both themes', () => {
+    const homePage = readText('src/pages/index.astro');
+
+    expect(homePage).toContain('<circle cx="45" cy="35" r="6" fill="#101012"/>');
+    expect(homePage).toContain('<circle cx="75" cy="35" r="6" fill="#101012"/>');
+    expect(homePage).not.toContain('<circle cx="45" cy="35" r="6" fill="var(--bg-deep)"/>');
+    expect(homePage).not.toContain('<circle cx="75" cy="35" r="6" fill="var(--bg-deep)"/>');
+  });
+
   test('omits the redundant integrations section navigation', () => {
     const integrationsPage = readText('src/pages/integrations.astro');
 
