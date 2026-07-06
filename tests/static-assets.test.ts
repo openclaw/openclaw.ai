@@ -222,6 +222,16 @@ describe('static public assets', () => {
     }
   });
 
+  test('keeps a local outlet icon for every press entry', () => {
+    const press = readJson('src/data/press.json') as Array<{ url: string }>;
+
+    expect(press.length).toBeGreaterThan(0);
+    for (const article of press) {
+      const host = new URL(article.url).hostname.replace(/^www\./, '');
+      expect(existsSync(repoPath(`public/press/icons/${host}.png`))).toBe(true);
+    }
+  });
+
   test('keeps integration cards neutral at rest', () => {
     const integrationsPage = readText('src/pages/integrations.astro');
 
