@@ -20,16 +20,6 @@
     "featured": false
   },
   {
-    "outlet": "Microsoft",
-    "title": "Build 2026: Furthering Windows as the trusted platform for development",
-    "url": "https://blogs.windows.com/windowsdeveloper/2026/06/02/build-2026-furthering-windows-as-the-trusted-platform-for-development/",
-    "displayDate": "Jun 2, 2026",
-    "date": "2026-06-02",
-    "author": "Pavan Davuluri, EVP Windows + Devices",
-    "summary": "Straight from the Build keynote: OpenClaw runs natively on Windows inside Microsoft Execution Containers — “the Windows node and gateway run contained, so your system stays secure.”",
-    "featured": true
-  },
-  {
     "outlet": "TechCrunch",
     "title": "Microsoft launches Scout, an OpenClaw-inspired personal assistant",
     "url": "https://techcrunch.com/2026/06/02/microsoft-launches-scout-an-openclaw-inspired-personal-assistant/",
@@ -37,6 +27,16 @@
     "date": "2026-06-02",
     "author": "Russell Brandom",
     "summary": "The clearest validation yet: Microsoft ships a personal assistant openly inspired by OpenClaw, bringing the agent workflows the lobster made mainstream to the Microsoft 365 ecosystem.",
+    "featured": true
+  },
+  {
+    "outlet": "Microsoft",
+    "title": "Build 2026: Furthering Windows as the trusted platform for development",
+    "url": "https://blogs.windows.com/windowsdeveloper/2026/06/02/build-2026-furthering-windows-as-the-trusted-platform-for-development/",
+    "displayDate": "Jun 2, 2026",
+    "date": "2026-06-02",
+    "author": "Pavan Davuluri, EVP Windows + Devices",
+    "summary": "Straight from the Build keynote: OpenClaw runs natively on Windows inside Microsoft Execution Containers — “the Windows node and gateway run contained, so your system stays secure.”",
     "featured": true
   },
   {
@@ -80,6 +80,26 @@
     "featured": false
   },
   {
+    "outlet": "Semafor",
+    "title": "Anthropic eyes its own version of OpenClaw",
+    "url": "https://www.semafor.com/article/04/03/2026/anthropic-eyes-its-own-version-of-openclaw",
+    "displayDate": "Apr 3, 2026",
+    "date": "2026-04-03",
+    "author": "Rachyl Jones",
+    "summary": "The trifecta completes: after Microsoft and Google, Anthropic is building its own answer to OpenClaw as customer demand for agent platforms keeps growing.",
+    "featured": false
+  },
+  {
+    "outlet": "Semafor",
+    "title": "OpenClaw is coming for businesses",
+    "url": "https://www.semafor.com/article/03/27/2026/openclaw-is-coming-for-businesses",
+    "displayDate": "Mar 27, 2026",
+    "date": "2026-03-27",
+    "author": "Rachyl Jones",
+    "summary": "“Every company in the world today needs to have an OpenClaw strategy” — Nvidia CEO Jensen Huang, as Semafor charts the lobster’s arrival in the enterprise.",
+    "featured": true
+  },
+  {
     "outlet": "Fortune",
     "title": "‘Raise a lobster’: How OpenClaw is the latest craze transforming China’s AI sector",
     "url": "https://fortune.com/2026/03/14/openclaw-china-ai-agent-boom-open-source-lobster-craze-minimax-qwen/",
@@ -97,6 +117,16 @@
     "date": "2026-03-12",
     "author": "Evelyn Cheng and Dylan Butts",
     "summary": "The lobster rush goes global: Tencent, Alibaba, and Baidu race to offer one-click OpenClaw deployments as adoption spreads across China’s tech industry.",
+    "featured": false
+  },
+  {
+    "outlet": "MIT Technology Review",
+    "title": "Hustlers are cashing in on China’s OpenClaw AI craze",
+    "url": "https://www.technologyreview.com/2026/03/11/1134179/china-openclaw-gold-rush/",
+    "displayDate": "Mar 11, 2026",
+    "date": "2026-03-11",
+    "author": "Caiwei Chen",
+    "summary": "MIT Technology Review on the OpenClaw gold rush: a cottage industry of installers, preconfigured lobster hardware, and district governments backing claw ventures across China.",
     "featured": false
   },
   {
@@ -140,13 +170,13 @@
     "featured": false
   },
   {
-    "outlet": "TechCrunch",
-    "title": "OpenClaw creator Peter Steinberger joins OpenAI",
-    "url": "https://techcrunch.com/2026/02/15/openclaw-creator-peter-steinberger-joins-openai/",
+    "outlet": "Business Insider",
+    "title": "OpenClaw's creator is heading to OpenAI. He says it could've been a 'huge company,' but building one didn't excite him.",
+    "url": "https://www.businessinsider.com/sam-altman-hires-openclaw-creator-peter-steinberger-personal-ai-agents-2026-2",
     "displayDate": "Feb 15, 2026",
     "date": "2026-02-15",
-    "author": "Anthony Ha",
-    "summary": "A clean, positive headline around the next chapter for OpenClaw: founder momentum, OpenAI backing, and the long-term foundation path.",
+    "author": "Business Insider",
+    "summary": "A positive business-profile angle on OpenClaw’s breakout moment and why Steinberger chose leverage and reach over starting another company.",
     "featured": false
   },
   {
@@ -160,13 +190,13 @@
     "featured": false
   },
   {
-    "outlet": "Business Insider",
-    "title": "OpenClaw's creator is heading to OpenAI. He says it could've been a 'huge company,' but building one didn't excite him.",
-    "url": "https://www.businessinsider.com/sam-altman-hires-openclaw-creator-peter-steinberger-personal-ai-agents-2026-2",
+    "outlet": "TechCrunch",
+    "title": "OpenClaw creator Peter Steinberger joins OpenAI",
+    "url": "https://techcrunch.com/2026/02/15/openclaw-creator-peter-steinberger-joins-openai/",
     "displayDate": "Feb 15, 2026",
     "date": "2026-02-15",
-    "author": "Business Insider",
-    "summary": "A positive business-profile angle on OpenClaw’s breakout moment and why Steinberger chose leverage and reach over starting another company.",
+    "author": "Anthony Ha",
+    "summary": "A clean, positive headline around the next chapter for OpenClaw: founder momentum, OpenAI backing, and the long-term foundation path.",
     "featured": false
   },
   {

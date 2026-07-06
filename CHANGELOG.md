@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+- Press: add Semafor's enterprise piece with Jensen Huang's "every company needs an OpenClaw strategy" quote (featured), Semafor's Anthropic-builds-its-own-OpenClaw exclusive, and MIT Technology Review on China's OpenClaw gold rush.
 - Press: sort coverage strictly newest-first with machine-readable dates, demote the Moltbook social-network story from the homepage highlights, and add Microsoft's Build 2026 keynote announcement of OpenClaw running natively on Windows (featured).
 - Integrations: add the ClickClack and Raft channels, list ClawRouter, Gradium, Inworld, OpenCode Go, and the Claude Max API proxy in the provider directory, and update catalog stats (29 chat channels, 62 provider entries) to match current docs.
 - Press: expand the press page with 7 more verified pieces — Fast Company's AI 20 profile of the creator (featured), Business Insider on Google's 'Remy' answer to OpenClaw, GeekWire inside Microsoft's Project Lobster, BBC News and Fortune on China's lobster craze, and two VentureBeat analyses of the OpenClaw moment.
