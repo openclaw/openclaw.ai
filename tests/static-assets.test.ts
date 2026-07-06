@@ -112,7 +112,7 @@ describe('static public assets', () => {
     const homepage = readText('src/pages/index.astro');
     const ecosystemPage = readText('src/pages/ecosystem.astro');
 
-    expect(integrationsCatalog).toContain("{ value: '27', label: 'chat channels' }");
+    expect(integrationsCatalog).toContain("{ value: '28', label: 'chat channels' }");
     expect(integrationsCatalog).not.toContain('documented chat channels');
     expect(integrationsCatalog).not.toContain("label: 'Catalog snapshot");
     expect(integrationsCatalog).toContain("{ name: 'OpenAI'");
@@ -120,9 +120,10 @@ describe('static public assets', () => {
     expect(integrationsCatalog).not.toContain('BlueBubbles');
     expect(integrationsCatalog).not.toContain('/providers/glm');
     expect(integrationsPage).not.toContain('50+ integrations');
-    expect(integrationsPage).toContain("'built-in': 'Bundled'");
-    expect(integrationsPage).toContain("included: 'Bundled'");
-    expect(integrationsPage).toContain("official: 'Official plugin'");
+    // The bundled/official/external taxonomy was removed on purpose
+    expect(integrationsCatalog).not.toContain('CatalogStatus');
+    expect(integrationsPage).not.toContain('statusLabels');
+    expect(integrationsPage).not.toContain('status-badge');
     expect(integrationsPage).not.toContain('Official install');
     expect(integrationsPage).not.toContain('Current catalog examples');
     expect(integrationsPage).not.toContain('model-snapshot');
@@ -160,28 +161,16 @@ describe('static public assets', () => {
     );
   });
 
-  test('sorts channels by current package distribution before name', () => {
-    const statusRank = {
-      'built-in': 0,
-      included: 0,
-      official: 1,
-      external: 2,
-      community: 3,
-      gateway: 3,
-      node: 3,
-    };
-    const expectedOrder = [...channels].sort((left, right) => {
-      return statusRank[left.status] - statusRank[right.status]
-        || left.name.localeCompare(right.name);
-    });
-    const statusFor = (name: string) => channels.find((channel) => channel.name === name)?.status;
+  test('sorts channels alphabetically without a status taxonomy', () => {
+    const expectedOrder = [...channels].sort((left, right) =>
+      left.name.localeCompare(right.name),
+    );
 
     expect(channels.map((channel) => channel.name)).toEqual(
       expectedOrder.map((channel) => channel.name),
     );
-    expect(statusFor('Discord')).toBe('official');
-    expect(statusFor('Mattermost')).toBe('included');
-    expect(statusFor('WeChat / Weixin')).toBe('external');
+    expect(channels.map((channel) => channel.name)).toContain('Raft');
+    expect(channels.some((channel) => 'status' in channel)).toBe(false);
   });
 
   test('collapses the channel catalog after three responsive rows', () => {
@@ -203,7 +192,7 @@ describe('static public assets', () => {
   });
 
   test('uses real local or vector brand marks for branded integration cards', () => {
-    const semanticChannelIcons = new Set(['IRC', 'Voice Call', 'WebChat']);
+    const semanticChannelIcons = new Set(['IRC', 'Raft', 'Voice Call', 'WebChat']);
     const brandedItems = [
       ...channels.filter((item) => !semanticChannelIcons.has(item.name)),
       ...featuredProviders,
@@ -237,10 +226,10 @@ describe('static public assets', () => {
 
     expect(integrationsPage).not.toContain('hero-kicker');
     expect(integrationsPage).not.toContain('The OpenClaw ecosystem');
+    expect(integrationsPage).toContain('<p class="section-kicker">Works with everything</p>');
     expect(integrationsPage).toContain('<h1 class="hero-title">Integrations</h1>');
-    expect(integrationsPage).toMatch(/\.hero \{[\s\S]*?text-align: center;/);
-    expect(integrationsPage).toMatch(/\.hero-title \{[\s\S]*?background: linear-gradient/);
-    expect(integrationsPage).toMatch(/\.hero-actions,[\s\S]*?justify-content: center;/);
+    expect(integrationsPage).toMatch(/\.hero \{[\s\S]*?text-align: left;/);
+    expect(integrationsPage).not.toMatch(/\.hero-title \{[\s\S]*?background: linear-gradient/);
   });
 
   test('includes integrations in the shared site navigation', () => {
@@ -259,10 +248,11 @@ describe('static public assets', () => {
   test('uses a compact expandable site navigation on mobile', () => {
     const topbar = readText('src/components/SiteTopbar.astro');
 
-    expect(topbar).toContain("import { FileText, Megaphone, Menu, X } from '@lucide/astro'");
+    expect(topbar).toContain("import { FileText, Megaphone } from '@lucide/astro'");
     expect(topbar).toContain('class="site-nav site-nav-desktop"');
     expect(topbar).toContain('<details class="site-menu">');
     expect(topbar).toContain('class="site-menu-toggle"');
+    expect(topbar).toContain('class="site-burger"');
     expect(topbar).toContain('aria-label="Toggle main navigation"');
     expect(topbar).toContain('class="site-menu-panel"');
     expect(topbar).toMatch(/@media \(max-width: 720px\) \{[\s\S]*?\.site-nav\.site-nav-desktop \{[\s\S]*?display: none;/);
