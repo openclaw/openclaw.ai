@@ -111,6 +111,17 @@ function formatBlogDate(date: Date): string {
         Clears your inbox, sends emails, manages your calendar, checks you in for flights.<br/>
         All from WhatsApp, Telegram, or any chat app you already use.
       </p>
+
+      <div class="hero-actions">
+        <a href="#quickstart" class="btn btn-primary">
+          Get started
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <line x1="5" y1="12" x2="19" y2="12"/>
+            <polyline points="12 5 19 12 12 19"/>
+          </svg>
+        </a>
+        <a href="https://docs.openclaw.ai/getting-started" target="_blank" rel="noopener" class="btn btn-ghost">Read the docs</a>
+      </div>
     </header>
 
     <!-- Quick Start -->
@@ -842,16 +853,20 @@ function formatBlogDate(date: Date): string {
     position: fixed;
     inset: 0;
     background-image:
-      radial-gradient(2px 2px at 20px 30px, rgba(255,255,255,0.8), transparent),
-      radial-gradient(2px 2px at 40px 70px, rgba(255,255,255,0.5), transparent),
-      radial-gradient(1px 1px at 90px 40px, rgba(255,255,255,0.6), transparent),
-      radial-gradient(2px 2px at 130px 80px, rgba(255,255,255,0.4), transparent),
-      radial-gradient(1px 1px at 160px 120px, rgba(255,255,255,0.7), transparent),
-      radial-gradient(2px 2px at 200px 60px, rgba(0,229,204,0.6), transparent),
-      radial-gradient(1px 1px at 250px 150px, rgba(255,255,255,0.5), transparent),
-      radial-gradient(2px 2px at 300px 40px, rgba(255,77,77,0.4), transparent);
-    background-size: 350px 200px;
-    animation: twinkle 8s ease-in-out infinite alternate;
+      radial-gradient(1.5px 1.5px at 40px 60px, rgba(255,255,255,0.85), transparent),
+      radial-gradient(1px 1px at 130px 180px, rgba(255,255,255,0.5), transparent),
+      radial-gradient(2px 2px at 220px 40px, rgba(255,255,255,0.4), transparent),
+      radial-gradient(1px 1px at 310px 240px, rgba(255,255,255,0.65), transparent),
+      radial-gradient(1.5px 1.5px at 420px 120px, rgba(0,229,204,0.5), transparent),
+      radial-gradient(1px 1px at 500px 300px, rgba(255,255,255,0.45), transparent),
+      radial-gradient(2px 2px at 560px 90px, rgba(255,77,77,0.35), transparent),
+      radial-gradient(1px 1px at 80px 320px, rgba(255,255,255,0.55), transparent),
+      radial-gradient(1.5px 1.5px at 260px 350px, rgba(255,255,255,0.35), transparent),
+      radial-gradient(1px 1px at 380px 20px, rgba(255,255,255,0.6), transparent),
+      radial-gradient(1px 1px at 590px 210px, rgba(0,229,204,0.35), transparent),
+      radial-gradient(1.5px 1.5px at 170px 90px, rgba(255,255,255,0.3), transparent);
+    background-size: 620px 380px;
+    animation: twinkle 10s ease-in-out infinite alternate;
     pointer-events: none;
     z-index: 0;
   }
@@ -876,9 +891,9 @@ function formatBlogDate(date: Date): string {
   .container {
     position: relative;
     z-index: 1;
-    max-width: 860px;
+    max-width: 960px;
     margin: 0 auto;
-    padding: 60px 24px 40px;
+    padding: 72px 24px 40px;
     min-height: 100vh;
     display: flex;
     flex-direction: column;
@@ -887,9 +902,37 @@ function formatBlogDate(date: Date): string {
 
   /* Hero */
   .hero {
+    position: relative;
     text-align: center;
-    margin-bottom: 56px;
+    margin-bottom: 88px;
     animation: fadeInUp 0.8s ease-out;
+  }
+
+  /* Aurora wash behind the hero so the top of the page has a focal glow.
+     Kept inside the container (it clips horizontal overflow) and masked at the
+     edges so the glow fades out seamlessly instead of getting cut. */
+  .hero::before {
+    content: '';
+    position: absolute;
+    inset: -60px 0;
+    z-index: -1;
+    pointer-events: none;
+    background:
+      radial-gradient(40% 48% at 32% 30%, color-mix(in srgb, var(--coral-bright) 14%, transparent), transparent 68%),
+      radial-gradient(36% 44% at 70% 24%, color-mix(in srgb, var(--cyan-bright) 10%, transparent), transparent 68%),
+      radial-gradient(50% 58% at 50% 72%, color-mix(in srgb, var(--coral-mid) 7%, transparent), transparent 70%);
+    -webkit-mask-image: linear-gradient(to right, transparent, black 16%, black 84%, transparent);
+    mask-image: linear-gradient(to right, transparent, black 16%, black 84%, transparent);
+    animation: auroraDrift 16s ease-in-out infinite alternate;
+  }
+
+  :global(html[data-theme='light']) .hero::before {
+    opacity: 0.55;
+  }
+
+  @keyframes auroraDrift {
+    from { transform: translate3d(-1.5%, 0, 0) scale(1); }
+    to { transform: translate3d(1.5%, 2.5%, 0) scale(1.05); }
   }
 
   @keyframes fadeInUp {
@@ -971,11 +1014,11 @@ function formatBlogDate(date: Date): string {
 
   .title {
     font-family: var(--font-display);
-    font-size: clamp(3rem, 10vw, 4.5rem);
+    font-size: clamp(3.2rem, 10vw, 5.2rem);
     font-weight: 700;
-    letter-spacing: -0.03em;
+    letter-spacing: -0.04em;
     line-height: 1;
-    margin-bottom: 12px;
+    margin-bottom: 16px;
   }
 
   .title-main {
@@ -994,12 +1037,12 @@ function formatBlogDate(date: Date): string {
 
   .tagline {
     font-family: var(--font-display);
-    font-size: 1.1rem;
+    font-size: clamp(1.35rem, 3.4vw, 1.8rem);
     font-weight: 500;
-    color: var(--coral-bright);
-    letter-spacing: 0.15em;
-    text-transform: uppercase;
-    margin-bottom: 20px;
+    color: var(--text-primary);
+    letter-spacing: -0.01em;
+    line-height: 1.25;
+    margin-bottom: 16px;
     animation: fadeInUp 0.8s ease-out 0.15s both;
   }
 
@@ -1016,12 +1059,71 @@ function formatBlogDate(date: Date): string {
   }
 
   .description {
-    font-size: 1.1rem;
+    font-size: 1.05rem;
     color: var(--text-secondary);
-    max-width: 780px;
+    max-width: 680px;
     margin: 0 auto;
     line-height: 1.7;
     animation: fadeInUp 0.8s ease-out 0.3s both;
+  }
+
+  .hero-actions {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 14px;
+    margin-top: 32px;
+    animation: fadeInUp 0.8s ease-out 0.4s both;
+  }
+
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    min-height: 48px;
+    padding: 0 28px;
+    border-radius: 999px;
+    font-family: var(--font-display);
+    font-size: 1rem;
+    font-weight: 600;
+    text-decoration: none;
+    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .btn svg {
+    width: 18px;
+    height: 18px;
+    transition: transform 0.2s ease;
+  }
+
+  .btn-primary {
+    background: linear-gradient(135deg, var(--coral-bright) 0%, var(--coral-dark) 100%);
+    color: white;
+    box-shadow: 0 8px 28px var(--shadow-coral-mid);
+  }
+
+  .btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 14px 40px var(--shadow-coral-strong);
+  }
+
+  .btn-primary:hover svg {
+    transform: translateX(3px);
+  }
+
+  .btn-ghost {
+    border: 1px solid var(--border-subtle);
+    background: var(--surface-card);
+    color: var(--text-primary);
+    backdrop-filter: blur(10px);
+  }
+
+  .btn-ghost:hover {
+    transform: translateY(-2px);
+    border-color: var(--border-accent);
+    box-shadow: 0 10px 30px var(--shadow-coral-soft);
   }
 
   /* CTA Grid */
@@ -1029,7 +1131,7 @@ function formatBlogDate(date: Date): string {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
     gap: 16px;
-    margin-bottom: 56px;
+    margin-bottom: 88px;
     animation: fadeInUp 0.8s ease-out 0.45s both;
   }
 
@@ -1098,7 +1200,7 @@ function formatBlogDate(date: Date): string {
 
   /* Newsletter */
   .newsletter {
-    margin-bottom: 56px;
+    margin-bottom: 88px;
     animation: fadeInUp 0.8s ease-out 0.7s both;
   }
 
@@ -1113,18 +1215,14 @@ function formatBlogDate(date: Date): string {
 
   .newsletter-title {
     font-family: var(--font-display);
-    font-size: 1.4rem;
+    font-size: clamp(1.4rem, 3vw, 1.7rem);
     font-weight: 600;
+    letter-spacing: -0.02em;
     margin-bottom: 8px;
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 10px;
-  }
-
-  .newsletter-title .claw-accent {
-    color: var(--coral-bright);
-    font-weight: 700;
+    gap: 14px;
   }
 
   .newsletter-desc {
@@ -1222,7 +1320,7 @@ function formatBlogDate(date: Date): string {
 
   /* Features */
   .features {
-    margin-bottom: 56px;
+    margin-bottom: 88px;
     animation: fadeInUp 0.8s ease-out 0.55s both;
   }
 
@@ -1240,8 +1338,8 @@ function formatBlogDate(date: Date): string {
 
   .feature-card {
     display: block;
-    padding: 20px;
-    border-radius: 14px;
+    padding: 24px;
+    border-radius: 16px;
     border: 1px solid var(--border-subtle);
     background: var(--surface-card);
     backdrop-filter: blur(12px);
@@ -1252,41 +1350,48 @@ function formatBlogDate(date: Date): string {
   }
 
   .feature-card:hover {
-    transform: translateY(-4px);
-    border-color: var(--coral-bright);
-    box-shadow: 0 12px 40px color-mix(in srgb, var(--coral-bright) 20%, transparent);
+    transform: translateY(-3px);
+    border-color: color-mix(in srgb, var(--coral-bright) 45%, transparent);
+    box-shadow: 0 12px 40px color-mix(in srgb, var(--coral-bright) 16%, transparent);
   }
 
   .feature-icon {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin-bottom: 12px;
+    display: inline-grid;
+    place-items: center;
+    width: 46px;
+    height: 46px;
+    margin-bottom: 16px;
+    border-radius: 12px;
+    background: var(--surface-coral-soft);
+    transition: box-shadow 0.25s ease;
+  }
+
+  .feature-card:hover .feature-icon {
+    box-shadow: 0 0 20px color-mix(in srgb, var(--coral-bright) 25%, transparent);
   }
 
   .feature-icon :global(svg) {
-    width: 28px;
-    height: 28px;
+    width: 22px;
+    height: 22px;
   }
 
   .feature-title {
     font-family: var(--font-display);
-    font-size: 1rem;
+    font-size: 1.05rem;
     font-weight: 600;
     color: var(--text-primary);
     margin-bottom: 6px;
-    text-align: center;
   }
 
   .feature-desc {
-    font-size: 0.85rem;
-    color: var(--text-muted);
-    line-height: 1.5;
+    font-size: 0.88rem;
+    color: var(--text-secondary);
+    line-height: 1.55;
   }
 
   /* Integrations Preview */
   .integrations-preview {
-    margin-bottom: 56px;
+    margin-bottom: 88px;
     animation: fadeInUp 0.8s ease-out 0.6s both;
   }
 
@@ -1353,7 +1458,7 @@ function formatBlogDate(date: Date): string {
 
   /* Community Builds */
   .builds-section {
-    margin-bottom: 56px;
+    margin-bottom: 88px;
     animation: fadeInUp 0.8s ease-out 0.62s both;
   }
 
@@ -1460,7 +1565,7 @@ function formatBlogDate(date: Date): string {
 
   /* Press Section */
   .press-section {
-    margin-bottom: 56px;
+    margin-bottom: 88px;
     animation: fadeInUp 0.8s ease-out 0.68s both;
   }
 
@@ -1544,16 +1649,41 @@ function formatBlogDate(date: Date): string {
 
   /* Quick Start */
   .quickstart {
-    margin-bottom: 56px;
+    margin-bottom: 88px;
+    scroll-margin-top: 84px;
     animation: fadeInUp 0.8s ease-out 0.6s both;
   }
 
 
   .code-block {
+    position: relative;
+    max-width: 860px;
+    margin: 0 auto;
     background: var(--bg-elevated);
     border: 1px solid var(--border-subtle);
-    border-radius: 12px;
+    border-radius: 14px;
     overflow: hidden;
+    box-shadow:
+      0 24px 70px -24px color-mix(in srgb, var(--coral-bright) 22%, transparent),
+      0 4px 24px var(--surface-overlay);
+  }
+
+  /* Coral-to-cyan hairline along the terminal's top edge */
+  .code-block::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 1px;
+    z-index: 1;
+    background: linear-gradient(
+      90deg,
+      transparent,
+      color-mix(in srgb, var(--coral-bright) 65%, transparent) 30%,
+      color-mix(in srgb, var(--cyan-bright) 55%, transparent) 70%,
+      transparent
+    );
   }
 
   .code-header {
@@ -1771,7 +1901,8 @@ function formatBlogDate(date: Date): string {
   }
 
   .quickstart-note {
-    margin-top: 16px;
+    max-width: 860px;
+    margin: 16px auto 0;
     font-size: 0.9rem;
     color: var(--text-muted);
     text-align: center;
@@ -1887,46 +2018,62 @@ function formatBlogDate(date: Date): string {
 
   /* Sponsors */
   .sponsors {
-    margin-bottom: 56px;
+    margin-bottom: 88px;
     animation: fadeInUp 0.8s ease-out 0.72s both;
   }
 
   .sponsors .section-title {
-    margin-bottom: 24px;
+    font-family: var(--font-display);
+    font-size: clamp(1.5rem, 3.2vw, 1.95rem);
+    font-weight: 600;
+    letter-spacing: -0.02em;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 14px;
+    margin-bottom: 28px;
+  }
+
+  .sponsors .claw-accent,
+  .newsletter-title .claw-accent {
+    display: inline-grid;
+    place-items: center;
+    width: 32px;
+    height: 32px;
+    border-radius: 10px;
+    background: var(--surface-coral-soft);
+    color: var(--coral-bright);
+    font-size: 0.95rem;
   }
 
   .sponsors-grid {
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 40px;
-    flex-wrap: wrap;
+    gap: clamp(20px, 4.5vw, 44px);
+    flex-wrap: nowrap;
   }
 
   .sponsor-card {
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 20px 32px;
-    border-radius: 16px;
-    border: 1px solid var(--border-subtle);
-    background: var(--surface-card);
-    backdrop-filter: blur(12px);
+    padding: 8px 2px;
+    border-radius: 12px;
     text-decoration: none;
     transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
   }
 
   .sponsor-card:hover {
-    transform: translateY(-4px);
-    border-color: var(--border-accent);
-    box-shadow: 0 12px 40px var(--shadow-coral-soft);
+    transform: translateY(-2px);
   }
 
   .sponsor-logo {
     height: 36px;
     width: auto;
-    opacity: 0.7;
-    transition: opacity 0.25s ease;
+    opacity: 0.55;
+    filter: grayscale(0.25);
+    transition: opacity 0.25s ease, filter 0.25s ease;
   }
 
   :global(html[data-theme='light']) .sponsor-logo-invert-on-light {
@@ -1936,6 +2083,7 @@ function formatBlogDate(date: Date): string {
 
   .sponsor-card:hover .sponsor-logo {
     opacity: 1;
+    filter: none;
   }
 
   .sponsor-logo-openai {
@@ -1974,13 +2122,14 @@ function formatBlogDate(date: Date): string {
     display: block;
   }
 
-  @media (max-width: 480px) {
+  @media (max-width: 640px) {
     .sponsors-grid {
-      gap: 16px;
+      gap: 16px 24px;
+      flex-wrap: wrap;
     }
 
     .sponsor-card {
-      padding: 16px 24px;
+      padding: 4px 2px;
     }
 
     .sponsor-logo {
@@ -2015,7 +2164,7 @@ function formatBlogDate(date: Date): string {
 
   /* Latest Blog Post */
   .blog-preview {
-    margin-bottom: 56px;
+    margin-bottom: 88px;
     animation: fadeInUp 0.8s ease-out 0.5s both;
   }
 
@@ -2068,7 +2217,7 @@ function formatBlogDate(date: Date): string {
   .blog-recent {
     display: block;
     border: 1px solid var(--border-subtle);
-    border-radius: 8px;
+    border-radius: 14px;
     background: var(--surface-card-strong);
     color: inherit;
     text-decoration: none;
@@ -2169,7 +2318,7 @@ function formatBlogDate(date: Date): string {
 
   /* Testimonials */
   .testimonials {
-    margin-bottom: 56px;
+    margin-bottom: 88px;
     animation: fadeInUp 0.8s ease-out 0.75s both;
     overflow: hidden;
     margin-left: -24px;
@@ -2265,7 +2414,7 @@ function formatBlogDate(date: Date): string {
     height: 44px;
     border-radius: 50%;
     flex-shrink: 0;
-    border: 2px solid var(--border-subtle);
+    border: 2px solid color-mix(in srgb, var(--coral-bright) 28%, var(--border-subtle));
     background: var(--bg-elevated);
   }
 
@@ -2301,6 +2450,19 @@ function formatBlogDate(date: Date): string {
     .lobster-icon {
       width: 80px;
       height: 80px;
+    }
+
+    .hero-actions {
+      flex-direction: column;
+      align-items: stretch;
+    }
+
+    .btn {
+      justify-content: center;
+    }
+
+    .feature-card {
+      padding: 18px;
     }
 
     .cta {

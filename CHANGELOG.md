@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+- Website: homepage facelift — hero call-to-action buttons, aurora glow and film-grain texture, larger section headers with chevron markers, refined feature and blog cards, glowing quick-start terminal, cleaner sponsor logo wall, and a wider 960px layout with more breathing room between sections.
 - Dependencies: update Astro to 7.0.4, js-yaml to 5.2.0, RSS to 4.0.19, Simple Icons to 16.24.1, and Sharp to 0.35.3; add Astro 7-compatible Lucide icons and preserve the existing generated HTML whitespace behavior (#172, #176, thanks @dependabot).
 - Ecosystem: add ClawScan, a composable security scanning harness for agent skills (#177, thanks @Patrick-Erichsen).
 - Ecosystem: render the Crabline card from its existing SVG banner instead of requesting a missing PNG.
