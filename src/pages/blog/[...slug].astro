@@ -4,7 +4,7 @@ import Icon from '../../components/Icon.astro';
 import SiteTopbar from '../../components/SiteTopbar.astro';
 import { render } from 'astro:content';
 import { getPublishedBlogPosts } from '../../lib/blog';
-import { resolveAuthorProfile, type AuthorLink, type BlogAuthor } from '../../lib/authors';
+import { authorSlug, resolveAuthorProfile, type AuthorLink, type BlogAuthor } from '../../lib/authors';
 import { getCachedXAvatarSrc, getInitialsAvatarSrc } from '../../lib/avatars';
 import { sanitizeUrl } from '../../lib/sanitize-url';
 import { absoluteUrl, blogPostPath } from '../../lib/seo';
@@ -119,17 +119,16 @@ const canonicalPostUrl = absoluteUrl(blogPostPath(post));
 const ogImage = `/og/blog/${post.id}.png`;
 const articleImageUrl = absoluteUrl(ogImage);
 
-function getAuthorProfileUrl(author: BlogAuthor): string | null {
-  const link = getSortedAuthorLinkMeta(author).find((meta) => sanitizeUrl(meta.url) !== '#');
-  return link ? link.url : null;
-}
 const descriptionHtml = post.data.descriptionHtml ?? post.data.description;
 const structuredAuthors = authors.map((author) => {
-  const profileUrl = getSortedAuthorLinkMeta(author).find((link) => sanitizeUrl(link.url) !== '#')?.url;
+  const sameAs = getSortedAuthorLinkMeta(author)
+    .map((link) => link.url)
+    .filter((url) => sanitizeUrl(url) !== '#');
   return {
     '@type': 'Person',
     name: author.name,
-    ...(profileUrl ? { url: profileUrl } : {}),
+    url: absoluteUrl(`/blog/authors/${authorSlug(author.name)}`),
+    ...(sameAs.length ? { sameAs } : {}),
   };
 });
 const articleStructuredData = {
@@ -173,27 +172,26 @@ const articleStructuredData = {
         <div class="byline">
           <div class="byline-avatars">
             {authors.map((author) => (
-              <img
-                src={getAuthorAvatar(author)}
-                alt=""
-                loading="lazy"
-                title={[author.name, author.title, author.org].filter(Boolean).join(' — ')}
-                onerror={`this.src='${getInitialsAvatarSrc(author.name, 88)}'`}
-              />
+              <a href={`/blog/authors/${authorSlug(author.name)}`} title={[author.name, author.title, author.org].filter(Boolean).join(' — ')}>
+                <img
+                  src={getAuthorAvatar(author)}
+                  alt={author.name}
+                  loading="lazy"
+                  onerror={`this.src='${getInitialsAvatarSrc(author.name, 88)}'`}
+                />
+              </a>
             ))}
           </div>
           <div class="byline-names">
-            {authors.map((author, index) => {
-              const profileUrl = getAuthorProfileUrl(author);
-              return (
-                <>
-                  {index > 0 && <span class="byline-sep">·</span>}
-                  {profileUrl
-                    ? <a href={sanitizeUrl(profileUrl)} target="_blank" rel="noopener" title={[author.title, author.org].filter(Boolean).join(', ')}>{author.name}</a>
-                    : <span title={[author.title, author.org].filter(Boolean).join(', ')}>{author.name}</span>}
-                </>
-              );
-            })}
+            {authors.map((author, index) => (
+              <>
+                {index > 0 && <span class="byline-sep">·</span>}
+                <a
+                  href={`/blog/authors/${authorSlug(author.name)}`}
+                  title={[author.title, author.org].filter(Boolean).join(', ')}
+                >{author.name}</a>
+              </>
+            ))}
           </div>
           <span class="byline-meta">{formatDate(post.data.date)} · {estimateReadTime(post.body || '')}</span>
         </div>
@@ -467,6 +465,15 @@ const articleStructuredData = {
     align-items: center;
   }
 
+  .byline-avatars a {
+    display: inline-flex;
+    border-radius: 50%;
+  }
+
+  .byline-avatars a + a {
+    margin-left: -8px;
+  }
+
   .byline-avatars img {
     width: 28px;
     height: 28px;
@@ -475,10 +482,6 @@ const articleStructuredData = {
     background: var(--bg-elevated);
     filter: grayscale(1);
     transition: filter 0.25s ease;
-  }
-
-  .byline-avatars img + img {
-    margin-left: -8px;
   }
 
   .byline:hover .byline-avatars img {

@@ -80,6 +80,16 @@ const authorProfiles: BlogAuthor[] = [
   },
 ];
 
+/** URL slug for an author page, derived from the display name. */
+export function authorSlug(name: string): string {
+  return name
+    .toLowerCase()
+    .normalize('NFKD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-+|-+$/g, '');
+}
+
 function authorKey(value: string | undefined): string | undefined {
   const normalized = value?.trim().toLowerCase();
   return normalized || undefined;

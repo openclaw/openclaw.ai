@@ -1,0 +1,343 @@
+---
+import Layout from '../../../layouts/Layout.astro';
+import SiteTopbar from '../../../components/SiteTopbar.astro';
+import SiteFooter from '../../../components/SiteFooter.astro';
+import { getPublishedBlogPosts } from '../../../lib/blog';
+import { authorSlug, resolveAuthorProfile, type BlogAuthor } from '../../../lib/authors';
+import { getCachedXAvatarSrc, getInitialsAvatarSrc } from '../../../lib/avatars';
+import { sanitizeUrl } from '../../../lib/sanitize-url';
+import { absoluteUrl } from '../../../lib/seo';
+
+export async function getStaticPaths() {
+  const posts = await getPublishedBlogPosts();
+  const bySlug = new Map<string, { author: BlogAuthor; posts: typeof posts }>();
+
+  for (const post of posts) {
+    const rawAuthors: BlogAuthor[] = post.data.authors?.length
+      ? post.data.authors
+      : [{
+          name: post.data.author ?? 'OpenClaw Team',
+          handle: post.data.authorHandle,
+          url: post.data.authorUrl,
+          avatar: post.data.authorAvatar,
+        }];
+
+    for (const raw of rawAuthors) {
+      const author = resolveAuthorProfile(raw);
+      const slug = authorSlug(author.name);
+      if (!slug) continue;
+      const entry = bySlug.get(slug);
+      if (entry) {
+        entry.posts.push(post);
+      } else {
+        bySlug.set(slug, { author, posts: [post] });
+      }
+    }
+  }
+
+  return [...bySlug.entries()].map(([slug, { author, posts: authorPosts }]) => ({
+    params: { slug },
+    props: { author, posts: authorPosts },
+  }));
+}
+
+const { author, posts } = Astro.props;
+
+function formatDate(date: Date): string {
+  return date.toLocaleDateString('en-US', {
+    month: 'short',
+    day: 'numeric',
+    year: 'numeric',
+  });
+}
+
+function estimateReadTime(content: string): string {
+  const words = content.split(/\s+/).filter(Boolean).length;
+  return `${Math.max(1, Math.ceil(words / 220))} min read`;
+}
+
+const avatar =
+  author.avatar ?? (author.handle ? getCachedXAvatarSrc(author.handle, author.name, 176) : getInitialsAvatarSrc(author.name, 176));
+
+const socialLinks = (author.links ?? []).filter((link) => sanitizeUrl(link.url) !== '#');
+if (socialLinks.length === 0 && author.handle) {
+  socialLinks.push({ label: `@${author.handle}`, url: `https://x.com/${author.handle}` });
+}
+if (author.url && sanitizeUrl(author.url) !== '#' && !socialLinks.some((link) => link.url === author.url)) {
+  socialLinks.push({ label: 'Website', url: author.url });
+}
+
+const roleLine = [author.title, author.org].filter(Boolean).join(', ');
+const pageTitle = `${author.name} - OpenClaw Blog`;
+const description = roleLine
+  ? `Posts by ${author.name}, ${roleLine}, on the OpenClaw blog.`
+  : `Posts by ${author.name} on the OpenClaw blog.`;
+
+const structuredData = {
+  '@context': 'https://schema.org',
+  '@type': 'ProfilePage',
+  mainEntity: {
+    '@type': 'Person',
+    name: author.name,
+    ...(author.title ? { jobTitle: author.title } : {}),
+    ...(author.org ? { worksFor: { '@type': 'Organization', name: author.org } } : {}),
+    ...(socialLinks.length ? { sameAs: socialLinks.map((link) => link.url) } : {}),
+    url: absoluteUrl(`/blog/authors/${authorSlug(author.name)}`),
+  },
+};
+---
+
+<Layout title={pageTitle} description={description} structuredData={structuredData}>
+  <SiteTopbar active="blog" />
+
+  <main class="shell">
+    <div class="rail">
+      <header class="author-head">
+        <a class="back-link" href="/blog"><span aria-hidden="true">←</span> All posts</a>
+        <div class="author-card">
+          <img
+            class="author-avatar"
+            src={avatar}
+            alt={author.name}
+            onerror={`this.src='${getInitialsAvatarSrc(author.name, 176)}'`}
+          />
+          <div class="author-id">
+            <p class="eyebrow">Author</p>
+            <h1>{author.name}</h1>
+            {roleLine && <p class="author-role">{roleLine}</p>}
+            {socialLinks.length > 0 && (
+              <div class="author-social">
+                {socialLinks.map((link) => (
+                  <a href={sanitizeUrl(link.url)} target="_blank" rel="noopener">{link.label}</a>
+                ))}
+              </div>
+            )}
+          </div>
+        </div>
+      </header>
+
+      <section class="posts">
+        <p class="posts-label">{posts.length} {posts.length === 1 ? 'post' : 'posts'}</p>
+        <div class="post-list">
+          {posts.map((post) => (
+            <a class="post-row" href={`/blog/${post.id}`}>
+              <div class="post-date">{formatDate(post.data.date)}</div>
+              <div class="post-body">
+                <h2>{post.data.title}</h2>
+                <p>{post.data.description}</p>
+                <div class="row-footer">
+                  <span>{estimateReadTime(post.body || '')}</span>
+                </div>
+              </div>
+            </a>
+          ))}
+        </div>
+      </section>
+
+      <SiteFooter current="blog" spacing="roomy" />
+    </div>
+  </main>
+</Layout>
+
+<style>
+  .shell {
+    position: relative;
+    z-index: 1;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .rail {
+    width: 100%;
+    max-width: 1060px;
+    margin: 0 auto;
+    padding: 0 48px;
+    border-left: 1px solid var(--border-subtle);
+    border-right: 1px solid var(--border-subtle);
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .author-head {
+    padding: 48px 0 36px;
+    border-bottom: 1px solid var(--border-subtle);
+  }
+
+  .back-link {
+    display: inline-block;
+    margin-bottom: 30px;
+    color: var(--text-muted);
+    font-family: var(--font-mono);
+    font-size: 0.76rem;
+    font-weight: 500;
+    text-decoration: none;
+    transition: color 0.15s ease;
+  }
+
+  .back-link:hover {
+    color: var(--text-primary);
+  }
+
+  .author-card {
+    display: flex;
+    align-items: center;
+    gap: 24px;
+  }
+
+  .author-avatar {
+    width: 88px;
+    height: 88px;
+    border-radius: 50%;
+    border: 1px solid var(--border-subtle);
+    background: var(--bg-elevated);
+    filter: grayscale(1);
+    transition: filter 0.25s ease;
+  }
+
+  .author-card:hover .author-avatar {
+    filter: grayscale(0);
+  }
+
+  .eyebrow {
+    color: var(--coral-bright);
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+
+  .author-id h1 {
+    margin: 8px 0 6px;
+    font-family: var(--font-display);
+    font-size: clamp(1.6rem, 3.4vw, 2.2rem);
+    font-weight: 600;
+    letter-spacing: -0.02em;
+    line-height: 1.15;
+    color: var(--text-primary);
+  }
+
+  .author-role {
+    color: var(--text-muted);
+    font-family: var(--font-mono);
+    font-size: 0.78rem;
+  }
+
+  .author-social {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 14px;
+  }
+
+  .author-social a {
+    display: inline-flex;
+    align-items: center;
+    min-height: 28px;
+    padding: 0 10px;
+    border: 1px solid var(--border-subtle);
+    color: var(--text-secondary);
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    font-weight: 500;
+    text-decoration: none;
+    transition: background 0.15s ease, color 0.15s ease;
+  }
+
+  .author-social a:hover {
+    background: var(--bg-surface);
+    color: var(--text-primary);
+  }
+
+  .posts {
+    padding: 32px 0 24px;
+  }
+
+  .posts-label {
+    margin-bottom: 18px;
+    color: var(--text-muted);
+    font-family: var(--font-mono);
+    font-size: 0.74rem;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+  }
+
+  .post-list {
+    display: grid;
+    border-top: 1px solid var(--border-subtle);
+  }
+
+  .post-row {
+    display: grid;
+    grid-template-columns: 128px minmax(0, 1fr);
+    gap: 24px;
+    padding: 26px 0;
+    border-bottom: 1px solid var(--border-subtle);
+    color: inherit;
+    text-decoration: none;
+  }
+
+  .post-date {
+    padding-top: 3px;
+    color: var(--text-muted);
+    font-family: var(--font-mono);
+    font-size: 0.78rem;
+  }
+
+  .post-row h2 {
+    margin: 0 0 10px;
+    font-family: var(--font-display);
+    font-size: 1.2rem;
+    font-weight: 600;
+    letter-spacing: -0.015em;
+    line-height: 1.3;
+    color: var(--text-primary);
+    transition: color 0.16s ease;
+  }
+
+  .post-row:hover h2 {
+    color: var(--coral-bright);
+  }
+
+  .post-row p {
+    max-width: 720px;
+    color: var(--text-secondary);
+    font-size: 0.95rem;
+    line-height: 1.68;
+  }
+
+  .row-footer {
+    margin-top: 12px;
+    color: var(--text-muted);
+    font-family: var(--font-mono);
+    font-size: 0.74rem;
+  }
+
+  @media (max-width: 760px) {
+    .rail {
+      padding: 0 20px;
+      border-left: none;
+      border-right: none;
+    }
+
+    .author-head {
+      padding-top: 36px;
+    }
+
+    .author-card {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 16px;
+    }
+
+    .post-row {
+      display: block;
+    }
+
+    .post-date {
+      margin-bottom: 8px;
+    }
+  }
+</style>
