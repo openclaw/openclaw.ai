@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Testimonials: prune 20 low-signal shoutouts into the backup file, and add Windows chief @pavandavuluri's "Clawfather" Build shoutout and @rodrigofarinha on agent speed.
+
 - Testimonials: add 5 more shoutouts — GitHub's @ashleywolf on the fastest-growing project celebration, plus @bartslodyczka, @nelsonlopes_, @morganlinton, and @mronge — with cached avatars.
 - Testimonials: add 4 more shoutouts from the archive — @satyanadella on the Windows partnership, @ycombinator's Startup School announcement, Microsoft's @jennifermarsman on MXC sandboxing, and @BradGroux — with cached avatars.
 
