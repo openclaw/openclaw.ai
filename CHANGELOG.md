@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+- Testimonials: add 5 more shoutouts — GitHub's @ashleywolf on the fastest-growing project celebration, plus @bartslodyczka, @nelsonlopes_, @morganlinton, and @mronge — with cached avatars.
 - Testimonials: add 4 more shoutouts from the archive — @satyanadella on the Windows partnership, @ycombinator's Startup School announcement, Microsoft's @jennifermarsman on MXC sandboxing, and @BradGroux — with cached avatars.
 
 - Press: show outlet favicons on press cards (homepage and press page) with locally cached icons, and add Lenny's Newsletter's "From skeptic to true believer" and Axios' story of the OpenClaw agent that almost got itself a job.
