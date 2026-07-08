@@ -22,24 +22,26 @@ import {
 
 const siIcon = (icon: any) => icon.path;
 
-// Integration pills with icons
-const integrationPills = [
-  { name: 'WhatsApp', icon: siIcon(siWhatsapp), color: '#25D366' },
-  { name: 'Telegram', icon: siIcon(siTelegram), color: '#26A5E4' },
-  { name: 'Discord', icon: siIcon(siDiscord), color: '#5865F2' },
-  { name: 'Slack', icon: 'lucide:hash', color: '#E01E5A' },
-  { name: 'Signal', icon: siIcon(siSignal), color: '#3A76F0' },
-  { name: 'iMessage', icon: siIcon(siApple), color: '#007AFF' },
-  { name: 'Claude', icon: siIcon(siAnthropic), color: '#D4A574' },
-  { name: 'GPT', icon: 'lucide:bot', color: '#00A67E' },
-  { name: 'Spotify', icon: siIcon(siSpotify), color: '#1DB954' },
-  { name: 'Hue', icon: siIcon(siPhilipshue), color: '#0065D3' },
-  { name: 'Obsidian', icon: siIcon(siObsidian), color: '#7C3AED' },
-  { name: 'Twitter', icon: siIcon(siX), color: 'var(--oc-text-primary)' },
-  { name: 'Browser', icon: siIcon(siGooglechrome), color: '#4285F4' },
-  { name: 'Gmail', icon: siIcon(siGmail), color: '#EA4335' },
-  { name: 'GitHub', icon: siIcon(siGithub), color: 'var(--oc-text-primary)' },
+const integrationCards = [
+  { name: 'WhatsApp', kind: 'Channel', icon: siIcon(siWhatsapp), color: '#25D366', desc: 'Personal chats, group loops, approvals.' },
+  { name: 'Telegram', kind: 'Channel', icon: siIcon(siTelegram), color: '#26A5E4', desc: 'Bots, topics, rich media, updates.' },
+  { name: 'Discord', kind: 'Channel', icon: siIcon(siDiscord), color: '#5865F2', desc: 'Servers, DMs, shared agent rooms.' },
+  { name: 'Slack', kind: 'Channel', icon: 'lucide:hash', color: '#E01E5A', desc: 'Team channels and approval prompts.' },
+  { name: 'Signal', kind: 'Channel', icon: siIcon(siSignal), color: '#3A76F0', desc: 'Private conversations with local control.' },
+  { name: 'iMessage', kind: 'Channel', icon: siIcon(siApple), color: '#007AFF', desc: 'Apple-native threads from your Mac.' },
+  { name: 'Claude', kind: 'Model', icon: siIcon(siAnthropic), color: '#D4A574', desc: 'Bring frontier models into one session.' },
+  { name: 'GPT', kind: 'Model', icon: 'lucide:bot', color: '#00A67E', desc: 'Reasoning, coding, and tool use together.' },
+  { name: 'Spotify', kind: 'Tool', icon: siIcon(siSpotify), color: '#1DB954', desc: 'Skills can reach daily apps.' },
+  { name: 'Hue', kind: 'Home', icon: siIcon(siPhilipshue), color: '#0065D3', desc: 'Smart-home actions from chat.' },
+  { name: 'Obsidian', kind: 'Notes', icon: siIcon(siObsidian), color: '#7C3AED', desc: 'Vaults, memory, and personal context.' },
+  { name: 'Twitter', kind: 'Web', icon: siIcon(siX), color: 'var(--text-primary)', desc: 'Research, drafts, bookmarks, posts.' },
+  { name: 'Browser', kind: 'Web', icon: siIcon(siGooglechrome), color: '#4285F4', desc: 'Forms, pages, extraction, inspection.' },
+  { name: 'Gmail', kind: 'Inbox', icon: siIcon(siGmail), color: '#EA4335', desc: 'Summaries, follow-ups, triage.' },
+  { name: 'GitHub', kind: 'Code', icon: siIcon(siGithub), color: 'var(--text-primary)', desc: 'Issues, PRs, reviews, releases.' },
 ];
+const topIntegrationRail = integrationCards.slice(0, 8);
+const bottomIntegrationRail = integrationCards.slice(8);
+const integrationScaleTicks = Array.from({ length: 64 });
 
 // Split top 30 into two rows for carousel
 const half = Math.ceil(testimonials.length / 2);
@@ -622,6 +624,28 @@ const asciiAurora = (() => {
           if (!document.hidden) auroraRaf = requestAnimationFrame(renderAurora);
         });
       }
+
+      const integrationRails = document.querySelector('[data-integration-rails]');
+      if (integrationRails && !reducedMotion) {
+        let railRaf = 0;
+        const updateIntegrationRails = () => {
+          railRaf = 0;
+          const rect = integrationRails.getBoundingClientRect();
+          const viewport = window.innerHeight || document.documentElement.clientHeight;
+          const progress = Math.min(Math.max((viewport - rect.top) / (viewport + rect.height), 0), 1);
+          const shift = Math.round((progress - 0.5) * 180);
+          integrationRails.style.setProperty('--integration-shift', `${shift}px`);
+        };
+
+        const requestRailUpdate = () => {
+          if (railRaf) return;
+          railRaf = requestAnimationFrame(updateIntegrationRails);
+        };
+
+        updateIntegrationRails();
+        window.addEventListener('scroll', requestRailUpdate, { passive: true });
+        window.addEventListener('resize', requestRailUpdate);
+      }
     </script>
 
     <!-- People -->
@@ -750,19 +774,51 @@ const asciiAurora = (() => {
     </section>
 
     <!-- Integrations Preview -->
-    <section class="integrations-preview">
-      <SectionHeader title="Works With Everything" />
-      <div class="integrations-row">
-        {integrationPills.map((p) => (
-          <span class="integration-pill oc-pill">
-            <Icon icon={p.icon} color={p.color} size={16} />
-            <span>{p.name}</span>
-          </span>
-        ))}
+    <section class="integrations-preview" data-integration-rails>
+      <div class="integrations-copy">
+        <SectionHeader
+          title="Works With Everything"
+          link={{ href: "/integrations", text: "Explore integrations" }}
+        />
+        <p>Chat channels, models, tools, and your machine all in the same loop.</p>
       </div>
+
+      <div class="integrations-railboard" aria-label="Supported integrations">
+        <div class="integration-track integration-track-top">
+          {topIntegrationRail.map((p) => (
+            <a href="/integrations" class="integration-card">
+              <span class="integration-icon" style={`--integration-color: ${p.color}`}>
+                <Icon icon={p.icon} color="currentColor" size={30} />
+              </span>
+              <span class="integration-name">{p.name}</span>
+              <span class="integration-kind">{p.kind}</span>
+              <span class="integration-desc">{p.desc}</span>
+            </a>
+          ))}
+        </div>
+
+        <div class="integration-scale" aria-hidden="true">
+          {integrationScaleTicks.map((_, index) => (
+            <span class:list={[index % 8 === 0 && 'major', index % 8 === 4 && 'mid']}></span>
+          ))}
+        </div>
+
+        <div class="integration-track integration-track-bottom">
+          {bottomIntegrationRail.map((p) => (
+            <a href="/integrations" class="integration-card">
+              <span class="integration-icon" style={`--integration-color: ${p.color}`}>
+                <Icon icon={p.icon} color="currentColor" size={30} />
+              </span>
+              <span class="integration-name">{p.name}</span>
+              <span class="integration-kind">{p.kind}</span>
+              <span class="integration-desc">{p.desc}</span>
+            </a>
+          ))}
+        </div>
+      </div>
+
       <div class="integrations-links">
-        <a href="/integrations" class="integrations-link">Explore integrations →</a>
-        <span class="link-separator">·</span>
+        <a href="/integrations" class="integrations-link">Browse all integrations →</a>
         <a href="/showcase" class="integrations-link">See what people built →</a>
       </div>
     </section>
@@ -1349,64 +1405,268 @@ const asciiAurora = (() => {
   /* Integrations Preview */
   .integrations-preview {
     margin-bottom: 56px;
-    
+    --integration-shift: 0px;
   }
 
-  .integrations-row {
-    display: flex;
-    flex-wrap: wrap;
-    gap: var(--oc-space-2);
+  .integrations-copy {
     margin-bottom: 20px;
   }
 
-  .integration-pill {
-    display: inline-flex;
-    align-items: center;
-    gap: var(--oc-space-2);
-    padding: var(--oc-space-2) 14px;
-    border: 1px solid var(--oc-border-subtle);
-    background: var(--oc-bg-page);
-    font-family: var(--oc-font-mono);
-    font-size: 0.74rem;
-    color: var(--oc-text-secondary);
-    transition: background 0.15s ease, border-color 0.15s ease;
-    cursor: default;
+  .integrations-copy p {
+    max-width: 720px;
+    color: var(--text-secondary);
+    font-family: var(--font-display);
+    font-size: clamp(1.35rem, 2.35vw, 2.05rem);
+    font-weight: 500;
+    line-height: 1.22;
+    margin: 0;
+    text-wrap: balance;
   }
 
-  .integration-pill :global(svg) {
-    width: 14px;
-    height: 14px;
+  .integrations-copy :global(.section-header) {
+    margin-bottom: 18px;
+  }
+
+  .integrations-railboard {
+    position: relative;
+    overflow: hidden;
+    border: 1px solid var(--border-subtle);
+    background:
+      linear-gradient(90deg, color-mix(in srgb, var(--border-subtle) 90%, transparent) 1px, transparent 1px) 0 0 / 120px 100%,
+      linear-gradient(180deg, transparent, color-mix(in srgb, var(--coral-bright) 7%, transparent) 48%, transparent 72%),
+      var(--bg-deep);
+  }
+
+  .integrations-railboard::before,
+  .integrations-railboard::after {
+    content: "";
+    position: absolute;
+    inset: 0 auto 0 0;
+    z-index: 2;
+    width: min(18%, 140px);
+    pointer-events: none;
+    background: linear-gradient(90deg, var(--bg-deep), transparent);
+  }
+
+  .integrations-railboard::after {
+    inset: 0 0 0 auto;
+    background: linear-gradient(270deg, var(--bg-deep), transparent);
+  }
+
+  .integration-track {
+    display: flex;
+    width: max-content;
+    will-change: transform;
+    transition: transform 120ms linear;
+  }
+
+  .integration-track-top {
+    transform: translate3d(calc(-88px - var(--integration-shift)), 0, 0);
+  }
+
+  .integration-track-bottom {
+    transform: translate3d(calc(-260px + var(--integration-shift)), 0, 0);
+  }
+
+  .integration-card {
+    position: relative;
+    display: grid;
+    grid-template-rows: auto 1fr auto auto;
+    width: 178px;
+    min-height: 160px;
+    padding: 18px 18px 16px;
+    border-right: 1px solid var(--border-subtle);
+    color: var(--text-primary);
+    text-decoration: none;
+    background: color-mix(in srgb, var(--bg-deep) 88%, transparent);
+    transition: background 0.18s ease, color 0.18s ease;
+  }
+
+  .integration-card::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    background: radial-gradient(circle at 50% 0%, color-mix(in srgb, var(--integration-color) 18%, transparent), transparent 58%);
+    transition: opacity 0.18s ease;
+  }
+
+  .integration-card:hover {
+    background: var(--bg-surface);
+  }
+
+  .integration-card:hover::before {
+    opacity: 1;
+  }
+
+  .integration-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    margin-bottom: 18px;
+    border: 1px solid var(--border-subtle);
+    background: color-mix(in srgb, var(--integration-color) 10%, var(--bg-deep));
+    color: color-mix(in srgb, var(--integration-color) 82%, var(--text-primary));
+  }
+
+  .integration-icon :global(svg) {
+    width: 22px;
+    height: 22px;
     flex-shrink: 0;
   }
 
-  .integration-pill:hover {
-    background: var(--oc-bg-surface);
-    border-color: color-mix(in srgb, var(--oc-text-muted) 55%, transparent);
+  .integration-name,
+  .integration-kind,
+  .integration-desc {
+    position: relative;
+    z-index: 1;
+  }
+
+  .integration-name {
+    align-self: end;
+    font-family: var(--font-display);
+    font-size: 1.02rem;
+    font-weight: 600;
+    line-height: 1.2;
+  }
+
+  .integration-kind {
+    margin-top: 8px;
+    font-family: var(--font-mono);
+    font-size: 0.68rem;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--coral-bright);
+  }
+
+  .integration-desc {
+    margin-top: 8px;
+    color: var(--text-muted);
+    font-size: 0.76rem;
+    line-height: 1.45;
+  }
+
+  .integration-scale {
+    display: grid;
+    grid-template-columns: repeat(64, 1fr);
+    align-items: center;
+    gap: 7px;
+    height: 58px;
+    padding: 0 20px;
+    border-top: 1px solid var(--border-subtle);
+    border-bottom: 1px solid var(--border-subtle);
+    background:
+      linear-gradient(90deg, transparent, color-mix(in srgb, var(--coral-bright) 8%, transparent), transparent),
+      color-mix(in srgb, var(--bg-surface) 24%, transparent);
+  }
+
+  .integration-scale span {
+    display: block;
+    height: 26px;
+    border-left: 1px solid color-mix(in srgb, var(--text-muted) 28%, transparent);
+  }
+
+  .integration-scale span.mid {
+    height: 36px;
+    border-left-color: color-mix(in srgb, var(--text-muted) 45%, transparent);
+  }
+
+  .integration-scale span.major {
+    height: 46px;
+    border-left-color: color-mix(in srgb, var(--text-primary) 72%, transparent);
   }
 
   .integrations-links {
-    display: flex;
-    align-items: center;
-    gap: var(--oc-space-3);
-    flex-wrap: wrap;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    border: 1px solid var(--border-subtle);
+    border-top: 0;
   }
 
   .integrations-link {
-    color: var(--oc-text-muted);
-    font-family: var(--oc-font-mono);
+    display: flex;
+    align-items: center;
+    min-height: 52px;
+    padding: 0 24px;
+    border-right: 1px solid var(--border-subtle);
+    color: var(--text-muted);
+    font-family: var(--font-mono);
     font-size: 0.76rem;
     text-decoration: none;
     font-weight: 500;
-    transition: color 0.15s ease;
+    transition: color 0.15s ease, background 0.15s ease;
+  }
+
+  .integrations-link:last-child {
+    border-right: 0;
   }
 
   .integrations-link:hover {
-    color: var(--oc-text-primary);
+    color: var(--text-primary);
+    background: var(--bg-surface);
   }
 
-  .link-separator {
-    color: var(--oc-text-muted);
-    font-size: 0.76rem;
+  @media (prefers-reduced-motion: reduce) {
+    .integration-track {
+      transition: none;
+    }
+  }
+
+  @media (max-width: 720px) {
+    .integrations-copy p {
+      font-size: 1.42rem;
+    }
+
+    .integration-card {
+      width: 164px;
+      min-height: 164px;
+      padding: 18px 16px 16px;
+    }
+
+    .integration-icon {
+      width: 38px;
+      height: 38px;
+      margin-bottom: 18px;
+    }
+
+    .integration-desc {
+      display: none;
+    }
+
+    .integration-scale {
+      height: 54px;
+      gap: 5px;
+      padding: 0 14px;
+    }
+
+    .integration-scale span {
+      height: 24px;
+    }
+
+    .integration-scale span.mid {
+      height: 34px;
+    }
+
+    .integration-scale span.major {
+      height: 42px;
+    }
+
+    .integrations-links {
+      grid-template-columns: 1fr;
+    }
+
+    .integrations-link {
+      border-right: 0;
+      border-bottom: 1px solid var(--border-subtle);
+      padding: 0 18px;
+    }
+
+    .integrations-link:last-child {
+      border-bottom: 0;
+    }
   }
 
   /* Community Builds */
