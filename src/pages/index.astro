@@ -39,8 +39,27 @@ const integrationCards = [
   { name: 'Gmail', kind: 'Inbox', icon: siIcon(siGmail), color: '#EA4335', desc: 'Summaries, follow-ups, triage.' },
   { name: 'GitHub', kind: 'Code', icon: siIcon(siGithub), color: 'var(--text-primary)', desc: 'Issues, PRs, reviews, releases.' },
 ];
-const topIntegrationRail = integrationCards.slice(0, 8);
-const bottomIntegrationRail = integrationCards.slice(8);
+const integrationByName = new Map(integrationCards.map((card) => [card.name, card]));
+const integrationRailFromNames = (names: string[]) => names.map((name) => integrationByName.get(name)!);
+const topIntegrationRail = integrationRailFromNames([
+  'WhatsApp',
+  'Telegram',
+  'Discord',
+  'Slack',
+  'iMessage',
+  'Claude',
+  'GPT',
+  'Signal',
+]);
+const bottomIntegrationRail = integrationRailFromNames([
+  'Browser',
+  'Gmail',
+  'GitHub',
+  'Obsidian',
+  'Twitter',
+  'Spotify',
+  'Hue',
+]);
 const integrationScrubberTicks = Array.from({ length: 72 });
 
 // Split top 30 into two rows for carousel
@@ -628,9 +647,19 @@ const asciiAurora = (() => {
       const integrationRails = document.querySelector('[data-integration-rails]');
       if (integrationRails) {
         const rows = [...integrationRails.querySelectorAll('.integration-track')];
+        const railboard = integrationRails.querySelector('.integrations-railboard');
         const scrubber = integrationRails.querySelector('.integration-scrubber');
         const scrubberTicks = [...integrationRails.querySelectorAll('.integration-scrubber span')];
+        const rowMetrics = new Map();
+        const CLONE_BUFFER = 96;
+        const MIN_TRAVEL_CARDS = 1.25;
+        const TRAVEL_DAMPING = 0.86;
+        const EASE_SCROLL = 0.055;
+        const EASE_SCRUB = 0.22;
+        let current = 0;
         let scrubProgress = null;
+        let manualProgress = null;
+        const clamp01 = (value) => Math.min(Math.max(value, 0), 1);
         const setActiveIntegration = (name) => {
           integrationRails.querySelectorAll('.integration-card').forEach((card) => {
             const isActive = card.dataset.name === name;
@@ -638,68 +667,124 @@ const asciiAurora = (() => {
             card.setAttribute('aria-pressed', String(isActive));
           });
         };
-        const shiftForViewport = () => Math.min(window.innerWidth * 0.34, 320);
-        const progressForSection = () => {
-          const rect = integrationRails.getBoundingClientRect();
-          const viewport = window.innerHeight || document.documentElement.clientHeight;
-          return Math.min(Math.max((viewport - rect.top) / (viewport + rect.height), 0), 1);
-        };
-        const progressFromPointer = (event) => {
-          const rect = scrubber.getBoundingClientRect();
-          return Math.min(Math.max((event.clientX - rect.left) / rect.width, 0), 1);
-        };
-        const scrollToProgress = (progress) => {
-          const rect = integrationRails.getBoundingClientRect();
-          const viewport = window.innerHeight || document.documentElement.clientHeight;
-          const sectionTop = window.scrollY + rect.top;
-          window.scrollTo({
-            top: sectionTop + progress * (viewport + rect.height) - viewport,
-            behavior: 'auto',
-          });
-        };
-        const setScrubProgress = (event) => {
-          scrubProgress = progressFromPointer(event);
-          current = scrubProgress;
-          scrollToProgress(scrubProgress);
-        };
-
+        const boardWidth = () => (railboard ?? integrationRails).getBoundingClientRect().width;
         rows.forEach((row) => {
-          const originals = [...row.children];
-          while (row.scrollWidth < window.innerWidth + shiftForViewport() + 280) {
-            originals.forEach((card) => {
+          rowMetrics.set(row, { originals: [...row.children] });
+        });
+        const measureRow = (row) => {
+          const metrics = rowMetrics.get(row);
+          const first = metrics.originals[0]?.getBoundingClientRect();
+          const last = metrics.originals.at(-1)?.getBoundingClientRect();
+          const cardWidth = first?.width || 178;
+          const originalSpan = first && last ? last.right - first.left : cardWidth;
+          const rawTravel = Math.max(originalSpan - boardWidth(), cardWidth * MIN_TRAVEL_CARDS);
+          const travel = rawTravel * TRAVEL_DAMPING;
+          const dir = row.dataset.dir === 'right' ? 1 : -1;
+          metrics.travel = travel;
+          metrics.dir = dir;
+          metrics.base = dir === 1 ? -travel : 0;
+          return metrics;
+        };
+        const ensureClones = (row) => {
+          const metrics = rowMetrics.get(row);
+          const neededWidth = boardWidth() + metrics.travel + CLONE_BUFFER;
+          let guard = 0;
+          while (row.scrollWidth < neededWidth && guard < 12) {
+            metrics.originals.forEach((card) => {
               const clone = card.cloneNode(true);
               clone.setAttribute('aria-hidden', 'true');
               clone.setAttribute('tabindex', '-1');
               row.appendChild(clone);
             });
+            guard += 1;
           }
-        });
+        };
+        const layoutRows = () => {
+          rows.forEach((row) => {
+            measureRow(row);
+            ensureClones(row);
+          });
+        };
+        const xAt = (row, progress) => {
+          const metrics = rowMetrics.get(row);
+          return metrics.base + metrics.dir * progress * metrics.travel;
+        };
+        const progressWindow = () => {
+          const viewport = window.innerHeight || document.documentElement.clientHeight;
+          return {
+            viewport,
+            startCenter: viewport * 0.72,
+            endCenter: viewport * 0.36,
+          };
+        };
+        const progressForSection = () => {
+          const rect = (railboard ?? integrationRails).getBoundingClientRect();
+          const { startCenter, endCenter } = progressWindow();
+          const boardCenter = rect.top + rect.height / 2;
+          return clamp01((startCenter - boardCenter) / (startCenter - endCenter));
+        };
+        const progressFromPointer = (event) => {
+          const rect = scrubber.getBoundingClientRect();
+          return clamp01((event.clientX - rect.left) / rect.width);
+        };
+        const setScrubProgress = (event) => {
+          manualProgress = progressFromPointer(event);
+          scrubProgress = manualProgress;
+        };
+        const applyTransforms = (progress) => {
+          rows.forEach((row) => {
+            row.style.transform = `translate3d(${xAt(row, progress)}px, 0, 0)`;
+          });
+        };
+        const updateScrubberTicks = (progress) => {
+          const scrubberPosition = progress * (scrubberTicks.length - 1);
+          scrubberTicks.forEach((tick, index) => {
+            const distance = Math.abs(index - scrubberPosition);
+            tick.classList.toggle('on', distance < 1.2);
+            tick.classList.toggle('near', distance >= 1.2 && distance < 3.4);
+          });
+        };
+        const auditIntegrationRails = (points = [0, 0.5, 1]) => {
+          const result = [];
+          const saved = current;
+          points.forEach((progress) => {
+            applyTransforms(progress);
+            const boardRect = (railboard ?? integrationRails).getBoundingClientRect();
+            rows.forEach((row) => {
+              const label = row.classList.contains('integration-track-top') ? 'top' : 'bottom';
+              [...row.children].forEach((card, index) => {
+                const rect = card.getBoundingClientRect();
+                const visibleWidth = Math.min(rect.right, boardRect.right) - Math.max(rect.left, boardRect.left);
+                if (visibleWidth <= 1) return;
+                result.push({
+                  progress,
+                  row: label,
+                  index,
+                  name: card.dataset.name,
+                  clone: card.getAttribute('aria-hidden') === 'true',
+                  visible: `${Math.round((visibleWidth / rect.width) * 100)}%`,
+                });
+              });
+            });
+          });
+          applyTransforms(saved);
+          return result;
+        };
+
+        layoutRows();
+        window.__auditIntegrationRails = auditIntegrationRails;
 
         if (reducedMotion) {
-          const middleTick = Math.floor(scrubberTicks.length / 2);
-          scrubberTicks.forEach((tick, index) => {
-            tick.classList.toggle('on', Math.abs(index - middleTick) < 1.5);
-            tick.classList.toggle('near', Math.abs(index - middleTick) >= 1.5 && Math.abs(index - middleTick) < 3.5);
-          });
+          const staticProgress = 0.5;
+          applyTransforms(staticProgress);
+          updateScrubberTicks(staticProgress);
         } else {
-          let current = progressForSection();
+          current = progressForSection();
           const updateIntegrationFrame = () => {
-            const target = scrubProgress ?? progressForSection();
-            current += (target - current) * (scrubProgress == null ? 0.075 : 0.22);
-            const shift = shiftForViewport();
-
-            rows.forEach((row) => {
-              const dir = row.dataset.dir === 'right' ? 1 : -1;
-              const base = dir === 1 ? -shift : 0;
-              row.style.transform = `translate3d(${base + dir * current * shift}px, 0, 0)`;
-            });
-
-            const scrubberPosition = current * (scrubberTicks.length - 1);
-            scrubberTicks.forEach((tick, index) => {
-              const distance = Math.abs(index - scrubberPosition);
-              tick.classList.toggle('on', distance < 1.2);
-              tick.classList.toggle('near', distance >= 1.2 && distance < 3.4);
-            });
+            const target = scrubProgress ?? manualProgress ?? progressForSection();
+            current += (target - current) * (scrubProgress == null && manualProgress == null ? EASE_SCROLL : EASE_SCRUB);
+            applyTransforms(current);
+            updateScrubberTicks(current);
 
             requestAnimationFrame(updateIntegrationFrame);
           };
@@ -730,6 +815,15 @@ const asciiAurora = (() => {
 
             scrubber.addEventListener('pointerup', stopScrubbing);
             scrubber.addEventListener('pointercancel', stopScrubbing);
+
+            window.addEventListener('scroll', () => {
+              if (!scrubber.classList.contains('is-dragging')) manualProgress = null;
+            }, { passive: true });
+
+            window.addEventListener('resize', () => {
+              layoutRows();
+              applyTransforms(manualProgress ?? current);
+            }, { passive: true });
           }
         }
 
@@ -874,7 +968,6 @@ const asciiAurora = (() => {
           title="Works With Everything"
           link={{ href: "/integrations", text: "Explore integrations" }}
         />
-        <p>Chat channels, models, tools, and your machine all in the same loop.</p>
       </div>
 
       <div class="integrations-railboard" aria-label="Supported integrations">
@@ -928,8 +1021,9 @@ const asciiAurora = (() => {
         link={{ href: "https://docs.openclaw.ai/start/showcase", text: "View docs showcase" }}
       />
       <div class="builds-grid">
-        {featuredBuilds.map((build) => (
+        {featuredBuilds.map((build, index) => (
           <a href={sanitizeUrl(build.href)} target="_blank" rel="noopener" class="build-card">
+            <span class="build-index">{String(index + 1).padStart(2, '0')}</span>
             <div class="build-card-header">
               <span class="build-source">
                 <svg class="build-source-icon" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d={siIcon(siX)} /></svg>
@@ -937,12 +1031,14 @@ const asciiAurora = (() => {
               </span>
               <span class="build-open">Open →</span>
             </div>
-            <h3 class="build-title">{build.title}</h3>
-            <p class="build-summary">{build.summary}</p>
-            <div class="build-tags">
-              {build.tags.map((tag: string) => (
-                <span class="build-tag">{tag}</span>
-              ))}
+            <div class="build-copy">
+              <h3 class="build-title">{build.title}</h3>
+              <p class="build-summary">{build.summary}</p>
+              <div class="build-tags">
+                {build.tags.map((tag: string) => (
+                  <span class="build-tag">{tag}</span>
+                ))}
+              </div>
             </div>
           </a>
         ))}
@@ -1555,12 +1651,12 @@ const asciiAurora = (() => {
     position: absolute;
     inset: 0 auto 0 0;
     z-index: 2;
-    width: min(9%, 82px);
+    width: min(11%, 96px);
     pointer-events: none;
     background: linear-gradient(
       90deg,
-      color-mix(in srgb, var(--bg-deep) 76%, transparent) 0%,
-      color-mix(in srgb, var(--bg-deep) 46%, transparent) 44%,
+      color-mix(in srgb, var(--bg-deep) 80%, transparent) 0%,
+      color-mix(in srgb, var(--bg-deep) 52%, transparent) 44%,
       transparent 100%
     );
   }
@@ -1569,8 +1665,8 @@ const asciiAurora = (() => {
     inset: 0 0 0 auto;
     background: linear-gradient(
       270deg,
-      color-mix(in srgb, var(--bg-deep) 76%, transparent) 0%,
-      color-mix(in srgb, var(--bg-deep) 46%, transparent) 44%,
+      color-mix(in srgb, var(--bg-deep) 80%, transparent) 0%,
+      color-mix(in srgb, var(--bg-deep) 52%, transparent) 44%,
       transparent 100%
     );
   }
@@ -1643,13 +1739,15 @@ const asciiAurora = (() => {
 
   .integration-card.is-active .integration-name {
     color: var(--text-primary);
-    transform: none;
+    top: 96px;
   }
 
   .integration-card.is-active .integration-icon {
     color: color-mix(in srgb, var(--integration-color) 84%, var(--text-primary));
     opacity: 1;
-    transform: none;
+    top: 58px;
+    width: 36px;
+    height: 36px;
   }
 
   .integration-card.is-active .integration-kind,
@@ -1666,22 +1764,6 @@ const asciiAurora = (() => {
     color: var(--text-muted);
   }
 
-  .integration-card.is-active .integration-icon {
-    position: absolute;
-    top: 58px;
-    left: 50%;
-    width: 36px;
-    height: 36px;
-    transform: translateX(-50%);
-  }
-
-  .integration-card.is-active .integration-name {
-    position: absolute;
-    top: 96px;
-    right: 14px;
-    left: 14px;
-  }
-
   .integration-card.is-active .integration-icon,
   .integration-card.is-active .integration-name,
   .integration-card.is-active .integration-kind,
@@ -1690,6 +1772,10 @@ const asciiAurora = (() => {
   }
 
   .integration-icon {
+    position: absolute;
+    top: 64px;
+    left: 50%;
+    z-index: 1;
     display: inline-flex;
     align-items: center;
     justify-content: center;
@@ -1697,7 +1783,8 @@ const asciiAurora = (() => {
     height: 44px;
     color: color-mix(in srgb, var(--text-muted) 42%, var(--text-primary));
     opacity: 0.36;
-    transition: color 0.45s ease, opacity 0.45s ease, transform 0.32s ease;
+    transform: translateX(-50%);
+    transition: top 0.25s ease, width 0.25s ease, height 0.25s ease, color 0.45s ease, opacity 0.45s ease;
   }
 
   .integration-icon :global(svg) {
@@ -1715,12 +1802,16 @@ const asciiAurora = (() => {
   }
 
   .integration-name {
+    position: absolute;
+    top: 116px;
+    right: 14px;
+    left: 14px;
     font-family: var(--font-display);
     font-size: 1.02rem;
     font-weight: 600;
     line-height: 1.2;
     color: color-mix(in srgb, var(--text-muted) 64%, transparent);
-    transition: color 0.45s ease, transform 0.32s ease;
+    transition: top 0.25s ease, color 0.45s ease;
   }
 
   .integration-meta {
@@ -1890,40 +1981,52 @@ const asciiAurora = (() => {
   }
 
   .builds-grid {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 1px;
-    background: var(--oc-border-subtle);
-    border: 1px solid var(--oc-border-subtle);
+    display: flex;
+    flex-direction: column;
+    border: 1px solid var(--border-subtle);
     margin-bottom: 18px;
   }
 
   @media (max-width: 640px) {
     .builds-grid {
-      grid-template-columns: 1fr;
+      display: flex;
     }
   }
 
   .build-card {
-    display: flex;
-    flex-direction: column;
-    gap: var(--oc-space-3);
-    padding: 30px 26px;
-    background: var(--oc-bg-page);
+    display: grid;
+    grid-template-columns: 46px minmax(148px, 0.36fr) 1fr;
+    gap: 22px;
+    align-items: start;
+    padding: 24px 26px;
+    border-bottom: 1px solid var(--border-subtle);
+    background: var(--bg-deep);
     text-decoration: none;
     color: var(--oc-text-primary);
     transition: background 0.15s ease;
+  }
+
+  .build-card:last-child {
+    border-bottom: 0;
   }
 
   .build-card:hover {
     background: var(--oc-bg-surface);
   }
 
+  .build-index {
+    color: color-mix(in srgb, var(--text-muted) 55%, transparent);
+    font-family: var(--font-mono);
+    font-size: 0.78rem;
+    line-height: 1.55;
+  }
+
   .build-card-header {
     display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: var(--oc-space-3);
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: flex-start;
+    gap: 12px;
   }
 
   .build-source {
@@ -1964,24 +2067,31 @@ const asciiAurora = (() => {
     color: var(--oc-text-primary);
   }
 
+  .build-copy {
+    min-width: 0;
+  }
+
   .build-title {
     font-family: var(--oc-font-display);
     font-size: 1.05rem;
     font-weight: 600;
     letter-spacing: -0.01em;
     line-height: 1.35;
+    margin-bottom: 8px;
   }
 
   .build-summary {
     color: var(--oc-text-muted);
     font-size: 0.88rem;
     line-height: 1.65;
+    max-width: 64ch;
   }
 
   .build-tags {
     display: flex;
     flex-wrap: wrap;
     gap: 14px;
+    margin-top: 14px;
   }
 
   .build-tag {
@@ -2007,7 +2117,7 @@ const asciiAurora = (() => {
 
   .press-grid {
     display: grid;
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: repeat(3, 1fr);
     gap: 1px;
     background: var(--oc-border-subtle);
     border: 1px solid var(--oc-border-subtle);
@@ -2022,12 +2132,22 @@ const asciiAurora = (() => {
   .press-card {
     display: flex;
     flex-direction: column;
-    gap: var(--oc-space-3);
-    padding: 30px 26px;
-    background: var(--oc-bg-page);
+    gap: 12px;
+    min-height: 220px;
+    padding: 26px 26px;
+    background: var(--bg-deep);
     text-decoration: none;
     color: var(--oc-text-primary);
     transition: background 0.15s ease;
+  }
+
+  .press-card:first-child {
+    grid-column: 1 / -1;
+    min-height: 180px;
+  }
+
+  .press-card:nth-child(n + 2) {
+    min-height: 210px;
   }
 
   .press-card:hover {
@@ -2106,6 +2226,32 @@ const asciiAurora = (() => {
 
   .press-featured:hover {
     background: color-mix(in srgb, var(--oc-accent-primary) 5%, var(--oc-bg-surface));
+  }
+
+  @media (max-width: 860px) {
+    .build-card {
+      grid-template-columns: 38px 1fr;
+      gap: 12px 18px;
+    }
+
+    .build-card-header,
+    .build-copy {
+      grid-column: 2;
+    }
+
+    .build-card-header {
+      flex-direction: row;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .press-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .press-card:first-child {
+      grid-column: auto;
+    }
   }
 
   /* Quick Start */
