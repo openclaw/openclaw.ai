@@ -9,6 +9,7 @@
         "@lucide/astro": "^1.22.0",
         "@vercel/analytics": "^2.0.1",
         "astro": "^7.0.4",
+        "@openclaw/design-system": "git+ssh://git@github.com/openclaw/design-system.git#v0.0.3",
         "js-yaml": "^5.2.0",
         "sharp": "0.35.3",
         "simple-icons": "^16.24.1",
@@ -202,6 +203,8 @@
     "@napi-rs/wasm-runtime": ["@napi-rs/wasm-runtime@1.1.6", "", { "dependencies": { "@tybys/wasm-util": "^0.10.3" }, "peerDependencies": { "@emnapi/core": "^1.7.1", "@emnapi/runtime": "^1.7.1" } }, "sha512-ZLv/JdUfkvOy9eCnnBaGfiO+XimbjebAeO+MRQqD/B+FR1tnRN0tpKSJHRbE8sFfS6aqsXZ67TQjfwfsxULVbg=="],
 
     "@nodable/entities": ["@nodable/entities@2.1.0", "", {}, "sha512-nyT7T3nbMyBI/lvr6L5TyWbFJAI9FTgVRakNoBqCD+PmID8DzFrrNdLLtHMwMszOtqZa8PAOV24ZqDnQrhQINA=="],
+
+    "@openclaw/design-system": ["@openclaw/design-system@git+ssh://git@github.com/openclaw/design-system.git#35c800b212fa0f8377012c2db70125f1babb74e9", {}, "35c800b212fa0f8377012c2db70125f1babb74e9"],
 
     "@oslojs/encoding": ["@oslojs/encoding@1.1.0", "", {}, "sha512-70wQhgYmndg4GCPxPPxPGevRKqTIJ2Nh4OkiMWmDAVYsTQ+Ta7Sq+rPevXyXGdzr30/qZBnyOalCszoMxlyldQ=="],
 
