@@ -8,6 +8,8 @@ authors:
     avatar: "/avatars/x/davemorin.jpg"
 draft: false
 tags: ["announcement", "foundation"]
+coverImage: "/blog/introducing-openclaw-foundation/creation.png"
+ogLayout: "full-bleed"
 ---
 
 Six months ago, OpenClaw was a single claw and a Discord server at Peter's place in Austria. A weekend project that was built because, in his words, he was annoyed it didn't exist and so he prompted it into existence. Today, it is a global movement with 4.5 million new claws being born every week, and the fastest growing repository in GitHub history. And now, a foundation.

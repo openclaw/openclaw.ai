@@ -32,6 +32,7 @@ const blog = defineCollection({
     tags: z.array(z.string()).default([]),
     coverImage: z.string().optional(),
     image: z.string().optional(),
+    ogLayout: z.enum(['full-bleed']).optional(),
   }),
 });
 
