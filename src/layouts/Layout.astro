@@ -1,5 +1,7 @@
 ---
 import Analytics from '@vercel/analytics/astro';
+import '@openclaw/design-system/tokens.css';
+import '@openclaw/design-system/themes.css';
 
 interface Props {
   title: string;
@@ -75,38 +77,7 @@ const structuredDataItems = structuredData ? Array.isArray(structuredData) ? str
 
     <style is:global>
       :root {
-        /* Neutral ink, aligned with the OpenClaw Foundation site */
-        --bg-deep: #101012;
-        --bg-surface: #19191c;
-        --bg-elevated: #202024;
-
-        /* Foundation coral */
-        --coral-bright: #f5654a;
-        --coral-mid: #e05540;
-        --coral-dark: #b23a28;
-
-        /* Sea glass — secondary accent, used sparingly */
-        --cyan-bright: #4fc8ae;
-        --cyan-mid: #2fa48d;
-        --cyan-glow: rgba(79, 200, 174, 0.35);
-
-        /* Text */
-        --text-primary: #ededed;
-        --text-secondary: #bcbcc4;
-        --text-muted: #9a9aa2;
-
-        /* Borders */
-        --border-subtle: rgba(154, 154, 162, 0.18);
-        --border-accent: rgba(245, 101, 74, 0.4);
-
-        --surface-card: rgba(25, 25, 28, 0.72);
-        --surface-card-strong: rgba(25, 25, 28, 0.9);
-        --surface-overlay: rgba(0, 0, 0, 0.3);
-        --surface-interactive: rgba(237, 237, 237, 0.08);
-        --surface-interactive-hover: rgba(237, 237, 237, 0.16);
-        --surface-cyan-soft: rgba(79, 200, 174, 0.14);
-        --surface-coral-soft: rgba(245, 101, 74, 0.14);
-        --surface-inset-highlight: rgba(237, 237, 237, 0.05);
+        /* Site-specific effects build on the shared OpenClaw palette. */
         --newsletter-gradient: rgba(25, 25, 28, 0.85);
         --press-featured-gradient: rgba(245, 101, 74, 0.05);
         --shadow-coral-soft: rgba(178, 58, 40, 0.26);
@@ -122,12 +93,6 @@ const structuredDataItems = structuredData ? Array.isArray(structuredData) ? str
         --logo-glow: rgba(245, 101, 74, 0.35);
         --logo-glow-hover: rgba(79, 200, 174, 0.5);
 
-        /* Text color for content sitting on the coral accent */
-        --on-accent: #101012;
-
-        /* Dot grid for the backdrop */
-        --chart-line: rgba(237, 237, 237, 0.09);
-
         /* Fonts */
         --font-display: 'Switzer', system-ui, sans-serif;
         --font-body: 'Switzer', system-ui, sans-serif;
@@ -136,34 +101,6 @@ const structuredDataItems = structuredData ? Array.isArray(structuredData) ? str
       }
 
       html[data-theme='light'] {
-        /* Warm paper, aligned with the Foundation light theme */
-        --bg-deep: #f6f5f3;
-        --bg-surface: #eceae6;
-        --bg-elevated: #ffffff;
-
-        --coral-bright: #d84a31;
-        --coral-mid: #c24028;
-        --coral-dark: #9c3222;
-
-        --cyan-bright: #14806e;
-        --cyan-mid: #0f6355;
-        --cyan-glow: rgba(20, 128, 110, 0.24);
-
-        --text-primary: #17171a;
-        --text-secondary: #46464e;
-        --text-muted: #63636c;
-
-        --border-subtle: rgba(23, 23, 26, 0.14);
-        --border-accent: rgba(216, 74, 49, 0.42);
-
-        --surface-card: rgba(255, 255, 255, 0.8);
-        --surface-card-strong: rgba(255, 255, 255, 0.95);
-        --surface-overlay: rgba(23, 23, 26, 0.08);
-        --surface-interactive: rgba(23, 23, 26, 0.07);
-        --surface-interactive-hover: rgba(23, 23, 26, 0.14);
-        --surface-cyan-soft: rgba(20, 128, 110, 0.13);
-        --surface-coral-soft: rgba(216, 74, 49, 0.12);
-        --surface-inset-highlight: rgba(23, 23, 26, 0.05);
         --newsletter-gradient: rgba(255, 255, 255, 0.9);
         --press-featured-gradient: rgba(216, 74, 49, 0.06);
         --shadow-coral-soft: rgba(156, 50, 34, 0.15);
@@ -178,10 +115,6 @@ const structuredDataItems = structuredData ? Array.isArray(structuredData) ? str
         --logo-gradient-end: #9c3222;
         --logo-glow: rgba(216, 74, 49, 0.22);
         --logo-glow-hover: rgba(20, 128, 110, 0.3);
-
-        --on-accent: #ffffff;
-
-        --chart-line: rgba(23, 23, 26, 0.12);
       }
 
       *, *::before, *::after {

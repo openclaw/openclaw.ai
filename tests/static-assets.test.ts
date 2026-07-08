@@ -25,6 +25,17 @@ function readBytes(relativePath: string): Buffer {
 }
 
 describe('static public assets', () => {
+  test('loads foundational colors from the shared OpenClaw design system', () => {
+    const layout = readText('src/layouts/Layout.astro');
+
+    expect(layout).toContain("import '@openclaw/design-system/tokens.css'");
+    expect(layout).toContain("import '@openclaw/design-system/themes.css'");
+    expect(layout).not.toContain('--bg-deep: #101012');
+    expect(layout).not.toContain('--coral-bright: #f5654a');
+    expect(layout).not.toContain('--bg-deep: #f6f5f3');
+    expect(layout).not.toContain('--coral-bright: #d84a31');
+  });
+
   test('redirects legacy docs paths to the canonical docs host', () => {
     const config = readJson('vercel.json') as {
       redirects?: Array<{
