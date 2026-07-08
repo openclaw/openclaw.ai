@@ -7,6 +7,7 @@ import SiteFooter from '../components/SiteFooter.astro';
 import testimonials from '../data/testimonials.json';
 import communityBuilds from '../data/community-builds.json';
 import pressArticles from '../data/press.json';
+import footerAsciinator from '../data/footer-asciinator.html?raw';
 import { getPublishedBlogPosts } from '../lib/blog';
 import { getCachedXAvatarSrc, getInitialsAvatarSrc } from '../lib/avatars';
 import { sanitizeUrl } from '../lib/sanitize-url';
@@ -65,10 +66,12 @@ const integrationScrubberTicks = Array.from({ length: 72 });
 const half = Math.ceil(testimonials.length / 2);
 const topRow = testimonials.slice(0, half);
 const bottomRow = testimonials.slice(half);
-const testimonialRows = [
-  { items: topRow, dir: 'left' },
-  { items: bottomRow, dir: 'right' },
-];
+const row1 = [...topRow, ...topRow];
+const row2 = [...bottomRow, ...bottomRow];
+const pixelsPerItem = 336;
+const pixelsPerSecond = 50;
+const duration1 = (row1.length / 2 * pixelsPerItem) / pixelsPerSecond;
+const duration2 = (row2.length / 2 * pixelsPerItem) / pixelsPerSecond;
 const featuredBuilds = communityBuilds.slice(0, 4);
 const featuredPress = pressArticles.slice(0, 4).map((article) => {
   let favicon: string | null = null;
@@ -840,38 +843,41 @@ const asciiAurora = (() => {
         title="What People Say"
         link={{ href: "/shoutouts", text: "View all" }}
       />
-      <div class="testimonials-marquees">
-        {testimonialRows.map(({ items, dir }) => (
-          <div class="testimonial-marquee" data-dir={dir}>
-            <div class="testimonial-track">
-              {[false, true].map((clone) => (
-                <div class="testimonial-group" aria-hidden={clone ? 'true' : undefined}>
-                  {items.map((t) => (
-                    <a
-                      href={sanitizeUrl(t.url)}
-                      target="_blank"
-                      rel="noopener"
-                      class="testimonial-card"
-                      tabindex={clone ? '-1' : undefined}
-                    >
-                      <img
-                        src={getCachedXAvatarSrc(t.author, t.author, 88)}
-                        alt={t.author}
-                        class="testimonial-avatar"
-                        loading="lazy"
-                        onerror={`this.src='${getInitialsAvatarSrc(t.author, 88)}'`}
-                      />
-                      <div class="testimonial-content">
-                        <p class="testimonial-quote">"{t.quote}"</p>
-                        <span class="testimonial-author">@{t.author}</span>
-                      </div>
-                    </a>
-                  ))}
-                </div>
-              ))}
-            </div>
-          </div>
-        ))}
+      <div class="testimonials-track">
+        <div class="testimonials-row row-1" style={`--duration: ${duration1}s`}>
+          {row1.map((t) => (
+            <a href={sanitizeUrl(t.url)} target="_blank" rel="noopener" class="testimonial-card" tabindex="-1">
+              <img
+                src={getCachedXAvatarSrc(t.author, t.author, 88)}
+                alt={t.author}
+                class="testimonial-avatar"
+                loading="lazy"
+                onerror={`this.src='${getInitialsAvatarSrc(t.author, 88)}'`}
+              />
+              <div class="testimonial-content">
+                <p class="testimonial-quote">"{t.quote}"</p>
+                <span class="testimonial-author">@{t.author}</span>
+              </div>
+            </a>
+          ))}
+        </div>
+        <div class="testimonials-row row-2" style={`--duration: ${duration2}s`}>
+          {row2.map((t) => (
+            <a href={sanitizeUrl(t.url)} target="_blank" rel="noopener" class="testimonial-card">
+              <img
+                src={getCachedXAvatarSrc(t.author, t.author, 88)}
+                alt={t.author}
+                class="testimonial-avatar"
+                loading="lazy"
+                onerror={`this.src='${getInitialsAvatarSrc(t.author, 88)}'`}
+              />
+              <div class="testimonial-content">
+                <p class="testimonial-quote">"{t.quote}"</p>
+                <span class="testimonial-author">@{t.author}</span>
+              </div>
+            </a>
+          ))}
+        </div>
       </div>
     </section>
 
@@ -1013,8 +1019,8 @@ const asciiAurora = (() => {
     <section class="builds-section">
       <div class="builds-grid">
         <div class="builds-head-cell">
-          <h2>What people are building.</h2>
-          <p>Real OpenClaw workflows shared by the community.</p>
+          <h2><span>What people are building.</span></h2>
+          <p><span>Real OpenClaw workflows shared by the community.</span></p>
           <a href="/showcase" class="builds-head-cta">View showcase</a>
         </div>
         {featuredBuilds.map((build) => (
@@ -1173,7 +1179,7 @@ const asciiAurora = (() => {
     </section>
 
     <!-- Footer -->
-    <SiteFooter current="home" spacing="home" decorativeArt={asciiAurora} showDisclaimer />
+    <SiteFooter current="home" spacing="home" decorativeHtml={footerAsciinator} showDisclaimer />
     </div>
   </main>
 </Layout>
@@ -1636,7 +1642,7 @@ const asciiAurora = (() => {
   .rail > .integrations-preview {
     position: relative;
     margin: 0 -48px;
-    padding: 48px;
+    padding: 72px 48px;
     border-top: 0;
     background-color: var(--bg-deep);
     background-image: radial-gradient(
@@ -1995,7 +2001,7 @@ const asciiAurora = (() => {
     .rail > .integrations-preview {
       margin-right: -20px;
       margin-left: -20px;
-      padding: 40px 20px;
+      padding: 56px 20px;
     }
   }
 
@@ -2055,6 +2061,7 @@ const asciiAurora = (() => {
   }
 
   .builds-head-cell {
+    position: relative;
     grid-row: span 2;
     display: flex;
     flex-direction: column;
@@ -2063,10 +2070,31 @@ const asciiAurora = (() => {
     border-right: 1px solid var(--border-subtle);
     border-bottom: 1px solid var(--border-subtle);
     background: var(--bg-deep);
+    overflow: hidden;
+  }
+
+  .builds-head-cell::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+    background-image: radial-gradient(
+      circle at center,
+      color-mix(in srgb, var(--chart-line) 72%, transparent) 0.5px,
+      transparent 1.2px
+    );
+    background-size: 10px 10px;
+  }
+
+  .builds-head-cell > * {
+    position: relative;
+    z-index: 1;
   }
 
   .builds-head-cell h2 {
     max-width: 11ch;
+    align-self: flex-start;
     font-family: var(--font-display);
     font-size: clamp(2.15rem, 3.8vw, 2.65rem);
     font-weight: 600;
@@ -2075,12 +2103,28 @@ const asciiAurora = (() => {
     color: var(--coral-bright);
   }
 
+  .builds-head-cell h2 span,
+  .builds-head-cell p span {
+    background: var(--bg-deep);
+    box-decoration-break: clone;
+    -webkit-box-decoration-break: clone;
+  }
+
+  .builds-head-cell h2 span {
+    padding: 0.02em 0.08em;
+  }
+
   .builds-head-cell p {
     max-width: 30ch;
     margin-top: 24px;
+    align-self: flex-start;
     color: var(--text-muted);
     font-size: 0.98rem;
     line-height: 1.6;
+  }
+
+  .builds-head-cell p span {
+    padding: 0.08em 0.16em;
   }
 
   .builds-head-cta {
@@ -3114,15 +3158,13 @@ const asciiAurora = (() => {
     overflow: hidden;
   }
 
-  .testimonials-marquees {
+  .testimonials-track {
+    position: relative;
     display: flex;
     flex-direction: column;
     gap: var(--oc-space-2);
     margin-left: -48px;
     margin-right: -48px;
-  }
-
-  .testimonial-marquee {
     overflow: hidden;
     mask-image: linear-gradient(
       to right,
@@ -3140,29 +3182,33 @@ const asciiAurora = (() => {
     );
   }
 
-  .testimonial-track {
-    display: flex;
-    width: max-content;
-    animation: testimonial-scroll 56s linear infinite;
-    will-change: transform;
-  }
-
-  .testimonial-marquee[data-dir="right"] .testimonial-track {
-    animation-direction: reverse;
-    animation-delay: -19s;
-    animation-duration: 68s;
-  }
-
-  .testimonial-group {
-    display: flex;
-    flex-shrink: 0;
-    gap: 16px;
-    padding: 8px 16px 8px 0;
-  }
-
-  .testimonial-marquee:hover .testimonial-track,
-  .testimonial-marquee:focus-within .testimonial-track {
+  .testimonials-track:focus-within .testimonials-row {
     animation-play-state: paused;
+  }
+
+  .testimonials-row {
+    display: flex;
+    gap: 16px;
+    width: max-content;
+    padding: 8px 0;
+  }
+
+  .row-1 {
+    animation: scroll-left var(--duration, 80s) linear infinite;
+  }
+
+  .row-2 {
+    animation: scroll-right var(--duration, 90s) linear infinite;
+  }
+
+  @keyframes scroll-left {
+    from { transform: translateX(0); }
+    to { transform: translateX(-50%); }
+  }
+
+  @keyframes scroll-right {
+    from { transform: translateX(-50%); }
+    to { transform: translateX(0); }
   }
 
   .testimonial-card {
@@ -3180,13 +3226,12 @@ const asciiAurora = (() => {
     flex-shrink: 0;
   }
 
-  @keyframes testimonial-scroll {
-    from { transform: translate3d(0, 0, 0); }
-    to { transform: translate3d(-50%, 0, 0); }
-  }
-
   .testimonial-card:hover {
     background: var(--bg-surface);
+  }
+
+  .testimonials-row:hover {
+    animation-play-state: paused;
   }
 
   .testimonial-avatar {
@@ -3218,14 +3263,6 @@ const asciiAurora = (() => {
     -webkit-line-clamp: 3;
     -webkit-box-orient: vertical;
     overflow: hidden;
-  }
-
-  @media (prefers-reduced-motion: reduce) {
-    .testimonial-track {
-      animation: none;
-      transform: none;
-      will-change: auto;
-    }
   }
 
   .testimonial-author {
@@ -3264,7 +3301,7 @@ const asciiAurora = (() => {
       margin: -24px -20px var(--oc-space-4);
     }
 
-    .testimonials-marquees {
+    .testimonials-track {
       margin-left: -20px;
       margin-right: -20px;
     }

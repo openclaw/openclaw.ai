@@ -14,6 +14,7 @@ const {
   credit = 'full',
   spacing = 'roomy',
   decorativeArt = '',
+  decorativeHtml = '',
   showDisclaimer = false,
 } = Astro.props;
 
@@ -36,9 +37,9 @@ const links = navLinks.filter((link) => link.id !== current);
   )}
   <p class="foundation-note">An <a href="https://openclaw.org" target="_blank" rel="noopener">OpenClaw Foundation</a> project.</p>
   {showDisclaimer && <p class="disclaimer">Independent project, not affiliated with Anthropic.</p>}
-  {decorativeArt && (
-    <div class="footer-art" aria-hidden="true">
-      <pre>{decorativeArt}</pre>
+  {(decorativeHtml || decorativeArt) && (
+    <div class:list={['footer-art', decorativeHtml && 'footer-art--html']} aria-hidden="true">
+      {decorativeHtml ? <Fragment set:html={decorativeHtml} /> : <pre>{decorativeArt}</pre>}
     </div>
   )}
 </footer>
@@ -131,8 +132,28 @@ const links = navLinks.filter((link) => link.id !== current);
     letter-spacing: 1px;
     color: var(--coral-bright);
     opacity: 0.42;
-    transform: scaleY(-1);
     transform-origin: center;
+  }
+
+  .footer-art:not(.footer-art--html) pre {
+    transform: scaleY(-1);
+  }
+
+  .footer-art--html {
+    height: min(25vh, 240px);
+    margin-top: 22px;
+    mask-image: linear-gradient(180deg, transparent 0%, black 12%, black 86%, transparent 100%);
+    -webkit-mask-image: linear-gradient(180deg, transparent 0%, black 12%, black 86%, transparent 100%);
+  }
+
+  .footer-art--html :global(pre) {
+    flex-shrink: 0;
+    margin: 0;
+    font-family: var(--font-mono);
+    font-size: clamp(4px, 0.34vw, 5.2px) !important;
+    line-height: 1.06 !important;
+    letter-spacing: 0;
+    opacity: 0.62;
   }
 
   @media (max-width: 480px) {
