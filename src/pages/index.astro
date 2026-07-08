@@ -62,21 +62,13 @@ const bottomIntegrationRail = integrationRailFromNames([
 ]);
 const integrationScrubberTicks = Array.from({ length: 72 });
 
-// Split top 30 into two rows for carousel
 const half = Math.ceil(testimonials.length / 2);
 const topRow = testimonials.slice(0, half);
 const bottomRow = testimonials.slice(half);
-
-// Duplicate for seamless loop
-const row1 = [...topRow, ...topRow];
-const row2 = [...bottomRow, ...bottomRow];
-
-// Calculate animation duration based on content length for constant speed
-// Each card is ~336px (320px min-width + 16px gap), speed = 50px/s
-const pixelsPerItem = 336;
-const pixelsPerSecond = 50;
-const duration1 = (row1.length / 2 * pixelsPerItem) / pixelsPerSecond;
-const duration2 = (row2.length / 2 * pixelsPerItem) / pixelsPerSecond;
+const testimonialRows = [
+  { items: topRow, dir: 'left' },
+  { items: bottomRow, dir: 'right' },
+];
 const featuredBuilds = communityBuilds.slice(0, 4);
 const featuredPress = pressArticles.slice(0, 4).map((article) => {
   let favicon: string | null = null;
@@ -848,41 +840,38 @@ const asciiAurora = (() => {
         title="What People Say"
         link={{ href: "/shoutouts", text: "View all" }}
       />
-      <div class="testimonials-track">
-        <div class="testimonials-row row-1" style={`--duration: ${duration1}s`}>
-          {row1.map((t) => (
-            <a href={sanitizeUrl(t.url)} target="_blank" rel="noopener" class="testimonial-card" tabindex="-1">
-              <img
-                src={getCachedXAvatarSrc(t.author, t.author, 88)}
-                alt={t.author}
-                class="testimonial-avatar"
-                loading="lazy"
-                onerror={`this.src='${getInitialsAvatarSrc(t.author, 88)}'`}
-              />
-              <div class="testimonial-content">
-                <p class="testimonial-quote">"{t.quote}"</p>
-                <span class="testimonial-author">@{t.author}</span>
-              </div>
-            </a>
-          ))}
-        </div>
-        <div class="testimonials-row row-2" style={`--duration: ${duration2}s`}>
-          {row2.map((t) => (
-            <a href={sanitizeUrl(t.url)} target="_blank" rel="noopener" class="testimonial-card">
-              <img
-                src={getCachedXAvatarSrc(t.author, t.author, 88)}
-                alt={t.author}
-                class="testimonial-avatar"
-                loading="lazy"
-                onerror={`this.src='${getInitialsAvatarSrc(t.author, 88)}'`}
-              />
-              <div class="testimonial-content">
-                <p class="testimonial-quote">"{t.quote}"</p>
-                <span class="testimonial-author">@{t.author}</span>
-              </div>
-            </a>
-          ))}
-        </div>
+      <div class="testimonials-marquees">
+        {testimonialRows.map(({ items, dir }) => (
+          <div class="testimonial-marquee" data-dir={dir}>
+            <div class="testimonial-track">
+              {[false, true].map((clone) => (
+                <div class="testimonial-group" aria-hidden={clone ? 'true' : undefined}>
+                  {items.map((t) => (
+                    <a
+                      href={sanitizeUrl(t.url)}
+                      target="_blank"
+                      rel="noopener"
+                      class="testimonial-card"
+                      tabindex={clone ? '-1' : undefined}
+                    >
+                      <img
+                        src={getCachedXAvatarSrc(t.author, t.author, 88)}
+                        alt={t.author}
+                        class="testimonial-avatar"
+                        loading="lazy"
+                        onerror={`this.src='${getInitialsAvatarSrc(t.author, 88)}'`}
+                      />
+                      <div class="testimonial-content">
+                        <p class="testimonial-quote">"{t.quote}"</p>
+                        <span class="testimonial-author">@{t.author}</span>
+                      </div>
+                    </a>
+                  ))}
+                </div>
+              ))}
+            </div>
+          </div>
+        ))}
       </div>
     </section>
 
@@ -3095,13 +3084,15 @@ const asciiAurora = (() => {
     overflow: hidden;
   }
 
-  .testimonials-track {
-    position: relative;
+  .testimonials-marquees {
     display: flex;
     flex-direction: column;
     gap: var(--oc-space-2);
     margin-left: -48px;
     margin-right: -48px;
+  }
+
+  .testimonial-marquee {
     overflow: hidden;
     mask-image: linear-gradient(
       to right,
@@ -3119,33 +3110,29 @@ const asciiAurora = (() => {
     );
   }
 
-  .testimonials-track:focus-within .testimonials-row {
-    animation-play-state: paused;
-  }
-
-  .testimonials-row {
+  .testimonial-track {
     display: flex;
-    gap: var(--oc-space-4);
     width: max-content;
-    padding: var(--oc-space-2) 0;
+    animation: testimonial-scroll 56s linear infinite;
+    will-change: transform;
   }
 
-  .row-1 {
-    animation: scroll-left var(--duration, 80s) linear infinite;
+  .testimonial-marquee[data-dir="right"] .testimonial-track {
+    animation-direction: reverse;
+    animation-delay: -19s;
+    animation-duration: 68s;
   }
 
-  .row-2 {
-    animation: scroll-right var(--duration, 90s) linear infinite;
+  .testimonial-group {
+    display: flex;
+    flex-shrink: 0;
+    gap: 16px;
+    padding: 8px 16px 8px 0;
   }
 
-  @keyframes scroll-left {
-    from { transform: translateX(0); }
-    to { transform: translateX(-50%); }
-  }
-
-  @keyframes scroll-right {
-    from { transform: translateX(-50%); }
-    to { transform: translateX(0); }
+  .testimonial-marquee:hover .testimonial-track,
+  .testimonial-marquee:focus-within .testimonial-track {
+    animation-play-state: paused;
   }
 
   .testimonial-card {
@@ -3163,12 +3150,13 @@ const asciiAurora = (() => {
     flex-shrink: 0;
   }
 
-  .testimonial-card:hover {
-    background: var(--oc-bg-surface);
+  @keyframes testimonial-scroll {
+    from { transform: translate3d(0, 0, 0); }
+    to { transform: translate3d(-50%, 0, 0); }
   }
 
-  .testimonials-row:hover {
-    animation-play-state: paused;
+  .testimonial-card:hover {
+    background: var(--bg-surface);
   }
 
   .testimonial-avatar {
@@ -3200,6 +3188,14 @@ const asciiAurora = (() => {
     -webkit-line-clamp: 3;
     -webkit-box-orient: vertical;
     overflow: hidden;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .testimonial-track {
+      animation: none;
+      transform: none;
+      will-change: auto;
+    }
   }
 
   .testimonial-author {
@@ -3238,7 +3234,7 @@ const asciiAurora = (() => {
       margin: -24px -20px var(--oc-space-4);
     }
 
-    .testimonials-track {
+    .testimonials-marquees {
       margin-left: -20px;
       margin-right: -20px;
     }
