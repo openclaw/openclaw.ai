@@ -628,12 +628,39 @@ const asciiAurora = (() => {
       const integrationRails = document.querySelector('[data-integration-rails]');
       if (integrationRails) {
         const rows = [...integrationRails.querySelectorAll('.integration-track')];
+        const scrubber = integrationRails.querySelector('.integration-scrubber');
         const scrubberTicks = [...integrationRails.querySelectorAll('.integration-scrubber span')];
+        let scrubProgress = null;
+        const setActiveIntegration = (name) => {
+          integrationRails.querySelectorAll('.integration-card').forEach((card) => {
+            const isActive = card.dataset.name === name;
+            card.classList.toggle('is-active', isActive);
+            card.setAttribute('aria-pressed', String(isActive));
+          });
+        };
         const shiftForViewport = () => Math.min(window.innerWidth * 0.34, 320);
         const progressForSection = () => {
           const rect = integrationRails.getBoundingClientRect();
           const viewport = window.innerHeight || document.documentElement.clientHeight;
           return Math.min(Math.max((viewport - rect.top) / (viewport + rect.height), 0), 1);
+        };
+        const progressFromPointer = (event) => {
+          const rect = scrubber.getBoundingClientRect();
+          return Math.min(Math.max((event.clientX - rect.left) / rect.width, 0), 1);
+        };
+        const scrollToProgress = (progress) => {
+          const rect = integrationRails.getBoundingClientRect();
+          const viewport = window.innerHeight || document.documentElement.clientHeight;
+          const sectionTop = window.scrollY + rect.top;
+          window.scrollTo({
+            top: sectionTop + progress * (viewport + rect.height) - viewport,
+            behavior: 'auto',
+          });
+        };
+        const setScrubProgress = (event) => {
+          scrubProgress = progressFromPointer(event);
+          current = scrubProgress;
+          scrollToProgress(scrubProgress);
         };
 
         rows.forEach((row) => {
@@ -654,34 +681,17 @@ const asciiAurora = (() => {
             tick.classList.toggle('on', Math.abs(index - middleTick) < 1.5);
             tick.classList.toggle('near', Math.abs(index - middleTick) >= 1.5 && Math.abs(index - middleTick) < 3.5);
           });
-          rows.forEach((row) => row.querySelector('.integration-card')?.classList.add('is-active'));
         } else {
           let current = progressForSection();
           const updateIntegrationFrame = () => {
-            const target = progressForSection();
-            current += (target - current) * 0.075;
+            const target = scrubProgress ?? progressForSection();
+            current += (target - current) * (scrubProgress == null ? 0.075 : 0.22);
             const shift = shiftForViewport();
-            const board = integrationRails.querySelector('.integrations-railboard');
-            const boardRect = board?.getBoundingClientRect();
-            const activeCenter = boardRect ? boardRect.left + boardRect.width / 2 : window.innerWidth / 2;
 
             rows.forEach((row) => {
               const dir = row.dataset.dir === 'right' ? 1 : -1;
               const base = dir === 1 ? -shift : 0;
               row.style.transform = `translate3d(${base + dir * current * shift}px, 0, 0)`;
-
-              let activeCard = null;
-              let activeDistance = Infinity;
-              row.querySelectorAll('.integration-card').forEach((card) => {
-                const rect = card.getBoundingClientRect();
-                const distance = Math.abs(rect.left + rect.width / 2 - activeCenter);
-                if (distance < activeDistance) {
-                  activeDistance = distance;
-                  activeCard = card;
-                }
-                card.classList.remove('is-active');
-              });
-              activeCard?.classList.add('is-active');
             });
 
             const scrubberPosition = current * (scrubberTicks.length - 1);
@@ -695,7 +705,40 @@ const asciiAurora = (() => {
           };
 
           requestAnimationFrame(updateIntegrationFrame);
+
+          if (scrubber) {
+            scrubber.addEventListener('pointerdown', (event) => {
+              event.preventDefault();
+              scrubber.setPointerCapture(event.pointerId);
+              scrubber.classList.add('is-dragging');
+              setScrubProgress(event);
+            });
+
+            scrubber.addEventListener('pointermove', (event) => {
+              if (!scrubber.classList.contains('is-dragging')) return;
+              setScrubProgress(event);
+            });
+
+            const stopScrubbing = (event) => {
+              if (!scrubber.classList.contains('is-dragging')) return;
+              scrubber.classList.remove('is-dragging');
+              scrubProgress = null;
+              if (scrubber.hasPointerCapture(event.pointerId)) {
+                scrubber.releasePointerCapture(event.pointerId);
+              }
+            };
+
+            scrubber.addEventListener('pointerup', stopScrubbing);
+            scrubber.addEventListener('pointercancel', stopScrubbing);
+          }
         }
+
+        integrationRails.addEventListener('click', (event) => {
+          const target = event.target instanceof Element ? event.target : null;
+          const card = target?.closest('.integration-card');
+          if (!card) return;
+          setActiveIntegration(card.dataset.name);
+        });
       }
     </script>
 
@@ -837,14 +880,16 @@ const asciiAurora = (() => {
       <div class="integrations-railboard" aria-label="Supported integrations">
         <div class="integration-track integration-track-top" data-dir="left">
           {topIntegrationRail.map((p) => (
-            <a href="/integrations" class="integration-card" data-name={p.name}>
-              <span class="integration-icon" style={`--integration-color: ${p.color}`}>
+            <button type="button" class="integration-card" data-name={p.name} style={`--integration-color: ${p.color}`} aria-pressed="false">
+              <span class="integration-icon">
                 <Icon icon={p.icon} color="currentColor" size={30} />
               </span>
               <span class="integration-name">{p.name}</span>
-              <span class="integration-kind">{p.kind}</span>
-              <span class="integration-desc">{p.desc}</span>
-            </a>
+              <span class="integration-meta">
+                <span class="integration-kind">{p.kind}</span>
+                <span class="integration-desc">{p.desc}</span>
+              </span>
+            </button>
           ))}
         </div>
 
@@ -856,14 +901,16 @@ const asciiAurora = (() => {
 
         <div class="integration-track integration-track-bottom" data-dir="right">
           {bottomIntegrationRail.map((p) => (
-            <a href="/integrations" class="integration-card" data-name={p.name}>
-              <span class="integration-icon" style={`--integration-color: ${p.color}`}>
+            <button type="button" class="integration-card" data-name={p.name} style={`--integration-color: ${p.color}`} aria-pressed="false">
+              <span class="integration-icon">
                 <Icon icon={p.icon} color="currentColor" size={30} />
               </span>
               <span class="integration-name">{p.name}</span>
-              <span class="integration-kind">{p.kind}</span>
-              <span class="integration-desc">{p.desc}</span>
-            </a>
+              <span class="integration-meta">
+                <span class="integration-kind">{p.kind}</span>
+                <span class="integration-desc">{p.desc}</span>
+              </span>
+            </button>
           ))}
         </div>
       </div>
@@ -1490,14 +1537,24 @@ const asciiAurora = (() => {
     position: absolute;
     inset: 0 auto 0 0;
     z-index: 2;
-    width: min(18%, 150px);
+    width: min(9%, 82px);
     pointer-events: none;
-    background: linear-gradient(90deg, var(--bg-deep) 0%, var(--bg-deep) 42%, transparent 100%);
+    background: linear-gradient(
+      90deg,
+      color-mix(in srgb, var(--bg-deep) 76%, transparent) 0%,
+      color-mix(in srgb, var(--bg-deep) 46%, transparent) 44%,
+      transparent 100%
+    );
   }
 
   .integrations-railboard::after {
     inset: 0 0 0 auto;
-    background: linear-gradient(270deg, var(--bg-deep) 0%, var(--bg-deep) 42%, transparent 100%);
+    background: linear-gradient(
+      270deg,
+      color-mix(in srgb, var(--bg-deep) 76%, transparent) 0%,
+      color-mix(in srgb, var(--bg-deep) 46%, transparent) 44%,
+      transparent 100%
+    );
   }
 
   .integration-track {
@@ -1515,6 +1572,7 @@ const asciiAurora = (() => {
   }
 
   .integration-card {
+    appearance: none;
     position: relative;
     display: flex;
     flex-direction: column;
@@ -1522,26 +1580,58 @@ const asciiAurora = (() => {
     justify-content: center;
     gap: 10px;
     width: 178px;
-    min-height: 160px;
+    min-height: 184px;
     padding: 18px 18px 16px;
+    border: 0;
     border-right: 1px solid var(--border-subtle);
+    font: inherit;
     color: var(--text-primary);
-    text-decoration: none;
     text-align: center;
     background: transparent;
+    outline: 0;
+    cursor: pointer;
+    overflow: hidden;
   }
 
   .integration-card::before {
     content: none;
   }
 
+  .integration-card::after {
+    content: "";
+    position: absolute;
+    inset: auto 0 0;
+    z-index: 0;
+    height: 64%;
+    pointer-events: none;
+    opacity: 0;
+    background: linear-gradient(
+      0deg,
+      color-mix(in srgb, var(--integration-color) 22%, transparent) 0%,
+      color-mix(in srgb, var(--integration-color) 9%, transparent) 48%,
+      transparent 100%
+    );
+    transition: opacity 0.32s ease;
+  }
+
+  .integration-card:focus-visible {
+    outline: 1px solid color-mix(in srgb, var(--integration-color) 68%, var(--text-primary));
+    outline-offset: -3px;
+  }
+
+  .integration-card.is-active::after {
+    opacity: 1;
+  }
+
   .integration-card.is-active .integration-name {
     color: var(--text-primary);
+    transform: none;
   }
 
   .integration-card.is-active .integration-icon {
     color: color-mix(in srgb, var(--integration-color) 84%, var(--text-primary));
     opacity: 1;
+    transform: none;
   }
 
   .integration-card.is-active .integration-kind,
@@ -1551,11 +1641,27 @@ const asciiAurora = (() => {
   }
 
   .integration-card.is-active .integration-kind {
-    color: var(--coral-bright);
+    color: color-mix(in srgb, var(--integration-color) 78%, var(--text-primary));
   }
 
   .integration-card.is-active .integration-desc {
     color: var(--text-muted);
+  }
+
+  .integration-card.is-active .integration-icon {
+    position: absolute;
+    top: 58px;
+    left: 50%;
+    width: 36px;
+    height: 36px;
+    transform: translateX(-50%);
+  }
+
+  .integration-card.is-active .integration-name {
+    position: absolute;
+    top: 96px;
+    right: 14px;
+    left: 14px;
   }
 
   .integration-card.is-active .integration-icon,
@@ -1573,7 +1679,7 @@ const asciiAurora = (() => {
     height: 44px;
     color: color-mix(in srgb, var(--text-muted) 42%, var(--text-primary));
     opacity: 0.36;
-    transition: color 0.45s ease, opacity 0.45s ease;
+    transition: color 0.45s ease, opacity 0.45s ease, transform 0.32s ease;
   }
 
   .integration-icon :global(svg) {
@@ -1583,6 +1689,7 @@ const asciiAurora = (() => {
   }
 
   .integration-name,
+  .integration-meta,
   .integration-kind,
   .integration-desc {
     position: relative;
@@ -1595,10 +1702,18 @@ const asciiAurora = (() => {
     font-weight: 600;
     line-height: 1.2;
     color: color-mix(in srgb, var(--text-muted) 64%, transparent);
-    transition: color 0.45s ease;
+    transition: color 0.45s ease, transform 0.32s ease;
+  }
+
+  .integration-meta {
+    display: contents;
   }
 
   .integration-kind {
+    position: absolute;
+    top: 26px;
+    right: 14px;
+    left: 14px;
     font-family: var(--font-mono);
     font-size: 0.68rem;
     font-weight: 600;
@@ -1611,10 +1726,14 @@ const asciiAurora = (() => {
   }
 
   .integration-desc {
+    position: absolute;
+    right: 18px;
+    bottom: 20px;
+    left: 18px;
     color: var(--text-muted);
     font-size: 0.76rem;
     line-height: 1.45;
-    max-width: 20ch;
+    max-width: none;
     opacity: 0;
     transform: translateY(6px);
     transition: color 0.45s ease, opacity 0.45s ease, transform 0.45s ease;
@@ -1632,6 +1751,9 @@ const asciiAurora = (() => {
     background: color-mix(in srgb, var(--bg-surface) 8%, transparent);
     mask-image: linear-gradient(to right, transparent, #000 12%, #000 88%, transparent);
     -webkit-mask-image: linear-gradient(to right, transparent, #000 12%, #000 88%, transparent);
+    cursor: ew-resize;
+    touch-action: none;
+    user-select: none;
   }
 
   .integration-scrubber span {
@@ -1658,6 +1780,10 @@ const asciiAurora = (() => {
     height: 20px;
     background: var(--text-primary);
     opacity: 1;
+  }
+
+  .integration-scrubber.is-dragging span.on {
+    height: 22px;
   }
 
   .integrations-links {
