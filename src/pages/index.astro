@@ -41,7 +41,7 @@ const integrationCards = [
 ];
 const topIntegrationRail = integrationCards.slice(0, 8);
 const bottomIntegrationRail = integrationCards.slice(8);
-const integrationScaleTicks = Array.from({ length: 64 });
+const integrationScrubberTicks = Array.from({ length: 72 });
 
 // Split top 30 into two rows for carousel
 const half = Math.ceil(testimonials.length / 2);
@@ -626,25 +626,76 @@ const asciiAurora = (() => {
       }
 
       const integrationRails = document.querySelector('[data-integration-rails]');
-      if (integrationRails && !reducedMotion) {
-        let railRaf = 0;
-        const updateIntegrationRails = () => {
-          railRaf = 0;
+      if (integrationRails) {
+        const rows = [...integrationRails.querySelectorAll('.integration-track')];
+        const scrubberTicks = [...integrationRails.querySelectorAll('.integration-scrubber span')];
+        const shiftForViewport = () => Math.min(window.innerWidth * 0.34, 320);
+        const progressForSection = () => {
           const rect = integrationRails.getBoundingClientRect();
           const viewport = window.innerHeight || document.documentElement.clientHeight;
-          const progress = Math.min(Math.max((viewport - rect.top) / (viewport + rect.height), 0), 1);
-          const shift = Math.round((progress - 0.5) * 180);
-          integrationRails.style.setProperty('--integration-shift', `${shift}px`);
+          return Math.min(Math.max((viewport - rect.top) / (viewport + rect.height), 0), 1);
         };
 
-        const requestRailUpdate = () => {
-          if (railRaf) return;
-          railRaf = requestAnimationFrame(updateIntegrationRails);
-        };
+        rows.forEach((row) => {
+          const originals = [...row.children];
+          while (row.scrollWidth < window.innerWidth + shiftForViewport() + 280) {
+            originals.forEach((card) => {
+              const clone = card.cloneNode(true);
+              clone.setAttribute('aria-hidden', 'true');
+              clone.setAttribute('tabindex', '-1');
+              row.appendChild(clone);
+            });
+          }
+        });
 
-        updateIntegrationRails();
-        window.addEventListener('scroll', requestRailUpdate, { passive: true });
-        window.addEventListener('resize', requestRailUpdate);
+        if (reducedMotion) {
+          const middleTick = Math.floor(scrubberTicks.length / 2);
+          scrubberTicks.forEach((tick, index) => {
+            tick.classList.toggle('on', Math.abs(index - middleTick) < 1.5);
+            tick.classList.toggle('near', Math.abs(index - middleTick) >= 1.5 && Math.abs(index - middleTick) < 3.5);
+          });
+          rows.forEach((row) => row.querySelector('.integration-card')?.classList.add('is-active'));
+        } else {
+          let current = progressForSection();
+          const updateIntegrationFrame = () => {
+            const target = progressForSection();
+            current += (target - current) * 0.075;
+            const shift = shiftForViewport();
+            const board = integrationRails.querySelector('.integrations-railboard');
+            const boardRect = board?.getBoundingClientRect();
+            const activeCenter = boardRect ? boardRect.left + boardRect.width / 2 : window.innerWidth / 2;
+
+            rows.forEach((row) => {
+              const dir = row.dataset.dir === 'right' ? 1 : -1;
+              const base = dir === 1 ? -shift : 0;
+              row.style.transform = `translate3d(${base + dir * current * shift}px, 0, 0)`;
+
+              let activeCard = null;
+              let activeDistance = Infinity;
+              row.querySelectorAll('.integration-card').forEach((card) => {
+                const rect = card.getBoundingClientRect();
+                const distance = Math.abs(rect.left + rect.width / 2 - activeCenter);
+                if (distance < activeDistance) {
+                  activeDistance = distance;
+                  activeCard = card;
+                }
+                card.classList.remove('is-active');
+              });
+              activeCard?.classList.add('is-active');
+            });
+
+            const scrubberPosition = current * (scrubberTicks.length - 1);
+            scrubberTicks.forEach((tick, index) => {
+              const distance = Math.abs(index - scrubberPosition);
+              tick.classList.toggle('on', distance < 1.2);
+              tick.classList.toggle('near', distance >= 1.2 && distance < 3.4);
+            });
+
+            requestAnimationFrame(updateIntegrationFrame);
+          };
+
+          requestAnimationFrame(updateIntegrationFrame);
+        }
       }
     </script>
 
@@ -784,9 +835,9 @@ const asciiAurora = (() => {
       </div>
 
       <div class="integrations-railboard" aria-label="Supported integrations">
-        <div class="integration-track integration-track-top">
+        <div class="integration-track integration-track-top" data-dir="left">
           {topIntegrationRail.map((p) => (
-            <a href="/integrations" class="integration-card">
+            <a href="/integrations" class="integration-card" data-name={p.name}>
               <span class="integration-icon" style={`--integration-color: ${p.color}`}>
                 <Icon icon={p.icon} color="currentColor" size={30} />
               </span>
@@ -797,15 +848,15 @@ const asciiAurora = (() => {
           ))}
         </div>
 
-        <div class="integration-scale" aria-hidden="true">
-          {integrationScaleTicks.map((_, index) => (
-            <span class:list={[index % 8 === 0 && 'major', index % 8 === 4 && 'mid']}></span>
+        <div class="integration-scrubber" aria-hidden="true">
+          {integrationScrubberTicks.map((_, index) => (
+            <span class:list={[index % 9 === 0 && 'major']}></span>
           ))}
         </div>
 
-        <div class="integration-track integration-track-bottom">
+        <div class="integration-track integration-track-bottom" data-dir="right">
           {bottomIntegrationRail.map((p) => (
-            <a href="/integrations" class="integration-card">
+            <a href="/integrations" class="integration-card" data-name={p.name}>
               <span class="integration-icon" style={`--integration-color: ${p.color}`}>
                 <Icon icon={p.icon} color="currentColor" size={30} />
               </span>
@@ -1405,7 +1456,6 @@ const asciiAurora = (() => {
   /* Integrations Preview */
   .integrations-preview {
     margin-bottom: 56px;
-    --integration-shift: 0px;
   }
 
   .integrations-copy {
@@ -1431,10 +1481,7 @@ const asciiAurora = (() => {
     position: relative;
     overflow: hidden;
     border: 1px solid var(--border-subtle);
-    background:
-      linear-gradient(90deg, color-mix(in srgb, var(--border-subtle) 90%, transparent) 1px, transparent 1px) 0 0 / 120px 100%,
-      linear-gradient(180deg, transparent, color-mix(in srgb, var(--coral-bright) 7%, transparent) 48%, transparent 72%),
-      var(--bg-deep);
+    background: var(--bg-deep);
   }
 
   .integrations-railboard::before,
@@ -1443,72 +1490,90 @@ const asciiAurora = (() => {
     position: absolute;
     inset: 0 auto 0 0;
     z-index: 2;
-    width: min(18%, 140px);
+    width: min(18%, 150px);
     pointer-events: none;
-    background: linear-gradient(90deg, var(--bg-deep), transparent);
+    background: linear-gradient(90deg, var(--bg-deep) 0%, var(--bg-deep) 42%, transparent 100%);
   }
 
   .integrations-railboard::after {
     inset: 0 0 0 auto;
-    background: linear-gradient(270deg, var(--bg-deep), transparent);
+    background: linear-gradient(270deg, var(--bg-deep) 0%, var(--bg-deep) 42%, transparent 100%);
   }
 
   .integration-track {
     display: flex;
     width: max-content;
     will-change: transform;
-    transition: transform 120ms linear;
   }
 
   .integration-track-top {
-    transform: translate3d(calc(-88px - var(--integration-shift)), 0, 0);
+    transform: translate3d(0, 0, 0);
   }
 
   .integration-track-bottom {
-    transform: translate3d(calc(-260px + var(--integration-shift)), 0, 0);
+    transform: translate3d(-220px, 0, 0);
   }
 
   .integration-card {
     position: relative;
-    display: grid;
-    grid-template-rows: auto 1fr auto auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
     width: 178px;
     min-height: 160px;
     padding: 18px 18px 16px;
     border-right: 1px solid var(--border-subtle);
     color: var(--text-primary);
     text-decoration: none;
-    background: color-mix(in srgb, var(--bg-deep) 88%, transparent);
-    transition: background 0.18s ease, color 0.18s ease;
+    text-align: center;
+    background: transparent;
   }
 
   .integration-card::before {
-    content: "";
-    position: absolute;
-    inset: 0;
-    opacity: 0;
-    background: radial-gradient(circle at 50% 0%, color-mix(in srgb, var(--integration-color) 18%, transparent), transparent 58%);
-    transition: opacity 0.18s ease;
+    content: none;
   }
 
-  .integration-card:hover {
-    background: var(--bg-surface);
+  .integration-card.is-active .integration-name {
+    color: var(--text-primary);
   }
 
-  .integration-card:hover::before {
+  .integration-card.is-active .integration-icon {
+    color: color-mix(in srgb, var(--integration-color) 84%, var(--text-primary));
     opacity: 1;
+  }
+
+  .integration-card.is-active .integration-kind,
+  .integration-card.is-active .integration-desc {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  .integration-card.is-active .integration-kind {
+    color: var(--coral-bright);
+  }
+
+  .integration-card.is-active .integration-desc {
+    color: var(--text-muted);
+  }
+
+  .integration-card.is-active .integration-icon,
+  .integration-card.is-active .integration-name,
+  .integration-card.is-active .integration-kind,
+  .integration-card.is-active .integration-desc {
+    transition-duration: 0.25s;
   }
 
   .integration-icon {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    width: 40px;
-    height: 40px;
-    margin-bottom: 18px;
-    border: 1px solid var(--border-subtle);
-    background: color-mix(in srgb, var(--integration-color) 10%, var(--bg-deep));
-    color: color-mix(in srgb, var(--integration-color) 82%, var(--text-primary));
+    width: 44px;
+    height: 44px;
+    color: color-mix(in srgb, var(--text-muted) 42%, var(--text-primary));
+    opacity: 0.36;
+    transition: color 0.45s ease, opacity 0.45s ease;
   }
 
   .integration-icon :global(svg) {
@@ -1525,58 +1590,74 @@ const asciiAurora = (() => {
   }
 
   .integration-name {
-    align-self: end;
     font-family: var(--font-display);
     font-size: 1.02rem;
     font-weight: 600;
     line-height: 1.2;
+    color: color-mix(in srgb, var(--text-muted) 64%, transparent);
+    transition: color 0.45s ease;
   }
 
   .integration-kind {
-    margin-top: 8px;
     font-family: var(--font-mono);
     font-size: 0.68rem;
     font-weight: 600;
     letter-spacing: 0.08em;
     text-transform: uppercase;
-    color: var(--coral-bright);
+    color: color-mix(in srgb, var(--text-muted) 36%, transparent);
+    opacity: 0;
+    transform: translateY(4px);
+    transition: color 0.45s ease, opacity 0.45s ease, transform 0.45s ease;
   }
 
   .integration-desc {
-    margin-top: 8px;
     color: var(--text-muted);
     font-size: 0.76rem;
     line-height: 1.45;
+    max-width: 20ch;
+    opacity: 0;
+    transform: translateY(6px);
+    transition: color 0.45s ease, opacity 0.45s ease, transform 0.45s ease;
   }
 
-  .integration-scale {
+  .integration-scrubber {
     display: grid;
-    grid-template-columns: repeat(64, 1fr);
+    grid-template-columns: repeat(72, 1fr);
     align-items: center;
-    gap: 7px;
-    height: 58px;
-    padding: 0 20px;
+    gap: 6px;
+    height: 34px;
+    padding: 0 36px;
     border-top: 1px solid var(--border-subtle);
     border-bottom: 1px solid var(--border-subtle);
-    background:
-      linear-gradient(90deg, transparent, color-mix(in srgb, var(--coral-bright) 8%, transparent), transparent),
-      color-mix(in srgb, var(--bg-surface) 24%, transparent);
+    background: color-mix(in srgb, var(--bg-surface) 8%, transparent);
+    mask-image: linear-gradient(to right, transparent, #000 12%, #000 88%, transparent);
+    -webkit-mask-image: linear-gradient(to right, transparent, #000 12%, #000 88%, transparent);
   }
 
-  .integration-scale span {
+  .integration-scrubber span {
     display: block;
-    height: 26px;
-    border-left: 1px solid color-mix(in srgb, var(--text-muted) 28%, transparent);
+    width: 1px;
+    height: 8px;
+    background: color-mix(in srgb, var(--text-muted) 18%, transparent);
+    transition: height 0.22s ease, background 0.22s ease, opacity 0.22s ease;
+    opacity: 0.72;
   }
 
-  .integration-scale span.mid {
-    height: 36px;
-    border-left-color: color-mix(in srgb, var(--text-muted) 45%, transparent);
+  .integration-scrubber span.major {
+    height: 10px;
+    background: color-mix(in srgb, var(--text-muted) 24%, transparent);
   }
 
-  .integration-scale span.major {
-    height: 46px;
-    border-left-color: color-mix(in srgb, var(--text-primary) 72%, transparent);
+  .integration-scrubber span.near {
+    height: 14px;
+    background: color-mix(in srgb, var(--text-primary) 45%, transparent);
+    opacity: 0.9;
+  }
+
+  .integration-scrubber span.on {
+    height: 20px;
+    background: var(--text-primary);
+    opacity: 1;
   }
 
   .integrations-links {
@@ -1612,6 +1693,7 @@ const asciiAurora = (() => {
   @media (prefers-reduced-motion: reduce) {
     .integration-track {
       transition: none;
+      transform: none;
     }
   }
 
@@ -1636,22 +1718,10 @@ const asciiAurora = (() => {
       display: none;
     }
 
-    .integration-scale {
-      height: 54px;
-      gap: 5px;
-      padding: 0 14px;
-    }
-
-    .integration-scale span {
-      height: 24px;
-    }
-
-    .integration-scale span.mid {
-      height: 34px;
-    }
-
-    .integration-scale span.major {
-      height: 42px;
+    .integration-scrubber {
+      height: 30px;
+      gap: 4px;
+      padding: 0 18px;
     }
 
     .integrations-links {
