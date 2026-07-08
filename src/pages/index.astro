@@ -1633,12 +1633,30 @@ const asciiAurora = (() => {
   }
 
   /* Integrations Preview */
-  .integrations-preview {
-    margin-bottom: 56px;
+  .rail > .integrations-preview {
+    position: relative;
+    margin: 0 -48px;
+    padding: 48px;
+    border-top: 0;
+    background-color: var(--bg-deep);
+    background-image: radial-gradient(
+      circle at center,
+      color-mix(in srgb, var(--chart-line) 72%, transparent) 0.5px,
+      transparent 1.2px
+    );
+    background-size: 10px 10px;
+    overflow: hidden;
+  }
+
+  .integrations-preview + .builds-section {
+    border-top: 0;
   }
 
   .integrations-copy {
+    position: relative;
+    z-index: 1;
     margin-bottom: 20px;
+    background: var(--bg-deep);
   }
 
   .integrations-copy p {
@@ -1658,6 +1676,7 @@ const asciiAurora = (() => {
 
   .integrations-railboard {
     position: relative;
+    z-index: 1;
     overflow: hidden;
     border: 1px solid var(--border-subtle);
     background: var(--bg-deep);
@@ -1923,10 +1942,13 @@ const asciiAurora = (() => {
   }
 
   .integrations-links {
+    position: relative;
+    z-index: 1;
     display: grid;
     grid-template-columns: repeat(2, 1fr);
     border: 1px solid var(--border-subtle);
     border-top: 0;
+    background: var(--bg-deep);
   }
 
   .integrations-link {
@@ -1966,6 +1988,14 @@ const asciiAurora = (() => {
     .integration-track {
       transition: none;
       transform: none;
+    }
+  }
+
+  @media (max-width: 720px) {
+    .rail > .integrations-preview {
+      margin-right: -20px;
+      margin-left: -20px;
+      padding: 40px 20px;
     }
   }
 
