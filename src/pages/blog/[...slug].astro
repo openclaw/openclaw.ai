@@ -4,6 +4,7 @@ import Icon from '../../components/Icon.astro';
 import SiteTopbar from '../../components/SiteTopbar.astro';
 import { render } from 'astro:content';
 import { getPublishedBlogPosts } from '../../lib/blog';
+import { resolveBlogSocialImage } from '../../lib/blog-social-image';
 import { authorSlug, getSortedAuthorLinkMeta, resolveAuthorProfile, type BlogAuthor } from '../../lib/authors';
 import { getCachedXAvatarSrc, getInitialsAvatarSrc } from '../../lib/avatars';
 import { sanitizeUrl } from '../../lib/sanitize-url';
@@ -72,8 +73,8 @@ const relatedPosts = allPosts
   .map((item) => item.post);
 
 const canonicalPostUrl = absoluteUrl(blogPostPath(post));
-const ogImage = `/og/blog/${post.id}.png`;
-const articleImageUrl = absoluteUrl(ogImage);
+const ogImage = resolveBlogSocialImage(post.id, post.data.ogImage);
+const articleImageUrl = absoluteUrl(ogImage.src);
 
 const descriptionHtml = post.data.descriptionHtml ?? post.data.description;
 const structuredAuthors = authors.map((author) => {
@@ -113,7 +114,10 @@ const articleStructuredData = {
   title={`${post.data.title} - OpenClaw Blog`}
   description={post.data.description}
   canonicalUrl={canonicalPostUrl}
-  ogImage={ogImage}
+  ogImage={ogImage.src}
+  ogImageWidth={ogImage.width}
+  ogImageHeight={ogImage.height}
+  ogImageType={ogImage.type}
   ogType="article"
   structuredData={articleStructuredData}
 >
