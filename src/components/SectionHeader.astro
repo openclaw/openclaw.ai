@@ -10,8 +10,8 @@ interface Props {
 const { title, link } = Astro.props;
 ---
 
-<div class="section-header">
-  <h2 class="section-title">{title}</h2>
+<div class="section-header oc-section-header">
+  <h2 class="section-title oc-eyebrow">{title}</h2>
   {link && (
     <a href={link.href} class="section-link">
       {link.text} <span class="sr-only">related content</span>
@@ -25,33 +25,33 @@ const { title, link } = Astro.props;
     display: flex;
     justify-content: space-between;
     align-items: baseline;
-    gap: 16px;
+    gap: var(--oc-space-4);
     margin-bottom: 20px;
   }
 
   /* Foundation-style section label: mono, uppercase, accent */
   .section-title {
-    font-family: var(--font-mono);
+    font-family: var(--oc-font-mono);
     font-size: 0.8rem;
     font-weight: 600;
     letter-spacing: 0.1em;
     text-transform: uppercase;
-    color: var(--coral-bright);
+    color: var(--oc-accent-primary);
     margin-bottom: 0;
   }
 
   .section-link {
-    font-family: var(--font-mono);
+    font-family: var(--oc-font-mono);
     font-size: 0.76rem;
-    color: var(--text-muted);
+    color: var(--oc-text-muted);
     text-decoration: none;
     font-weight: 500;
     flex-shrink: 0;
-    transition: color 0.2s ease;
+    transition: color var(--oc-duration-ui) ease;
   }
 
   .section-link:hover {
-    color: var(--text-primary);
+    color: var(--oc-text-primary);
   }
 
   .sr-only {

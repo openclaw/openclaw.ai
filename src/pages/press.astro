@@ -34,7 +34,7 @@ const outletIcon = (url: string) => `/press/icons/${new URL(url).hostname.replac
           href={sanitizeUrl(article.url)}
           target="_blank"
           rel="noopener"
-          class:list={['press-card', article.featured && 'press-featured']}
+          class:list={['press-card', 'oc-card', article.featured && 'press-featured']}
         >
           <div class="press-meta">
             <span class="press-outlet">
@@ -94,7 +94,7 @@ const outletIcon = (url: string) => `/press/icons/${new URL(url).hostname.replac
     z-index: 1;
     max-width: 1100px;
     margin: 0 auto;
-    padding: 40px 24px;
+    padding: 40px var(--oc-space-5);
     min-height: 100vh;
     display: flex;
     flex-direction: column;
@@ -102,7 +102,7 @@ const outletIcon = (url: string) => `/press/icons/${new URL(url).hostname.replac
 
   .header {
     text-align: center;
-    margin-bottom: 48px;
+    margin-bottom: var(--oc-space-7);
     
   }
 
@@ -119,27 +119,27 @@ const outletIcon = (url: string) => `/press/icons/${new URL(url).hostname.replac
 
   .back-link {
     display: inline-block;
-    margin-bottom: 24px;
-    color: var(--text-muted);
+    margin-bottom: var(--oc-space-5);
+    color: var(--oc-text-muted);
     text-decoration: none;
     font-size: 0.9rem;
-    transition: color 0.2s ease;
+    transition: color var(--oc-duration-ui) ease;
   }
 
   .back-link:hover {
-    color: var(--coral-bright);
+    color: var(--oc-accent-primary);
   }
 
   .title {
-    font-family: var(--font-display);
+    font-family: var(--oc-font-display);
     font-size: clamp(2rem, 6vw, 3rem);
     font-weight: 700;
-    margin-bottom: 12px;
-    color: var(--text-primary);
+    margin-bottom: var(--oc-space-3);
+    color: var(--oc-text-primary);
   }
 
   .claw-accent {
-    color: var(--coral-bright);
+    color: var(--oc-accent-primary);
     font-size: 0.5em;
     vertical-align: 0.22em;
   }
@@ -147,7 +147,7 @@ const outletIcon = (url: string) => `/press/icons/${new URL(url).hostname.replac
   .subtitle {
     max-width: 700px;
     margin: 0 auto;
-    color: var(--text-secondary);
+    color: var(--oc-text-secondary);
     font-size: 1.08rem;
   }
 
@@ -161,24 +161,25 @@ const outletIcon = (url: string) => `/press/icons/${new URL(url).hostname.replac
     display: flex;
     flex-direction: column;
     gap: 14px;
-    padding: 24px;
-    border-radius: 0;
-    border: 1px solid var(--border-subtle);
-    background: var(--surface-card-strong);
+    padding: var(--oc-space-5);
+    border-radius: var(--oc-radius-surface);
+    border: 1px solid var(--oc-border-subtle);
+    background: var(--oc-surface-card-strong);
     backdrop-filter: blur(12px);
     text-decoration: none;
-    color: var(--text-primary);
+    color: var(--oc-text-primary);
+    box-shadow: none;
     transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
   }
 
   .press-card:hover {
     transform: none;
-    border-color: var(--coral-bright);
+    border-color: var(--oc-accent-primary);
     box-shadow: none;
   }
 
   .press-featured {
-    border-color: var(--border-accent);
+    border-color: var(--oc-border-accent);
     background: var(--press-featured-gradient);
   }
 
@@ -186,14 +187,14 @@ const outletIcon = (url: string) => `/press/icons/${new URL(url).hostname.replac
     display: flex;
     justify-content: space-between;
     align-items: center;
-    gap: 12px;
+    gap: var(--oc-space-3);
   }
 
   .press-outlet {
     display: inline-flex;
     align-items: center;
-    gap: 8px;
-    color: var(--coral-bright);
+    gap: var(--oc-space-2);
+    color: var(--oc-accent-primary);
     font-size: 0.82rem;
     font-weight: 700;
     letter-spacing: 0.08em;
@@ -212,24 +213,24 @@ const outletIcon = (url: string) => `/press/icons/${new URL(url).hostname.replac
   }
 
   .press-date {
-    color: var(--text-muted);
+    color: var(--oc-text-muted);
     font-size: 0.82rem;
   }
 
   .press-title {
-    font-family: var(--font-display);
+    font-family: var(--oc-font-display);
     font-size: 1.2rem;
     line-height: 1.35;
   }
 
   .press-summary {
-    color: var(--text-secondary);
+    color: var(--oc-text-secondary);
     line-height: 1.65;
     font-size: 0.96rem;
   }
 
   .press-author {
-    color: var(--text-muted);
+    color: var(--oc-text-muted);
     font-size: 0.88rem;
     font-weight: 500;
   }
@@ -237,7 +238,7 @@ const outletIcon = (url: string) => `/press/icons/${new URL(url).hostname.replac
 
   @media (max-width: 720px) {
     .container {
-      padding: 24px 16px;
+      padding: var(--oc-space-5) var(--oc-space-4);
     }
 
     .press-grid {

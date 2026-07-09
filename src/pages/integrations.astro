@@ -35,10 +35,10 @@ import {
         or run models locally. Extend the runtime with official plugins and community skills.
       </p>
       <div class="hero-actions">
-        <a href="https://docs.openclaw.ai/" target="_blank" rel="noopener" class="action action-primary">
+        <a href="https://docs.openclaw.ai/" target="_blank" rel="noopener" class="action action-primary oc-action oc-action-primary">
           Read the docs <span aria-hidden="true">↗</span>
         </a>
-        <a href="https://clawhub.ai" target="_blank" rel="noopener" class="action action-secondary">
+        <a href="https://clawhub.ai" target="_blank" rel="noopener" class="action action-secondary oc-action oc-action-ghost">
           Browse ClawHub <span aria-hidden="true">↗</span>
         </a>
       </div>
@@ -89,7 +89,7 @@ import {
       </div>
       <button
         type="button"
-        class="channel-expander"
+        class="channel-expander oc-action oc-action-ghost"
         aria-controls="channel-catalog"
         aria-expanded="false"
         data-channel-expander
@@ -190,7 +190,7 @@ import {
 
       <div class="automation-band">
         <div class="automation-intro">
-          <span class="automation-mark"><Icon icon="lucide:workflow" color="var(--coral-bright)" size={26} /></span>
+          <span class="automation-mark"><Icon icon="lucide:workflow" color="var(--oc-accent-primary)" size={26} /></span>
           <div>
             <p class="section-kicker">Background work</p>
             <h3>Automation is more than cron</h3>
@@ -226,7 +226,7 @@ import {
       <div class="platform-columns">
         <div class="platform-column">
           <div class="platform-heading">
-            <Icon icon="lucide:server-cog" color="var(--coral-bright)" size={24} />
+            <Icon icon="lucide:server-cog" color="var(--oc-accent-primary)" size={24} />
             <div>
               <h3>Gateway hosts</h3>
               <p>Run the agent runtime, channels, automation, and services.</p>
@@ -248,7 +248,7 @@ import {
 
         <div class="platform-column">
           <div class="platform-heading">
-            <Icon icon="lucide:monitor-smartphone" color="var(--cyan-bright)" size={24} />
+            <Icon icon="lucide:monitor-smartphone" color="var(--oc-accent-secondary)" size={24} />
             <div>
               <h3>Companion nodes</h3>
               <p>Expose camera, screen, voice, location, Canvas, and native actions.</p>
@@ -309,8 +309,8 @@ import {
           <p>Plugins can add tools, channels, providers, hooks, speech, realtime voice, media generation, and packaged skills.</p>
         </div>
         <div class="community-actions">
-          <a href="https://clawhub.ai" target="_blank" rel="noopener" class="action action-primary">Explore ClawHub ↗</a>
-          <a href="https://docs.openclaw.ai/plugins/building-plugins" target="_blank" rel="noopener" class="action action-secondary">Build a plugin ↗</a>
+          <a href="https://clawhub.ai" target="_blank" rel="noopener" class="action action-primary oc-action oc-action-primary">Explore ClawHub ↗</a>
+          <a href="https://docs.openclaw.ai/plugins/building-plugins" target="_blank" rel="noopener" class="action action-secondary oc-action oc-action-ghost">Build a plugin ↗</a>
         </div>
       </div>
     </section>
@@ -395,9 +395,9 @@ import {
     width: 100%;
     max-width: 1060px;
     margin: 0 auto;
-    padding: 0 48px 48px;
-    border-left: 1px solid var(--border-subtle);
-    border-right: 1px solid var(--border-subtle);
+    padding: 0 var(--oc-space-7) var(--oc-space-7);
+    border-left: 1px solid var(--oc-border-subtle);
+    border-right: 1px solid var(--oc-border-subtle);
   }
 
   @media (max-width: 720px) {
@@ -426,8 +426,8 @@ import {
   }
 
   .section-heading > a {
-    color: var(--text-muted);
-    font-family: var(--font-mono);
+    color: var(--oc-text-muted);
+    font-family: var(--oc-font-mono);
     font-size: 0.76rem;
     font-weight: 500;
     text-decoration: none;
@@ -435,12 +435,12 @@ import {
   }
 
   .section-heading > a:hover {
-    color: var(--text-primary);
+    color: var(--oc-text-primary);
   }
 
   .section-kicker {
-    color: var(--coral-bright);
-    font-family: var(--font-mono);
+    color: var(--oc-accent-primary);
+    font-family: var(--oc-font-mono);
     font-size: 0.74rem;
     font-weight: 600;
     letter-spacing: 0.08em;
@@ -448,19 +448,19 @@ import {
   }
 
   .hero-title {
-    margin: 12px 0 0;
-    font-family: var(--font-display);
+    margin: var(--oc-space-3) 0 0;
+    font-family: var(--oc-font-display);
     font-size: clamp(1.9rem, 4vw, 2.7rem);
     font-weight: 600;
     line-height: 1.12;
     letter-spacing: -0.02em;
-    color: var(--text-primary);
+    color: var(--oc-text-primary);
   }
 
   .hero-lede {
     max-width: 640px;
     margin: 14px 0 0;
-    color: var(--text-secondary);
+    color: var(--oc-text-secondary);
     font-size: 1.02rem;
     line-height: 1.65;
   }
@@ -468,7 +468,7 @@ import {
   .hero-copy {
     max-width: 640px;
     margin: 10px 0 0;
-    color: var(--text-muted);
+    color: var(--oc-text-muted);
     font-size: 0.92rem;
     line-height: 1.65;
   }
@@ -487,8 +487,8 @@ import {
     justify-content: center;
     min-height: 44px;
     padding: 0 22px;
-    border: 1px solid var(--border-subtle);
-    font-family: var(--font-mono);
+    border: 1px solid var(--oc-border-subtle);
+    font-family: var(--oc-font-mono);
     font-size: 0.82rem;
     font-weight: 600;
     text-decoration: none;
@@ -496,39 +496,44 @@ import {
   }
 
   .action span {
-    margin-left: 4px;
+    margin-left: var(--oc-space-1);
   }
 
   .action:hover {
     transform: none;
   }
 
+  .action:active,
+  .channel-expander:active {
+    transform: none;
+  }
+
   .action-primary {
-    border-color: var(--coral-bright);
-    background: var(--coral-bright);
-    color: var(--on-accent);
+    border-color: var(--oc-accent-primary);
+    background: var(--oc-accent-primary);
+    color: var(--oc-text-on-accent);
   }
 
   .action-primary:hover {
-    background: color-mix(in srgb, var(--coral-bright) 82%, #fff);
-    border-color: color-mix(in srgb, var(--coral-bright) 82%, #fff);
+    background: color-mix(in srgb, var(--oc-accent-primary) 82%, #fff);
+    border-color: color-mix(in srgb, var(--oc-accent-primary) 82%, #fff);
   }
 
   .action-secondary {
-    background: var(--bg-deep);
-    color: var(--text-primary);
+    background: var(--oc-bg-page);
+    color: var(--oc-text-primary);
   }
 
   .action-secondary:hover {
-    background: var(--bg-surface);
-    border-color: color-mix(in srgb, var(--text-muted) 55%, transparent);
+    background: var(--oc-bg-surface);
+    border-color: color-mix(in srgb, var(--oc-text-muted) 55%, transparent);
   }
 
   .catalog-stats {
     display: grid;
     grid-template-columns: repeat(3, minmax(0, 1fr));
     margin: 0;
-    border-top: 1px solid var(--border-subtle);
+    border-top: 1px solid var(--oc-border-subtle);
   }
 
   .stat {
@@ -536,8 +541,8 @@ import {
     flex-direction: column-reverse;
     gap: 3px;
     min-height: 92px;
-    padding: 16px 20px;
-    border-right: 1px solid var(--border-subtle);
+    padding: var(--oc-space-4) 20px;
+    border-right: 1px solid var(--oc-border-subtle);
   }
 
   .stat:last-child {
@@ -545,8 +550,8 @@ import {
   }
 
   .stat dt {
-    color: var(--text-muted);
-    font-family: var(--font-mono);
+    color: var(--oc-text-muted);
+    font-family: var(--oc-font-mono);
     font-size: 0.7rem;
     letter-spacing: 0.04em;
     text-transform: uppercase;
@@ -554,8 +559,8 @@ import {
   }
 
   .stat dd {
-    color: var(--text-primary);
-    font-family: var(--font-display);
+    color: var(--oc-text-primary);
+    font-family: var(--oc-font-display);
     font-size: 1.75rem;
     font-weight: 700;
     font-variant-numeric: tabular-nums;
@@ -565,7 +570,7 @@ import {
   .catalog-section {
     margin: 0;
     padding: 56px 0;
-    border-top: 1px solid var(--border-subtle);
+    border-top: 1px solid var(--oc-border-subtle);
     scroll-margin-top: 82px;
   }
 
@@ -574,12 +579,12 @@ import {
     grid-template-columns: minmax(0, 1fr) auto;
     align-items: end;
     gap: 28px;
-    margin-bottom: 24px;
+    margin-bottom: var(--oc-space-5);
   }
 
   .section-heading h2 {
-    margin: 10px 0 8px;
-    font-family: var(--font-display);
+    margin: 10px 0 var(--oc-space-2);
+    font-family: var(--oc-font-display);
     font-size: 1.35rem;
     font-weight: 600;
     line-height: 1.2;
@@ -588,7 +593,7 @@ import {
 
   .section-heading p:not(.section-kicker) {
     max-width: 720px;
-    color: var(--text-secondary);
+    color: var(--oc-text-secondary);
     font-size: 0.92rem;
   }
 
@@ -596,8 +601,8 @@ import {
     display: grid;
     grid-template-columns: repeat(4, minmax(0, 1fr));
     gap: 1px;
-    background: var(--border-subtle);
-    border: 1px solid var(--border-subtle);
+    background: var(--oc-border-subtle);
+    border: 1px solid var(--oc-border-subtle);
   }
 
   .channel-grid.is-collapsed > .catalog-card:nth-child(n + 13) {
@@ -611,12 +616,12 @@ import {
     gap: 7px;
     min-height: 38px;
     margin: 18px auto 0;
-    padding: 0 12px;
-    border: 1px solid var(--border-subtle);
-    border-radius: 0;
-    background: var(--bg-deep);
-    color: var(--text-secondary);
-    font-family: var(--font-mono);
+    padding: 0 var(--oc-space-3);
+    border: 1px solid var(--oc-border-subtle);
+    border-radius: var(--oc-radius-control);
+    background: var(--oc-bg-page);
+    color: var(--oc-text-secondary);
+    font-family: var(--oc-font-mono);
     font-size: 0.74rem;
     font-weight: 600;
     cursor: pointer;
@@ -629,15 +634,15 @@ import {
 
   .channel-expander:hover,
   .channel-expander:focus-visible {
-    border-color: var(--border-accent);
-    background: var(--surface-card-strong);
-    color: var(--text-primary);
+    border-color: var(--oc-border-accent);
+    background: var(--oc-surface-card-strong);
+    color: var(--oc-text-primary);
   }
 
   .channel-expander:focus-visible {
     outline: none;
-    border-color: var(--cyan-bright);
-    box-shadow: 0 0 0 1px var(--cyan-bright);
+    border-color: var(--oc-accent-secondary);
+    box-shadow: 0 0 0 1px var(--oc-accent-secondary);
   }
 
   .channel-expander-icon {
@@ -657,15 +662,15 @@ import {
     min-height: 148px;
     padding: 20px;
     overflow: hidden;
-    background: var(--bg-deep);
-    color: var(--text-primary);
+    background: var(--oc-bg-page);
+    color: var(--oc-text-primary);
     text-decoration: none;
     transition: background 0.15s ease;
   }
 
   .catalog-card:hover,
   .catalog-card:focus-visible {
-    background: var(--bg-surface);
+    background: var(--oc-bg-surface);
   }
 
   .card-icon {
@@ -684,7 +689,7 @@ import {
 
   .catalog-card h3 {
     margin: 0 0 5px;
-    font-family: var(--font-display);
+    font-family: var(--oc-font-display);
     font-size: 1rem;
     line-height: 1.2;
     letter-spacing: 0;
@@ -692,7 +697,7 @@ import {
 
   .catalog-card p {
     margin: 0;
-    color: var(--text-muted);
+    color: var(--oc-text-muted);
     font-size: 0.78rem;
     line-height: 1.45;
   }
@@ -710,22 +715,22 @@ import {
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 1px;
-    background: var(--border-subtle);
-    border: 1px solid var(--border-subtle);
-    margin-top: 12px;
+    background: var(--oc-border-subtle);
+    border: 1px solid var(--oc-border-subtle);
+    margin-top: var(--oc-space-3);
   }
 
   .link-group {
     min-width: 0;
     padding: 22px 20px;
-    background: var(--bg-deep);
+    background: var(--oc-bg-page);
   }
 
   .link-group-heading {
     display: grid;
     grid-template-columns: 28px minmax(0, 1fr);
-    gap: 12px;
-    margin-bottom: 16px;
+    gap: var(--oc-space-3);
+    margin-bottom: var(--oc-space-4);
   }
 
   .link-group h3,
@@ -733,7 +738,7 @@ import {
   .automation-intro h3,
   .community-cta h3 {
     margin: 0 0 3px;
-    font-family: var(--font-display);
+    font-family: var(--oc-font-display);
     font-size: 1.05rem;
     line-height: 1.2;
     letter-spacing: 0;
@@ -743,7 +748,7 @@ import {
   .platform-heading p,
   .automation-intro p:not(.section-kicker),
   .community-cta p:not(.section-kicker) {
-    color: var(--text-muted);
+    color: var(--oc-text-muted);
     font-size: 0.78rem;
     line-height: 1.45;
   }
@@ -762,9 +767,9 @@ import {
     align-items: center;
     min-height: 28px;
     padding: 0 9px;
-    border: 1px solid var(--border-subtle);
-    color: var(--text-secondary);
-    font-family: var(--font-mono);
+    border: 1px solid var(--oc-border-subtle);
+    color: var(--oc-text-secondary);
+    font-family: var(--oc-font-mono);
     font-size: 0.68rem;
     font-weight: 500;
     text-decoration: none;
@@ -773,8 +778,8 @@ import {
 
   .link-group a:hover,
   .link-group a:focus-visible {
-    background: var(--bg-surface);
-    color: var(--text-primary);
+    background: var(--oc-bg-surface);
+    color: var(--oc-text-primary);
   }
 
   .capability-grid {
@@ -789,17 +794,17 @@ import {
     display: grid;
     grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr);
     gap: 34px;
-    margin-top: 12px;
+    margin-top: var(--oc-space-3);
     padding: 26px 0;
-    border-top: 1px solid var(--border-subtle);
-    border-bottom: 1px solid var(--border-subtle);
+    border-top: 1px solid var(--oc-border-subtle);
+    border-bottom: 1px solid var(--oc-border-subtle);
   }
 
   .automation-intro {
     display: grid;
     grid-template-columns: 38px minmax(0, 1fr);
     align-content: start;
-    gap: 12px;
+    gap: var(--oc-space-3);
   }
 
   .automation-mark {
@@ -808,9 +813,9 @@ import {
     justify-content: center;
     width: 38px;
     height: 38px;
-    border: 1px solid var(--border-accent);
-    border-radius: 0;
-    background: var(--surface-coral-soft);
+    border: 1px solid var(--oc-border-accent);
+    border-radius: var(--oc-radius-inset);
+    background: var(--oc-surface-accent-soft);
   }
 
   .automation-links {
@@ -820,7 +825,7 @@ import {
     margin: 0;
     padding: 0;
     list-style: none;
-    border-top: 1px solid var(--border-subtle);
+    border-top: 1px solid var(--oc-border-subtle);
   }
 
   .automation-links li {
@@ -828,35 +833,35 @@ import {
     grid-template-columns: 30px minmax(0, 1fr);
     align-items: center;
     min-height: 42px;
-    padding-left: 12px;
-    border-bottom: 1px solid var(--border-subtle);
+    padding-left: var(--oc-space-3);
+    border-bottom: 1px solid var(--oc-border-subtle);
   }
 
   .automation-links li:nth-child(odd) {
-    border-right: 1px solid var(--border-subtle);
+    border-right: 1px solid var(--oc-border-subtle);
   }
 
   .automation-links span {
-    color: var(--text-muted);
-    font-family: var(--font-mono);
+    color: var(--oc-text-muted);
+    font-family: var(--oc-font-mono);
     font-size: 0.64rem;
   }
 
   .automation-links a {
-    color: var(--text-secondary);
+    color: var(--oc-text-secondary);
     font-size: 0.78rem;
     font-weight: 700;
     text-decoration: none;
   }
 
   .automation-links a:hover {
-    color: var(--text-primary);
+    color: var(--oc-text-primary);
   }
 
   .platform-columns {
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 24px;
+    gap: var(--oc-space-5);
   }
 
   .platform-column {
@@ -866,13 +871,13 @@ import {
   .platform-heading {
     display: grid;
     grid-template-columns: 30px minmax(0, 1fr);
-    gap: 12px;
+    gap: var(--oc-space-3);
     min-height: 72px;
     padding-bottom: 14px;
   }
 
   .platform-list {
-    border-top: 1px solid var(--border-subtle);
+    border-top: 1px solid var(--oc-border-subtle);
   }
 
   .platform-list a {
@@ -881,8 +886,8 @@ import {
     gap: 10px;
     min-height: 84px;
     padding: 14px 6px;
-    border-bottom: 1px solid var(--border-subtle);
-    color: var(--text-primary);
+    border-bottom: 1px solid var(--oc-border-subtle);
+    color: var(--oc-text-primary);
     text-decoration: none;
     transition: background 0.18s ease, padding 0.18s ease;
   }
@@ -891,7 +896,7 @@ import {
   .platform-list a:focus-visible {
     padding-right: 10px;
     padding-left: 10px;
-    background: var(--surface-card);
+    background: var(--oc-surface-card);
   }
 
   .platform-list .card-icon {
@@ -910,13 +915,13 @@ import {
   }
 
   .platform-list strong {
-    font-family: var(--font-display);
+    font-family: var(--oc-font-display);
     font-size: 0.92rem;
     letter-spacing: 0;
   }
 
   .platform-list small {
-    color: var(--text-muted);
+    color: var(--oc-text-muted);
     font-size: 0.73rem;
     line-height: 1.4;
   }
@@ -929,11 +934,11 @@ import {
     display: grid;
     grid-template-columns: minmax(0, 1fr) auto;
     align-items: center;
-    gap: 24px;
-    margin-top: 12px;
+    gap: var(--oc-space-5);
+    margin-top: var(--oc-space-3);
     padding: 28px 0;
-    border-top: 1px solid var(--border-subtle);
-    border-bottom: 1px solid var(--border-subtle);
+    border-top: 1px solid var(--oc-border-subtle);
+    border-bottom: 1px solid var(--oc-border-subtle);
   }
 
   .community-cta > div:first-child {
@@ -947,7 +952,7 @@ import {
 
   a:focus-visible,
   button:focus-visible {
-    outline: 2px solid var(--cyan-bright);
+    outline: 2px solid var(--oc-accent-secondary);
     outline-offset: 3px;
   }
 
@@ -1003,7 +1008,7 @@ import {
     }
 
     .catalog-stats .stat:nth-child(-n + 2) {
-      border-bottom: 1px solid var(--border-subtle);
+      border-bottom: 1px solid var(--oc-border-subtle);
     }
 
     .section-heading {
