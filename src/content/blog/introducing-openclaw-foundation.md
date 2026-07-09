@@ -6,6 +6,9 @@ authors:
   - name: "Dave Morin"
     handle: "davemorin"
     avatar: "/avatars/x/davemorin.jpg"
+  - name: "Peter Steinberger"
+    handle: "steipete"
+    avatar: "/avatars/x/steipete.jpg"
 draft: false
 tags: ["announcement", "foundation"]
 ogImage:
