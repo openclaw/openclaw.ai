@@ -62,7 +62,7 @@ If you're passionate about the claw but don't see a role that matches your skill
 
 We've launched partnerships with some of the best technology companies and academic institutions in the world.
 
-**OpenAI** supports inference, [shipped Codex Security](https://openclaw.ai/blog/openclaw-security-in-public) to harden the platform, and stood up Claw Labs, a team inside OpenAI led by Peter that works on shared product improvements. And now a major donor to the Foundation, OpenAI has committed to supporting the Foundation's stewardship of OpenClaw as open and independent.
+**OpenAI** supports inference, shipped [Codex Security](https://openclaw.ai/blog/openclaw-security-in-public) to harden the platform, and stood up Claw Labs, a team inside OpenAI led by Peter that works on shared product improvements. And now a major donor to the Foundation, OpenAI has committed to supporting the Foundation's stewardship of OpenClaw as open and independent.
 
 **NVIDIA** launched [NemoClaw](https://www.nvidia.com/en-us/ai/nemoclaw/) at GTC: one command installs OpenClaw with open Nemotron models and the OpenShell secure runtime, so anyone can run a private, always-on claw on their own hardware. Industrial leaders like Cadence, Siemens, Synopsys, and Dassault Systèmes are already building autonomous AI engineers on NemoClaw, compressing weeks of chip verification and simulation work into hours. And, startups are using it for everything from aircraft geometry to electric motor design. As Jensen Huang put it at GTC: "Every company in the world today needs to have an OpenClaw strategy."
 
