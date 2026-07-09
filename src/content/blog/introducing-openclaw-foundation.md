@@ -19,7 +19,7 @@ Six months ago, OpenClaw was a single claw and a Discord server at Peter's place
 
 ## Our Vision
 
-Our vision is to bring humans closer to AI. Not AI locked into someone else's cloud, personal AI that actually does things: runs on your machine, works with the apps that you already use, and answers to you and you alone.
+Our vision is to bring people closer to AI. In service of human potential, not in place of it. Today AI feels distant and a little frightening, locked in someone else's cloud, answering to someone else's interests. We think the future is personal AI that actually does things. It runs on your machine, works with the apps that you already use, and answers to you and you alone.
 
 Your agent, your machine, your rules. Just like you carry your own laptop, you should be able to own your AI. We are on a mission to bring the power of personal AI to the people by stewarding OpenClaw as open and independent.
 
