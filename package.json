@@ -8,7 +8,7 @@
     "build": "astro build",
     "test": "bun test",
     "test:built-assets": "bun run build && node tests/assert-built-assets.mjs",
-    "skills:install": "npm exec --yes --package=skills@1.5.15 -- skills add 'git@github.com:openclaw/design-system.git#v0.0.1' --skill '*' --agent codex --copy --yes --full-depth",
+    "skills:install": "npm exec --yes --package=skills@1.5.15 -- skills add 'openclaw/design-system#v0.0.1' --skill '*' --agent codex --copy --yes --full-depth",
     "avatars:cache": "node scripts/cache-avatars.mjs",
     "preview": "astro preview"
   },
@@ -21,7 +21,7 @@
   "dependencies": {
     "@astrojs/rss": "^4.0.19",
     "@lucide/astro": "^1.22.0",
-    "@openclaw/design-system": "git+ssh://git@github.com/openclaw/design-system.git#v0.0.1",
+    "@openclaw/design-system": "git+https://github.com/openclaw/design-system.git#v0.0.1",
     "@vercel/analytics": "^2.0.1",
     "astro": "^7.0.4",
     "js-yaml": "^5.2.0",
