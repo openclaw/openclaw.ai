@@ -10,6 +10,9 @@ interface Props {
   description?: string;
   canonicalUrl?: string;
   ogImage?: string;
+  ogImageWidth?: number;
+  ogImageHeight?: number;
+  ogImageType?: string;
   ogType?: string;
   structuredData?: Record<string, unknown> | Record<string, unknown>[];
 }
@@ -19,6 +22,9 @@ const {
   description = "OpenClaw — the open-source AI assistant that runs on your machine and works from the chat apps you already use.",
   canonicalUrl = new URL(Astro.url.pathname, Astro.site ?? "https://openclaw.ai").href,
   ogImage = "/og-image.png",
+  ogImageWidth = 1200,
+  ogImageHeight = 630,
+  ogImageType = "image/png",
   ogType = "website",
   structuredData,
 } = Astro.props;
@@ -47,14 +53,20 @@ const structuredDataItems = structuredData ? Array.isArray(structuredData) ? str
     <meta property="og:type" content={ogType} />
     <meta property="og:url" content={canonicalUrl} />
     <meta property="og:image" content={resolvedOgImage} />
-    <meta property="og:image:width" content="1200" />
-    <meta property="og:image:height" content="630" />
+    <meta property="og:image:secure_url" content={resolvedOgImage} />
+    <meta property="og:image:type" content={ogImageType} />
+    <meta property="og:image:width" content={ogImageWidth} />
+    <meta property="og:image:height" content={ogImageHeight} />
 
     <!-- Twitter Card -->
     <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:site" content="@openclaw" />
     <meta name="twitter:title" content={title} />
     <meta name="twitter:description" content={description} />
     <meta name="twitter:image" content={resolvedOgImage} />
+    <meta name="twitter:image:secure_url" content={resolvedOgImage} />
+    <meta name="twitter:image:width" content={ogImageWidth} />
+    <meta name="twitter:image:height" content={ogImageHeight} />
 
     <!-- Fonts: Switzer + Sentient italic accent from Fontshare with font-display swap for performance -->
     <link rel="preconnect" href="https://api.fontshare.com">

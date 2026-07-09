@@ -6,17 +6,24 @@ authors:
   - name: "Dave Morin"
     handle: "davemorin"
     avatar: "/avatars/x/davemorin.jpg"
+  - name: "Peter Steinberger"
+    handle: "steipete"
+    avatar: "/avatars/x/steipete.jpg"
 draft: false
+image: "/blog/introducing-openclaw-foundation/team-maintainers.jpg"
 tags: ["announcement", "foundation"]
-coverImage: "/blog/introducing-openclaw-foundation/creation.png"
-ogLayout: "full-bleed"
+ogImage:
+  src: "/blog/introducing-openclaw-foundation/social.png"
+  width: 1600
+  height: 900
+  type: "image/png"
 ---
 
 Six months ago, OpenClaw was a single claw and a Discord server at Peter's place in Austria. A weekend project that was built because, in his words, he was annoyed it didn't exist and so he prompted it into existence. Today, it is a global movement with 4.5 million new claws being born every week, and the fastest growing repository in GitHub history. And now, a foundation.
 
 ## Our Vision
 
-Our vision is to bring humans closer to AI. Not AI locked into someone else's cloud, personal AI that actually does things: runs on your machine, works with the apps that you already use, and answers to you and you alone.
+Our vision is to bring people closer to AI. In service of human potential, not in place of it. Today AI feels distant and a little frightening, locked in someone else's cloud, answering to someone else's interests. We think the future is personal AI that actually does things. It runs on your machine, works with the apps that you already use, and answers to you and you alone.
 
 Your agent, your machine, your rules. Just like you carry your own laptop, you should be able to own your AI. We are on a mission to bring the power of personal AI to the people by stewarding OpenClaw as open and independent.
 
@@ -59,13 +66,13 @@ If you're passionate about the claw but don't see a role that matches your skill
 
 We've launched partnerships with some of the best technology companies and academic institutions in the world.
 
-**OpenAI** supports inference, [shipped Codex Security](https://openclaw.ai/blog/openclaw-security-in-public) to harden the platform, and stood up Claw Labs, a team inside OpenAI led by Peter that works on shared product improvements. And now a major donor to the Foundation, OpenAI has committed to supporting the Foundation's stewardship of OpenClaw as open and independent.
+**OpenAI** supports inference, shipped [Codex Security](https://openclaw.ai/blog/openclaw-security-in-public) to harden the platform, and stood up Claw Labs, a team inside OpenAI led by Peter that works on shared product improvements. And now a major donor to the Foundation, OpenAI has committed to supporting the Foundation's stewardship of OpenClaw as open and independent.
 
 **NVIDIA** launched [NemoClaw](https://www.nvidia.com/en-us/ai/nemoclaw/) at GTC: one command installs OpenClaw with open Nemotron models and the OpenShell secure runtime, so anyone can run a private, always-on claw on their own hardware. Industrial leaders like Cadence, Siemens, Synopsys, and Dassault Systèmes are already building autonomous AI engineers on NemoClaw, compressing weeks of chip verification and simulation work into hours. And, startups are using it for everything from aircraft geometry to electric motor design. As Jensen Huang put it at GTC: "Every company in the world today needs to have an OpenClaw strategy."
 
-**Microsoft** announced [Microsoft Scout](https://www.microsoft.com/en-us/microsoft-365/blog/2026/06/02/introducing-microsoft-scout-your-always-on-personal-agent/) at Build, always-on claws that work autonomously, with their own identity, and act on your behalf. The first of what Satya Nadella calls "the enterprise-grade OpenClaws," while contributing enterprise security work back upstream so OpenClaw runs securely on Windows everywhere.
+**Microsoft** announced [Microsoft Scout](https://www.microsoft.com/en-us/microsoft-365/blog/2026/06/02/introducing-microsoft-scout-your-always-on-personal-agent/) at Build: always-on autopilot agents that work autonomously, with their own identity, and take work off your plate. The first of what Satya Nadella referred to at Build as "enterprise grade Claws," Microsoft Scout is built with enterprise-grade security and controls, and powered by OpenClaw open-source technology, with Microsoft continuing to contribute directly upstream to OpenClaw.
 
-**University of Michigan** became our largest donor and launched the [Institute for Agentic Computing](https://record.umich.edu/articles/u-m-launches-institute-for-agentic-computing/), an academic home for OpenClaw that will serve as a hub for researchers and developers applying agentic AI to advanced scientific discovery and engineering. The University is poised to lead the evolution and practical deployment of agentic technologies, acting as a critical hub within the international agentic network and supporting initiatives of national importance, such as the Genesis mission for AI-driven scientific discovery.
+**University of Michigan** became our largest donor and launched the [Institute for Agentic Computing](https://record.umich.edu/articles/u-m-launches-institute-for-agentic-computing/), an academic home for OpenClaw that will serve as a hub for researchers and developers applying agentic AI to advanced scientific discovery and engineering. The University is poised to lead the evolution and practical deployment of agentic technologies, acting as a critical hub within the international agentic network and supporting initiatives of national importance, such as [The Genesis Mission](https://www.energy.gov/undersecretaryforscience/genesis-mission/genesis-mission) for AI-driven scientific discovery.
 
 **[Tencent](https://www.tencent.com/)** added full-time maintainers on security, stability and ClawHub, plus a direct vulnerability-sync line with their internal security team. **[Atlassian](https://www.atlassian.com/)** and other enterprise partners pushed on deployment, auditability, identity boundaries and secret handling. **[Blacksmith](https://www.blacksmith.sh/)** gives us the runner capacity to test agent paths at the rate we ship. And **[Vercel](https://vercel.com/)**, **[Cloudflare](https://www.cloudflare.com/)**, **[Convex](https://www.convex.dev/)**, and **[GitHub](https://github.com/)** provide the infrastructure that keeps OpenClaw fast, safe, and always shipping.
 

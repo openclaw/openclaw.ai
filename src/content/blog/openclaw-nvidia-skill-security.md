@@ -18,7 +18,7 @@ authors:
 draft: false
 tags: ["security", "announcement", "nvidia", "clawhub", "skills"]
 coverImage: "/blog/openclaw-nvidia-skill-security/openclaw-nvidia-cover.png"
-image: "/blog/openclaw-nvidia-skill-security/openclaw-nvidia-blog-lockup.png"
+image: "/blog/openclaw-nvidia-skill-security/openclaw-nvidia-banner.png"
 ---
 
 Agent skill files have a reputation for being insecure, and that reputation is earned.

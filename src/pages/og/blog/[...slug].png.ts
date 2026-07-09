@@ -1,5 +1,4 @@
 import { getPublishedBlogPosts, type BlogPost } from '../../../lib/blog';
-import { renderFullBleedOgSvg } from '../../../lib/blog-og-full-bleed';
 import { readFile } from 'node:fs/promises';
 import { join } from 'node:path';
 import sharp from 'sharp';
@@ -122,11 +121,9 @@ function renderOgSvg(post: BlogPost, coverDataUri: string | null): string {
 
 export async function GET({ props }: { props: { post: BlogPost } }) {
   const coverDataUri = await getPublicImageDataUri(props.post.data.coverImage ?? props.post.data.image);
-  const svg =
-    props.post.data.ogLayout === 'full-bleed' && coverDataUri
-      ? renderFullBleedOgSvg(props.post.data.title, coverDataUri)
-      : renderOgSvg(props.post, coverDataUri);
-  const png = await sharp(Buffer.from(svg)).png().toBuffer();
+  const png = await sharp(Buffer.from(renderOgSvg(props.post, coverDataUri)))
+    .png()
+    .toBuffer();
 
   return new Response(png, {
     headers: {
