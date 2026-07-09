@@ -24,6 +24,13 @@ export type BlogAuthor = {
 
 const authorProfiles: BlogAuthor[] = [
   {
+    name: 'Dave Morin',
+    title: 'Chairperson',
+    org: 'OpenClaw Foundation',
+    handle: 'davemorin',
+    avatar: '/avatars/x/davemorin.jpg',
+  },
+  {
     name: 'Vincent Koc',
     title: 'Chief Architect',
     org: 'OpenClaw Foundation',

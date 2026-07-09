@@ -293,6 +293,43 @@ const articleStructuredData = {
       expandedImageFrames.forEach(collapseImageFrame);
     });
   }
+
+  // Scroll spy: highlight the "On this page" entry for the section in view.
+  const tocLinks = Array.from(document.querySelectorAll<HTMLAnchorElement>('.reader-toc a'));
+  if (tocLinks.length > 0) {
+    const headings = tocLinks
+      .map((link) => document.getElementById(decodeURIComponent(link.hash.slice(1))))
+      .filter((el): el is HTMLElement => el !== null);
+    let activeId: string | null = null;
+    let spyTick = false;
+
+    const updateActiveHeading = () => {
+      spyTick = false;
+      let currentId = headings[0]?.id ?? null;
+      for (const heading of headings) {
+        if (heading.getBoundingClientRect().top <= 130) {
+          currentId = heading.id;
+        } else {
+          break;
+        }
+      }
+      if (currentId === activeId) return;
+      activeId = currentId;
+      for (const link of tocLinks) {
+        link.classList.toggle('active', decodeURIComponent(link.hash.slice(1)) === currentId);
+      }
+    };
+
+    const onScrollSpy = () => {
+      if (spyTick) return;
+      spyTick = true;
+      requestAnimationFrame(updateActiveHeading);
+    };
+
+    window.addEventListener('scroll', onScrollSpy, { passive: true });
+    window.addEventListener('resize', onScrollSpy, { passive: true });
+    updateActiveHeading();
+  }
 </script>
 
 </Layout>
@@ -331,6 +368,10 @@ const articleStructuredData = {
   .back-link:hover,
   .reader-toc a:hover {
     color: var(--text-primary);
+  }
+
+  .reader-toc a.active {
+    color: var(--coral-bright);
   }
 
   .back-link {
