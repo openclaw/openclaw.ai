@@ -1189,93 +1189,6 @@ const asciiAurora = (() => {
     <SiteFooter current="home" spacing="home" decorativeHtml={footerAsciinator} showDisclaimer />
     </div>
   </main>
-
-  <script>
-    {
-      const triggers = ['claw', 'lobster'];
-      let typed = '';
-      let raining = false;
-      let rainCount = 0;
-
-      const isTypingTarget = (target) => {
-        if (!(target instanceof Element)) return false;
-        return Boolean(target.closest('input, textarea, select, [contenteditable="true"]'));
-      };
-
-      const startCrustaceanRain = () => {
-        if (raining) return;
-        raining = true;
-        rainCount += 1;
-
-        const layer = document.createElement('div');
-        layer.className = 'crustacean-rain';
-        layer.setAttribute('aria-hidden', 'true');
-
-        const shells = ['🦞', '🦀', '🦞', '🦀', '🦐'];
-        const count = Math.min(52, 26 + rainCount * 8);
-        const isRoyal = rainCount % 3 === 0;
-        const falling = [];
-
-        for (let index = 0; index < count; index += 1) {
-          const shell = document.createElement('span');
-          const depth = Math.random();
-          shell.textContent = shells[Math.floor(Math.random() * shells.length)];
-          shell.style.setProperty('--x', `${Math.random() * 100}vw`);
-          shell.style.setProperty('--delay', `${Math.random() * 520}ms`);
-          shell.style.setProperty('--duration', `${3500 - depth * 1500}ms`);
-          shell.style.setProperty('--drift', `${(Math.random() - 0.5) * (80 + depth * 96)}px`);
-          shell.style.setProperty('--spin', `${(Math.random() - 0.5) * (70 + depth * 90)}deg`);
-          shell.style.setProperty('--size', `${16 + depth * 28}px`);
-          shell.style.setProperty('--blur', depth < 0.3 ? '1.4px' : '0px');
-          layer.append(shell);
-          falling.push(shell);
-        }
-
-        if (isRoyal) {
-          const royal = document.createElement('span');
-          royal.className = 'crustacean-royal';
-          royal.innerHTML = '<span class="crustacean-crown">👑</span><span class="crustacean-king">🦞</span>';
-          royal.style.setProperty('--x', '50vw');
-          royal.style.setProperty('--delay', '260ms');
-          royal.style.setProperty('--duration', '3600ms');
-          royal.style.setProperty('--drift', '0px');
-          royal.style.setProperty('--spin', '10deg');
-          royal.style.setProperty('--size', '52px');
-          royal.style.setProperty('--blur', '0px');
-          layer.append(royal);
-          falling.push(royal);
-        }
-
-        document.body.append(layer);
-        let remaining = falling.length;
-        const cleanup = () => {
-          if (!layer.isConnected) return;
-          layer.remove();
-          raining = false;
-        };
-
-        falling.forEach((shell) => {
-          shell.addEventListener('animationend', () => {
-            remaining -= 1;
-            if (remaining === 0) cleanup();
-          }, { once: true });
-        });
-
-        window.setTimeout(cleanup, 5200);
-      };
-
-      document.addEventListener('keydown', (event) => {
-        if (event.metaKey || event.ctrlKey || event.altKey || isTypingTarget(event.target)) return;
-        if (event.key.length !== 1) return;
-
-        typed = `${typed}${event.key.toLowerCase()}`.slice(-12);
-        if (triggers.some((trigger) => typed.endsWith(trigger))) {
-          typed = '';
-          startCrustaceanRain();
-        }
-      }, true);
-    }
-  </script>
 </Layout>
 
 <style>
@@ -1632,14 +1545,47 @@ const asciiAurora = (() => {
   }
 
   @media (max-width: 520px) {
+    .rail > .cta-section {
+      padding-top: 76px;
+      padding-bottom: 76px;
+    }
+
     .cta-grid {
-      grid-template-columns: 1fr;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
     }
 
     .cta {
-      min-height: 180px;
-      padding: 28px 24px 30px;
+      min-height: 166px;
+      padding: 22px 18px 24px;
+      border-right: 0;
+    }
+
+    .cta:nth-child(2n) {
       border-right: 1px solid var(--border-subtle);
+    }
+
+    .cta:nth-child(n + 3) {
+      border-top: 1px solid var(--border-subtle);
+    }
+
+    .cta-icon {
+      width: 22px;
+      height: 22px;
+    }
+
+    .cta-label {
+      font-size: 0.72rem;
+    }
+
+    .cta-sub {
+      max-width: 13ch;
+      font-size: 0.78rem;
+      line-height: 1.42;
+    }
+
+    .cta[target="_blank"]::after {
+      top: 10px;
+      right: 10px;
     }
   }
 
@@ -3644,71 +3590,6 @@ const asciiAurora = (() => {
     }
   }
 
-  :global(.crustacean-rain) {
-    position: fixed;
-    inset: 0;
-    z-index: 999;
-    overflow: hidden;
-    pointer-events: none;
-  }
-
-  :global(.crustacean-rain > span) {
-    position: absolute;
-    top: -32px;
-    left: var(--x);
-    font-size: var(--size);
-    line-height: 1;
-    opacity: 0;
-    filter: blur(var(--blur)) drop-shadow(0 8px 18px color-mix(in srgb, var(--coral-bright) 28%, transparent));
-    transform: translate3d(0, 0, 0) rotate(0deg);
-    animation: crustacean-fall var(--duration) cubic-bezier(0.18, 0.76, 0.3, 1) var(--delay) forwards;
-    will-change: transform, opacity;
-  }
-
-  :global(.crustacean-rain .crustacean-royal) {
-    display: inline-grid;
-    place-items: center;
-    filter: drop-shadow(0 0 22px color-mix(in srgb, #ffd36a 42%, transparent));
-    z-index: 1;
-  }
-
-  :global(.crustacean-royal .crustacean-crown) {
-    position: absolute;
-    top: -0.62em;
-    left: 50%;
-    font-size: 0.48em;
-    line-height: 1;
-    transform: translateX(-50%) rotate(-7deg);
-  }
-
-  :global(.crustacean-royal .crustacean-king) {
-    line-height: 1;
-  }
-
-  @keyframes crustacean-fall {
-    0% {
-      opacity: 0;
-      transform: translate3d(0, -36px, 0) rotate(0deg);
-    }
-
-    10% {
-      opacity: 1;
-    }
-
-    50% {
-      transform: translate3d(calc(var(--drift) * -0.5), 50vh, 0) rotate(calc(var(--spin) * 0.5));
-    }
-
-    86% {
-      opacity: 0.9;
-    }
-
-    100% {
-      opacity: 0;
-      transform: translate3d(var(--drift), calc(100vh + 64px), 0) rotate(var(--spin));
-    }
-  }
-
   /* Accessibility Utilities */
 
   /* Hides content visually but keeps it available for screen readers */
@@ -3738,11 +3619,6 @@ const asciiAurora = (() => {
       animation-iteration-count: 1 !important;
       transition-duration: 0.01ms !important;
       scroll-behavior: auto !important;
-    }
-
-    :global(.crustacean-rain > span) {
-      animation-duration: var(--duration) !important;
-      transition-duration: 0s !important;
     }
   }
 </style>
