@@ -3409,22 +3409,22 @@ const asciiAurora = (() => {
     position: relative;
     display: flex;
     flex-direction: column;
-    gap: var(--oc-space-2);
+    gap: 0;
     margin-left: -48px;
     margin-right: -48px;
     overflow: hidden;
     mask-image: linear-gradient(
       to right,
       transparent,
-      black 12%,
-      black 88%,
+      black 10%,
+      black 90%,
       transparent
     );
     -webkit-mask-image: linear-gradient(
       to right,
       transparent,
-      black 12%,
-      black 88%,
+      black 10%,
+      black 90%,
       transparent
     );
   }
@@ -3435,9 +3435,9 @@ const asciiAurora = (() => {
 
   .testimonials-row {
     display: flex;
-    gap: 16px;
+    gap: 0;
     width: max-content;
-    padding: 8px 0;
+    padding: 0;
   }
 
   .row-1 {
@@ -3461,12 +3461,13 @@ const asciiAurora = (() => {
   .testimonial-card {
     display: flex;
     align-items: flex-start;
-    gap: var(--oc-space-3);
-    padding: 18px;
-    min-width: 320px;
-    max-width: 400px;
-    border: 1px solid var(--oc-border-subtle);
-    background: var(--oc-bg-page);
+    gap: 10px;
+    padding: 15px;
+    min-width: 300px;
+    max-width: 360px;
+    border: 1px solid var(--border-subtle);
+    border-left: 0;
+    background: var(--bg-deep);
     text-decoration: none;
     color: var(--oc-text-primary);
     transition: background 0.15s ease;
@@ -3477,13 +3478,17 @@ const asciiAurora = (() => {
     background: var(--bg-surface);
   }
 
+  .row-2 .testimonial-card {
+    border-top: 0;
+  }
+
   .testimonials-row:hover {
     animation-play-state: paused;
   }
 
   .testimonial-avatar {
-    width: 44px;
-    height: 44px;
+    width: 36px;
+    height: 36px;
     flex-shrink: 0;
     border: 1px solid var(--oc-border-subtle);
     background: var(--oc-bg-elevated);
@@ -3498,14 +3503,14 @@ const asciiAurora = (() => {
   .testimonial-content {
     display: flex;
     flex-direction: column;
-    gap: 6px;
+    gap: 8px;
     min-width: 0;
   }
 
   .testimonial-quote {
-    font-size: 0.9rem;
-    line-height: 1.5;
-    color: var(--oc-text-secondary);
+    font-size: 0.86rem;
+    line-height: 1.45;
+    color: var(--text-secondary);
     display: -webkit-box;
     -webkit-line-clamp: 3;
     -webkit-box-orient: vertical;
@@ -3554,18 +3559,18 @@ const asciiAurora = (() => {
     }
 
     .testimonial-card {
-      min-width: 280px;
-      max-width: 320px;
-      padding: 14px;
+      min-width: 270px;
+      max-width: 300px;
+      padding: 13px;
     }
 
     .testimonial-avatar {
-      width: 36px;
-      height: 36px;
+      width: 32px;
+      height: 32px;
     }
 
     .testimonial-quote {
-      font-size: 0.85rem;
+      font-size: 0.82rem;
     }
     /* Quick Start mobile layout */
     .code-header {
