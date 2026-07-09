@@ -10,6 +10,7 @@ authors:
     handle: "steipete"
     avatar: "/avatars/x/steipete.jpg"
 draft: false
+image: "/blog/introducing-openclaw-foundation/team-maintainers.jpg"
 tags: ["announcement", "foundation"]
 ogImage:
   src: "/blog/introducing-openclaw-foundation/social.png"
