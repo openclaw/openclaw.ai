@@ -38,8 +38,6 @@ const {
   current,
   credit = 'full',
   spacing = 'roomy',
-  decorativeArt = '',
-  decorativeHtml = '',
   showDisclaimer = false,
 } = Astro.props;
 
@@ -100,12 +98,6 @@ const visibleGroups = linkGroups.map((group) => ({
       </a>
     </p>
   </div>
-
-  {(decorativeHtml || decorativeArt) && (
-    <div class:list={['footer-art', decorativeHtml && 'footer-art--html']} aria-hidden="true">
-      {decorativeHtml ? <Fragment set:html={decorativeHtml} /> : <pre>{decorativeArt}</pre>}
-    </div>
-  )}
 </footer>
 
 <style>
@@ -278,58 +270,6 @@ const visibleGroups = linkGroups.map((group) => ({
     color: var(--oc-text-primary);
   }
 
-  .footer-art {
-    position: relative;
-    display: flex;
-    justify-content: center;
-    height: 50px;
-    padding: 0;
-    overflow: hidden;
-    pointer-events: none;
-    user-select: none;
-  }
-
-  .footer-art::before {
-    content: '+';
-    position: absolute;
-    top: 14px;
-    left: 28px;
-    color: color-mix(in srgb, var(--oc-text-muted) 34%, transparent);
-    font-family: var(--oc-font-mono);
-    font-size: 0.78rem;
-    line-height: 1;
-  }
-
-  .footer-art pre {
-    flex-shrink: 0;
-    margin: 0;
-    font-family: var(--oc-font-mono);
-    font-size: 8px;
-    line-height: 1;
-    letter-spacing: 0;
-    color: var(--oc-accent-primary);
-    opacity: 0.58;
-    transform-origin: center;
-  }
-
-  .footer-art:not(.footer-art--html) pre {
-    transform: scaleY(-1);
-  }
-
-  .footer-art--html {
-    align-items: flex-start;
-  }
-
-  .footer-art--html :global(pre) {
-    flex-shrink: 0;
-    margin: 0;
-    font-family: var(--oc-font-mono);
-    font-size: clamp(7.6px, 0.7vw, 10.6px) !important;
-    line-height: 1.02 !important;
-    letter-spacing: 0;
-    opacity: 0.72;
-  }
-
   .footer-legal {
     display: grid;
     grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
@@ -337,7 +277,6 @@ const visibleGroups = linkGroups.map((group) => ({
     gap: 24px;
     min-height: 56px;
     padding: 0 48px;
-    border-bottom: 1px solid var(--oc-border-subtle);
     color: color-mix(in srgb, var(--oc-text-muted) 72%, transparent);
     font-family: var(--oc-font-mono);
     font-size: 0.72rem;
@@ -400,15 +339,6 @@ const visibleGroups = linkGroups.map((group) => ({
     .footer-group:nth-of-type(3) {
       border-right: 0;
     }
-
-    .footer-art {
-      justify-content: center;
-      overflow: hidden;
-    }
-
-    .footer-art--html :global(pre) {
-      font-size: clamp(2.7px, 0.7vw, 4.6px) !important;
-    }
   }
 
   @media (max-width: 560px) {
@@ -447,16 +377,6 @@ const visibleGroups = linkGroups.map((group) => ({
       padding-top: 40px;
     }
 
-    .footer-art {
-      justify-content: center;
-      padding: 28px 0 30px;
-      overflow: hidden;
-    }
-
-    .footer-art--html :global(pre) {
-      font-size: clamp(2px, 1vw, 3.5px) !important;
-    }
-
     .footer-legal {
       flex-direction: column;
       align-items: flex-start;
@@ -466,20 +386,9 @@ const visibleGroups = linkGroups.map((group) => ({
     }
   }
 
-  @media (hover: hover) and (pointer: fine) {
-    .footer-art--html :global(pre) {
-      transition: opacity 0.4s ease;
-    }
-
-    .footer-art--html:hover :global(pre) {
-      opacity: 0.95;
-    }
-  }
-
   @media (prefers-reduced-motion: reduce) {
     .footer a,
-    .footer-socials a,
-    .footer-art--html :global(pre) {
+    .footer-socials a {
       transition: none;
     }
   }

@@ -1,7 +1,6 @@
 const CONFIG = {
   cloneBuffer: 96,
   minimumTravelCards: 1.25,
-  travelDamping: 1,
   edgeRevealMultiplier: 3.4,
   scrollEase: 0.075,
   scrubEase: 0.22,
@@ -15,19 +14,6 @@ type RailMetrics = {
   direction: 1 | -1;
   travel: number;
   base: number;
-};
-
-type AuditEntry = {
-  progress: number;
-  row: 'top' | 'bottom';
-  index: number;
-  name: string | undefined;
-  clone: boolean;
-  visible: string;
-};
-
-type AuditWindow = Window & {
-  __auditIntegrationRails?: (points?: number[]) => AuditEntry[];
 };
 
 const clampProgress = (value: number) => Math.min(Math.max(value, 0), 1);
@@ -72,7 +58,7 @@ export function initIntegrationRail(root: HTMLElement, reducedMotion: boolean): 
       cardWidth * CONFIG.minimumTravelCards,
     );
 
-    metric.travel = rawTravel * CONFIG.travelDamping;
+    metric.travel = rawTravel;
     metric.base = metric.direction === 1 ? -metric.travel : 0;
   };
 
@@ -185,35 +171,20 @@ export function initIntegrationRail(root: HTMLElement, reducedMotion: boolean): 
     if (scrubber.hasPointerCapture(event.pointerId)) scrubber.releasePointerCapture(event.pointerId);
   };
 
-  const audit = (points = [0, 0.5, 1]): AuditEntry[] => {
-    const entries: AuditEntry[] = [];
-    const savedProgress = currentProgress;
-
-    points.forEach((progress) => {
-      applyTransforms(progress);
-      const boardRect = railboard.getBoundingClientRect();
-      metrics.forEach((metric) => {
-        const row = metric.row.classList.contains('integration-track-top') ? 'top' : 'bottom';
-        Array.from(metric.row.children).forEach((card, index) => {
-          if (!(card instanceof HTMLElement)) return;
-          const rect = card.getBoundingClientRect();
-          const visibleWidth = Math.min(rect.right, boardRect.right) - Math.max(rect.left, boardRect.left);
-          if (visibleWidth <= 1) return;
-          entries.push({
-            progress,
-            row,
-            index,
-            name: card.dataset.name,
-            clone: card.hasAttribute('data-integration-clone'),
-            visible: `${Math.round((visibleWidth / rect.width) * 100)}%`,
-          });
-        });
-      });
+  const cardFocusObserver = new IntersectionObserver((entries) => {
+    entries.forEach((entry) => {
+      if (entry.target instanceof HTMLButtonElement) {
+        entry.target.tabIndex = entry.intersectionRatio >= 0.5 ? 0 : -1;
+      }
     });
+  }, { root: railboard, threshold: [0, 0.5] });
 
-    applyTransforms(savedProgress);
-    return entries;
-  };
+  metrics.forEach((metric) => {
+    metric.originals.forEach((card) => {
+      card.tabIndex = -1;
+      cardFocusObserver.observe(card);
+    });
+  });
 
   layout();
   currentProgress = reducedMotion ? 0.5 : progressForSection();
@@ -268,8 +239,6 @@ export function initIntegrationRail(root: HTMLElement, reducedMotion: boolean): 
   intersectionObserver?.observe(root);
   startAnimation();
 
-  if (import.meta.env.DEV) (window as AuditWindow).__auditIntegrationRails = audit;
-
   const destroy = () => {
     if (destroyed) return;
     destroyed = true;
@@ -277,8 +246,9 @@ export function initIntegrationRail(root: HTMLElement, reducedMotion: boolean): 
     abortController.abort();
     resizeObserver.disconnect();
     intersectionObserver?.disconnect();
+    cardFocusObserver.disconnect();
+    metrics.forEach((metric) => metric.originals.forEach((card) => card.removeAttribute('tabindex')));
     metrics.forEach(removeClones);
-    if (import.meta.env.DEV) delete (window as AuditWindow).__auditIntegrationRails;
   };
 
   document.addEventListener('astro:before-swap', destroy, { once: true, signal });

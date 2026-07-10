@@ -7,7 +7,6 @@ import SiteFooter from '../components/SiteFooter.astro';
 import testimonials from '../data/testimonials.json';
 import communityBuilds from '../data/community-builds.json';
 import pressArticles from '../data/press.json';
-import footerAsciinator from '../data/footer-asciinator.html?raw';
 import {
   bottomIntegrationRail,
   integrationScrubberTickCount,
@@ -623,7 +622,7 @@ const asciiAurora = renderAsciiAurora();
     </section>
 
     <!-- Footer -->
-    <SiteFooter current="home" spacing="home" decorativeHtml={footerAsciinator} showDisclaimer />
+    <SiteFooter current="home" spacing="home" showDisclaimer />
     </div>
   </main>
 </Layout>
@@ -1294,17 +1293,6 @@ const asciiAurora = renderAsciiAurora();
     background: var(--oc-bg-page);
   }
 
-  .integrations-copy p {
-    max-width: 720px;
-    color: var(--oc-text-secondary);
-    font-family: var(--oc-font-display);
-    font-size: clamp(1.35rem, 2.35vw, 2.05rem);
-    font-weight: 500;
-    line-height: 1.22;
-    margin: 0;
-    text-wrap: balance;
-  }
-
   .integrations-copy :global(.section-header) {
     padding-block: 8px;
     margin-bottom: 18px;
@@ -1633,10 +1621,6 @@ const asciiAurora = renderAsciiAurora();
       margin-right: -20px;
       margin-left: -20px;
       padding: 56px 20px;
-    }
-
-    .integrations-copy p {
-      font-size: 1.42rem;
     }
 
     .integration-card {
@@ -1979,28 +1963,6 @@ const asciiAurora = renderAsciiAurora();
     color: var(--oc-text-primary);
     overflow: hidden;
     transition: background 0.15s ease;
-  }
-
-  .press-card::after {
-    content: "";
-    position: absolute;
-    inset: auto 0 0;
-    z-index: 0;
-    height: 62%;
-    pointer-events: none;
-    opacity: 0;
-    background: linear-gradient(
-      0deg,
-      color-mix(in srgb, var(--oc-text-primary) 8%, transparent) 0%,
-      color-mix(in srgb, var(--oc-text-primary) 3%, transparent) 52%,
-      transparent 100%
-    );
-    transition: opacity 0.22s ease;
-  }
-
-  .press-card > * {
-    position: relative;
-    z-index: 1;
   }
 
   .press-card:first-child {

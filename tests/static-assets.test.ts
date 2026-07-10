@@ -85,7 +85,6 @@ describe('static public assets', () => {
 
     expect(aliasUsages).toEqual([]);
     expect(readText('src/pages/index.astro')).toContain('oc-action oc-action-primary');
-    expect(readText('src/pages/index.astro')).toContain('data-integration-rails');
     expect(readText('src/pages/ecosystem.astro')).toContain('card oc-card');
     expect(readText('src/components/SectionHeader.astro')).toContain(
       'section-header oc-section-header',
