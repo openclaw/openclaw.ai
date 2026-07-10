@@ -1431,7 +1431,14 @@ const asciiAurora = renderAsciiAurora();
   .integration-card.is-active .integration-kind,
   .integration-card.is-active .integration-desc {
     opacity: 1;
+  }
+
+  .integration-card.is-active .integration-kind {
     transform: translateY(0);
+  }
+
+  .integration-card.is-active .integration-desc {
+    transform: translate(-50%, 0);
   }
 
   .integration-card.is-active .integration-kind {
@@ -1514,15 +1521,15 @@ const asciiAurora = renderAsciiAurora();
 
   .integration-desc {
     position: absolute;
-    right: 18px;
     bottom: 20px;
-    left: 18px;
+    left: 50%;
+    width: calc(var(--integration-card-active) - 36px);
     color: var(--oc-text-muted);
     font-size: 0.76rem;
     line-height: 1.45;
     max-width: none;
     opacity: 0;
-    transform: translateY(6px);
+    transform: translate(-50%, 6px);
     transition: color 0.45s ease, opacity 0.45s ease, transform 0.45s ease;
   }
 

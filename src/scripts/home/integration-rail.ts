@@ -250,10 +250,6 @@ export function initIntegrationRail(root: HTMLElement, reducedMotion: boolean): 
     const card = target?.closest<HTMLButtonElement>('.integration-card');
     if (!card) return;
     setActiveIntegration(card.dataset.name);
-    requestAnimationFrame(() => {
-      layout();
-      applyTransforms(manualProgress ?? currentProgress);
-    });
   }, { signal });
 
   const resizeObserver = new ResizeObserver(() => {
