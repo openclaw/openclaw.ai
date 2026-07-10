@@ -150,19 +150,6 @@ const structuredDataItems = structuredData ? Array.isArray(structuredData) ? str
         -moz-osx-font-smoothing: grayscale;
       }
 
-      /* Quiet dot-grid backdrop fading toward the fold */
-      body::before {
-        content: '';
-        position: fixed;
-        inset: 0;
-        z-index: 0;
-        pointer-events: none;
-        background-image: radial-gradient(var(--oc-chart-line) 1px, transparent 1.5px);
-        background-size: 26px 26px;
-        mask-image: linear-gradient(to bottom, black, transparent 90%);
-        -webkit-mask-image: linear-gradient(to bottom, black, transparent 90%);
-      }
-
       /* Retired space-era layers still present in page markup */
       .stars,
       .nebula {

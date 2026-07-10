@@ -129,11 +129,29 @@ function isActive(item: NavItem) {
     justify-content: space-between;
     gap: var(--oc-space-5);
     min-height: 54px;
-    padding: 0 76px 0 var(--oc-space-6);
+    padding: 0 76px 0 32px;
     border-bottom: 1px solid var(--oc-border-subtle);
+    background: rgba(16, 16, 18, 0.88);
     background: color-mix(in srgb, var(--oc-bg-page) 72%, transparent);
-    backdrop-filter: blur(16px);
-    -webkit-backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: saturate(140%) blur(16px);
+    backdrop-filter: saturate(140%) blur(16px);
+  }
+
+  :global(html[data-theme='light']) .site-topbar {
+    background: rgba(246, 245, 243, 0.9);
+    background: color-mix(in srgb, var(--oc-bg-page) 78%, transparent);
+  }
+
+  @supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+    .site-topbar {
+      background: rgba(16, 16, 18, 0.96);
+      background: color-mix(in srgb, var(--oc-bg-page) 94%, transparent);
+    }
+
+    :global(html[data-theme='light']) .site-topbar {
+      background: rgba(246, 245, 243, 0.96);
+      background: color-mix(in srgb, var(--oc-bg-page) 94%, transparent);
+    }
   }
 
   .site-brand {
@@ -284,13 +302,15 @@ function isActive(item: NavItem) {
       left: 12px;
       z-index: 92;
       display: grid;
-      gap: var(--oc-space-1);
-      padding: var(--oc-space-2);
+      gap: 4px;
+      padding: 8px;
       border: 1px solid var(--oc-border-subtle);
-      border-radius: var(--oc-radius-surface);
+      border-radius: 0;
+      background: rgba(16, 16, 18, 0.96);
       background: color-mix(in srgb, var(--oc-bg-page) 96%, transparent);
       box-shadow: none;
-      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: saturate(140%) blur(18px);
+      backdrop-filter: saturate(140%) blur(18px);
     }
 
     .site-menu-panel .site-nav-link {

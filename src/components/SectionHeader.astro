@@ -1,4 +1,6 @@
 ---
+import Icon from './Icon.astro';
+
 interface Props {
   title: string;
   link?: {
@@ -8,6 +10,7 @@ interface Props {
 }
 
 const { title, link } = Astro.props;
+const isExternalLink = link?.href.startsWith('http');
 ---
 
 <div class="section-header oc-section-header">
@@ -15,7 +18,7 @@ const { title, link } = Astro.props;
   {link && (
     <a href={link.href} class="section-link">
       {link.text} <span class="sr-only">related content</span>
-      <span aria-hidden="true">→</span>
+      <Icon icon={isExternalLink ? 'lucide:arrow-up-right' : 'lucide:arrow-right'} color="currentColor" size={10} class="section-link-icon" />
     </a>
   )}
 </div>
@@ -41,6 +44,9 @@ const { title, link } = Astro.props;
   }
 
   .section-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
     font-family: var(--oc-font-mono);
     font-size: 0.76rem;
     color: var(--oc-text-muted);
@@ -52,6 +58,19 @@ const { title, link } = Astro.props;
 
   .section-link:hover {
     color: var(--oc-text-primary);
+  }
+
+  .section-link-icon {
+    width: 0.68rem;
+    height: 0.68rem;
+    flex: 0 0 auto;
+    stroke-width: 2.25;
+    transform: translateY(0.5px);
+    transition: transform 0.15s ease;
+  }
+
+  .section-link:hover .section-link-icon {
+    transform: translate(2px, 0.5px);
   }
 
   .sr-only {

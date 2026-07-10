@@ -1,12 +1,37 @@
 ---
-const navLinks = [
-  { id: 'home', label: 'Home', href: '/' },
-  { id: 'blog', label: 'Blog', href: '/blog' },
-  { id: 'showcase', label: 'Showcase', href: '/showcase' },
-  { id: 'press', label: 'Press', href: '/press' },
-  { id: 'shoutouts', label: 'Shoutouts', href: '/shoutouts' },
-  { id: 'integrations', label: 'Integrations', href: '/integrations' },
-  { id: 'security', label: 'Security', href: '/blog#security' },
+import { siDiscord, siGithub } from 'simple-icons';
+
+const linkGroups = [
+  {
+    title: 'Product',
+    links: [
+      { id: 'showcase', label: 'Showcase', href: '/showcase' },
+      { id: 'integrations', label: 'Integrations', href: '/integrations' },
+      { id: 'docs', label: 'Docs', href: 'https://docs.openclaw.ai', external: true },
+    ],
+  },
+  {
+    title: 'Resources',
+    links: [
+      { id: 'blog', label: 'Blog', href: '/blog' },
+      { id: 'press', label: 'Press', href: '/press' },
+      { id: 'shoutouts', label: 'Shoutouts', href: '/shoutouts' },
+    ],
+  },
+  {
+    title: 'Project',
+    links: [
+      { id: 'foundation', label: 'Foundation', href: 'https://openclaw.org', external: true },
+      { id: 'security', label: 'Security', href: '/blog#security' },
+      { id: 'github', label: 'GitHub', href: 'https://github.com/openclaw/openclaw', external: true },
+    ],
+  },
+];
+
+const socialLinks = [
+  { label: 'X', href: 'https://x.com/openclaw', glyph: '𝕏' },
+  { label: 'GitHub', href: 'https://github.com/openclaw/openclaw', path: siGithub.path },
+  { label: 'Discord', href: 'https://discord.com/invite/clawd', path: siDiscord.path },
 ];
 
 const {
@@ -16,120 +41,355 @@ const {
   showDisclaimer = false,
 } = Astro.props;
 
-const links = navLinks.filter((link) => link.id !== current);
+const visibleGroups = linkGroups.map((group) => ({
+  ...group,
+  links: group.links.filter((link) => link.id !== current),
+}));
 ---
 
 <footer class:list={['footer', `footer--${spacing}`]}>
-  <nav class="footer-nav">
-    {links.map((link, index) => (
-      <>
-        {index > 0 && <span class="footer-separator">·</span>}
-        <a href={link.href}>{link.label}</a>
-      </>
+  <div class="footer-top">
+    <section class="footer-brand" aria-label="OpenClaw">
+      <a href="/" class="footer-logo">OpenClaw</a>
+      {credit === 'simple' ? (
+        <p class="footer-credit">Built by <a href="https://molty.me" target="_blank" rel="noopener">Molty 🦞</a>.</p>
+      ) : (
+        <p class="footer-credit">Built by <a href="https://molty.me" target="_blank" rel="noopener" class="credit-strong">Molty 🦞</a>, a space lobster AI with a soul, by <a href="https://steipete.me" target="_blank" rel="noopener">Peter Steinberger</a> & <a href="https://github.com/openclaw/openclaw#community" target="_blank" rel="noopener">community</a>.</p>
+      )}
+      <p class="foundation-note">An <a href="https://openclaw.org" target="_blank" rel="noopener">OpenClaw Foundation</a> project.</p>
+      <nav class="footer-socials" aria-label="Social links">
+        {socialLinks.map((link) => (
+          <a href={link.href} target="_blank" rel="noopener" aria-label={link.label}>
+            {link.path
+              ? (
+                <svg class="social-icon" viewBox="0 0 24 24" aria-hidden="true">
+                  <path d={link.path} />
+                </svg>
+              )
+              : <span class="social-glyph" aria-hidden="true">{link.glyph}</span>}
+          </a>
+        ))}
+      </nav>
+    </section>
+
+    {visibleGroups.map((group) => (
+      <nav class="footer-group" aria-label={group.title}>
+        <h2>{group.title}</h2>
+        {group.links.map((link) => (
+          <a
+            href={link.href}
+            target={link.external ? '_blank' : undefined}
+            rel={link.external ? 'noopener' : undefined}
+          >
+            {link.label}
+          </a>
+        ))}
+      </nav>
     ))}
-  </nav>
-  {credit === 'simple' ? (
-    <p>Built by <a href="https://molty.me" target="_blank" rel="noopener">Molty</a> 🦞</p>
-  ) : (
-    <p>Built by <a href="https://molty.me" target="_blank" rel="noopener">Molty</a> 🦞, a space lobster AI with a <a href="https://soul.md" target="_blank" rel="noopener">soul</a>, by <a href="https://steipete.me" target="_blank" rel="noopener">Peter Steinberger</a> & <a href="https://github.com/openclaw/openclaw#community" target="_blank" rel="noopener">community</a>.</p>
-  )}
-  <p class="foundation-note">An <a href="https://openclaw.org" target="_blank" rel="noopener">OpenClaw Foundation</a> project.</p>
-  {showDisclaimer && <p class="disclaimer">Independent project, not affiliated with Anthropic.</p>}
+  </div>
+
+  <div class="footer-legal">
+    <p>{showDisclaimer ? 'Independent project, not affiliated with Anthropic.' : 'Open-source assistant infrastructure.'}</p>
+    <p class="footer-year">© 2026</p>
+    <p class="footer-foundation-meta">
+      <a href="https://openclaw.org" target="_blank" rel="noopener" class="foundation-name">
+        <img src="https://pbs.twimg.com/profile_images/2017100664984186880/orbYx-3U_400x400.jpg" alt="" loading="lazy" />
+        <span>OpenClaw Foundation</span>
+      </a>
+    </p>
+  </div>
 </footer>
 
 <style>
   .footer {
-    text-align: center;
-    font-family: var(--oc-font-mono);
-    font-size: 0.76rem;
-    color: var(--oc-text-muted);
+    width: 100%;
+    margin-top: auto;
+    border: 1px solid var(--oc-border-subtle);
+    background: color-mix(in srgb, var(--oc-bg-page) 88%, black);
+    color: var(--oc-text-secondary);
+    overflow: hidden;
   }
 
   .footer--home {
-    margin-top: auto;
-    padding: 36px 0 40px;
-    border-top: 1px solid var(--oc-border-subtle);
+    margin-top: 52px;
+    width: calc(100% + 96px);
+    margin-left: -48px;
+    margin-right: -48px;
+    border-right: 0;
+    border-left: 0;
   }
 
   .footer--roomy {
-    margin-top: auto;
-    padding-top: var(--oc-space-7);
+    margin-top: 64px;
   }
 
   .footer--compact {
-    padding-top: var(--oc-space-5);
+    margin-top: 40px;
   }
 
   .footer--article {
-    margin-top: var(--oc-space-7);
-    padding-top: var(--oc-space-5);
+    margin-top: 48px;
   }
 
-  .footer-nav {
+  .footer-top {
+    display: grid;
+    grid-template-columns: minmax(0, 5fr) repeat(3, minmax(0, 2.333fr));
+    min-height: 320px;
+    border-bottom: 1px solid var(--oc-border-subtle);
+  }
+
+  .footer-brand,
+  .footer-group {
+    min-width: 0;
+    padding: 48px;
+    border-right: 1px solid var(--oc-border-subtle);
+  }
+
+  .footer-group:last-child {
+    border-right: 0;
+  }
+
+  .footer-brand {
     display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    align-items: center;
-    column-gap: var(--oc-space-2);
-    row-gap: var(--oc-space-2);
-    margin-bottom: var(--oc-space-4);
+    flex-direction: column;
   }
 
-  .footer-separator {
-    color: var(--oc-text-muted);
-    margin: 0 var(--oc-space-1);
-    opacity: 0.5;
-  }
-
-  .footer a {
-    color: var(--oc-text-secondary);
+  .footer-logo {
+    width: fit-content;
+    color: var(--oc-text-primary);
+    font-family: var(--oc-font-display);
+    font-size: 1.25rem;
+    font-weight: 700;
+    line-height: 1;
     text-decoration: none;
-    transition: color 0.15s ease;
+    transition: color 0.14s ease;
   }
 
-  .footer a:hover {
-    color: var(--oc-accent-primary);
+  .footer-credit,
+  .foundation-note {
+    max-width: 31rem;
+    color: var(--oc-text-muted);
+    font-family: var(--oc-font-body);
+    font-size: 0.95rem;
+    line-height: 1.65;
+  }
+
+  .footer-credit {
+    margin-top: 22px;
   }
 
   .foundation-note {
-    margin-top: 10px;
-    color: var(--oc-text-secondary);
+    margin-top: 12px;
   }
 
-  .disclaimer {
-    margin-top: var(--oc-space-2);
-    font-size: 0.72rem;
+  .footer-credit a,
+  .foundation-note a {
+    color: inherit;
+    text-underline-offset: 0.22em;
+    text-decoration-color: color-mix(in srgb, currentColor 45%, transparent);
+    transition: color 0.14s ease, text-decoration-color 0.14s ease;
+  }
+
+  .footer-credit .credit-strong {
+    color: var(--oc-text-primary);
+    text-decoration: none;
+  }
+
+  .footer-credit a:hover,
+  .foundation-note a:hover,
+  .footer-logo:hover {
+    color: var(--oc-text-primary);
+    text-decoration-color: currentColor;
+  }
+
+  .footer-socials {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    margin-top: auto;
+    padding-top: 48px;
+  }
+
+  .footer-socials a {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
     color: var(--oc-text-muted);
-    opacity: 0.7;
+    line-height: 1;
+    text-decoration: none;
+    transition: color 0.14s ease, transform 0.14s ease;
   }
 
-  @media (max-width: 480px) {
-    .footer-nav {
-      gap: 6px;
-      font-size: 0.85rem;
+  .footer-socials a:hover {
+    color: var(--oc-text-primary);
+  }
+
+  .footer-socials a:active {
+    transform: scale(0.96);
+  }
+
+  .social-glyph {
+    font-family: var(--oc-font-mono);
+    font-size: 1rem;
+  }
+
+  .social-icon {
+    width: 18px;
+    height: 18px;
+    fill: currentColor;
+  }
+
+  .footer-group {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+  }
+
+  .footer-group h2 {
+    margin-bottom: 6px;
+    color: color-mix(in srgb, var(--oc-text-muted) 68%, transparent);
+    font-family: var(--oc-font-mono);
+    font-size: 0.72rem;
+    font-weight: 600;
+    line-height: 1;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .footer-group a {
+    width: fit-content;
+    color: var(--oc-text-secondary);
+    font-family: var(--oc-font-body);
+    font-size: 0.96rem;
+    line-height: 1.4;
+    text-decoration: none;
+    transition: color 0.14s ease;
+  }
+
+  .footer-group a:hover {
+    color: var(--oc-text-primary);
+  }
+
+  .footer-legal {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+    align-items: center;
+    gap: 24px;
+    min-height: 56px;
+    padding: 0 48px;
+    color: color-mix(in srgb, var(--oc-text-muted) 72%, transparent);
+    font-family: var(--oc-font-mono);
+    font-size: 0.72rem;
+    line-height: 1.4;
+  }
+
+  .footer-legal > p {
+    margin: 0;
+  }
+
+  .footer-year {
+    justify-self: center;
+    line-height: 1;
+  }
+
+  .footer-foundation-meta {
+    display: inline-flex;
+    align-items: center;
+    justify-self: end;
+    gap: 7px;
+    margin: 0;
+    line-height: 1;
+  }
+
+  .foundation-name {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    color: inherit;
+    line-height: 1;
+    text-decoration: none;
+    transition: color 0.14s ease;
+  }
+
+  .foundation-name:hover {
+    color: var(--oc-text-primary);
+  }
+
+  .foundation-name img {
+    display: block;
+    width: 16px;
+    height: 16px;
+    border-radius: 2px;
+    object-fit: cover;
+  }
+
+  @media (max-width: 900px) {
+    .footer-top {
+      grid-template-columns: 1fr 1fr;
+      min-height: 0;
     }
 
-    .footer a {
-      display: inline-block;
+    .footer-brand {
+      grid-column: 1 / -1;
+      min-height: 260px;
+      border-bottom: 1px solid var(--oc-border-subtle);
+      border-right: 0;
     }
 
-    .footer-separator {
-      margin: 0 2px;
+    .footer-group:nth-of-type(3) {
+      border-right: 0;
     }
   }
 
-  @media (min-width: 481px) and (max-width: 768px) {
-    .footer-nav {
-      gap: 10px;
-      font-size: 0.9rem;
+  @media (max-width: 560px) {
+    .footer--home,
+    .footer--roomy,
+    .footer--compact,
+    .footer--article {
+      margin-top: 40px;
     }
 
-    .footer a {
-      display: inline-block;
+    .footer--home {
+      width: calc(100% + 40px);
+      margin-left: -20px;
+      margin-right: -20px;
     }
 
-    .footer-separator {
-      margin: 0 6px;
+    .footer-top {
+      grid-template-columns: 1fr;
+    }
+
+    .footer-brand,
+    .footer-group {
+      padding: 32px 28px;
+      border-right: 0;
+    }
+
+    .footer-group {
+      border-bottom: 1px solid var(--oc-border-subtle);
+    }
+
+    .footer-group:last-child {
+      border-bottom: 0;
+    }
+
+    .footer-socials {
+      padding-top: 40px;
+    }
+
+    .footer-legal {
+      flex-direction: column;
+      align-items: flex-start;
+      justify-content: center;
+      display: flex;
+      padding: 18px 28px;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .footer a,
+    .footer-socials a {
+      transition: none;
     }
   }
 </style>
