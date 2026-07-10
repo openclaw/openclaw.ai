@@ -194,110 +194,110 @@ const asciiAurora = (() => {
 
     <div class="rail">
     <!-- Quick Start -->
-    <section id="quickstart" class="quickstart">
+    <section id="quickstart" class="quickstart" data-quickstart>
       <SectionHeader title="Quick Start" />
       <div class="code-block">
         <div class="code-header">
           <span class="code-label">install</span>
           <div class="mode-switch">
-            <button class="mode-btn active" data-mode="oneliner">One-liner</button>
-            <button class="mode-btn" data-mode="quick">npm</button>
-            <button class="mode-btn" data-mode="hackable">Hackable</button>
-            <button class="mode-btn" data-mode="macos">Apps</button>
+            <button type="button" class="mode-btn active" data-mode="oneliner">One-liner</button>
+            <button type="button" class="mode-btn" data-mode="quick">npm</button>
+            <button type="button" class="mode-btn" data-mode="hackable">Hackable</button>
+            <button type="button" class="mode-btn" data-mode="macos">Apps</button>
           </div>
-          <div class="pm-switch" id="pm-switch" style="display: none;">
-            <button class="pm-btn active" data-pm="npm">npm</button>
-            <button class="pm-btn" data-pm="pnpm">pnpm</button>
+          <div class="pm-switch" id="pm-switch" hidden>
+            <button type="button" class="pm-btn active" data-pm="npm">npm</button>
+            <button type="button" class="pm-btn" data-pm="pnpm">pnpm</button>
           </div>
-          <div class="hackable-switch" id="hackable-switch" style="display: none;">
-            <button class="hackable-btn active" data-hackable="installer">installer</button>
-            <button class="hackable-btn" data-hackable="pnpm">pnpm</button>
+          <div class="hackable-switch" id="hackable-switch" hidden>
+            <button type="button" class="hackable-btn active" data-hackable="installer">installer</button>
+            <button type="button" class="hackable-btn" data-hackable="pnpm">pnpm</button>
           </div>
-          <div class="os-switch" id="os-switch" style="display: none;">
-            <button class="os-btn active" data-os="unix">macOS & Linux</button>
-            <button class="os-btn" data-os="windows">Windows</button>
+          <div class="os-switch" id="os-switch" hidden>
+            <button type="button" class="os-btn active" data-os="unix">macOS & Linux</button>
+            <button type="button" class="os-btn" data-os="windows">Windows</button>
           </div>
           <div class="beta-switch" id="beta-switch">
-            <button class="beta-btn" id="beta-btn" data-beta="false">
+            <button type="button" class="beta-btn" id="beta-btn" data-beta="false">
               <span class="beta-label">β</span>
               <span class="beta-text">Beta</span>
             </button>
           </div>
-          <div class="switch-placeholder" id="switch-placeholder" aria-hidden="true"></div>
+          <div class="switch-placeholder" id="switch-placeholder" aria-hidden="true" hidden></div>
         </div>
         <div id="code-oneliner" class="code-content">
           <div class="code-line comment" id="oneliner-comment"># Works everywhere. On macOS, first run may need an Administrator for Homebrew.</div>
           <div class="code-line cmd">
             <span class="code-prompt">$</span>
             <span class="os-cmd">curl -fsSL https://openclaw.ai/install.sh | bash</span>
-            <button class="copy-line-btn" data-cmd="oneliner" title="Copy">
+            <button type="button" class="copy-line-btn" data-cmd="oneliner" title="Copy">
               <svg class="copy-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
-              <svg class="check-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="display:none"><polyline points="20 6 9 17 4 12"/></svg>
+              <svg class="check-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" hidden><polyline points="20 6 9 17 4 12"/></svg>
             </button>
           </div>
         </div>
-        <div id="code-quick" class="code-content" style="display: none;">
+        <div id="code-quick" class="code-content" hidden>
           <div class="code-line comment" id="quick-comment-install"># Install OpenClaw</div>
           <div class="code-line cmd">
             <span class="code-prompt">$</span>
             <span class="pm-install">npm i -g openclaw</span>
-            <button class="copy-line-btn" data-cmd="install" title="Copy">
+            <button type="button" class="copy-line-btn" data-cmd="install" title="Copy">
               <svg class="copy-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
-              <svg class="check-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="display:none"><polyline points="20 6 9 17 4 12"/></svg>
+              <svg class="check-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" hidden><polyline points="20 6 9 17 4 12"/></svg>
             </button>
           </div>
           <div class="code-line comment" id="quick-comment-onboard"># Meet your lobster</div>
           <div class="code-line cmd">
             <span class="code-prompt">$</span>
             <span>openclaw onboard</span>
-            <button class="copy-line-btn" data-cmd="onboard" title="Copy">
+            <button type="button" class="copy-line-btn" data-cmd="onboard" title="Copy">
               <svg class="copy-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
-              <svg class="check-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="display:none"><polyline points="20 6 9 17 4 12"/></svg>
+              <svg class="check-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" hidden><polyline points="20 6 9 17 4 12"/></svg>
             </button>
           </div>
         </div>
-        <div id="code-hackable" class="code-content" style="display: none;">
+        <div id="code-hackable" class="code-content" hidden>
           <div id="hackable-installer-content">
             <div class="code-line comment"># For those who read source code for fun</div>
             <div class="code-line cmd">
               <span class="code-prompt">$</span>
               <span class="os-cmd-hackable">curl -fsSL https://openclaw.ai/install.sh | bash -s -- --install-method git</span>
-              <button class="copy-line-btn" data-cmd="hackable-installer" title="Copy">
+              <button type="button" class="copy-line-btn" data-cmd="hackable-installer" title="Copy">
                 <svg class="copy-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
-                <svg class="check-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="display:none"><polyline points="20 6 9 17 4 12"/></svg>
+                <svg class="check-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" hidden><polyline points="20 6 9 17 4 12"/></svg>
               </button>
             </div>
           </div>
-          <div id="hackable-pnpm-content" style="display: none;">
+          <div id="hackable-pnpm-content" hidden>
             <div class="code-line comment"># Source checkouts are pnpm workspaces</div>
             <div class="code-line cmd">
               <span class="code-prompt">$</span>
               <span>git clone https://github.com/openclaw/openclaw.git</span>
-              <button class="copy-line-btn" data-cmd="clone" title="Copy">
+              <button type="button" class="copy-line-btn" data-cmd="clone" title="Copy">
                 <svg class="copy-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
-                <svg class="check-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="display:none"><polyline points="20 6 9 17 4 12"/></svg>
+                <svg class="check-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" hidden><polyline points="20 6 9 17 4 12"/></svg>
               </button>
             </div>
             <div class="code-line cmd">
               <span class="code-prompt">$</span>
               <span>cd openclaw && corepack enable && pnpm install</span>
-              <button class="copy-line-btn" data-cmd="build" title="Copy">
+              <button type="button" class="copy-line-btn" data-cmd="build" title="Copy">
                 <svg class="copy-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
-                <svg class="check-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="display:none"><polyline points="20 6 9 17 4 12"/></svg>
+                <svg class="check-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" hidden><polyline points="20 6 9 17 4 12"/></svg>
               </button>
             </div>
             <div class="code-line comment"># Run from source; bundled plugins use extensions/* deps</div>
             <div class="code-line cmd">
               <span class="code-prompt">$</span>
               <span>pnpm openclaw onboard</span>
-              <button class="copy-line-btn" data-cmd="hackable-onboard" title="Copy">
+              <button type="button" class="copy-line-btn" data-cmd="hackable-onboard" title="Copy">
                 <svg class="copy-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
-                <svg class="check-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="display:none"><polyline points="20 6 9 17 4 12"/></svg>
+                <svg class="check-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" hidden><polyline points="20 6 9 17 4 12"/></svg>
               </button>
             </div>
           </div>
         </div>
-        <div id="code-macos" class="code-content" style="display: none;">
+        <div id="code-macos" class="code-content" hidden>
           <div class="app-download-content">
             <div class="app-download-intro">
               <span class="app-download-tagline">Companion Apps (Beta)</span>
@@ -337,254 +337,10 @@ const asciiAurora = (() => {
 
     <script>
       import { initIntegrationRail } from '../scripts/home/integration-rail';
+      import { initQuickStart } from '../scripts/home/quickstart';
 
-      // Windows install commands
-      const windowsCmd = 'powershell -c "irm https://openclaw.ai/install.ps1 | iex"';
-      const windowsBetaCmd = 'powershell -c "& ([scriptblock]::Create((irm https://openclaw.ai/install.ps1))) -Tag beta"';
-      const windowsGitCmd = 'powershell -c "& ([scriptblock]::Create((irm https://openclaw.ai/install.ps1))) -InstallMethod git"';
-
-      // State
-      let currentPm = 'npm';
-      let currentMode = 'oneliner';
-      let currentHackable = 'installer';
-      let currentBeta = false;
-      // Auto-detect OS using modern API with fallback
-      const isWindows = navigator.userAgentData?.platform === 'Windows' ||
-                        navigator.userAgent.toLowerCase().includes('windows');
-      let currentOs = isWindows ? 'windows' : 'unix';
-
-      // DOM Elements - cached once for performance
-      const pmBtns = document.querySelectorAll('.pm-btn');
-      const hackableBtns = document.querySelectorAll('.hackable-btn');
-      const osBtns = document.querySelectorAll('.os-btn');
-      const modeBtns = document.querySelectorAll('.mode-btn');
-      const pmSwitch = document.getElementById('pm-switch');
-      const hackableSwitch = document.getElementById('hackable-switch');
-      const osSwitch = document.getElementById('os-switch');
-      const betaSwitch = document.getElementById('beta-switch');
-      const betaBtn = document.getElementById('beta-btn');
-      const switchPlaceholder = document.getElementById('switch-placeholder');
-      const codeOneliner = document.getElementById('code-oneliner');
-      const codeQuick = document.getElementById('code-quick');
-      const codeHackable = document.getElementById('code-hackable');
-      const codeMacos = document.getElementById('code-macos');
-      const hackableInstallerContent = document.getElementById('hackable-installer-content');
-      const hackablePnpmContent = document.getElementById('hackable-pnpm-content');
-      const onelinerComment = document.getElementById('oneliner-comment');
-      const quickCommentInstall = document.getElementById('quick-comment-install');
-      const quickCommentOnboard = document.getElementById('quick-comment-onboard');
-
-      // Cached query selectors for frequently updated elements
-      const pmCmdElements = document.querySelectorAll('.pm-cmd');
-      const pmInstallElements = document.querySelectorAll('.pm-install');
-      const osCmdElements = document.querySelectorAll('.os-cmd');
-      const osCmdHackableElements = document.querySelectorAll('.os-cmd-hackable');
-
-      const comments = {
-        oneliner: {
-          stable: "# Works everywhere. Installs everything. You're welcome. 🦞",
-          beta: "# Living on the edge. Bugs are features you found first. 🦞"
-        },
-        quickInstall: {
-          stable: "# Install OpenClaw",
-          beta: "# Install OpenClaw (beta) — Fresh from the lab 🧪"
-        },
-        quickOnboard: {
-          stable: "# Meet your lobster",
-          beta: "# Meet your experimental lobster"
-        }
-      };
-
-      function updateCommands() {
-        // Update hackable mode commands using cached elements
-        pmCmdElements.forEach(cmd => cmd.textContent = currentPm);
-        // Update quick mode install command (with beta support)
-        const betaSuffix = currentBeta ? '@beta' : '';
-        const installCmd = currentPm === 'npm'
-          ? `npm i -g openclaw${betaSuffix}`
-          : `pnpm add -g openclaw${betaSuffix}`;
-        pmInstallElements.forEach(cmd => cmd.textContent = installCmd);
-        // Update one-liner OS command (with beta support)
-        let onelinerCmd;
-        if (currentOs === 'unix') {
-          onelinerCmd = currentBeta
-            ? "curl -fsSL https://openclaw.ai/install.sh | bash -s -- --beta"
-            : "curl -fsSL https://openclaw.ai/install.sh | bash";
-        } else {
-          onelinerCmd = currentBeta ? windowsBetaCmd : windowsCmd;
-        }
-        osCmdElements.forEach(cmd => cmd.textContent = onelinerCmd);
-        // Update hackable OS command for installer mode
-        const hackableOsCmd = currentOs === 'windows'
-          ? windowsGitCmd
-          : "curl -fsSL https://openclaw.ai/install.sh | bash -s -- --install-method git";
-        osCmdHackableElements.forEach(cmd => cmd.textContent = hackableOsCmd);
-        // Update hackable content visibility (null-safe)
-        if (currentMode === 'hackable') {
-          if (hackableInstallerContent) hackableInstallerContent.style.display = currentHackable === 'installer' ? 'block' : 'none';
-          if (hackablePnpmContent) hackablePnpmContent.style.display = currentHackable === 'pnpm' ? 'block' : 'none';
-        }
-        // Update beta button state (null-safe)
-        if (betaBtn) {
-          betaBtn.classList.toggle('active', currentBeta);
-          betaBtn.dataset.beta = currentBeta.toString();
-        }
-        // Update comment texts based on beta state (null-safe)
-        const mode = currentBeta ? 'beta' : 'stable';
-        if (onelinerComment) onelinerComment.textContent = comments.oneliner[mode];
-        if (quickCommentInstall) quickCommentInstall.textContent = comments.quickInstall[mode];
-        if (quickCommentOnboard) quickCommentOnboard.textContent = comments.quickOnboard[mode];
-      }
-
-      function updateVisibility() {
-        // Null-safe visibility updates
-        if (codeOneliner) codeOneliner.style.display = currentMode === 'oneliner' ? 'block' : 'none';
-        if (codeQuick) codeQuick.style.display = currentMode === 'quick' ? 'block' : 'none';
-        if (codeHackable) codeHackable.style.display = currentMode === 'hackable' ? 'block' : 'none';
-        if (codeMacos) codeMacos.style.display = currentMode === 'macos' ? 'block' : 'none';
-
-        // Show OS switch for one-liner and installer-backed hackable mode.
-        const showOsControls = currentMode === 'oneliner' || (currentMode === 'hackable' && currentHackable === 'installer');
-        const showPmControls = currentMode === 'quick';
-        const showHackableControls = currentMode === 'hackable';
-        // Beta only applies to oneliner and npm modes (git always gets main branch)
-        const showBetaControls = currentMode === 'oneliner' || currentMode === 'quick';
-        if (osSwitch) osSwitch.style.display = showOsControls ? 'flex' : 'none';
-        if (pmSwitch) pmSwitch.style.display = showPmControls ? 'flex' : 'none';
-        if (hackableSwitch) hackableSwitch.style.display = showHackableControls ? 'flex' : 'none';
-        if (betaSwitch) betaSwitch.style.display = showBetaControls ? 'flex' : 'none';
-        // Show placeholder when no switches visible (Apps mode) to prevent layout shift
-        const noSwitchesVisible = !showOsControls && !showPmControls && !showHackableControls && !showBetaControls;
-        if (switchPlaceholder) switchPlaceholder.style.display = noSwitchesVisible ? 'block' : 'none';
-      }
-
-      // Beta toggle (null-safe)
-      if (betaBtn) {
-        betaBtn.addEventListener('click', () => {
-          currentBeta = !currentBeta;
-          updateCommands();
-        });
-      }
-
-      pmBtns.forEach(btn => {
-        btn.addEventListener('click', () => {
-          currentPm = btn.dataset.pm;
-          pmBtns.forEach(b => b.classList.remove('active'));
-          btn.classList.add('active');
-          updateCommands();
-        });
-      });
-
-      hackableBtns.forEach(btn => {
-        btn.addEventListener('click', () => {
-          currentHackable = btn.dataset.hackable;
-          hackableBtns.forEach(b => b.classList.remove('active'));
-          btn.classList.add('active');
-          updateCommands();
-          updateVisibility();
-        });
-      });
-
-      osBtns.forEach(btn => {
-        btn.addEventListener('click', () => {
-          currentOs = btn.dataset.os;
-          osBtns.forEach(b => b.classList.remove('active'));
-          btn.classList.add('active');
-          updateCommands();
-        });
-      });
-
-      modeBtns.forEach(btn => {
-        btn.addEventListener('click', () => {
-          currentMode = btn.dataset.mode;
-          modeBtns.forEach(b => b.classList.remove('active'));
-          btn.classList.add('active');
-          updateVisibility();
-        });
-      });
-
-      // Initialize UI based on detected OS
-      osBtns.forEach(b => b.classList.toggle('active', b.dataset.os === currentOs));
-      updateCommands();
-      updateVisibility();
-
-      // Copy button functionality
-      const copyCommands = {
-        'oneliner': () => {
-          if (currentOs === 'unix') {
-            return currentBeta
-              ? "curl -fsSL https://openclaw.ai/install.sh | bash -s -- --beta"
-              : "curl -fsSL https://openclaw.ai/install.sh | bash";
-          } else {
-            return currentBeta ? windowsBetaCmd : windowsCmd;
-          }
-        },
-        'install': () => {
-          const betaSuffix = currentBeta ? '@beta' : '';
-          return currentPm === 'npm' ? `npm i -g openclaw${betaSuffix}` : `pnpm add -g openclaw${betaSuffix}`;
-        },
-        'onboard': () => 'openclaw onboard',
-        'hackable-installer': () => currentOs === 'windows'
-          ? windowsGitCmd
-          : "curl -fsSL https://openclaw.ai/install.sh | bash -s -- --install-method git",
-        'clone': () => 'git clone https://github.com/openclaw/openclaw.git',
-        'build': () => 'cd openclaw && corepack enable && pnpm install',
-        'hackable-onboard': () => 'pnpm openclaw onboard',
-      };
-
-      document.querySelectorAll('.copy-line-btn').forEach(btn => {
-        btn.addEventListener('click', async () => {
-          const cmdKey = btn.dataset.cmd;
-          const cmdFn = copyCommands[cmdKey];
-          if (!cmdFn) return;
-          
-          const code = cmdFn();
-          const copyIcon = btn.querySelector('.copy-icon');
-          const checkIcon = btn.querySelector('.check-icon');
-
-          // Try modern clipboard API first, fallback to execCommand
-          let success = false;
-          try {
-            if (navigator.clipboard && navigator.clipboard.writeText) {
-              await navigator.clipboard.writeText(code);
-              success = true;
-            } else {
-              // Fallback for older browsers or non-HTTPS
-              const textArea = document.createElement('textarea');
-              textArea.value = code;
-              textArea.style.position = 'fixed';
-              textArea.style.opacity = '0';
-              document.body.appendChild(textArea);
-              try {
-                textArea.select();
-                success = document.execCommand('copy');
-              } finally {
-                textArea.remove();
-              }
-            }
-          } catch (err) {
-            console.error('Failed to copy:', err);
-            success = false;
-          }
-
-          if (success) {
-            btn.classList.add('copied');
-            if (copyIcon) copyIcon.style.display = 'none';
-            if (checkIcon) checkIcon.style.display = 'block';
-            setTimeout(() => {
-              btn.classList.remove('copied');
-              if (copyIcon) copyIcon.style.display = 'block';
-              if (checkIcon) checkIcon.style.display = 'none';
-            }, 2000);
-          } else {
-            // Visual error feedback - brief red flash
-            btn.style.background = 'rgba(239, 68, 68, 0.3)';
-            setTimeout(() => {
-              btn.style.background = '';
-            }, 1000);
-          }
-        });
-      });
+      const quickStart = document.querySelector<HTMLElement>("[data-quickstart]");
+      if (quickStart) initQuickStart(quickStart);
 
       // Animated sonar fan: the rings pulse slowly outward from behind the
       // lobster mark, ~10fps. Mirrors the static SSR frame.
@@ -2592,6 +2348,10 @@ const asciiAurora = (() => {
     color: var(--oc-accent-secondary);
   }
 
+  .copy-line-btn.copy-failed {
+    background: rgba(239, 68, 68, 0.3);
+  }
+
   .copy-line-btn svg {
     width: 14px;
     height: 14px;
@@ -2670,7 +2430,7 @@ const asciiAurora = (() => {
 
   /* Placeholder to prevent layout shift when no switches visible */
   .switch-placeholder {
-    display: none;
+    display: block;
     height: 26px; /* Match switch button height */
     margin-left: auto;
   }
