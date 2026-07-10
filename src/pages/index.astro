@@ -651,7 +651,7 @@ const asciiAurora = renderAsciiAurora();
     padding: 64px 0;
   }
 
-  .rail > section:not(.builds-section):not(.press-section) {
+  .rail > section:not(.builds-section):not(.press-section):not(.quickstart) {
     border-top: 1px solid var(--border-subtle);
   }
 
@@ -1182,7 +1182,6 @@ const asciiAurora = renderAsciiAurora();
   /* Features */
   .features {
     margin-bottom: 56px;
-    
   }
 
   /* Hairline grid: 1px gaps over the border color, square cells */
@@ -1378,10 +1377,6 @@ const asciiAurora = renderAsciiAurora();
     cursor: pointer;
     overflow: hidden;
     transition: flex-basis 0.28s ease, width 0.28s ease, background 0.15s ease;
-  }
-
-  .integration-card::before {
-    content: none;
   }
 
   .integration-card::after {
@@ -1627,9 +1622,7 @@ const asciiAurora = renderAsciiAurora();
       margin-left: -20px;
       padding: 56px 20px;
     }
-  }
 
-  @media (max-width: 720px) {
     .integrations-copy p {
       font-size: 1.42rem;
     }
@@ -1962,12 +1955,6 @@ const asciiAurora = renderAsciiAurora();
     border: 1px solid var(--oc-border-subtle);
   }
 
-  @media (max-width: 640px) {
-    .press-grid {
-      grid-template-columns: 1fr;
-    }
-  }
-
   .press-card {
     position: relative;
     display: flex;
@@ -2132,7 +2119,6 @@ const asciiAurora = renderAsciiAurora();
   /* Quick Start */
   .quickstart {
     margin-bottom: 56px;
-    border-top: 0 !important;
   }
 
 
@@ -2197,7 +2183,7 @@ const asciiAurora = renderAsciiAurora();
     background: var(--oc-surface-interactive);
     color: var(--oc-text-muted);
     cursor: pointer;
-    transition: all var(--oc-duration-ui) ease;
+    transition: opacity 0.2s ease, background-color 0.2s ease, color 0.2s ease;
     flex-shrink: 0;
   }
 
@@ -2315,7 +2301,7 @@ const asciiAurora = renderAsciiAurora();
     background: transparent;
     color: var(--oc-text-muted);
     cursor: pointer;
-    transition: all var(--oc-duration-ui) ease;
+    transition: background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease;
   }
 
   .beta-btn:hover {
@@ -2451,7 +2437,10 @@ const asciiAurora = renderAsciiAurora();
     white-space: nowrap;
     text-decoration: none;
     cursor: pointer;
-    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    transition:
+      background-color 0.25s cubic-bezier(0.4, 0, 0.2, 1),
+      border-color 0.25s cubic-bezier(0.4, 0, 0.2, 1),
+      color 0.25s cubic-bezier(0.4, 0, 0.2, 1);
     box-shadow: none;
   }
 
@@ -2492,7 +2481,6 @@ const asciiAurora = renderAsciiAurora();
   /* Sponsors */
   .sponsors {
     margin-bottom: 56px;
-    
   }
 
   .sponsors .section-title {
