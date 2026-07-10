@@ -9,6 +9,7 @@ import communityBuilds from '../data/community-builds.json';
 import pressArticles from '../data/press.json';
 import footerAsciinator from '../data/footer-asciinator.html?raw';
 import { getPublishedBlogPosts } from '../lib/blog';
+import { renderAsciiAurora } from '../lib/ascii-aurora';
 import { getCachedXAvatarSrc, getInitialsAvatarSrc } from '../lib/avatars';
 import { sanitizeUrl } from '../lib/sanitize-url';
 
@@ -102,48 +103,7 @@ function formatBlogDate(date: Date): string {
   });
 }
 
-// Dither field behind the hero: a sonar fan of concentric arcs rising from
-// behind the lobster mark below, brightest at the source and fading toward
-// the corners, quantized through a 4x4 Bayer matrix. This is the static
-// first frame; a client script re-renders the same field over time.
-const asciiAurora = (() => {
-  const CHARS = ' .:-=+xX#8@';
-  const COLS = 220;
-  const ROWS = 26;
-  const BAYER = [
-    [0, 8, 2, 10],
-    [12, 4, 14, 6],
-    [3, 11, 1, 9],
-    [15, 7, 13, 5],
-  ];
-  let field = '';
-  for (let y = 0; y < ROWS; y++) {
-    let line = '';
-    for (let x = 0; x < COLS; x++) {
-      // Rings radiate from an origin just below the band (where the lobster
-      // sits). An angular envelope shapes them into a fan: bright overhead,
-      // dark at the horizontal edges.
-      const dx = x - COLS / 2;
-      const dyr = (ROWS + 5 - y) * 1.9;
-      const dist = Math.sqrt(dx * dx + dyr * dyr);
-      const ring = 0.5 + 0.5 * Math.sin(dist * 0.3);
-      const angle = Math.atan2(dyr, dx);
-      const fan = Math.pow(Math.sin(angle), 2);
-      const decay = Math.min(Math.max(1.15 - dist / 110, 0), 1);
-      // Quiet zone around the origin keeps the mascot and eyebrow readable
-      const inner = Math.min(Math.max((dist - 24) / 18, 0), 1);
-      let v = Math.pow(ring, 3.5) * fan * decay * inner * 1.4;
-      if (v < 0.05) v = 0;
-      v = Math.min(Math.max(v, 0), 1);
-      const threshold = (BAYER[y % 4][x % 4] + 0.5) / 16;
-      const level = v * (CHARS.length - 1);
-      const idx = Math.min(CHARS.length - 1, Math.floor(level) + (level % 1 > threshold ? 1 : 0));
-      line += CHARS[idx];
-    }
-    field += line + '\n';
-  }
-  return field;
-})();
+const asciiAurora = renderAsciiAurora();
 ---
 
 <Layout title="OpenClaw — Personal AI Assistant">
@@ -336,68 +296,16 @@ const asciiAurora = (() => {
     </section>
 
     <script>
+      import { initHeroAurora } from '../scripts/home/hero-aurora';
       import { initIntegrationRail } from '../scripts/home/integration-rail';
       import { initQuickStart } from '../scripts/home/quickstart';
 
       const quickStart = document.querySelector<HTMLElement>("[data-quickstart]");
       if (quickStart) initQuickStart(quickStart);
 
-      // Animated sonar fan: the rings pulse slowly outward from behind the
-      // lobster mark, ~10fps. Mirrors the static SSR frame.
-      const auroraPre = document.querySelector('.hero-art pre');
       const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-      if (auroraPre && !reducedMotion) {
-        const CHARS = ' .:-=+xX#8@';
-        const COLS = 220;
-        const ROWS = 26;
-        const BAYER = [
-          [0, 8, 2, 10],
-          [12, 4, 14, 6],
-          [3, 11, 1, 9],
-          [15, 7, 13, 5],
-        ];
-        let auroraRaf = 0;
-        let lastFrame = 0;
-
-        const renderAurora = (now) => {
-          auroraRaf = requestAnimationFrame(renderAurora);
-          if (now - lastFrame < 100) return;
-          lastFrame = now;
-          const t = now / 1000;
-          let out = '';
-          for (let y = 0; y < ROWS; y++) {
-            let line = '';
-            for (let x = 0; x < COLS; x++) {
-              const dx = x - COLS / 2;
-              const dyr = (ROWS + 5 - y) * 1.9;
-              const dist = Math.sqrt(dx * dx + dyr * dyr);
-              const ring = 0.5 + 0.5 * Math.sin(dist * 0.3 - t * 0.35);
-              const angle = Math.atan2(dyr, dx);
-              const fan = Math.pow(Math.sin(angle), 2);
-              const decay = Math.min(Math.max(1.15 - dist / 110, 0), 1);
-              const inner = Math.min(Math.max((dist - 24) / 18, 0), 1);
-              let v = Math.pow(ring, 3.5) * fan * decay * inner * 1.4;
-              if (v < 0.05) v = 0;
-              v = Math.min(Math.max(v, 0), 1);
-              const threshold = (BAYER[y & 3][x & 3] + 0.5) / 16;
-              const level = v * (CHARS.length - 1);
-              const idx = Math.min(
-                CHARS.length - 1,
-                Math.floor(level) + (level % 1 > threshold ? 1 : 0)
-              );
-              line += CHARS[idx];
-            }
-            out += line + '\n';
-          }
-          auroraPre.textContent = out;
-        };
-
-        auroraRaf = requestAnimationFrame(renderAurora);
-        document.addEventListener('visibilitychange', () => {
-          cancelAnimationFrame(auroraRaf);
-          if (!document.hidden) auroraRaf = requestAnimationFrame(renderAurora);
-        });
-      }
+      const aurora = document.querySelector<HTMLElement>('.hero-art pre');
+      if (aurora) initHeroAurora(aurora, reducedMotion);
 
       const integrationRails = document.querySelector<HTMLElement>('[data-integration-rails]');
       if (integrationRails) initIntegrationRail(integrationRails, reducedMotion);
