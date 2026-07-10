@@ -40,29 +40,29 @@ const links = navLinks.filter((link) => link.id !== current);
 <style>
   .footer {
     text-align: center;
-    font-family: var(--font-mono);
+    font-family: var(--oc-font-mono);
     font-size: 0.76rem;
-    color: var(--text-muted);
+    color: var(--oc-text-muted);
   }
 
   .footer--home {
     margin-top: auto;
     padding: 36px 0 40px;
-    border-top: 1px solid var(--border-subtle);
+    border-top: 1px solid var(--oc-border-subtle);
   }
 
   .footer--roomy {
     margin-top: auto;
-    padding-top: 48px;
+    padding-top: var(--oc-space-7);
   }
 
   .footer--compact {
-    padding-top: 24px;
+    padding-top: var(--oc-space-5);
   }
 
   .footer--article {
-    margin-top: 48px;
-    padding-top: 24px;
+    margin-top: var(--oc-space-7);
+    padding-top: var(--oc-space-5);
   }
 
   .footer-nav {
@@ -70,36 +70,36 @@ const links = navLinks.filter((link) => link.id !== current);
     flex-wrap: wrap;
     justify-content: center;
     align-items: center;
-    column-gap: 8px;
-    row-gap: 8px;
-    margin-bottom: 16px;
+    column-gap: var(--oc-space-2);
+    row-gap: var(--oc-space-2);
+    margin-bottom: var(--oc-space-4);
   }
 
   .footer-separator {
-    color: var(--text-muted);
-    margin: 0 4px;
+    color: var(--oc-text-muted);
+    margin: 0 var(--oc-space-1);
     opacity: 0.5;
   }
 
   .footer a {
-    color: var(--text-secondary);
+    color: var(--oc-text-secondary);
     text-decoration: none;
     transition: color 0.15s ease;
   }
 
   .footer a:hover {
-    color: var(--coral-bright);
+    color: var(--oc-accent-primary);
   }
 
   .foundation-note {
     margin-top: 10px;
-    color: var(--text-secondary);
+    color: var(--oc-text-secondary);
   }
 
   .disclaimer {
-    margin-top: 8px;
+    margin-top: var(--oc-space-2);
     font-size: 0.72rem;
-    color: var(--text-muted);
+    color: var(--oc-text-muted);
     opacity: 0.7;
   }
 

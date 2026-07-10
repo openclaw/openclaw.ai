@@ -70,7 +70,7 @@ function firstAuthor(post: (typeof posts)[number]): BlogAuthor {
       <section class="posts">
         {featured && postAnchors.get(featured.id)?.map((tag) => <span id={tag} class="tag-anchor" aria-hidden="true"></span>)}
         {featured && (
-          <a class="featured-post" href={`/blog/${featured.id}`}>
+          <a class="featured-post oc-card" href={`/blog/${featured.id}`}>
             <div class="post-meta">
               <span class="post-date">{formatDate(featured.data.date)}</span>
               <span>{firstAuthor(featured).name}</span>
@@ -124,9 +124,9 @@ function firstAuthor(post: (typeof posts)[number]): BlogAuthor {
     width: 100%;
     max-width: 1060px;
     margin: 0 auto;
-    padding: 0 48px;
-    border-left: 1px solid var(--border-subtle);
-    border-right: 1px solid var(--border-subtle);
+    padding: 0 var(--oc-space-7);
+    border-left: 1px solid var(--oc-border-subtle);
+    border-right: 1px solid var(--oc-border-subtle);
     flex: 1;
     display: flex;
     flex-direction: column;
@@ -137,8 +137,8 @@ function firstAuthor(post: (typeof posts)[number]): BlogAuthor {
   }
 
   .eyebrow {
-    color: var(--coral-bright);
-    font-family: var(--font-mono);
+    color: var(--oc-accent-primary);
+    font-family: var(--oc-font-mono);
     font-size: 0.72rem;
     font-weight: 600;
     letter-spacing: 0.1em;
@@ -148,17 +148,17 @@ function firstAuthor(post: (typeof posts)[number]): BlogAuthor {
   .blog-head h1 {
     max-width: 640px;
     margin: 14px 0 14px;
-    font-family: var(--font-display);
+    font-family: var(--oc-font-display);
     font-size: clamp(1.9rem, 4vw, 2.7rem);
     font-weight: 600;
     line-height: 1.12;
     letter-spacing: -0.02em;
-    color: var(--text-primary);
+    color: var(--oc-text-primary);
   }
 
   .lede {
     max-width: 620px;
-    color: var(--text-muted);
+    color: var(--oc-text-muted);
     font-size: 0.98rem;
     line-height: 1.7;
   }
@@ -166,10 +166,10 @@ function firstAuthor(post: (typeof posts)[number]): BlogAuthor {
   .tag-row {
     display: flex;
     flex-wrap: wrap;
-    gap: 8px;
+    gap: var(--oc-space-2);
     margin-top: 26px;
     padding-bottom: 26px;
-    border-bottom: 1px solid var(--border-subtle);
+    border-bottom: 1px solid var(--oc-border-subtle);
   }
 
   .tag-link {
@@ -177,9 +177,9 @@ function firstAuthor(post: (typeof posts)[number]): BlogAuthor {
     align-items: center;
     min-height: 28px;
     padding: 0 10px;
-    border: 1px solid var(--border-subtle);
-    color: var(--text-muted);
-    font-family: var(--font-mono);
+    border: 1px solid var(--oc-border-subtle);
+    color: var(--oc-text-muted);
+    font-family: var(--oc-font-mono);
     font-size: 0.72rem;
     font-weight: 500;
     text-decoration: none;
@@ -188,36 +188,37 @@ function firstAuthor(post: (typeof posts)[number]): BlogAuthor {
 
   .tag-link:hover,
   .tag-link.active {
-    background: var(--bg-surface);
-    color: var(--text-primary);
+    background: var(--oc-bg-surface);
+    color: var(--oc-text-primary);
   }
 
   .tag-link.active {
-    color: var(--coral-bright);
+    color: var(--oc-accent-primary);
   }
 
   .posts {
-    padding: 40px 0 24px;
+    padding: 40px 0 var(--oc-space-5);
   }
 
   .featured-post {
     display: block;
     margin-bottom: 40px;
     padding: 30px 28px;
-    border: 1px solid var(--border-subtle);
-    background: var(--bg-surface);
+    border: 1px solid var(--oc-border-subtle);
+    background: var(--oc-bg-surface);
     color: inherit;
+    box-shadow: none;
     text-decoration: none;
     transition: background 0.15s ease;
   }
 
   .featured-post:hover {
-    background: var(--bg-elevated);
+    background: var(--oc-bg-elevated);
   }
 
   .featured-post:hover h2,
   .post-row:hover h2 {
-    color: var(--coral-bright);
+    color: var(--oc-accent-primary);
   }
 
   .post-meta,
@@ -226,21 +227,21 @@ function firstAuthor(post: (typeof posts)[number]): BlogAuthor {
     flex-wrap: wrap;
     align-items: center;
     gap: 10px;
-    color: var(--text-muted);
-    font-family: var(--font-mono);
+    color: var(--oc-text-muted);
+    font-family: var(--oc-font-mono);
     font-size: 0.74rem;
     font-weight: 500;
   }
 
   .post-date {
-    color: var(--coral-bright);
+    color: var(--oc-accent-primary);
   }
 
   .featured-post h2,
   .post-row h2 {
-    margin: 12px 0 10px;
-    font-family: var(--font-display);
-    color: var(--text-primary);
+    margin: var(--oc-space-3) 0 10px;
+    font-family: var(--oc-font-display);
+    color: var(--oc-text-primary);
     letter-spacing: -0.015em;
     transition: color 0.16s ease;
   }
@@ -253,7 +254,7 @@ function firstAuthor(post: (typeof posts)[number]): BlogAuthor {
   .featured-post p,
   .post-row p {
     max-width: 720px;
-    color: var(--text-secondary);
+    color: var(--oc-text-secondary);
     font-size: 0.95rem;
     line-height: 1.68;
   }
@@ -261,7 +262,7 @@ function firstAuthor(post: (typeof posts)[number]): BlogAuthor {
   .post-tags {
     display: flex;
     flex-wrap: wrap;
-    gap: 8px;
+    gap: var(--oc-space-2);
     margin-top: 18px;
   }
 
@@ -271,9 +272,9 @@ function firstAuthor(post: (typeof posts)[number]): BlogAuthor {
     align-items: center;
     min-height: 24px;
     padding: 0 9px;
-    border: 1px solid var(--border-subtle);
-    color: var(--text-secondary);
-    font-family: var(--font-mono);
+    border: 1px solid var(--oc-border-subtle);
+    color: var(--oc-text-secondary);
+    font-family: var(--oc-font-mono);
     font-size: 0.7rem;
     font-weight: 500;
   }
@@ -281,7 +282,7 @@ function firstAuthor(post: (typeof posts)[number]): BlogAuthor {
   .post-list {
     display: grid;
     gap: 0;
-    border-top: 1px solid var(--border-subtle);
+    border-top: 1px solid var(--oc-border-subtle);
   }
 
   .tag-anchor {
@@ -292,16 +293,16 @@ function firstAuthor(post: (typeof posts)[number]): BlogAuthor {
   .post-row {
     display: grid;
     grid-template-columns: 128px minmax(0, 1fr);
-    gap: 24px;
+    gap: var(--oc-space-5);
     padding: 26px 0;
-    border-bottom: 1px solid var(--border-subtle);
+    border-bottom: 1px solid var(--oc-border-subtle);
     color: inherit;
     text-decoration: none;
   }
 
   .post-row .post-date {
-    color: var(--text-muted);
-    font-family: var(--font-mono);
+    color: var(--oc-text-muted);
+    font-family: var(--oc-font-mono);
     font-size: 0.78rem;
     padding-top: 3px;
   }
@@ -313,7 +314,7 @@ function firstAuthor(post: (typeof posts)[number]): BlogAuthor {
   }
 
   .row-footer {
-    margin-top: 12px;
+    margin-top: var(--oc-space-3);
   }
 
   @media (max-width: 760px) {
@@ -346,7 +347,7 @@ function firstAuthor(post: (typeof posts)[number]): BlogAuthor {
     }
 
     .post-row .post-date {
-      margin-bottom: 8px;
+      margin-bottom: var(--oc-space-2);
     }
   }
 </style>

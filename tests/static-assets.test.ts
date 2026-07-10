@@ -24,7 +24,72 @@ function readBytes(relativePath: string): Buffer {
   return readFileSync(repoPath(relativePath));
 }
 
+function listSourceFiles(relativeDir: string): string[] {
+  return readdirSync(repoPath(relativeDir), { withFileTypes: true }).flatMap((entry) => {
+    const relativePath = path.join(relativeDir, entry.name);
+    return entry.isDirectory() ? listSourceFiles(relativePath) : [relativePath];
+  });
+}
+
 describe('static public assets', () => {
+  test('uses the canonical OpenClaw design-system contract', () => {
+    const layout = readText('src/layouts/Layout.astro');
+    const orderedImports = [
+      "import '@openclaw/design-system/tokens.css'",
+      "import '@openclaw/design-system/themes.css'",
+      "import '@openclaw/design-system/typography.css'",
+      "import '@openclaw/design-system/components.css'",
+    ];
+    const importOffsets = orderedImports.map((entry) => layout.indexOf(entry));
+
+    expect(importOffsets.every((offset) => offset >= 0)).toBe(true);
+    expect(importOffsets).toEqual([...importOffsets].sort((left, right) => left - right));
+    expect(layout).toContain('<body class="oc-app-surface">');
+
+    const migrationAliases = [
+      'bg-deep',
+      'bg-surface',
+      'bg-elevated',
+      'coral-bright',
+      'coral-mid',
+      'coral-dark',
+      'cyan-bright',
+      'cyan-mid',
+      'cyan-glow',
+      'text-primary',
+      'text-secondary',
+      'text-muted',
+      'on-accent',
+      'border-subtle',
+      'border-accent',
+      'surface-card',
+      'surface-card-strong',
+      'surface-overlay',
+      'surface-interactive',
+      'surface-interactive-hover',
+      'surface-coral-soft',
+      'surface-cyan-soft',
+      'surface-inset-highlight',
+      'chart-line',
+      'font-display',
+      'font-body',
+      'font-serif',
+      'font-mono',
+    ];
+    const aliasPattern = new RegExp(`var\\(--(?:${migrationAliases.join('|')})\\)`, 'g');
+    const aliasUsages = listSourceFiles('src')
+      .filter((file) => /\.(?:astro|css|ts|tsx)$/.test(file))
+      .flatMap((file) => (readText(file).match(aliasPattern) ?? []).map((match) => `${file}: ${match}`));
+
+    expect(aliasUsages).toEqual([]);
+    expect(readText('src/pages/index.astro')).toContain('oc-action oc-action-primary');
+    expect(readText('src/pages/index.astro')).toContain('integration-pill oc-pill');
+    expect(readText('src/pages/ecosystem.astro')).toContain('card oc-card');
+    expect(readText('src/components/SectionHeader.astro')).toContain(
+      'section-header oc-section-header',
+    );
+  });
+
   test('redirects legacy docs paths to the canonical docs host', () => {
     const config = readJson('vercel.json') as {
       redirects?: Array<{
@@ -144,7 +209,9 @@ describe('static public assets', () => {
   test('keeps automation links clear of their grid dividers', () => {
     const integrationsPage = readText('src/pages/integrations.astro');
 
-    expect(integrationsPage).toMatch(/\.automation-links li \{[\s\S]*?padding-left: 12px;/);
+    expect(integrationsPage).toMatch(
+      /\.automation-links li \{[\s\S]*?padding-left: var\(--oc-space-3\);/,
+    );
   });
 
   test('keeps integration examples on current live destinations', () => {
@@ -183,7 +250,7 @@ describe('static public assets', () => {
     expect(integrationsPage).toContain('Show fewer channels');
     expect(integrationsPage).toContain('<span class="channel-expander-icon"');
     expect(integrationsPage).toMatch(
-      /\.channel-expander:focus-visible \{[\s\S]*?outline: none;[\s\S]*?box-shadow: 0 0 0 1px var\(--cyan-bright\);/,
+      /\.channel-expander:focus-visible \{[\s\S]*?outline: none;[\s\S]*?box-shadow: 0 0 0 1px var\(--oc-accent-secondary\);/,
     );
     expect(integrationsPage).toContain('nth-child(n + 13)');
     expect(integrationsPage).toContain('nth-child(n + 10)');

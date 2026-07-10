@@ -25,7 +25,7 @@ const allTestimonials = [...testimonials, ...extraTestimonials];
 
     <div class="shoutouts-grid">
       {allTestimonials.map((t) => (
-        <a href={sanitizeUrl(t.url)} target="_blank" rel="noopener" class="shoutout-card">
+        <a href={sanitizeUrl(t.url)} target="_blank" rel="noopener" class="shoutout-card oc-card">
           <img
             src={t.avatar || getCachedXAvatarSrc(t.author, t.author, 96)}
             alt={t.author}
@@ -87,7 +87,7 @@ const allTestimonials = [...testimonials, ...extraTestimonials];
     z-index: 1;
     max-width: 1200px;
     margin: 0 auto;
-    padding: 40px 24px;
+    padding: 40px var(--oc-space-5);
     min-height: 100vh;
     display: flex;
     flex-direction: column;
@@ -95,7 +95,7 @@ const allTestimonials = [...testimonials, ...extraTestimonials];
 
   .header {
     text-align: center;
-    margin-bottom: 48px;
+    margin-bottom: var(--oc-space-7);
     
   }
 
@@ -112,33 +112,33 @@ const allTestimonials = [...testimonials, ...extraTestimonials];
 
   .back-link {
     display: inline-block;
-    margin-bottom: 24px;
-    color: var(--text-muted);
+    margin-bottom: var(--oc-space-5);
+    color: var(--oc-text-muted);
     text-decoration: none;
     font-size: 0.9rem;
-    transition: color 0.2s ease;
+    transition: color var(--oc-duration-ui) ease;
   }
 
   .back-link:hover {
-    color: var(--coral-bright);
+    color: var(--oc-accent-primary);
   }
 
   .title {
-    font-family: var(--font-display);
+    font-family: var(--oc-font-display);
     font-size: clamp(2rem, 6vw, 3rem);
     font-weight: 700;
-    margin-bottom: 12px;
-    color: var(--text-primary);
+    margin-bottom: var(--oc-space-3);
+    color: var(--oc-text-primary);
   }
 
   .claw-accent {
-    color: var(--coral-bright);
+    color: var(--oc-accent-primary);
     font-size: 0.5em;
     vertical-align: 0.22em;
   }
 
   .subtitle {
-    color: var(--text-secondary);
+    color: var(--oc-text-secondary);
     font-size: 1.1rem;
   }
 
@@ -154,17 +154,18 @@ const allTestimonials = [...testimonials, ...extraTestimonials];
     align-items: flex-start;
     gap: 14px;
     padding: 20px;
-    border-radius: 0;
-    border: 1px solid var(--border-subtle);
-    background: var(--surface-card-strong);
+    border-radius: var(--oc-radius-surface);
+    border: 1px solid var(--oc-border-subtle);
+    background: var(--oc-surface-card-strong);
     backdrop-filter: blur(8px);
     text-decoration: none;
-    color: var(--text-primary);
+    color: var(--oc-text-primary);
+    box-shadow: none;
     transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
   }
 
   .shoutout-card:hover {
-    border-color: var(--coral-bright);
+    border-color: var(--oc-accent-primary);
     transform: none;
     box-shadow: none;
   }
@@ -174,33 +175,33 @@ const allTestimonials = [...testimonials, ...extraTestimonials];
     height: 48px;
     border-radius: 50%;
     flex-shrink: 0;
-    border: 2px solid var(--border-subtle);
-    background: var(--bg-elevated);
+    border: 2px solid var(--oc-border-subtle);
+    background: var(--oc-bg-elevated);
   }
 
   .shoutout-content {
     display: flex;
     flex-direction: column;
-    gap: 8px;
+    gap: var(--oc-space-2);
     min-width: 0;
   }
 
   .shoutout-quote {
     font-size: 0.95rem;
     line-height: 1.55;
-    color: var(--text-secondary);
+    color: var(--oc-text-secondary);
   }
 
   .shoutout-author {
     font-size: 0.85rem;
     font-weight: 600;
-    color: var(--coral-bright);
+    color: var(--oc-accent-primary);
   }
 
 
   @media (max-width: 480px) {
     .container {
-      padding: 24px 16px;
+      padding: var(--oc-space-5) var(--oc-space-4);
     }
 
     .shoutouts-grid {
@@ -208,7 +209,7 @@ const allTestimonials = [...testimonials, ...extraTestimonials];
     }
 
     .shoutout-card {
-      padding: 16px;
+      padding: var(--oc-space-4);
     }
 
     .shoutout-avatar {

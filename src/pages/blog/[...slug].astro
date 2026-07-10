@@ -205,7 +205,7 @@ const articleStructuredData = {
             <h2>Build from the docs</h2>
             <p>Install, configure, and harden OpenClaw with the same reading layout.</p>
           </div>
-          <a href="https://docs.openclaw.ai/start/getting-started" target="_blank" rel="noopener">Open docs</a>
+          <a class="oc-action oc-action-primary" href="https://docs.openclaw.ai/start/getting-started" target="_blank" rel="noopener">Open docs</a>
         </section>
       </footer>
     </article>
@@ -344,7 +344,7 @@ const articleStructuredData = {
     gap: 72px;
     max-width: 1200px;
     margin: 0 auto;
-    padding: 54px 32px 96px;
+    padding: 54px var(--oc-space-6) 96px;
   }
 
   .reader-toc {
@@ -357,8 +357,8 @@ const articleStructuredData = {
 
   .back-link,
   .reader-toc a {
-    color: var(--text-muted);
-    font-family: var(--font-mono);
+    color: var(--oc-text-muted);
+    font-family: var(--oc-font-mono);
     font-size: 0.8rem;
     font-weight: 500;
     text-decoration: none;
@@ -367,11 +367,11 @@ const articleStructuredData = {
 
   .back-link:hover,
   .reader-toc a:hover {
-    color: var(--text-primary);
+    color: var(--oc-text-primary);
   }
 
   .reader-toc a.active {
-    color: var(--coral-bright);
+    color: var(--oc-accent-primary);
   }
 
   .back-link {
@@ -382,8 +382,8 @@ const articleStructuredData = {
 
   .toc-related {
     margin-top: 30px;
-    padding-top: 24px;
-    border-top: 1px solid var(--border-subtle);
+    padding-top: var(--oc-space-5);
+    border-top: 1px solid var(--oc-border-subtle);
   }
 
   .toc-related:first-child {
@@ -394,9 +394,9 @@ const articleStructuredData = {
 
   .article-kicker,
   .reader-toc h2 {
-    margin: 0 0 12px;
-    color: var(--coral-bright);
-    font-family: var(--font-mono);
+    margin: 0 0 var(--oc-space-3);
+    color: var(--oc-accent-primary);
+    font-family: var(--oc-font-mono);
     font-size: 0.72rem;
     font-weight: 600;
     letter-spacing: 0.1em;
@@ -414,8 +414,8 @@ const articleStructuredData = {
 
   .article h1 {
     margin: 0;
-    color: var(--text-primary);
-    font-family: var(--font-display);
+    color: var(--oc-text-primary);
+    font-family: var(--oc-font-display);
     font-size: clamp(1.9rem, 4.2vw, 2.9rem);
     font-weight: 600;
     line-height: 1.12;
@@ -425,19 +425,19 @@ const articleStructuredData = {
   .dek {
     margin-top: 18px;
     max-width: 700px;
-    color: var(--text-secondary);
+    color: var(--oc-text-secondary);
     font-size: 1.18rem;
     line-height: 1.65;
   }
 
   .dek :global(a) {
-    color: var(--coral-bright);
+    color: var(--oc-accent-primary);
     text-decoration: underline;
     text-underline-offset: 3px;
   }
 
   .dek :global(a:hover) {
-    color: var(--cyan-bright);
+    color: var(--oc-accent-secondary);
   }
 
   .article-header-image {
@@ -456,10 +456,10 @@ const articleStructuredData = {
     align-items: center;
     flex-wrap: wrap;
     gap: 10px;
-    margin-top: 24px;
+    margin-top: var(--oc-space-5);
     padding: 14px 0;
-    border-top: 1px solid var(--border-subtle);
-    border-bottom: 1px solid var(--border-subtle);
+    border-top: 1px solid var(--oc-border-subtle);
+    border-bottom: 1px solid var(--oc-border-subtle);
   }
 
   .byline-avatars {
@@ -480,8 +480,8 @@ const articleStructuredData = {
     width: 28px;
     height: 28px;
     border-radius: 50%;
-    border: 2px solid var(--bg-deep);
-    background: var(--bg-elevated);
+    border: 2px solid var(--oc-bg-page);
+    background: var(--oc-bg-elevated);
     filter: grayscale(1);
     transition: filter 0.25s ease;
   }
@@ -491,7 +491,7 @@ const articleStructuredData = {
   }
 
   .byline-names {
-    color: var(--text-primary);
+    color: var(--oc-text-primary);
     font-size: 0.9rem;
     font-weight: 600;
   }
@@ -502,52 +502,52 @@ const articleStructuredData = {
   }
 
   .byline-names a:hover {
-    color: var(--coral-bright);
+    color: var(--oc-accent-primary);
   }
 
   .byline-sep {
     margin: 0 6px;
-    color: var(--text-muted);
+    color: var(--oc-text-muted);
   }
 
   .byline-meta {
     margin-left: auto;
-    color: var(--text-muted);
-    font-family: var(--font-mono);
+    color: var(--oc-text-muted);
+    font-family: var(--oc-font-mono);
     font-size: 0.74rem;
   }
 
   .article-content {
-    --release-card-bg: color-mix(in srgb, var(--surface-card-strong) 84%, var(--bg-elevated));
-    --release-card-border: color-mix(in srgb, var(--text-muted) 30%, var(--border-subtle));
-    --release-card-highlight: color-mix(in srgb, var(--text-primary) 5%, transparent);
-    --release-data-ink: color-mix(in srgb, var(--cyan-bright) 58%, var(--text-primary));
-    --release-risk-ink: color-mix(in srgb, var(--coral-bright) 46%, var(--text-primary));
-    --release-track: color-mix(in srgb, var(--surface-card-strong) 72%, var(--bg-deep));
-    --article-inline-code-bg: color-mix(in srgb, var(--bg-deep) 60%, var(--bg-surface));
+    --release-card-bg: color-mix(in srgb, var(--oc-surface-card-strong) 84%, var(--oc-bg-elevated));
+    --release-card-border: color-mix(in srgb, var(--oc-text-muted) 30%, var(--oc-border-subtle));
+    --release-card-highlight: color-mix(in srgb, var(--oc-text-primary) 5%, transparent);
+    --release-data-ink: color-mix(in srgb, var(--oc-accent-secondary) 58%, var(--oc-text-primary));
+    --release-risk-ink: color-mix(in srgb, var(--oc-accent-primary) 46%, var(--oc-text-primary));
+    --release-track: color-mix(in srgb, var(--oc-surface-card-strong) 72%, var(--oc-bg-page));
+    --article-inline-code-bg: color-mix(in srgb, var(--oc-bg-page) 60%, var(--oc-bg-surface));
     --article-code-bg: #0c0c0f;
     --article-code-border: rgba(154, 154, 162, 0.2);
     --article-code-text: #cfcfd6;
-    color: var(--text-secondary);
+    color: var(--oc-text-secondary);
     font-size: 1.02rem;
     line-height: 1.78;
   }
 
   :global(html[data-theme='light']) .article-content {
-    --release-card-bg: color-mix(in srgb, var(--surface-card-strong) 90%, var(--bg-elevated));
-    --release-card-border: color-mix(in srgb, var(--text-muted) 34%, var(--border-subtle));
-    --release-card-highlight: color-mix(in srgb, var(--text-primary) 4%, transparent);
-    --release-data-ink: color-mix(in srgb, var(--cyan-bright) 68%, var(--text-primary));
-    --release-risk-ink: color-mix(in srgb, var(--coral-bright) 56%, var(--text-primary));
-    --release-track: color-mix(in srgb, var(--bg-elevated) 78%, white);
-    --article-inline-code-bg: var(--bg-elevated);
-    --article-code-bg: var(--bg-elevated);
-    --article-code-border: var(--border-subtle);
-    --article-code-text: var(--text-primary);
+    --release-card-bg: color-mix(in srgb, var(--oc-surface-card-strong) 90%, var(--oc-bg-elevated));
+    --release-card-border: color-mix(in srgb, var(--oc-text-muted) 34%, var(--oc-border-subtle));
+    --release-card-highlight: color-mix(in srgb, var(--oc-text-primary) 4%, transparent);
+    --release-data-ink: color-mix(in srgb, var(--oc-accent-secondary) 68%, var(--oc-text-primary));
+    --release-risk-ink: color-mix(in srgb, var(--oc-accent-primary) 56%, var(--oc-text-primary));
+    --release-track: color-mix(in srgb, var(--oc-bg-elevated) 78%, white);
+    --article-inline-code-bg: var(--oc-bg-elevated);
+    --article-code-bg: var(--oc-bg-elevated);
+    --article-code-border: var(--oc-border-subtle);
+    --article-code-text: var(--oc-text-primary);
   }
 
   .article-content :global(p:first-child) {
-    color: var(--text-primary);
+    color: var(--oc-text-primary);
     font-size: 1.18rem;
     line-height: 1.72;
   }
@@ -564,9 +564,9 @@ const articleStructuredData = {
   .article-content :global(h2) {
     margin: 2.4em 0 0.7em;
     padding-top: 1.1em;
-    border-top: 1px solid var(--border-subtle);
-    color: var(--text-primary);
-    font-family: var(--font-display);
+    border-top: 1px solid var(--oc-border-subtle);
+    color: var(--oc-text-primary);
+    font-family: var(--oc-font-display);
     font-size: 1.45rem;
     font-weight: 600;
     line-height: 1.25;
@@ -575,7 +575,7 @@ const articleStructuredData = {
 
   .article-content :global(h3) {
     margin: 1.9em 0 0.55em;
-    color: var(--text-primary);
+    color: var(--oc-text-primary);
     font-size: 1.1rem;
     font-weight: 600;
     line-height: 1.35;
@@ -597,12 +597,12 @@ const articleStructuredData = {
   }
 
   .article-content :global(ol li) {
-    margin-bottom: 12px;
+    margin-bottom: var(--oc-space-3);
     padding-left: 0;
   }
 
   .article-content :global(li::marker) {
-    color: var(--coral-bright);
+    color: var(--oc-accent-primary);
   }
 
   .article-content :global(table) {
@@ -614,23 +614,23 @@ const articleStructuredData = {
     overflow: hidden;
     table-layout: fixed;
     box-sizing: border-box;
-    border: 1px solid var(--border-subtle);
-    border-radius: 0;
-    background: var(--surface-card-strong);
+    border: 1px solid var(--oc-border-subtle);
+    border-radius: var(--oc-radius-surface);
+    background: var(--oc-surface-card-strong);
     box-shadow: none;
     font-variant-numeric: tabular-nums;
   }
 
   .article-content :global(th),
   .article-content :global(td) {
-    padding: 14px 16px;
-    border-bottom: 1px solid var(--border-subtle);
+    padding: 14px var(--oc-space-4);
+    border-bottom: 1px solid var(--oc-border-subtle);
     vertical-align: middle;
   }
 
   .article-content :global(th) {
-    color: var(--text-muted);
-    font-family: var(--font-mono);
+    color: var(--oc-text-muted);
+    font-family: var(--oc-font-mono);
     font-size: 0.72rem;
     font-weight: 600;
     letter-spacing: 0.06em;
@@ -641,7 +641,7 @@ const articleStructuredData = {
   }
 
   .article-content :global(td) {
-    color: var(--text-secondary);
+    color: var(--oc-text-secondary);
     font-size: 0.98rem;
     line-height: 1.45;
   }
@@ -679,27 +679,27 @@ const articleStructuredData = {
   }
 
   .article-content :global(strong) {
-    color: var(--text-primary);
+    color: var(--oc-text-primary);
     font-weight: 800;
   }
 
   .article-content :global(a) {
-    color: var(--coral-bright);
+    color: var(--oc-accent-primary);
     text-decoration: underline;
     text-underline-offset: 3px;
   }
 
   .article-content :global(a:hover) {
-    color: color-mix(in srgb, var(--coral-bright) 70%, var(--text-primary));
+    color: color-mix(in srgb, var(--oc-accent-primary) 70%, var(--oc-text-primary));
   }
 
   .article-content :global(code) {
     padding: 0.08em 0.36em;
-    border: 1px solid var(--border-subtle);
-    border-radius: 0;
+    border: 1px solid var(--oc-border-subtle);
+    border-radius: var(--oc-radius-inset);
     background: var(--article-inline-code-bg);
-    color: var(--cyan-bright);
-    font-family: var(--font-mono);
+    color: var(--oc-accent-secondary);
+    font-family: var(--oc-font-mono);
     font-size: 0.88em;
   }
 
@@ -747,18 +747,18 @@ const articleStructuredData = {
 
   .article-content :global(blockquote) {
     padding: 14px 0 14px 22px;
-    border-left: 3px solid var(--coral-bright);
-    color: var(--text-primary);
+    border-left: 3px solid var(--oc-accent-primary);
+    color: var(--oc-text-primary);
     font-style: italic;
   }
 
   .article-content :global(.paper-callout) {
     margin: 2rem 0 0;
     padding: 18px 20px;
-    border: 1px solid color-mix(in srgb, var(--coral-bright) 38%, var(--border-subtle));
-    border-left: 4px solid var(--coral-bright);
-    background: color-mix(in srgb, var(--coral-bright) 6%, var(--bg-surface));
-    color: var(--text-primary);
+    border: 1px solid color-mix(in srgb, var(--oc-accent-primary) 38%, var(--oc-border-subtle));
+    border-left: 4px solid var(--oc-accent-primary);
+    background: color-mix(in srgb, var(--oc-accent-primary) 6%, var(--oc-bg-surface));
+    color: var(--oc-text-primary);
     font-size: 0.98rem;
     line-height: 1.7;
   }
@@ -770,12 +770,12 @@ const articleStructuredData = {
 
   .article-content :global(figure:not(.chart-card) img) {
     margin: 0;
-    border-radius: 0;
+    border-radius: var(--oc-radius-inset);
   }
 
   .article-content :global(figure:not(.chart-card) figcaption) {
-    margin-top: 12px;
-    color: var(--text-muted);
+    margin-top: var(--oc-space-3);
+    color: var(--oc-text-muted);
     font-size: 0.9rem;
     line-height: 1.55;
     text-align: center;
@@ -790,14 +790,14 @@ const articleStructuredData = {
 
   .article-content :global(.metric-card) {
     border: 1px solid var(--release-card-border);
-    border-radius: 0;
+    border-radius: var(--oc-radius-surface);
     background: var(--release-card-bg);
     padding: 18px;
   }
 
   .article-content :global(.metric-card span) {
     display: block;
-    color: var(--text-muted);
+    color: var(--oc-text-muted);
     font-size: 0.76rem;
     font-weight: 800;
     letter-spacing: 0.1em;
@@ -806,9 +806,9 @@ const articleStructuredData = {
 
   .article-content :global(.metric-card strong) {
     display: block;
-    margin: 10px 0 8px;
-    color: var(--text-primary);
-    font-family: var(--font-display);
+    margin: 10px 0 var(--oc-space-2);
+    color: var(--oc-text-primary);
+    font-family: var(--oc-font-display);
     font-size: clamp(1.8rem, 4vw, 2.75rem);
     line-height: 1;
   }
@@ -819,17 +819,17 @@ const articleStructuredData = {
     align-items: end;
     gap: 6px;
     height: 46px;
-    margin: 14px 0 12px;
+    margin: 14px 0 var(--oc-space-3);
     padding: 9px;
-    border: 1px solid color-mix(in srgb, var(--text-muted) 18%, var(--border-subtle));
-    border-radius: 0;
+    border: 1px solid color-mix(in srgb, var(--oc-text-muted) 18%, var(--oc-border-subtle));
+    border-radius: var(--oc-radius-inset);
     background: color-mix(in srgb, var(--release-track) 66%, transparent);
   }
 
   .article-content :global(.metric-spark i) {
     display: block;
     height: max(5px, var(--h));
-    border-radius: 0;
+    border-radius: var(--oc-radius-inset);
     background: var(--release-data-ink);
     opacity: 0.86;
   }
@@ -841,7 +841,7 @@ const articleStructuredData = {
 
   .article-content :global(.metric-card p) {
     margin: 0;
-    color: var(--text-secondary);
+    color: var(--oc-text-secondary);
     line-height: 1.55;
   }
 
@@ -862,30 +862,30 @@ const articleStructuredData = {
   }
 
   .article-content :global(.metric-endpoints b) {
-    color: var(--text-secondary);
-    font-family: var(--font-mono);
+    color: var(--oc-text-secondary);
+    font-family: var(--oc-font-mono);
     font-size: 0.85rem;
   }
 
   .article-content :global(.chart-grid) {
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 16px;
+    gap: var(--oc-space-4);
     margin: 34px 0 18px;
   }
 
   .article-content :global(.chart-card) {
     margin: 0;
     border: 1px solid var(--release-card-border);
-    border-radius: 0;
+    border-radius: var(--oc-radius-surface);
     background: var(--release-card-bg);
     padding: 18px;
   }
 
   .article-content :global(.chart-card figcaption) {
     margin: 0 0 18px;
-    color: var(--text-primary);
-    font-family: var(--font-display);
+    color: var(--oc-text-primary);
+    font-family: var(--oc-font-display);
     font-size: 1.16rem;
     font-weight: 800;
     line-height: 1.2;
@@ -900,19 +900,19 @@ const articleStructuredData = {
     display: grid;
     grid-template-columns: minmax(118px, 0.9fr) minmax(90px, 1.2fr) minmax(64px, auto);
     align-items: center;
-    gap: 12px;
+    gap: var(--oc-space-3);
   }
 
   .article-content :global(.bar-row > span) {
     min-width: 0;
-    color: var(--text-secondary);
+    color: var(--oc-text-secondary);
     font-size: 0.9rem;
     line-height: 1.35;
   }
 
   .article-content :global(.bar-row strong) {
-    color: var(--text-primary);
-    font-family: var(--font-mono);
+    color: var(--oc-text-primary);
+    font-family: var(--oc-font-mono);
     font-size: 0.86rem;
     text-align: right;
     white-space: nowrap;
@@ -921,8 +921,8 @@ const articleStructuredData = {
   .article-content :global(.bar-track) {
     overflow: hidden;
     height: 12px;
-    border: 1px solid color-mix(in srgb, var(--text-muted) 20%, var(--border-subtle));
-    border-radius: 0;
+    border: 1px solid color-mix(in srgb, var(--oc-text-muted) 20%, var(--oc-border-subtle));
+    border-radius: var(--oc-radius-inset);
     background: var(--release-track);
   }
 
@@ -943,12 +943,12 @@ const articleStructuredData = {
 
   .article-content :global(.bar-row.selected > span),
   .article-content :global(.bar-row.selected strong) {
-    color: var(--text-primary);
+    color: var(--oc-text-primary);
   }
 
   .article-content :global(.chart-note) {
     margin: 14px 0 0;
-    color: var(--text-muted);
+    color: var(--oc-text-muted);
     font-size: 0.82rem;
     line-height: 1.45;
   }
@@ -962,14 +962,14 @@ const articleStructuredData = {
 
   .article-content :global(.mini-card) {
     border: 1px solid var(--release-card-border);
-    border-radius: 0;
+    border-radius: var(--oc-radius-surface);
     background: var(--release-card-bg);
-    padding: 16px;
+    padding: var(--oc-space-4);
   }
 
   .article-content :global(.mini-card span) {
     display: block;
-    color: var(--text-muted);
+    color: var(--oc-text-muted);
     font-size: 0.74rem;
     font-weight: 800;
     letter-spacing: 0.09em;
@@ -978,9 +978,9 @@ const articleStructuredData = {
 
   .article-content :global(.mini-card strong) {
     display: block;
-    margin-top: 8px;
-    color: var(--text-primary);
-    font-family: var(--font-display);
+    margin-top: var(--oc-space-2);
+    color: var(--oc-text-primary);
+    font-family: var(--oc-font-display);
     font-size: clamp(1.55rem, 3vw, 2.1rem);
     line-height: 1;
   }
@@ -994,30 +994,30 @@ const articleStructuredData = {
   }
 
   .article-content :global(.mini-card p) {
-    margin: 8px 0 0;
-    color: var(--text-secondary);
+    margin: var(--oc-space-2) 0 0;
+    color: var(--oc-text-secondary);
     font-size: 0.94rem;
     line-height: 1.45;
   }
 
   .article-content :global(.mini-card .muted-note),
   .article-content :global(.timeline-list .muted-note) {
-    color: var(--text-muted);
+    color: var(--oc-text-muted);
     font-size: 0.82rem;
   }
 
   .article-content :global(.timeline-list) {
     display: grid;
-    gap: 12px;
+    gap: var(--oc-space-3);
     margin: 30px 0 40px;
   }
 
   .article-content :global(.timeline-list > div) {
     position: relative;
     border: 1px solid var(--release-card-border);
-    border-radius: 0;
+    border-radius: var(--oc-radius-surface);
     background: var(--release-card-bg);
-    padding: 16px 18px 16px 46px;
+    padding: var(--oc-space-4) 18px var(--oc-space-4) 46px;
   }
 
   .article-content :global(.timeline-list > div::before) {
@@ -1027,7 +1027,7 @@ const articleStructuredData = {
     top: 22px;
     width: 10px;
     height: 10px;
-    border-radius: 0;
+    border-radius: var(--oc-radius-inset);
     background: var(--release-data-ink);
     box-shadow: 0 0 0 5px color-mix(in srgb, var(--release-data-ink) 14%, transparent);
   }
@@ -1035,7 +1035,7 @@ const articleStructuredData = {
   .article-content :global(.timeline-list span) {
     display: block;
     color: var(--release-data-ink);
-    font-family: var(--font-mono);
+    font-family: var(--oc-font-mono);
     font-size: 0.78rem;
     font-weight: 700;
   }
@@ -1046,13 +1046,13 @@ const articleStructuredData = {
   }
 
   .article-content :global(.timeline-list p) {
-    margin: 4px 0 0;
+    margin: var(--oc-space-1) 0 0;
   }
 
   .article-content :global(hr) {
     margin: 30px 0;
     border: 0;
-    border-top: 1px solid var(--border-subtle);
+    border-top: 1px solid var(--oc-border-subtle);
   }
 
   .article-content :global(img) {
@@ -1060,8 +1060,8 @@ const articleStructuredData = {
     width: 100%;
     max-width: 100%;
     height: auto;
-    margin: 28px 0 32px;
-    border-radius: 0;
+    margin: 28px 0 var(--oc-space-6);
+    border-radius: var(--oc-radius-inset);
   }
 
   .article-content :global(img[data-expandable-image]) {
@@ -1076,7 +1076,7 @@ const articleStructuredData = {
   }
 
   .article-content :global(img[data-expandable-image]:focus-visible) {
-    outline: 2px solid var(--cyan-bright);
+    outline: 2px solid var(--oc-accent-secondary);
     outline-offset: 4px;
   }
 
@@ -1094,7 +1094,7 @@ const articleStructuredData = {
     cursor: zoom-out;
     box-shadow:
       0 24px 80px rgba(0, 0, 0, 0.32),
-      0 0 0 1px color-mix(in srgb, var(--cyan-bright) 22%, var(--border-subtle));
+      0 0 0 1px color-mix(in srgb, var(--oc-accent-secondary) 22%, var(--oc-border-subtle));
   }
 
   .article-content :global(.evidence-figure) {
@@ -1105,7 +1105,7 @@ const articleStructuredData = {
     display: block;
     width: 100%;
     height: auto;
-    border-radius: 0;
+    border-radius: var(--oc-radius-inset);
   }
 
   .reader-toc a {
@@ -1116,14 +1116,14 @@ const articleStructuredData = {
   }
 
   .reader-toc .toc-l3 {
-    padding-left: 12px;
+    padding-left: var(--oc-space-3);
     font-size: 0.84rem;
   }
 
   .article-footer {
-    margin-top: 64px;
+    margin-top: var(--oc-space-8);
     padding-top: 28px;
-    border-top: 1px solid var(--border-subtle);
+    border-top: 1px solid var(--oc-border-subtle);
   }
 
   .footer-tags {
@@ -1138,9 +1138,9 @@ const articleStructuredData = {
     align-items: center;
     min-height: 24px;
     padding: 0 9px;
-    border: 1px solid var(--border-subtle);
-    color: var(--text-secondary);
-    font-family: var(--font-mono);
+    border: 1px solid var(--oc-border-subtle);
+    color: var(--oc-text-secondary);
+    font-family: var(--oc-font-mono);
     font-size: 0.7rem;
     font-weight: 500;
   }
@@ -1150,7 +1150,7 @@ const articleStructuredData = {
     flex-wrap: wrap;
     align-items: center;
     gap: 10px;
-    color: var(--text-muted);
+    color: var(--oc-text-muted);
     font-size: 0.9rem;
   }
 
@@ -1160,9 +1160,9 @@ const articleStructuredData = {
     align-items: center;
     min-height: 32px;
     padding: 0 11px;
-    border: 1px solid var(--border-subtle);
-    color: var(--text-secondary);
-    font-family: var(--font-mono);
+    border: 1px solid var(--oc-border-subtle);
+    color: var(--oc-text-secondary);
+    font-family: var(--oc-font-mono);
     font-size: 0.76rem;
     font-weight: 500;
     text-decoration: none;
@@ -1181,8 +1181,8 @@ const articleStructuredData = {
 
   .share-link:hover,
   .cta-box a:hover {
-    background: var(--bg-surface);
-    color: var(--text-primary);
+    background: var(--oc-bg-surface);
+    color: var(--oc-text-primary);
   }
 
   .related-posts {
@@ -1192,8 +1192,8 @@ const articleStructuredData = {
   .related-posts h2,
   .cta-box h2 {
     margin: 0 0 14px;
-    color: var(--text-primary);
-    font-family: var(--font-display);
+    color: var(--oc-text-primary);
+    font-family: var(--oc-font-display);
     font-size: 1.28rem;
     letter-spacing: 0;
   }
@@ -1205,25 +1205,25 @@ const articleStructuredData = {
 
   .related-posts a {
     display: grid;
-    gap: 4px;
+    gap: var(--oc-space-1);
     padding: 14px 0;
-    border-top: 1px solid var(--border-subtle);
+    border-top: 1px solid var(--oc-border-subtle);
     color: inherit;
     text-decoration: none;
   }
 
   .related-posts a span {
-    color: var(--text-muted);
-    font-family: var(--font-mono);
+    color: var(--oc-text-muted);
+    font-family: var(--oc-font-mono);
     font-size: 0.78rem;
   }
 
   .related-posts a strong {
-    color: var(--text-primary);
+    color: var(--oc-text-primary);
   }
 
   .related-posts a:hover strong {
-    color: var(--coral-bright);
+    color: var(--oc-accent-primary);
   }
 
   .cta-box {
@@ -1232,11 +1232,11 @@ const articleStructuredData = {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    gap: 24px;
+    gap: var(--oc-space-5);
     margin-top: 38px;
     padding: 26px 28px;
-    border: 1px solid var(--border-subtle);
-    background: var(--bg-surface);
+    border: 1px solid var(--oc-border-subtle);
+    background: var(--oc-bg-surface);
   }
 
   .cta-box::before {
@@ -1244,7 +1244,7 @@ const articleStructuredData = {
     position: absolute;
     inset: 0 auto 0 0;
     width: 3px;
-    background: var(--coral-bright);
+    background: var(--oc-accent-primary);
   }
 
   .cta-box > * {
@@ -1254,22 +1254,26 @@ const articleStructuredData = {
 
   .cta-box p {
     margin: 0;
-    color: color-mix(in srgb, var(--text-primary) 62%, var(--text-secondary));
+    color: color-mix(in srgb, var(--oc-text-primary) 62%, var(--oc-text-secondary));
   }
 
   .cta-box a {
     min-height: 42px;
     padding: 0 18px;
-    border-color: var(--coral-bright);
-    background: var(--coral-bright);
-    color: var(--on-accent);
+    border-color: var(--oc-accent-primary);
+    background: var(--oc-accent-primary);
+    color: var(--oc-text-on-accent);
     font-weight: 600;
   }
 
   .cta-box a:hover {
-    background: color-mix(in srgb, var(--coral-bright) 82%, #fff);
-    border-color: color-mix(in srgb, var(--coral-bright) 82%, #fff);
-    color: var(--on-accent);
+    background: color-mix(in srgb, var(--oc-accent-primary) 82%, #fff);
+    border-color: color-mix(in srgb, var(--oc-accent-primary) 82%, #fff);
+    color: var(--oc-text-on-accent);
+  }
+
+  .cta-box a:active {
+    transform: none;
   }
 
   @media (max-width: 1080px) {
@@ -1306,7 +1310,7 @@ const articleStructuredData = {
 
     .article-content :global(th),
     .article-content :global(td) {
-      padding: 12px 10px;
+      padding: var(--oc-space-3) 10px;
       font-size: 0.86rem;
     }
 

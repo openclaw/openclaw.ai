@@ -539,9 +539,9 @@ function logoSrc(project: Project) {
       </p>
       <nav class="anchor-row" aria-label="Section shortcuts">
         {sections.map((s) => (
-          <a href={`#${s.id}`} class="anchor-chip">{s.title}</a>
+          <a href={`#${s.id}`} class="anchor-chip oc-pill">{s.title}</a>
         ))}
-        <a href="#more" class="anchor-chip muted">Everything else</a>
+        <a href="#more" class="anchor-chip muted oc-pill">Everything else</a>
       </nav>
     </header>
 
@@ -553,7 +553,7 @@ function logoSrc(project: Project) {
         <p class="section-desc">{section.tagline}</p>
         <div class="grid">
           {section.items.map((p) => (
-            <article class="card" style={`--accent: ${p.color}`}>
+            <article class="card oc-card" style={`--accent: ${p.color}`}>
               <div class="card-art">
                 <img
                   class="card-banner"
@@ -610,7 +610,7 @@ function logoSrc(project: Project) {
         </summary>
         <div class="grid more-grid">
           {everythingElse.map((p) => (
-            <article class="card card-compact" style={`--accent: ${p.color}`}>
+            <article class="card card-compact oc-card" style={`--accent: ${p.color}`}>
               <div class="card-art">
                 <img
                   class="card-banner"
@@ -647,13 +647,13 @@ function logoSrc(project: Project) {
         Everything above is open source. Read an RFC, file an issue, ship a skill to ClawHub.
       </p>
       <div class="cta-row">
-        <a href="https://github.com/openclaw" target="_blank" rel="noopener" class="cta-button cta-primary">
+        <a href="https://github.com/openclaw" target="_blank" rel="noopener" class="cta-button cta-primary oc-action">
           <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor" aria-hidden="true">
             <path d={siIcon(siGithub)} />
           </svg>
           Browse the org
         </a>
-        <a href="https://clawhub.ai" target="_blank" rel="noopener" class="cta-button cta-secondary">
+        <a href="https://clawhub.ai" target="_blank" rel="noopener" class="cta-button cta-secondary oc-action">
           ClawHub registry →
         </a>
       </div>
@@ -703,7 +703,7 @@ function logoSrc(project: Project) {
     z-index: 1;
     max-width: 1100px;
     margin: 0 auto;
-    padding: 40px 24px 80px;
+    padding: 40px var(--oc-space-5) 80px;
     min-height: 100vh;
   }
 
@@ -723,22 +723,22 @@ function logoSrc(project: Project) {
     letter-spacing: 0.18em;
     font-size: 0.78rem;
     font-weight: 600;
-    color: var(--cyan-bright);
-    margin-bottom: 16px;
+    color: var(--oc-accent-secondary);
+    margin-bottom: var(--oc-space-4);
   }
 
   .title {
-    font-family: var(--font-display);
+    font-family: var(--oc-font-display);
     font-size: clamp(2.5rem, 8vw, 3.75rem);
     font-weight: 600;
     letter-spacing: -0.03em;
-    color: var(--text-primary);
-    margin-bottom: 16px;
+    color: var(--oc-text-primary);
+    margin-bottom: var(--oc-space-4);
   }
 
   .description {
     font-size: 1.1rem;
-    color: var(--text-secondary);
+    color: var(--oc-text-secondary);
     max-width: 640px;
     margin: 0 auto;
     line-height: 1.6;
@@ -749,17 +749,17 @@ function logoSrc(project: Project) {
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
-    gap: 8px;
+    gap: var(--oc-space-2);
   }
 
   .anchor-chip {
     display: inline-flex;
     align-items: center;
-    padding: 6px 12px;
-    border: 1px solid var(--border-subtle);
-    border-radius: 0;
-    background: var(--surface-card);
-    color: var(--text-secondary);
+    padding: 6px var(--oc-space-3);
+    border: 1px solid var(--oc-border-subtle);
+    border-radius: var(--oc-radius-control);
+    background: var(--oc-surface-card);
+    color: var(--oc-text-secondary);
     font-size: 0.82rem;
     font-weight: 500;
     text-decoration: none;
@@ -768,40 +768,40 @@ function logoSrc(project: Project) {
   }
 
   .anchor-chip:hover {
-    color: var(--coral-bright);
-    border-color: var(--coral-bright);
+    color: var(--oc-accent-primary);
+    border-color: var(--oc-accent-primary);
     transform: none;
   }
 
   .anchor-chip.muted {
-    color: var(--text-muted);
+    color: var(--oc-text-muted);
   }
 
   .section {
-    margin-bottom: 64px;
+    margin-bottom: var(--oc-space-8);
     
     scroll-margin-top: 80px;
   }
 
   .section-title {
-    font-family: var(--font-display);
+    font-family: var(--oc-font-display);
     font-size: 1.55rem;
     font-weight: 600;
-    margin-bottom: 8px;
+    margin-bottom: var(--oc-space-2);
     display: flex;
     align-items: center;
     gap: 10px;
   }
 
   .claw-accent {
-    color: var(--coral-bright);
+    color: var(--oc-accent-primary);
     font-size: 0.5em;
     vertical-align: 0.22em;
     font-weight: 700;
   }
 
   .section-desc {
-    color: var(--text-muted);
+    color: var(--oc-text-muted);
     margin-bottom: 20px;
     font-size: 0.95rem;
     line-height: 1.5;
@@ -811,7 +811,7 @@ function logoSrc(project: Project) {
   .grid {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
-    gap: 16px;
+    gap: var(--oc-space-4);
   }
 
   @media (min-width: 640px) {
@@ -829,14 +829,15 @@ function logoSrc(project: Project) {
     align-items: stretch;
     overflow: hidden;
     min-height: 242px;
-    border-radius: 0;
-    border: 1px solid var(--border-subtle);
+    border-radius: var(--oc-radius-surface);
+    border: 1px solid var(--oc-border-subtle);
     background:
-      linear-gradient(180deg, color-mix(in srgb, var(--accent, var(--coral-bright)) 8%, transparent), transparent 42%),
-      var(--surface-card);
+      linear-gradient(180deg, color-mix(in srgb, var(--accent, var(--oc-accent-primary)) 8%, transparent), transparent 42%),
+      var(--oc-surface-card);
     backdrop-filter: blur(12px);
     text-decoration: none;
-    color: var(--text-primary);
+    color: var(--oc-text-primary);
+    box-shadow: none;
     transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1),
                 border-color 0.25s cubic-bezier(0.4, 0, 0.2, 1),
                 box-shadow 0.25s cubic-bezier(0.4, 0, 0.2, 1);
@@ -844,7 +845,7 @@ function logoSrc(project: Project) {
 
   .card:hover {
     transform: none;
-    border-color: var(--accent, var(--coral-bright));
+    border-color: var(--accent, var(--oc-accent-primary));
     box-shadow: none;
   }
 
@@ -856,9 +857,9 @@ function logoSrc(project: Project) {
     height: 98px;
     margin-bottom: 26px;
     background:
-      radial-gradient(circle at 82% 20%, color-mix(in srgb, var(--accent, var(--coral-bright)) 28%, transparent), transparent 38%),
-      linear-gradient(135deg, color-mix(in srgb, var(--accent, var(--coral-bright)) 16%, var(--bg-deep)), var(--surface-card-strong));
-    border-bottom: 1px solid color-mix(in srgb, var(--accent, var(--coral-bright)) 22%, var(--border-subtle));
+      radial-gradient(circle at 82% 20%, color-mix(in srgb, var(--accent, var(--oc-accent-primary)) 28%, transparent), transparent 38%),
+      linear-gradient(135deg, color-mix(in srgb, var(--accent, var(--oc-accent-primary)) 16%, var(--oc-bg-page)), var(--oc-surface-card-strong));
+    border-bottom: 1px solid color-mix(in srgb, var(--accent, var(--oc-accent-primary)) 22%, var(--oc-border-subtle));
   }
 
   .card-art::after {
@@ -866,14 +867,14 @@ function logoSrc(project: Project) {
     position: absolute;
     inset: 0;
     background:
-      linear-gradient(180deg, transparent 42%, color-mix(in srgb, var(--bg-deep) 24%, transparent)),
-      linear-gradient(90deg, color-mix(in srgb, var(--bg-deep) 5%, transparent), transparent 60%);
+      linear-gradient(180deg, transparent 42%, color-mix(in srgb, var(--oc-bg-page) 24%, transparent)),
+      linear-gradient(90deg, color-mix(in srgb, var(--oc-bg-page) 5%, transparent), transparent 60%);
   }
 
   .card-art.banner-missing::after {
     background:
-      radial-gradient(circle at 30% 30%, color-mix(in srgb, var(--accent, var(--coral-bright)) 24%, transparent), transparent 34%),
-      linear-gradient(180deg, transparent, color-mix(in srgb, var(--bg-deep) 58%, transparent));
+      radial-gradient(circle at 30% 30%, color-mix(in srgb, var(--accent, var(--oc-accent-primary)) 24%, transparent), transparent 34%),
+      linear-gradient(180deg, transparent, color-mix(in srgb, var(--oc-bg-page) 58%, transparent));
   }
 
   .card-banner {
@@ -895,21 +896,25 @@ function logoSrc(project: Project) {
     place-items: center;
     width: 58px;
     height: 58px;
-    border-radius: 0;
-    border: 1px solid color-mix(in srgb, var(--accent, var(--coral-bright)) 34%, var(--border-subtle));
+    border-radius: var(--oc-radius-inset);
+    border: 1px solid color-mix(in srgb, var(--accent, var(--oc-accent-primary)) 34%, var(--oc-border-subtle));
     background:
-      linear-gradient(180deg, var(--surface-inset-highlight), transparent),
-      color-mix(in srgb, var(--surface-card-strong) 90%, var(--accent, var(--coral-bright)));
+      linear-gradient(
+        180deg,
+        color-mix(in srgb, var(--oc-text-primary) 5%, transparent),
+        transparent
+      ),
+      color-mix(in srgb, var(--oc-surface-card-strong) 90%, var(--accent, var(--oc-accent-primary)));
     box-shadow:
-      0 12px 28px color-mix(in srgb, var(--bg-deep) 74%, transparent),
-      0 0 22px color-mix(in srgb, var(--accent, var(--coral-bright)) 18%, transparent);
+      0 12px 28px color-mix(in srgb, var(--oc-bg-page) 74%, transparent),
+      0 0 22px color-mix(in srgb, var(--accent, var(--oc-accent-primary)) 18%, transparent);
   }
 
   .logo-badge img {
     width: 42px;
     height: 42px;
     object-fit: contain;
-    border-radius: 0;
+    border-radius: var(--oc-radius-inset);
   }
 
   .generated-logo {
@@ -917,8 +922,8 @@ function logoSrc(project: Project) {
     overflow: hidden;
     width: 42px;
     height: 42px;
-    border-radius: 0;
-    background: color-mix(in srgb, var(--accent, var(--coral-bright)) 20%, var(--bg-deep));
+    border-radius: var(--oc-radius-inset);
+    background: color-mix(in srgb, var(--accent, var(--oc-accent-primary)) 20%, var(--oc-bg-page));
   }
 
   .generated-logo img {
@@ -930,11 +935,11 @@ function logoSrc(project: Project) {
   }
 
   .card-name {
-    font-family: var(--font-display);
+    font-family: var(--oc-font-display);
     font-size: 1rem;
     font-weight: 600;
-    margin: 0 16px 6px;
-    color: var(--text-primary);
+    margin: 0 var(--oc-space-4) 6px;
+    color: var(--oc-text-primary);
   }
 
   .card-stretch {
@@ -955,16 +960,16 @@ function logoSrc(project: Project) {
   }
 
   .card-stretch:focus-visible::before {
-    outline: 2px solid var(--accent, var(--coral-bright));
+    outline: 2px solid var(--accent, var(--oc-accent-primary));
     outline-offset: 4px;
   }
 
   .card-desc {
     flex: 1;
     font-size: 0.82rem;
-    color: var(--text-muted);
+    color: var(--oc-text-muted);
     line-height: 1.45;
-    margin: 0 16px 14px;
+    margin: 0 var(--oc-space-4) 14px;
   }
 
   .card-links {
@@ -974,18 +979,18 @@ function logoSrc(project: Project) {
     gap: 6px;
     flex-wrap: wrap;
     justify-content: flex-start;
-    margin: auto 16px 16px;
+    margin: auto var(--oc-space-4) var(--oc-space-4);
   }
 
   .card-link {
     display: inline-flex;
     align-items: center;
-    gap: 4px;
-    padding: 3px 8px;
-    border-radius: 0;
-    border: 1px solid var(--border-subtle);
-    background: color-mix(in srgb, var(--bg-deep) 60%, transparent);
-    color: var(--text-secondary);
+    gap: var(--oc-space-1);
+    padding: 3px var(--oc-space-2);
+    border-radius: var(--oc-radius-control);
+    border: 1px solid var(--oc-border-subtle);
+    background: color-mix(in srgb, var(--oc-bg-page) 60%, transparent);
+    color: var(--oc-text-secondary);
     font-size: 0.7rem;
     font-weight: 500;
     text-decoration: none;
@@ -993,9 +998,9 @@ function logoSrc(project: Project) {
   }
 
   .card-link:hover {
-    color: var(--accent, var(--coral-bright));
-    border-color: var(--accent, var(--coral-bright));
-    background: color-mix(in srgb, var(--accent, var(--coral-bright)) 12%, transparent);
+    color: var(--accent, var(--oc-accent-primary));
+    border-color: var(--accent, var(--oc-accent-primary));
+    background: color-mix(in srgb, var(--accent, var(--oc-accent-primary)) 12%, transparent);
   }
 
   /* Everything-else section */
@@ -1004,7 +1009,7 @@ function logoSrc(project: Project) {
   }
 
   .more-details {
-    margin-top: 8px;
+    margin-top: var(--oc-space-2);
   }
 
   .more-details > summary {
@@ -1012,12 +1017,12 @@ function logoSrc(project: Project) {
     cursor: pointer;
     display: inline-flex;
     align-items: center;
-    gap: 8px;
+    gap: var(--oc-space-2);
     padding: 10px 18px;
-    border: 1px solid var(--border-subtle);
-    border-radius: 0;
-    background: var(--surface-card);
-    color: var(--text-secondary);
+    border: 1px solid var(--oc-border-subtle);
+    border-radius: var(--oc-radius-control);
+    background: var(--oc-surface-card);
+    color: var(--oc-text-secondary);
     font-size: 0.88rem;
     font-weight: 500;
     transition: color 0.18s ease, border-color 0.18s ease;
@@ -1028,13 +1033,13 @@ function logoSrc(project: Project) {
   }
 
   .more-details > summary:hover {
-    color: var(--coral-bright);
-    border-color: var(--coral-bright);
+    color: var(--oc-accent-primary);
+    border-color: var(--oc-accent-primary);
   }
 
   .summary-chevron {
     display: inline-block;
-    transition: transform 0.2s ease;
+    transition: transform var(--oc-duration-ui) ease;
     font-size: 0.7rem;
     margin-top: -2px;
   }
@@ -1045,7 +1050,7 @@ function logoSrc(project: Project) {
 
   .more-details[open] > summary .summary-label::after {
     content: ' — collapse';
-    color: var(--text-muted);
+    color: var(--oc-text-muted);
     font-weight: 400;
   }
 
@@ -1066,7 +1071,7 @@ function logoSrc(project: Project) {
     width: 48px;
     height: 48px;
     bottom: -20px;
-    border-radius: 0;
+    border-radius: var(--oc-radius-inset);
   }
 
   .card-compact .logo-badge img {
@@ -1081,7 +1086,7 @@ function logoSrc(project: Project) {
 
   .card-compact .card-name {
     font-size: 0.92rem;
-    margin: 0 14px 4px;
+    margin: 0 14px var(--oc-space-1);
   }
 
   .card-compact .card-desc {
@@ -1092,24 +1097,24 @@ function logoSrc(project: Project) {
   /* CTA */
   .cta-section {
     text-align: center;
-    padding: 48px 24px;
-    border-radius: 0;
-    border: 1px solid var(--border-subtle);
-    background: var(--surface-card);
+    padding: var(--oc-space-7) var(--oc-space-5);
+    border-radius: var(--oc-radius-surface);
+    border: 1px solid var(--oc-border-subtle);
+    background: var(--oc-surface-card);
     backdrop-filter: blur(12px);
     margin-bottom: 40px;
   }
 
   .cta-title {
-    font-family: var(--font-display);
+    font-family: var(--oc-font-display);
     font-size: 1.8rem;
     font-weight: 600;
-    margin-bottom: 8px;
+    margin-bottom: var(--oc-space-2);
   }
 
   .cta-desc {
-    color: var(--text-muted);
-    margin-bottom: 24px;
+    color: var(--oc-text-muted);
+    margin-bottom: var(--oc-space-5);
     max-width: 580px;
     margin-left: auto;
     margin-right: auto;
@@ -1119,21 +1124,21 @@ function logoSrc(project: Project) {
     display: flex;
     justify-content: center;
     flex-wrap: wrap;
-    gap: 12px;
+    gap: var(--oc-space-3);
   }
 
   .cta-button {
     display: inline-flex;
     align-items: center;
-    gap: 8px;
-    padding: 12px 24px;
-    border-radius: 0;
-    font-family: var(--font-display);
+    gap: var(--oc-space-2);
+    padding: var(--oc-space-3) var(--oc-space-5);
+    border-radius: var(--oc-radius-control);
+    font-family: var(--oc-font-display);
     font-weight: 600;
     font-size: 0.95rem;
     text-decoration: none;
     border: 1px solid transparent;
-    transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease, border-color 0.2s ease;
+    transition: transform var(--oc-duration-ui) ease, box-shadow var(--oc-duration-ui) ease, background var(--oc-duration-ui) ease, border-color var(--oc-duration-ui) ease;
   }
 
   .cta-primary {
@@ -1162,6 +1167,10 @@ function logoSrc(project: Project) {
     background: linear-gradient(135deg, rgba(79, 200, 174, 0.28), rgba(95, 227, 212, 0.17));
     border-color: rgba(95, 227, 212, 0.5);
     box-shadow: none;
+  }
+
+  .cta-button:active {
+    transform: none;
   }
 
 
@@ -1198,7 +1207,7 @@ function logoSrc(project: Project) {
 
   html[data-theme='light'] .card {
     background:
-      linear-gradient(180deg, color-mix(in srgb, var(--accent, var(--coral-bright)) 6%, transparent), transparent 38%),
+      linear-gradient(180deg, color-mix(in srgb, var(--accent, var(--oc-accent-primary)) 6%, transparent), transparent 38%),
       rgba(255, 255, 255, 0.94);
     box-shadow: none;
   }
@@ -1210,9 +1219,9 @@ function logoSrc(project: Project) {
   /* Force card-art to stay dark so banner illustrations pop in both themes. */
   html[data-theme='light'] .card-art {
     background:
-      radial-gradient(circle at 82% 20%, color-mix(in srgb, var(--accent, var(--coral-bright)) 36%, transparent), transparent 38%),
-      linear-gradient(135deg, color-mix(in srgb, var(--accent, var(--coral-bright)) 22%, var(--bg-surface)), var(--bg-deep));
-    border-bottom: 1px solid color-mix(in srgb, var(--accent, var(--coral-bright)) 30%, rgba(15, 23, 42, 0.4));
+      radial-gradient(circle at 82% 20%, color-mix(in srgb, var(--accent, var(--oc-accent-primary)) 36%, transparent), transparent 38%),
+      linear-gradient(135deg, color-mix(in srgb, var(--accent, var(--oc-accent-primary)) 22%, var(--oc-bg-surface)), var(--oc-bg-page));
+    border-bottom: 1px solid color-mix(in srgb, var(--accent, var(--oc-accent-primary)) 30%, rgba(15, 23, 42, 0.4));
   }
 
   html[data-theme='light'] .card-art::after {
@@ -1223,35 +1232,35 @@ function logoSrc(project: Project) {
 
   html[data-theme='light'] .card-art.banner-missing::after {
     background:
-      radial-gradient(circle at 30% 30%, color-mix(in srgb, var(--accent, var(--coral-bright)) 30%, transparent), transparent 34%),
+      radial-gradient(circle at 30% 30%, color-mix(in srgb, var(--accent, var(--oc-accent-primary)) 30%, transparent), transparent 34%),
       linear-gradient(180deg, transparent, rgba(5, 8, 16, 0.58));
   }
 
   html[data-theme='light'] .logo-badge {
-    border: 1px solid color-mix(in srgb, var(--accent, var(--coral-bright)) 38%, rgba(15, 23, 42, 0.18));
+    border: 1px solid color-mix(in srgb, var(--accent, var(--oc-accent-primary)) 38%, rgba(15, 23, 42, 0.18));
     background:
       linear-gradient(180deg, rgba(255, 255, 255, 0.92), rgba(255, 255, 255, 0.82));
     box-shadow:
       0 8px 22px rgba(15, 23, 42, 0.18),
-      0 0 18px color-mix(in srgb, var(--accent, var(--coral-bright)) 22%, transparent);
+      0 0 18px color-mix(in srgb, var(--accent, var(--oc-accent-primary)) 22%, transparent);
   }
 
   html[data-theme='light'] .generated-logo {
-    background: color-mix(in srgb, var(--accent, var(--coral-bright)) 16%, rgba(15, 23, 42, 0.85));
+    background: color-mix(in srgb, var(--accent, var(--oc-accent-primary)) 16%, rgba(15, 23, 42, 0.85));
   }
 
   /* Site / Repo chips: use the card surface so they actually have a body. */
   html[data-theme='light'] .card-link {
     background: rgba(255, 255, 255, 0.92);
     border-color: rgba(15, 23, 42, 0.18);
-    color: var(--text-secondary);
+    color: var(--oc-text-secondary);
     box-shadow: none;
   }
 
   html[data-theme='light'] .card-link:hover {
     color: #ffffff;
-    border-color: var(--accent, var(--coral-bright));
-    background: var(--accent, var(--coral-bright));
+    border-color: var(--accent, var(--oc-accent-primary));
+    background: var(--accent, var(--oc-accent-primary));
   }
 
   html[data-theme='light'] .more-details > summary {
@@ -1266,27 +1275,27 @@ function logoSrc(project: Project) {
 
   /* CTA buttons in light mode — the dark-mode versions had cream-on-cream text. */
   html[data-theme='light'] .cta-primary {
-    background: linear-gradient(135deg, var(--coral-bright), var(--coral-dark));
+    background: linear-gradient(135deg, var(--oc-accent-primary), var(--oc-accent-primary-deep));
     border-color: transparent;
     color: #ffffff;
     box-shadow: none;
   }
 
   html[data-theme='light'] .cta-primary:hover {
-    background: linear-gradient(135deg, color-mix(in srgb, var(--coral-bright) 92%, #000), var(--coral-dark));
+    background: linear-gradient(135deg, color-mix(in srgb, var(--oc-accent-primary) 92%, #000), var(--oc-accent-primary-deep));
     border-color: transparent;
     box-shadow: none;
   }
 
   html[data-theme='light'] .cta-secondary {
-    background: linear-gradient(135deg, var(--cyan-bright), var(--cyan-mid));
+    background: linear-gradient(135deg, var(--oc-accent-secondary), var(--oc-accent-secondary-deep));
     border-color: transparent;
     color: #ffffff;
     box-shadow: none;
   }
 
   html[data-theme='light'] .cta-secondary:hover {
-    background: linear-gradient(135deg, color-mix(in srgb, var(--cyan-bright) 92%, #000), var(--cyan-mid));
+    background: linear-gradient(135deg, color-mix(in srgb, var(--oc-accent-secondary) 92%, #000), var(--oc-accent-secondary-deep));
     border-color: transparent;
     box-shadow: none;
   }

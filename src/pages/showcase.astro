@@ -43,7 +43,7 @@ const categoryLabels: Record<string, string> = {
       </div>
       <div class="featured-grid">
         {featuredBuilds.map((build) => (
-          <a href={sanitizeUrl(build.href)} target="_blank" rel="noopener" class="featured-card">
+          <a href={sanitizeUrl(build.href)} target="_blank" rel="noopener" class="featured-card oc-card">
             <div class="featured-topline">
               <span class="featured-source">{build.source}</span>
               <span class="featured-likes">❤️ {build.likes}</span>
@@ -70,7 +70,7 @@ const categoryLabels: Record<string, string> = {
 
     <div class="showcase-grid">
       {sortedShowcase.map((item) => (
-        <a href={`https://x.com/${item.author}/status/${item.id}`} target="_blank" rel="noopener" class="showcase-card">
+        <a href={`https://x.com/${item.author}/status/${item.id}`} target="_blank" rel="noopener" class="showcase-card oc-card">
           <div class="card-header">
             <img
               src={getCachedXAvatarSrc(item.author, item.author, 96)}
@@ -102,9 +102,9 @@ const categoryLabels: Record<string, string> = {
       <h2 class="cta-title">Built something cool?</h2>
       <p class="cta-desc">Share your OpenClaw creation with the community</p>
       <div class="cta-buttons">
-        <a href="https://twitter.com/intent/tweet?text=Check%20out%20what%20I%20built%20with%20%40openclaw%21" target="_blank" rel="noopener" class="cta-btn cta-primary">Share on X</a>
-        <a href="https://clawhub.ai" target="_blank" rel="noopener" class="cta-btn cta-hub">Browse Skills</a>
-        <a href="https://discord.com/invite/clawd" target="_blank" rel="noopener" class="cta-btn cta-secondary">Join Discord</a>
+        <a href="https://twitter.com/intent/tweet?text=Check%20out%20what%20I%20built%20with%20%40openclaw%21" target="_blank" rel="noopener" class="cta-btn cta-primary oc-action">Share on X</a>
+        <a href="https://clawhub.ai" target="_blank" rel="noopener" class="cta-btn cta-hub oc-action">Browse Skills</a>
+        <a href="https://discord.com/invite/clawd" target="_blank" rel="noopener" class="cta-btn cta-secondary oc-action">Join Discord</a>
       </div>
     </section>
 
@@ -156,7 +156,7 @@ const categoryLabels: Record<string, string> = {
     z-index: 1;
     max-width: 1200px;
     margin: 0 auto;
-    padding: 40px 24px;
+    padding: 40px var(--oc-space-5);
     min-height: 100vh;
     display: flex;
     flex-direction: column;
@@ -164,7 +164,7 @@ const categoryLabels: Record<string, string> = {
 
   .header {
     text-align: center;
-    margin-bottom: 48px;
+    margin-bottom: var(--oc-space-7);
     
   }
 
@@ -175,40 +175,40 @@ const categoryLabels: Record<string, string> = {
 
   .back-link {
     display: inline-block;
-    margin-bottom: 24px;
-    color: var(--text-muted);
+    margin-bottom: var(--oc-space-5);
+    color: var(--oc-text-muted);
     text-decoration: none;
     font-size: 0.9rem;
-    transition: color 0.2s ease;
+    transition: color var(--oc-duration-ui) ease;
   }
 
   .back-link:hover {
-    color: var(--coral-bright);
+    color: var(--oc-accent-primary);
   }
 
   .title {
-    font-family: var(--font-display);
+    font-family: var(--oc-font-display);
     font-size: clamp(2rem, 6vw, 3rem);
     font-weight: 700;
-    margin-bottom: 12px;
-    color: var(--text-primary);
+    margin-bottom: var(--oc-space-3);
+    color: var(--oc-text-primary);
   }
 
   .claw-accent {
-    color: var(--coral-bright);
+    color: var(--oc-accent-primary);
     font-size: 0.5em;
     vertical-align: 0.22em;
   }
 
   .subtitle {
-    color: var(--text-secondary);
+    color: var(--oc-text-secondary);
     font-size: 1.1rem;
     max-width: 780px;
     margin: 0 auto;
   }
 
   .featured-section {
-    margin-bottom: 48px;
+    margin-bottom: var(--oc-space-7);
   }
 
   .featured-header {
@@ -219,15 +219,15 @@ const categoryLabels: Record<string, string> = {
 
   .featured-title,
   .grid-title {
-    font-family: var(--font-display);
+    font-family: var(--oc-font-display);
     font-size: 1.45rem;
     font-weight: 600;
-    color: var(--text-primary);
+    color: var(--oc-text-primary);
   }
 
   .featured-copy,
   .grid-copy {
-    color: var(--text-secondary);
+    color: var(--oc-text-secondary);
     max-width: 760px;
   }
 
@@ -242,20 +242,21 @@ const categoryLabels: Record<string, string> = {
     flex-direction: column;
     gap: 14px;
     padding: 22px;
-    border-radius: 0;
-    border: 1px solid var(--border-subtle);
+    border-radius: var(--oc-radius-surface);
+    border: 1px solid var(--oc-border-subtle);
     background:
       linear-gradient(135deg, rgba(245, 101, 74, 0.06), transparent 40%),
-      var(--surface-card-strong);
+      var(--oc-surface-card-strong);
     backdrop-filter: blur(10px);
     text-decoration: none;
-    color: var(--text-primary);
+    color: var(--oc-text-primary);
+    box-shadow: none;
     transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
   }
 
   .featured-card:hover {
     transform: none;
-    border-color: var(--coral-bright);
+    border-color: var(--oc-accent-primary);
     box-shadow: none;
   }
 
@@ -264,7 +265,7 @@ const categoryLabels: Record<string, string> = {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    gap: 12px;
+    gap: var(--oc-space-3);
   }
 
   .featured-source,
@@ -273,10 +274,10 @@ const categoryLabels: Record<string, string> = {
     align-items: center;
     min-height: 28px;
     padding: 0 10px;
-    border-radius: 0;
-    border: 1px solid var(--border-subtle);
-    background: var(--surface-overlay);
-    color: var(--text-muted);
+    border-radius: var(--oc-radius-control);
+    border: 1px solid var(--oc-border-subtle);
+    background: var(--oc-surface-overlay);
+    color: var(--oc-text-muted);
     font-size: 0.76rem;
   }
 
@@ -288,22 +289,22 @@ const categoryLabels: Record<string, string> = {
 
   .featured-likes {
     font-size: 0.84rem;
-    color: var(--text-muted);
+    color: var(--oc-text-muted);
   }
 
   .featured-card-title {
-    font-family: var(--font-display);
+    font-family: var(--oc-font-display);
     font-size: 1.2rem;
     line-height: 1.3;
   }
 
   .featured-summary {
-    color: var(--text-secondary);
+    color: var(--oc-text-secondary);
     line-height: 1.65;
   }
 
   .featured-author {
-    color: var(--coral-bright);
+    color: var(--oc-accent-primary);
     font-weight: 600;
     font-size: 0.95rem;
   }
@@ -312,12 +313,12 @@ const categoryLabels: Record<string, string> = {
     display: flex;
     flex-wrap: wrap;
     justify-content: flex-end;
-    gap: 8px;
+    gap: var(--oc-space-2);
   }
 
   .grid-header {
     display: grid;
-    gap: 8px;
+    gap: var(--oc-space-2);
     margin-bottom: 20px;
   }
 
@@ -330,14 +331,15 @@ const categoryLabels: Record<string, string> = {
   .showcase-card {
     display: flex;
     flex-direction: column;
-    gap: 16px;
-    padding: 24px;
-    border-radius: 0;
-    border: 1px solid var(--border-subtle);
-    background: var(--surface-card-strong);
+    gap: var(--oc-space-4);
+    padding: var(--oc-space-5);
+    border-radius: var(--oc-radius-surface);
+    border: 1px solid var(--oc-border-subtle);
+    background: var(--oc-surface-card-strong);
     backdrop-filter: blur(8px);
     text-decoration: none;
-    color: var(--text-primary);
+    color: var(--oc-text-primary);
+    box-shadow: none;
     transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
     -webkit-column-break-inside: avoid;
     page-break-inside: avoid;
@@ -346,7 +348,7 @@ const categoryLabels: Record<string, string> = {
   }
 
   .showcase-card:hover {
-    border-color: var(--coral-bright);
+    border-color: var(--oc-accent-primary);
     transform: none;
     box-shadow: none;
   }
@@ -354,7 +356,7 @@ const categoryLabels: Record<string, string> = {
   .card-header {
     display: flex;
     align-items: center;
-    gap: 12px;
+    gap: var(--oc-space-3);
   }
 
   .avatar {
@@ -362,8 +364,8 @@ const categoryLabels: Record<string, string> = {
     height: 48px;
     border-radius: 50%;
     flex-shrink: 0;
-    border: 2px solid var(--border-subtle);
-    background: var(--bg-elevated);
+    border: 2px solid var(--oc-border-subtle);
+    background: var(--oc-bg-elevated);
     object-fit: cover;
   }
 
@@ -376,81 +378,81 @@ const categoryLabels: Record<string, string> = {
 
   .author-name {
     font-weight: 600;
-    color: var(--coral-bright);
+    color: var(--oc-accent-primary);
     font-size: 0.95rem;
   }
 
   .category-tag {
-    font-size: 0.75rem;
-    color: var(--text-muted);
+    font-size: var(--oc-font-size-xs);
+    color: var(--oc-text-muted);
   }
 
   .likes {
     font-size: 0.85rem;
-    color: var(--text-muted);
+    color: var(--oc-text-muted);
   }
 
   .quote {
     font-size: 0.9rem;
     line-height: 1.6;
-    color: var(--text-secondary);
+    color: var(--oc-text-secondary);
     white-space: pre-line;
   }
 
   .images {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-    gap: 8px;
-    margin-top: 12px;
+    gap: var(--oc-space-2);
+    margin-top: var(--oc-space-3);
   }
 
   .tweet-image {
     width: 100%;
     height: auto;
-    border-radius: 0;
-    border: 1px solid var(--border-subtle);
+    border-radius: var(--oc-radius-inset);
+    border: 1px solid var(--oc-border-subtle);
     object-fit: cover;
     max-height: 200px;
   }
 
   .view-link {
     font-size: 0.85rem;
-    color: var(--text-muted);
-    padding-top: 12px;
-    border-top: 1px solid var(--border-subtle);
-    transition: color 0.2s ease;
+    color: var(--oc-text-muted);
+    padding-top: var(--oc-space-3);
+    border-top: 1px solid var(--oc-border-subtle);
+    transition: color var(--oc-duration-ui) ease;
   }
 
   .showcase-card:hover .view-link {
-    color: var(--coral-bright);
+    color: var(--oc-accent-primary);
   }
 
   .cta-section {
     text-align: center;
-    padding: 48px 24px;
-    border-radius: 0;
-    border: 1px solid var(--border-subtle);
-    background: var(--surface-card-strong);
+    padding: var(--oc-space-7) var(--oc-space-5);
+    border-radius: var(--oc-radius-surface);
+    border: 1px solid var(--oc-border-subtle);
+    background: var(--oc-surface-card-strong);
     backdrop-filter: blur(12px);
-    margin-bottom: 48px;
+    margin-bottom: var(--oc-space-7);
   }
 
   .cta-title {
-    font-family: var(--font-display);
-    font-size: 1.5rem;
+    font-family: var(--oc-font-display);
+    font-size: var(--oc-font-size-2xl);
     font-weight: 600;
-    color: var(--text-primary);
-    margin-bottom: 8px;
+    color: var(--oc-text-primary);
+    margin-bottom: var(--oc-space-2);
   }
 
   .cta-desc {
-    color: var(--text-secondary);
-    margin-bottom: 24px;
+    color: var(--oc-text-secondary);
+    margin-bottom: var(--oc-space-5);
   }
 
   .cta-buttons {
     display: flex;
-    gap: 16px;
+    gap: var(--oc-space-4);
     justify-content: center;
     flex-wrap: wrap;
   }
@@ -458,10 +460,10 @@ const categoryLabels: Record<string, string> = {
   .cta-btn {
     display: inline-flex;
     align-items: center;
-    gap: 8px;
-    padding: 12px 24px;
-    border-radius: 0;
-    font-family: var(--font-display);
+    gap: var(--oc-space-2);
+    padding: var(--oc-space-3) var(--oc-space-5);
+    border-radius: var(--oc-radius-control);
+    font-family: var(--oc-font-display);
     font-weight: 600;
     font-size: 0.95rem;
     text-decoration: none;
@@ -469,7 +471,7 @@ const categoryLabels: Record<string, string> = {
   }
 
   .cta-primary {
-    background: linear-gradient(135deg, var(--coral-bright) 0%, var(--coral-dark) 100%);
+    background: linear-gradient(135deg, var(--oc-accent-primary) 0%, var(--oc-accent-primary-deep) 100%);
     color: white;
     box-shadow: none;
   }
@@ -480,9 +482,9 @@ const categoryLabels: Record<string, string> = {
   }
 
   .cta-hub {
-    background: var(--surface-cyan-soft);
-    border: 1px solid var(--cyan-bright);
-    color: var(--cyan-bright);
+    background: var(--oc-surface-secondary-soft);
+    border: 1px solid var(--oc-accent-secondary);
+    color: var(--oc-accent-secondary);
   }
 
   .cta-hub:hover {
@@ -501,15 +503,19 @@ const categoryLabels: Record<string, string> = {
     transform: none;
   }
 
+  .cta-btn:active {
+    transform: none;
+  }
+
   .more-examples {
     text-align: center;
-    color: var(--text-muted);
+    color: var(--oc-text-muted);
     font-size: 0.95rem;
-    margin-bottom: 32px;
+    margin-bottom: var(--oc-space-6);
   }
 
   .more-examples a {
-    color: var(--cyan-bright);
+    color: var(--oc-accent-secondary);
     text-decoration: none;
   }
 
@@ -520,7 +526,7 @@ const categoryLabels: Record<string, string> = {
 
   @media (max-width: 640px) {
     .container {
-      padding: 24px 16px;
+      padding: var(--oc-space-5) var(--oc-space-4);
     }
 
     .featured-grid {

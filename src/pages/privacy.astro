@@ -26,25 +26,25 @@ const effectiveDate = 'March 7, 2026';
     </header>
 
     <section class="summary-grid" aria-label="privacy summary">
-      <article class="summary-card">
+      <article class="summary-card oc-card">
         <span class="summary-label">No ads or analytics</span>
         <p>No ad, analytics, or crash-reporting SDKs in the current mobile builds.</p>
       </article>
-      <article class="summary-card">
+      <article class="summary-card oc-card">
         <span class="summary-label">Permission-based</span>
         <p>Camera, mic, location, contacts, photos, calendar, notifications, motion, and SMS are optional.</p>
       </article>
-      <article class="summary-card">
+      <article class="summary-card oc-card">
         <span class="summary-label">Your gateway</span>
         <p>The app connects to the gateway you configure and sends commands and content there.</p>
       </article>
-      <article class="summary-card">
+      <article class="summary-card oc-card">
         <span class="summary-label">Optional providers</span>
         <p>Voice features may use platform speech services and ElevenLabs if you enable them.</p>
       </article>
     </section>
 
-    <article class="policy-card">
+    <article class="policy-card oc-card">
       <div class="meta-row">
         <span>Effective date: {effectiveDate}</span>
         <span class="meta-separator" aria-hidden="true">&middot;</span>
@@ -219,12 +219,12 @@ const effectiveDate = 'March 7, 2026';
     z-index: 1;
     max-width: 920px;
     margin: 0 auto;
-    padding: 40px 24px 72px;
+    padding: 40px var(--oc-space-5) 72px;
   }
 
   .header {
     text-align: center;
-    margin-bottom: 32px;
+    margin-bottom: var(--oc-space-6);
     
   }
 
@@ -242,19 +242,19 @@ const effectiveDate = 'March 7, 2026';
   .back-link {
     display: inline-block;
     margin-bottom: 20px;
-    color: var(--text-muted);
+    color: var(--oc-text-muted);
     text-decoration: none;
     font-size: 0.95rem;
-    transition: color 0.2s ease;
+    transition: color var(--oc-duration-ui) ease;
   }
 
   .back-link:hover {
-    color: var(--coral-bright);
+    color: var(--oc-accent-primary);
   }
 
   .eyebrow {
     margin-bottom: 10px;
-    color: var(--cyan-bright);
+    color: var(--oc-accent-secondary);
     font-size: 0.85rem;
     font-weight: 700;
     letter-spacing: 0.12em;
@@ -262,18 +262,18 @@ const effectiveDate = 'March 7, 2026';
   }
 
   .title {
-    font-family: var(--font-display);
+    font-family: var(--oc-font-display);
     font-size: clamp(2.4rem, 7vw, 4rem);
     font-weight: 700;
     line-height: 1.1;
-    color: var(--text-primary);
+    color: var(--oc-text-primary);
     margin-bottom: 14px;
   }
 
   .subtitle {
     max-width: 760px;
     margin: 0 auto;
-    color: var(--text-secondary);
+    color: var(--oc-text-secondary);
     font-size: 1.08rem;
   }
 
@@ -286,24 +286,25 @@ const effectiveDate = 'March 7, 2026';
 
   .summary-card,
   .policy-card {
-    border: 1px solid var(--border-subtle);
-    background: var(--surface-card-strong);
+    border: 1px solid var(--oc-border-subtle);
+    background: var(--oc-surface-card-strong);
+    box-shadow: none;
     backdrop-filter: blur(10px);
   }
 
   .summary-card {
     padding: 18px;
-    border-radius: 0;
+    border-radius: var(--oc-radius-surface);
     min-height: 144px;
   }
 
   .summary-label {
     display: inline-flex;
     margin-bottom: 10px;
-    padding: 4px 10px;
-    border-radius: 0;
-    background: var(--surface-cyan-soft);
-    color: var(--cyan-bright);
+    padding: var(--oc-space-1) 10px;
+    border-radius: var(--oc-radius-control);
+    background: var(--oc-surface-secondary-soft);
+    color: var(--oc-accent-secondary);
     font-size: 0.78rem;
     font-weight: 700;
     letter-spacing: 0.08em;
@@ -311,13 +312,13 @@ const effectiveDate = 'March 7, 2026';
   }
 
   .summary-card p {
-    color: var(--text-secondary);
+    color: var(--oc-text-secondary);
     font-size: 0.96rem;
     line-height: 1.55;
   }
 
   .policy-card {
-    border-radius: 0;
+    border-radius: var(--oc-radius-surface);
     padding: 28px;
     
   }
@@ -328,9 +329,9 @@ const effectiveDate = 'March 7, 2026';
     align-items: center;
     gap: 10px;
     padding-bottom: 18px;
-    margin-bottom: 12px;
-    border-bottom: 1px solid var(--border-subtle);
-    color: var(--text-muted);
+    margin-bottom: var(--oc-space-3);
+    border-bottom: 1px solid var(--oc-border-subtle);
+    color: var(--oc-text-muted);
     font-size: 0.92rem;
   }
 
@@ -339,26 +340,26 @@ const effectiveDate = 'March 7, 2026';
   }
 
   .section + .section {
-    margin-top: 24px;
+    margin-top: var(--oc-space-5);
   }
 
   .section h2 {
-    font-family: var(--font-display);
+    font-family: var(--oc-font-display);
     font-size: 1.45rem;
     font-weight: 600;
-    color: var(--text-primary);
-    margin-bottom: 8px;
+    color: var(--oc-text-primary);
+    margin-bottom: var(--oc-space-2);
   }
 
   .section p,
   .section li {
-    color: var(--text-secondary);
+    color: var(--oc-text-secondary);
     font-size: 1rem;
     line-height: 1.72;
   }
 
   .section p + p {
-    margin-top: 12px;
+    margin-top: var(--oc-space-3);
   }
 
   .section ul {
@@ -371,17 +372,17 @@ const effectiveDate = 'March 7, 2026';
   }
 
   .section li::marker {
-    color: var(--coral-bright);
+    color: var(--oc-accent-primary);
   }
 
   .section a {
-    color: var(--coral-bright);
+    color: var(--oc-accent-primary);
     text-decoration: underline;
     text-underline-offset: 3px;
   }
 
   .section a:hover {
-    color: var(--cyan-bright);
+    color: var(--oc-accent-secondary);
   }
 
   @media (max-width: 900px) {
@@ -393,7 +394,7 @@ const effectiveDate = 'March 7, 2026';
 
   @media (max-width: 640px) {
     .container {
-      padding: 28px 16px 56px;
+      padding: 28px var(--oc-space-4) 56px;
     }
 
     .summary-grid {
@@ -402,7 +403,7 @@ const effectiveDate = 'March 7, 2026';
 
     .policy-card {
       padding: 22px 18px;
-      border-radius: 0;
+      border-radius: var(--oc-radius-surface);
     }
 
     .subtitle {

@@ -35,10 +35,10 @@ const integrationPills = [
   { name: 'Spotify', icon: siIcon(siSpotify), color: '#1DB954' },
   { name: 'Hue', icon: siIcon(siPhilipshue), color: '#0065D3' },
   { name: 'Obsidian', icon: siIcon(siObsidian), color: '#7C3AED' },
-  { name: 'Twitter', icon: siIcon(siX), color: 'var(--text-primary)' },
+  { name: 'Twitter', icon: siIcon(siX), color: 'var(--oc-text-primary)' },
   { name: 'Browser', icon: siIcon(siGooglechrome), color: '#4285F4' },
   { name: 'Gmail', icon: siIcon(siGmail), color: '#EA4335' },
-  { name: 'GitHub', icon: siIcon(siGithub), color: 'var(--text-primary)' },
+  { name: 'GitHub', icon: siIcon(siGithub), color: 'var(--oc-text-primary)' },
 ];
 
 // Split top 30 into two rows for carousel
@@ -144,13 +144,13 @@ const asciiAurora = (() => {
           <!-- Right Claw -->
           <path d="M100 45 C115 40 120 50 115 60 C110 70 100 65 95 55 C92 48 95 45 100 45Z" fill="url(#lobster-gradient)"/>
           <!-- Antenna -->
-          <path d="M45 15 Q35 5 30 8" stroke="var(--coral-bright)" stroke-width="2" stroke-linecap="round"/>
-          <path d="M75 15 Q85 5 90 8" stroke="var(--coral-bright)" stroke-width="2" stroke-linecap="round"/>
+          <path d="M45 15 Q35 5 30 8" stroke="var(--oc-accent-primary)" stroke-width="2" stroke-linecap="round"/>
+          <path d="M75 15 Q85 5 90 8" stroke="var(--oc-accent-primary)" stroke-width="2" stroke-linecap="round"/>
           <!-- Eyes -->
           <circle cx="45" cy="35" r="6" fill="#101012"/>
           <circle cx="75" cy="35" r="6" fill="#101012"/>
-          <circle cx="46" cy="34" r="2" fill="var(--cyan-bright)"/>
-          <circle cx="76" cy="34" r="2" fill="var(--cyan-bright)"/>
+          <circle cx="46" cy="34" r="2" fill="var(--oc-accent-secondary)"/>
+          <circle cx="76" cy="34" r="2" fill="var(--oc-accent-secondary)"/>
           <defs>
             <linearGradient id="lobster-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
               <stop offset="0%" stop-color="var(--logo-gradient-start)"/>
@@ -168,8 +168,8 @@ const asciiAurora = (() => {
         </p>
 
         <div class="hero-actions">
-          <a href="#quickstart" class="hero-cta">Get started</a>
-          <a href="https://docs.openclaw.ai/" target="_blank" rel="noopener" class="hero-cta hero-cta-ghost">Read the docs</a>
+          <a href="#quickstart" class="hero-cta oc-action oc-action-primary">Get started</a>
+          <a href="https://docs.openclaw.ai/" target="_blank" rel="noopener" class="hero-cta hero-cta-ghost oc-action oc-action-ghost">Read the docs</a>
         </div>
       </div>
     </header>
@@ -717,32 +717,32 @@ const asciiAurora = (() => {
       <SectionHeader title="What It Does" />
       <div class="features-grid">
         <a href="https://docs.openclaw.ai/getting-started" target="_blank" rel="noopener" class="feature-card">
-          <div class="feature-icon"><Icon icon="lucide:home" color="var(--text-muted)" size={28} /></div>
+          <div class="feature-icon"><Icon icon="lucide:home" color="var(--oc-text-muted)" size={28} /></div>
           <h3 class="feature-title">Runs on Your Machine</h3>
           <p class="feature-desc">Mac, Windows, or Linux. Bring hosted, subscription-backed, gateway, or local models. State lives on your machine, not a vendor cloud.</p>
         </a>
         <a href="/integrations" class="feature-card">
-          <div class="feature-icon"><Icon icon="lucide:message-circle" color="var(--text-muted)" size={28} /></div>
+          <div class="feature-icon"><Icon icon="lucide:message-circle" color="var(--oc-text-muted)" size={28} /></div>
           <h3 class="feature-title">Chat Where You Are</h3>
           <p class="feature-desc">Talk to it on WhatsApp, Telegram, Discord, Slack, Signal, iMessage, or any of its 29 channels. Works in DMs and group chats.</p>
         </a>
         <a href="https://docs.openclaw.ai/session" target="_blank" rel="noopener" class="feature-card">
-          <div class="feature-icon"><Icon icon="lucide:brain" color="var(--text-muted)" size={28} /></div>
+          <div class="feature-icon"><Icon icon="lucide:brain" color="var(--oc-text-muted)" size={28} /></div>
           <h3 class="feature-title">Persistent Memory</h3>
           <p class="feature-desc">Remembers your preferences, projects, and people from one conversation to the next.</p>
         </a>
         <a href="https://docs.openclaw.ai/browser" target="_blank" rel="noopener" class="feature-card">
-          <div class="feature-icon"><Icon icon="lucide:globe" color="var(--text-muted)" size={28} /></div>
+          <div class="feature-icon"><Icon icon="lucide:globe" color="var(--oc-text-muted)" size={28} /></div>
           <h3 class="feature-title">Browser Control</h3>
           <p class="feature-desc">It can browse the web, fill forms, and extract data from any site.</p>
         </a>
         <a href="https://docs.openclaw.ai/bash" target="_blank" rel="noopener" class="feature-card">
-          <div class="feature-icon"><Icon icon="lucide:terminal" color="var(--text-muted)" size={28} /></div>
+          <div class="feature-icon"><Icon icon="lucide:terminal" color="var(--oc-text-muted)" size={28} /></div>
           <h3 class="feature-title">Full System Access</h3>
           <p class="feature-desc">Read and write files, run shell commands, execute scripts. Full access or sandboxed—your choice.</p>
         </a>
         <a href="https://docs.openclaw.ai/skills" target="_blank" rel="noopener" class="feature-card">
-          <div class="feature-icon"><Icon icon="lucide:puzzle" color="var(--text-muted)" size={28} /></div>
+          <div class="feature-icon"><Icon icon="lucide:puzzle" color="var(--oc-text-muted)" size={28} /></div>
           <h3 class="feature-title">Skills & Plugins</h3>
           <p class="feature-desc">Extend with community skills or build your own. It can even write its own.</p>
         </a>
@@ -754,7 +754,7 @@ const asciiAurora = (() => {
       <SectionHeader title="Works With Everything" />
       <div class="integrations-row">
         {integrationPills.map((p) => (
-          <span class="integration-pill">
+          <span class="integration-pill oc-pill">
             <Icon icon={p.icon} color={p.color} size={16} />
             <span>{p.name}</span>
           </span>
@@ -888,7 +888,7 @@ const asciiAurora = (() => {
             class="newsletter-input"
             aria-label="Email address"
           />
-          <button type="submit" class="newsletter-btn">
+          <button type="submit" class="newsletter-btn oc-action oc-action-primary">
             Subscribe
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
               <line x1="5" y1="12" x2="19" y2="12"/>
@@ -948,9 +948,9 @@ const asciiAurora = (() => {
     width: 100%;
     max-width: 1060px;
     margin: 0 auto;
-    padding: 0 48px;
-    border-left: 1px solid var(--border-subtle);
-    border-right: 1px solid var(--border-subtle);
+    padding: 0 var(--oc-space-7);
+    border-left: 1px solid var(--oc-border-subtle);
+    border-right: 1px solid var(--oc-border-subtle);
     flex: 1;
     display: flex;
     flex-direction: column;
@@ -958,8 +958,8 @@ const asciiAurora = (() => {
 
   .rail > section {
     margin: 0;
-    padding: 64px 0;
-    border-top: 1px solid var(--border-subtle);
+    padding: var(--oc-space-8) 0;
+    border-top: 1px solid var(--oc-border-subtle);
   }
 
   .rail > section:first-child {
@@ -974,7 +974,7 @@ const asciiAurora = (() => {
     }
 
     .rail > section {
-      padding: 48px 0;
+      padding: var(--oc-space-7) 0;
     }
   }
 
@@ -982,7 +982,7 @@ const asciiAurora = (() => {
   .hero {
     position: relative;
     text-align: center;
-    border-bottom: 1px solid var(--border-subtle);
+    border-bottom: 1px solid var(--oc-border-subtle);
     overflow: hidden;
   }
 
@@ -1000,11 +1000,11 @@ const asciiAurora = (() => {
   .hero-art pre {
     flex-shrink: 0;
     margin: 0;
-    font-family: var(--font-mono);
+    font-family: var(--oc-font-mono);
     font-size: 11px;
     line-height: 1.3;
     letter-spacing: 1px;
-    color: var(--coral-bright);
+    color: var(--oc-accent-primary);
     opacity: 0.65;
   }
 
@@ -1015,7 +1015,7 @@ const asciiAurora = (() => {
   .hero-content {
     position: relative;
     margin-top: -96px;
-    padding: 0 32px 68px;
+    padding: 0 var(--oc-space-6) 68px;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -1030,12 +1030,12 @@ const asciiAurora = (() => {
 
   .hero-eyebrow {
     display: block;
-    font-family: var(--font-mono);
+    font-family: var(--oc-font-mono);
     font-size: 0.72rem;
     font-weight: 600;
     letter-spacing: 0.1em;
     text-transform: uppercase;
-    color: var(--coral-bright);
+    color: var(--oc-accent-primary);
   }
 
   .hero-actions {
@@ -1043,7 +1043,7 @@ const asciiAurora = (() => {
     align-items: center;
     justify-content: center;
     flex-wrap: wrap;
-    gap: 12px;
+    gap: var(--oc-space-3);
     margin-top: 36px;
   }
 
@@ -1051,13 +1051,13 @@ const asciiAurora = (() => {
   .hero-cta {
     display: inline-flex;
     align-items: center;
-    gap: 8px;
+    gap: var(--oc-space-2);
     min-height: 44px;
-    padding: 0 24px;
-    border: 1px solid var(--coral-bright);
-    background: var(--coral-bright);
-    color: var(--on-accent);
-    font-family: var(--font-mono);
+    padding: 0 var(--oc-space-5);
+    border: 1px solid var(--oc-accent-primary);
+    background: var(--oc-accent-primary);
+    color: var(--oc-text-on-accent);
+    font-family: var(--oc-font-mono);
     font-size: 0.82rem;
     font-weight: 600;
     text-decoration: none;
@@ -1065,42 +1065,46 @@ const asciiAurora = (() => {
   }
 
   .hero-cta:hover {
-    background: color-mix(in srgb, var(--coral-bright) 82%, #fff);
-    border-color: color-mix(in srgb, var(--coral-bright) 82%, #fff);
+    background: color-mix(in srgb, var(--oc-accent-primary) 82%, #fff);
+    border-color: color-mix(in srgb, var(--oc-accent-primary) 82%, #fff);
+  }
+
+  .hero-cta:active {
+    transform: none;
   }
 
   .hero-cta-ghost {
-    background: var(--bg-deep);
-    color: var(--text-primary);
-    border: 1px solid var(--border-subtle);
+    background: var(--oc-bg-page);
+    color: var(--oc-text-primary);
+    border: 1px solid var(--oc-border-subtle);
   }
 
   .hero-cta-ghost:hover {
-    background: var(--bg-surface);
-    border-color: color-mix(in srgb, var(--text-muted) 55%, transparent);
+    background: var(--oc-bg-surface);
+    border-color: color-mix(in srgb, var(--oc-text-muted) 55%, transparent);
   }
 
   .title {
-    font-family: var(--font-display);
+    font-family: var(--oc-font-display);
     font-size: clamp(2.4rem, 5.6vw, 3.8rem);
     font-weight: 600;
     letter-spacing: -0.03em;
     line-height: 1.08;
     margin: 20px auto 22px;
-    color: var(--text-primary);
+    color: var(--oc-text-primary);
   }
 
   .title em {
-    font-family: var(--font-serif);
+    font-family: var(--oc-font-serif);
     font-style: italic;
     font-weight: 400;
     letter-spacing: -0.015em;
-    color: var(--coral-bright);
+    color: var(--oc-accent-primary);
   }
 
   .description {
     font-size: 1rem;
-    color: var(--text-muted);
+    color: var(--oc-text-muted);
     max-width: 620px;
     margin: 0 auto;
     line-height: 1.8;
@@ -1131,8 +1135,8 @@ const asciiAurora = (() => {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
     gap: 1px;
-    background: var(--border-subtle);
-    border: 1px solid var(--border-subtle);
+    background: var(--oc-border-subtle);
+    border: 1px solid var(--oc-border-subtle);
   }
 
   @media (min-width: 640px) {
@@ -1145,42 +1149,42 @@ const asciiAurora = (() => {
     display: flex;
     flex-direction: column;
     align-items: flex-start;
-    gap: 8px;
-    padding: 30px 24px;
-    background: var(--bg-deep);
+    gap: var(--oc-space-2);
+    padding: 30px var(--oc-space-5);
+    background: var(--oc-bg-page);
     text-decoration: none;
-    color: var(--text-primary);
+    color: var(--oc-text-primary);
     transition: background 0.15s ease;
   }
 
   .cta:hover {
-    background: var(--bg-surface);
+    background: var(--oc-bg-surface);
   }
 
   .cta-icon {
     width: 20px;
     height: 20px;
-    margin-bottom: 8px;
-    color: var(--text-muted);
+    margin-bottom: var(--oc-space-2);
+    color: var(--oc-text-muted);
     transition: color 0.15s ease;
   }
 
   .cta:hover .cta-icon {
-    color: var(--coral-bright);
+    color: var(--oc-accent-primary);
   }
 
   .cta-label {
-    font-family: var(--font-mono);
+    font-family: var(--oc-font-mono);
     font-weight: 600;
     font-size: 0.78rem;
     letter-spacing: 0.08em;
     text-transform: uppercase;
-    color: var(--coral-bright);
+    color: var(--oc-accent-primary);
   }
 
   .cta-sub {
     font-size: 0.85rem;
-    color: var(--text-muted);
+    color: var(--oc-text-muted);
   }
 
   /* Newsletter: flat, left-aligned */
@@ -1190,17 +1194,17 @@ const asciiAurora = (() => {
   }
 
   .newsletter-title {
-    font-family: var(--font-display);
+    font-family: var(--oc-font-display);
     font-size: 1.35rem;
     font-weight: 600;
     letter-spacing: -0.015em;
-    margin-bottom: 8px;
+    margin-bottom: var(--oc-space-2);
   }
 
   .newsletter-desc {
     font-size: 0.92rem;
-    color: var(--text-muted);
-    margin-bottom: 24px;
+    color: var(--oc-text-muted);
+    margin-bottom: var(--oc-space-5);
     max-width: 460px;
   }
 
@@ -1212,33 +1216,33 @@ const asciiAurora = (() => {
 
   .newsletter-input {
     flex: 1;
-    padding: 12px 16px;
-    border: 1px solid var(--border-subtle);
-    background: var(--bg-surface);
-    color: var(--text-primary);
-    font-family: var(--font-mono);
+    padding: var(--oc-space-3) var(--oc-space-4);
+    border: 1px solid var(--oc-border-subtle);
+    background: var(--oc-bg-surface);
+    color: var(--oc-text-primary);
+    font-family: var(--oc-font-mono);
     font-size: 0.85rem;
     outline: none;
     transition: border-color 0.15s ease;
   }
 
   .newsletter-input::placeholder {
-    color: var(--text-muted);
+    color: var(--oc-text-muted);
   }
 
   .newsletter-input:focus {
-    border-color: var(--coral-bright);
+    border-color: var(--oc-accent-primary);
   }
 
   .newsletter-btn {
     display: inline-flex;
     align-items: center;
-    gap: 8px;
-    padding: 12px 22px;
-    border: 1px solid var(--coral-bright);
-    background: var(--coral-bright);
-    color: var(--on-accent);
-    font-family: var(--font-mono);
+    gap: var(--oc-space-2);
+    padding: var(--oc-space-3) 22px;
+    border: 1px solid var(--oc-accent-primary);
+    background: var(--oc-accent-primary);
+    color: var(--oc-text-on-accent);
+    font-family: var(--oc-font-mono);
     font-size: 0.82rem;
     font-weight: 600;
     cursor: pointer;
@@ -1251,13 +1255,13 @@ const asciiAurora = (() => {
   }
 
   .newsletter-btn:active {
-    transform: translateY(0);
+    transform: none;
   }
 
   .newsletter-btn svg {
     width: 18px;
     height: 18px;
-    transition: transform 0.2s ease;
+    transition: transform var(--oc-duration-ui) ease;
   }
 
   .newsletter-btn:hover svg {
@@ -1290,8 +1294,8 @@ const asciiAurora = (() => {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
     gap: 1px;
-    border: 1px solid var(--border-subtle);
-    background: var(--border-subtle);
+    border: 1px solid var(--oc-border-subtle);
+    background: var(--oc-border-subtle);
   }
 
   @media (min-width: 640px) {
@@ -1302,16 +1306,16 @@ const asciiAurora = (() => {
 
   .feature-card {
     display: block;
-    padding: 28px 24px;
-    background: var(--bg-deep);
-    transition: background 0.2s ease;
+    padding: 28px var(--oc-space-5);
+    background: var(--oc-bg-page);
+    transition: background var(--oc-duration-ui) ease;
     text-decoration: none;
     color: inherit;
     cursor: pointer;
   }
 
   .feature-card:hover {
-    background: var(--bg-surface);
+    background: var(--oc-bg-surface);
   }
 
   .feature-icon {
@@ -1327,18 +1331,18 @@ const asciiAurora = (() => {
   }
 
   .feature-title {
-    font-family: var(--font-mono);
+    font-family: var(--oc-font-mono);
     font-size: 0.78rem;
     font-weight: 600;
     letter-spacing: 0.08em;
     text-transform: uppercase;
-    color: var(--coral-bright);
+    color: var(--oc-accent-primary);
     margin-bottom: 10px;
   }
 
   .feature-desc {
     font-size: 0.85rem;
-    color: var(--text-muted);
+    color: var(--oc-text-muted);
     line-height: 1.7;
   }
 
@@ -1351,20 +1355,20 @@ const asciiAurora = (() => {
   .integrations-row {
     display: flex;
     flex-wrap: wrap;
-    gap: 8px;
+    gap: var(--oc-space-2);
     margin-bottom: 20px;
   }
 
   .integration-pill {
     display: inline-flex;
     align-items: center;
-    gap: 8px;
-    padding: 8px 14px;
-    border: 1px solid var(--border-subtle);
-    background: var(--bg-deep);
-    font-family: var(--font-mono);
+    gap: var(--oc-space-2);
+    padding: var(--oc-space-2) 14px;
+    border: 1px solid var(--oc-border-subtle);
+    background: var(--oc-bg-page);
+    font-family: var(--oc-font-mono);
     font-size: 0.74rem;
-    color: var(--text-secondary);
+    color: var(--oc-text-secondary);
     transition: background 0.15s ease, border-color 0.15s ease;
     cursor: default;
   }
@@ -1376,20 +1380,20 @@ const asciiAurora = (() => {
   }
 
   .integration-pill:hover {
-    background: var(--bg-surface);
-    border-color: color-mix(in srgb, var(--text-muted) 55%, transparent);
+    background: var(--oc-bg-surface);
+    border-color: color-mix(in srgb, var(--oc-text-muted) 55%, transparent);
   }
 
   .integrations-links {
     display: flex;
     align-items: center;
-    gap: 12px;
+    gap: var(--oc-space-3);
     flex-wrap: wrap;
   }
 
   .integrations-link {
-    color: var(--text-muted);
-    font-family: var(--font-mono);
+    color: var(--oc-text-muted);
+    font-family: var(--oc-font-mono);
     font-size: 0.76rem;
     text-decoration: none;
     font-weight: 500;
@@ -1397,11 +1401,11 @@ const asciiAurora = (() => {
   }
 
   .integrations-link:hover {
-    color: var(--text-primary);
+    color: var(--oc-text-primary);
   }
 
   .link-separator {
-    color: var(--text-muted);
+    color: var(--oc-text-muted);
     font-size: 0.76rem;
   }
 
@@ -1415,8 +1419,8 @@ const asciiAurora = (() => {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
     gap: 1px;
-    background: var(--border-subtle);
-    border: 1px solid var(--border-subtle);
+    background: var(--oc-border-subtle);
+    border: 1px solid var(--oc-border-subtle);
     margin-bottom: 18px;
   }
 
@@ -1429,31 +1433,31 @@ const asciiAurora = (() => {
   .build-card {
     display: flex;
     flex-direction: column;
-    gap: 12px;
+    gap: var(--oc-space-3);
     padding: 30px 26px;
-    background: var(--bg-deep);
+    background: var(--oc-bg-page);
     text-decoration: none;
-    color: var(--text-primary);
+    color: var(--oc-text-primary);
     transition: background 0.15s ease;
   }
 
   .build-card:hover {
-    background: var(--bg-surface);
+    background: var(--oc-bg-surface);
   }
 
   .build-card-header {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    gap: 12px;
+    gap: var(--oc-space-3);
   }
 
   .build-source {
     display: inline-flex;
     align-items: center;
-    gap: 8px;
-    color: var(--coral-bright);
-    font-family: var(--font-mono);
+    gap: var(--oc-space-2);
+    color: var(--oc-accent-primary);
+    font-family: var(--oc-font-mono);
     font-size: 0.72rem;
     font-weight: 600;
     letter-spacing: 0.08em;
@@ -1463,18 +1467,18 @@ const asciiAurora = (() => {
   .build-source-icon {
     width: 13px;
     height: 13px;
-    color: var(--text-muted);
-    transition: color 0.2s ease;
+    color: var(--oc-text-muted);
+    transition: color var(--oc-duration-ui) ease;
   }
 
   .build-card:hover .build-source-icon {
-    color: var(--text-primary);
+    color: var(--oc-text-primary);
   }
 
   .build-open,
   .build-link {
-    color: var(--text-muted);
-    font-family: var(--font-mono);
+    color: var(--oc-text-muted);
+    font-family: var(--oc-font-mono);
     font-size: 0.76rem;
     font-weight: 500;
     text-decoration: none;
@@ -1483,11 +1487,11 @@ const asciiAurora = (() => {
 
   .build-open:hover,
   .build-link:hover {
-    color: var(--text-primary);
+    color: var(--oc-text-primary);
   }
 
   .build-title {
-    font-family: var(--font-display);
+    font-family: var(--oc-font-display);
     font-size: 1.05rem;
     font-weight: 600;
     letter-spacing: -0.01em;
@@ -1495,7 +1499,7 @@ const asciiAurora = (() => {
   }
 
   .build-summary {
-    color: var(--text-muted);
+    color: var(--oc-text-muted);
     font-size: 0.88rem;
     line-height: 1.65;
   }
@@ -1509,8 +1513,8 @@ const asciiAurora = (() => {
   .build-tag {
     display: inline-flex;
     align-items: center;
-    color: var(--text-muted);
-    font-family: var(--font-mono);
+    color: var(--oc-text-muted);
+    font-family: var(--oc-font-mono);
     font-size: 0.72rem;
   }
 
@@ -1518,7 +1522,7 @@ const asciiAurora = (() => {
     display: flex;
     flex-wrap: wrap;
     align-items: center;
-    gap: 8px;
+    gap: var(--oc-space-2);
   }
 
   /* Press Section */
@@ -1531,8 +1535,8 @@ const asciiAurora = (() => {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
     gap: 1px;
-    background: var(--border-subtle);
-    border: 1px solid var(--border-subtle);
+    background: var(--oc-border-subtle);
+    border: 1px solid var(--oc-border-subtle);
   }
 
   @media (max-width: 640px) {
@@ -1544,33 +1548,33 @@ const asciiAurora = (() => {
   .press-card {
     display: flex;
     flex-direction: column;
-    gap: 12px;
+    gap: var(--oc-space-3);
     padding: 30px 26px;
-    background: var(--bg-deep);
+    background: var(--oc-bg-page);
     text-decoration: none;
-    color: var(--text-primary);
+    color: var(--oc-text-primary);
     transition: background 0.15s ease;
   }
 
   .press-card:hover {
-    background: var(--bg-surface);
+    background: var(--oc-bg-surface);
   }
 
   .press-meta {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    gap: 12px;
+    gap: var(--oc-space-3);
   }
 
   .press-name {
     display: inline-flex;
     align-items: center;
-    gap: 8px;
-    font-family: var(--font-mono);
+    gap: var(--oc-space-2);
+    font-family: var(--oc-font-mono);
     font-size: 0.72rem;
     font-weight: 600;
-    color: var(--coral-bright);
+    color: var(--oc-accent-primary);
     letter-spacing: 0.08em;
     text-transform: uppercase;
   }
@@ -1585,7 +1589,7 @@ const asciiAurora = (() => {
     background: #fff;
     filter: grayscale(1);
     opacity: 0.65;
-    transition: filter 0.2s ease, opacity 0.2s ease;
+    transition: filter var(--oc-duration-ui) ease, opacity var(--oc-duration-ui) ease;
   }
 
   .press-card:hover .press-favicon {
@@ -1594,40 +1598,40 @@ const asciiAurora = (() => {
   }
 
   .press-date {
-    color: var(--text-muted);
-    font-family: var(--font-mono);
+    color: var(--oc-text-muted);
+    font-family: var(--oc-font-mono);
     font-size: 0.72rem;
   }
 
   .press-title {
-    font-family: var(--font-display);
+    font-family: var(--oc-font-display);
     font-size: 1.05rem;
     font-weight: 600;
     letter-spacing: -0.01em;
     line-height: 1.4;
-    color: var(--text-primary);
+    color: var(--oc-text-primary);
     margin: 0;
   }
 
   .press-summary {
-    color: var(--text-muted);
+    color: var(--oc-text-muted);
     line-height: 1.65;
     font-size: 0.88rem;
   }
 
   .press-author {
-    font-family: var(--font-mono);
+    font-family: var(--oc-font-mono);
     font-size: 0.74rem;
-    color: var(--text-muted);
+    color: var(--oc-text-muted);
     font-weight: 500;
   }
 
   .press-featured {
-    background: color-mix(in srgb, var(--coral-bright) 5%, var(--bg-deep));
+    background: color-mix(in srgb, var(--oc-accent-primary) 5%, var(--oc-bg-page));
   }
 
   .press-featured:hover {
-    background: color-mix(in srgb, var(--coral-bright) 5%, var(--bg-surface));
+    background: color-mix(in srgb, var(--oc-accent-primary) 5%, var(--oc-bg-surface));
   }
 
   /* Quick Start */
@@ -1638,8 +1642,8 @@ const asciiAurora = (() => {
 
 
   .code-block {
-    background: var(--bg-surface);
-    border: 1px solid var(--border-subtle);
+    background: var(--oc-bg-surface);
+    border: 1px solid var(--oc-border-subtle);
     overflow: hidden;
   }
 
@@ -1649,22 +1653,22 @@ const asciiAurora = (() => {
     gap: 20px;
     min-height: 46px;
     padding: 0 20px;
-    border-bottom: 1px solid var(--border-subtle);
+    border-bottom: 1px solid var(--oc-border-subtle);
   }
 
   .code-label {
     align-self: center;
-    font-family: var(--font-mono);
+    font-family: var(--oc-font-mono);
     font-size: 0.72rem;
     font-weight: 600;
     letter-spacing: 0.08em;
     text-transform: uppercase;
-    color: var(--text-muted);
+    color: var(--oc-text-muted);
   }
 
   .code-content {
     padding: 18px 20px;
-    font-family: var(--font-mono);
+    font-family: var(--oc-font-mono);
     font-size: 0.9rem;
     line-height: 1.6;
   }
@@ -1672,17 +1676,17 @@ const asciiAurora = (() => {
   .code-line {
     display: flex;
     align-items: center;
-    gap: 8px;
-    padding: 4px 0;
+    gap: var(--oc-space-2);
+    padding: var(--oc-space-1) 0;
   }
 
   .code-line.comment {
-    color: var(--text-muted);
+    color: var(--oc-text-muted);
     font-style: italic;
   }
 
   .code-line.cmd {
-    color: var(--text-primary);
+    color: var(--oc-text-primary);
   }
 
   .copy-line-btn {
@@ -1694,11 +1698,11 @@ const asciiAurora = (() => {
     width: 28px;
     height: 28px;
     border: none;
-    border-radius: 0;
-    background: var(--surface-interactive);
-    color: var(--text-muted);
+    border-radius: var(--oc-radius-control);
+    background: var(--oc-surface-interactive);
+    color: var(--oc-text-muted);
     cursor: pointer;
-    transition: all 0.2s ease;
+    transition: all var(--oc-duration-ui) ease;
     flex-shrink: 0;
   }
 
@@ -1707,14 +1711,14 @@ const asciiAurora = (() => {
   }
 
   .copy-line-btn:hover {
-    background: var(--surface-interactive-hover);
-    color: var(--text-primary);
+    background: var(--oc-surface-interactive-hover);
+    color: var(--oc-text-primary);
   }
 
   .copy-line-btn.copied {
     opacity: 1;
-    background: var(--surface-cyan-soft);
-    color: var(--cyan-bright);
+    background: var(--oc-surface-secondary-soft);
+    color: var(--oc-accent-secondary);
   }
 
   .copy-line-btn svg {
@@ -1726,7 +1730,7 @@ const asciiAurora = (() => {
     width: 12px;
     height: 12px;
     border-radius: 50%;
-    background: var(--text-muted);
+    background: var(--oc-text-muted);
   }
 
   .code-dot:nth-child(1) { background: #ff5f57; }
@@ -1735,9 +1739,9 @@ const asciiAurora = (() => {
 
   .code-title {
     margin-left: auto;
-    font-size: 0.75rem;
-    color: var(--text-muted);
-    font-family: var(--font-mono);
+    font-size: var(--oc-font-size-xs);
+    color: var(--oc-text-muted);
+    font-family: var(--oc-font-mono);
   }
 
   .mode-switch,
@@ -1746,7 +1750,7 @@ const asciiAurora = (() => {
   .os-switch {
     display: flex;
     align-items: stretch;
-    gap: 16px;
+    gap: var(--oc-space-4);
     margin-bottom: -1px;
   }
 
@@ -1760,13 +1764,13 @@ const asciiAurora = (() => {
   .pm-btn,
   .hackable-btn,
   .os-btn {
-    font-family: var(--font-mono);
+    font-family: var(--oc-font-mono);
     font-size: 0.72rem;
     padding: 0 2px;
     border: none;
     border-bottom: 1px solid transparent;
     background: transparent;
-    color: var(--text-muted);
+    color: var(--oc-text-muted);
     cursor: pointer;
     transition: color 0.15s ease, border-color 0.15s ease;
   }
@@ -1775,22 +1779,22 @@ const asciiAurora = (() => {
   .pm-btn:hover,
   .hackable-btn:hover,
   .os-btn:hover {
-    color: var(--text-primary);
+    color: var(--oc-text-primary);
   }
 
   .mode-btn.active,
   .pm-btn.active,
   .hackable-btn.active,
   .os-btn.active {
-    color: var(--coral-bright);
-    border-bottom-color: var(--coral-bright);
+    color: var(--oc-accent-primary);
+    border-bottom-color: var(--oc-accent-primary);
     font-weight: 600;
   }
 
   /* Beta Switch */
   .beta-switch {
     align-self: center;
-    margin-left: 8px;
+    margin-left: var(--oc-space-2);
   }
 
   /* Placeholder to prevent layout shift when no switches visible */
@@ -1803,27 +1807,27 @@ const asciiAurora = (() => {
   .beta-btn {
     display: flex;
     align-items: center;
-    gap: 4px;
-    font-family: var(--font-mono);
+    gap: var(--oc-space-1);
+    font-family: var(--oc-font-mono);
     font-size: 0.7rem;
-    padding: 4px 10px;
-    border: 1px solid var(--border-subtle);
-    border-radius: 0;
+    padding: var(--oc-space-1) 10px;
+    border: 1px solid var(--oc-border-subtle);
+    border-radius: var(--oc-radius-control);
     background: transparent;
-    color: var(--text-muted);
+    color: var(--oc-text-muted);
     cursor: pointer;
-    transition: all 0.2s ease;
+    transition: all var(--oc-duration-ui) ease;
   }
 
   .beta-btn:hover {
-    border-color: var(--coral-bright);
-    color: var(--coral-bright);
+    border-color: var(--oc-accent-primary);
+    color: var(--oc-accent-primary);
   }
 
   .beta-btn.active {
-    background: var(--surface-coral-soft);
-    border-color: var(--coral-bright);
-    color: var(--coral-bright);
+    background: var(--oc-surface-accent-soft);
+    border-color: var(--oc-accent-primary);
+    color: var(--oc-accent-primary);
   }
 
   .beta-label {
@@ -1838,7 +1842,7 @@ const asciiAurora = (() => {
 
   .pm-cmd,
   .pm-install {
-    color: var(--cyan-bright);
+    color: var(--oc-accent-secondary);
   }
 
   .code-block pre {
@@ -1847,25 +1851,25 @@ const asciiAurora = (() => {
   }
 
   .code-block code {
-    font-family: var(--font-mono);
+    font-family: var(--oc-font-mono);
     font-size: 0.9rem;
     line-height: 1.7;
-    color: var(--text-secondary);
+    color: var(--oc-text-secondary);
   }
 
   .code-comment {
-    color: var(--text-muted);
+    color: var(--oc-text-muted);
   }
 
   .code-prompt {
-    color: var(--coral-bright);
+    color: var(--oc-accent-primary);
     user-select: none;
   }
 
   .quickstart-note {
-    margin-top: 16px;
+    margin-top: var(--oc-space-4);
     font-size: 0.9rem;
-    color: var(--text-muted);
+    color: var(--oc-text-muted);
     text-align: center;
   }
 
@@ -1874,8 +1878,8 @@ const asciiAurora = (() => {
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 16px;
-    padding: 24px 16px;
+    gap: var(--oc-space-4);
+    padding: var(--oc-space-5) var(--oc-space-4);
     text-align: center;
   }
 
@@ -1884,7 +1888,7 @@ const asciiAurora = (() => {
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 8px;
+    gap: var(--oc-space-2);
   }
 
   .app-download-grid {
@@ -1898,28 +1902,28 @@ const asciiAurora = (() => {
     justify-content: flex-start;
     min-width: 0;
     padding: 18px;
-    border: 1px solid var(--border-subtle);
-    border-radius: 0;
+    border: 1px solid var(--oc-border-subtle);
+    border-radius: var(--oc-radius-surface);
     background: rgba(255, 255, 255, 0.03);
   }
 
   .app-download-tagline {
-    font-family: var(--font-display);
+    font-family: var(--oc-font-display);
     font-size: 1.1rem;
     font-weight: 600;
-    color: var(--text-primary);
+    color: var(--oc-text-primary);
   }
 
   .app-download-subtitle {
     font-size: 0.9rem;
-    color: var(--text-muted);
+    color: var(--oc-text-muted);
   }
 
   .app-download-platform {
-    font-family: var(--font-display);
+    font-family: var(--oc-font-display);
     font-size: 0.95rem;
     font-weight: 600;
-    color: var(--text-primary);
+    color: var(--oc-text-primary);
   }
 
   .app-download-btn {
@@ -1929,10 +1933,10 @@ const asciiAurora = (() => {
     gap: 10px;
     min-width: 190px;
     padding: 14px 28px;
-    background: var(--coral-bright);
-    color: var(--on-accent);
+    background: var(--oc-accent-primary);
+    color: var(--oc-text-on-accent);
     border: none;
-    font-family: var(--font-mono);
+    font-family: var(--oc-font-mono);
     font-size: 0.85rem;
     font-weight: 600;
     white-space: nowrap;
@@ -1944,7 +1948,7 @@ const asciiAurora = (() => {
 
   .app-download-btn-secondary {
     background: rgba(255, 255, 255, 0.06);
-    border: 1px solid var(--border-subtle);
+    border: 1px solid var(--oc-border-subtle);
     box-shadow: none;
   }
 
@@ -1972,7 +1976,7 @@ const asciiAurora = (() => {
 
   .app-download-meta {
     font-size: 0.8rem;
-    color: var(--text-muted);
+    color: var(--oc-text-muted);
     text-decoration: none;
   }
 
@@ -1983,7 +1987,7 @@ const asciiAurora = (() => {
   }
 
   .sponsors .section-title {
-    margin-bottom: 24px;
+    margin-bottom: var(--oc-space-5);
   }
 
   /* Logo wall: hairline cells */
@@ -1991,8 +1995,8 @@ const asciiAurora = (() => {
     display: grid;
     grid-template-columns: repeat(6, 1fr);
     gap: 1px;
-    background: var(--border-subtle);
-    border: 1px solid var(--border-subtle);
+    background: var(--oc-border-subtle);
+    border: 1px solid var(--oc-border-subtle);
   }
 
   @media (max-width: 720px) {
@@ -2007,13 +2011,13 @@ const asciiAurora = (() => {
     justify-content: center;
     height: 88px;
     padding: 18px 20px;
-    background: var(--bg-deep);
+    background: var(--oc-bg-page);
     text-decoration: none;
     transition: background 0.15s ease;
   }
 
   .sponsor-card:hover {
-    background: var(--bg-surface);
+    background: var(--oc-bg-surface);
   }
 
   .sponsor-logo {
@@ -2077,7 +2081,7 @@ const asciiAurora = (() => {
 
     .sponsor-card {
       height: 72px;
-      padding: 16px;
+      padding: var(--oc-space-4);
     }
 
     .sponsor-logo {
@@ -2122,8 +2126,8 @@ const asciiAurora = (() => {
   .blog-preview-kicker {
     display: inline-block;
     margin-bottom: 6px;
-    color: var(--coral-bright);
-    font-family: var(--font-mono);
+    color: var(--oc-accent-primary);
+    font-family: var(--oc-font-mono);
     font-size: 0.8rem;
     font-weight: 600;
     letter-spacing: 0.1em;
@@ -2132,8 +2136,8 @@ const asciiAurora = (() => {
 
   .blog-preview h2 {
     margin: 0;
-    color: var(--text-primary);
-    font-family: var(--font-display);
+    color: var(--oc-text-primary);
+    font-family: var(--oc-font-display);
     font-size: 1.35rem;
     font-weight: 600;
     letter-spacing: -0.015em;
@@ -2141,8 +2145,8 @@ const asciiAurora = (() => {
   }
 
   .blog-preview-link {
-    color: var(--text-muted);
-    font-family: var(--font-mono);
+    color: var(--oc-text-muted);
+    font-family: var(--oc-font-mono);
     font-size: 0.76rem;
     font-weight: 500;
     text-decoration: none;
@@ -2150,15 +2154,15 @@ const asciiAurora = (() => {
   }
 
   .blog-preview-link:hover {
-    color: var(--text-primary);
+    color: var(--oc-text-primary);
   }
 
   .blog-preview-grid {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     gap: 1px;
-    background: var(--border-subtle);
-    border: 1px solid var(--border-subtle);
+    background: var(--oc-border-subtle);
+    border: 1px solid var(--oc-border-subtle);
   }
 
   .blog-recents {
@@ -2170,8 +2174,8 @@ const asciiAurora = (() => {
     display: flex;
     flex-direction: column;
     align-items: flex-start;
-    padding: 32px 26px;
-    background: var(--bg-deep);
+    padding: var(--oc-space-6) 26px;
+    background: var(--oc-bg-page);
     color: inherit;
     text-decoration: none;
     transition: background 0.15s ease;
@@ -2179,7 +2183,7 @@ const asciiAurora = (() => {
 
   .blog-feature:hover,
   .blog-recent:hover {
-    background: var(--bg-surface);
+    background: var(--oc-bg-surface);
   }
 
   .blog-feature-badge {
@@ -2193,7 +2197,7 @@ const asciiAurora = (() => {
     height: 150px;
     margin: -32px -26px 20px;
     overflow: hidden;
-    border-bottom: 1px solid var(--border-subtle);
+    border-bottom: 1px solid var(--oc-border-subtle);
     background: #0a0a0c;
   }
 
@@ -2216,8 +2220,8 @@ const asciiAurora = (() => {
     display: block;
     height: 100%;
     background-image:
-      radial-gradient(var(--surface-coral-soft) 1.2px, transparent 1.2px),
-      radial-gradient(var(--surface-coral-soft) 1.2px, transparent 1.2px);
+      radial-gradient(var(--oc-surface-accent-soft) 1.2px, transparent 1.2px),
+      radial-gradient(var(--oc-surface-accent-soft) 1.2px, transparent 1.2px);
     background-size: 9px 9px;
     background-position: 0 0, 4.5px 4.5px;
     mask-image: radial-gradient(ellipse 90% 110% at 50% -20%, black 30%, transparent 80%);
@@ -2227,17 +2231,17 @@ const asciiAurora = (() => {
   .blog-date {
     display: inline-flex;
     align-items: center;
-    color: var(--coral-bright);
-    font-family: var(--font-mono);
+    color: var(--oc-accent-primary);
+    font-family: var(--oc-font-mono);
     font-size: 0.74rem;
     font-weight: 500;
   }
 
   .blog-feature h3,
   .blog-recent h3 {
-    margin: 12px 0 9px;
-    color: var(--text-primary);
-    font-family: var(--font-display);
+    margin: var(--oc-space-3) 0 9px;
+    color: var(--oc-text-primary);
+    font-family: var(--oc-font-display);
     font-size: 1.02rem;
     font-weight: 600;
     letter-spacing: -0.01em;
@@ -2246,7 +2250,7 @@ const asciiAurora = (() => {
 
   .blog-feature p,
   .blog-recent p {
-    color: var(--text-muted);
+    color: var(--oc-text-muted);
     font-size: 0.85rem;
     line-height: 1.65;
     display: -webkit-box;
@@ -2267,7 +2271,7 @@ const asciiAurora = (() => {
   .testimonials-track {
     display: flex;
     flex-direction: column;
-    gap: 8px;
+    gap: var(--oc-space-2);
     margin-left: -48px;
     margin-right: -48px;
     overflow: hidden;
@@ -2293,9 +2297,9 @@ const asciiAurora = (() => {
 
   .testimonials-row {
     display: flex;
-    gap: 16px;
+    gap: var(--oc-space-4);
     width: max-content;
-    padding: 8px 0;
+    padding: var(--oc-space-2) 0;
   }
 
   .row-1 {
@@ -2319,20 +2323,20 @@ const asciiAurora = (() => {
   .testimonial-card {
     display: flex;
     align-items: flex-start;
-    gap: 12px;
+    gap: var(--oc-space-3);
     padding: 18px;
     min-width: 320px;
     max-width: 400px;
-    border: 1px solid var(--border-subtle);
-    background: var(--bg-deep);
+    border: 1px solid var(--oc-border-subtle);
+    background: var(--oc-bg-page);
     text-decoration: none;
-    color: var(--text-primary);
+    color: var(--oc-text-primary);
     transition: background 0.15s ease;
     flex-shrink: 0;
   }
 
   .testimonial-card:hover {
-    background: var(--bg-surface);
+    background: var(--oc-bg-surface);
   }
 
   .testimonials-row:hover {
@@ -2343,8 +2347,8 @@ const asciiAurora = (() => {
     width: 44px;
     height: 44px;
     flex-shrink: 0;
-    border: 1px solid var(--border-subtle);
-    background: var(--bg-elevated);
+    border: 1px solid var(--oc-border-subtle);
+    background: var(--oc-bg-elevated);
     filter: grayscale(1);
     transition: filter 0.25s ease;
   }
@@ -2363,7 +2367,7 @@ const asciiAurora = (() => {
   .testimonial-quote {
     font-size: 0.9rem;
     line-height: 1.5;
-    color: var(--text-secondary);
+    color: var(--oc-text-secondary);
     display: -webkit-box;
     -webkit-line-clamp: 3;
     -webkit-box-orient: vertical;
@@ -2371,16 +2375,16 @@ const asciiAurora = (() => {
   }
 
   .testimonial-author {
-    font-family: var(--font-mono);
+    font-family: var(--oc-font-mono);
     font-size: 0.72rem;
     font-weight: 600;
-    color: var(--coral-bright);
+    color: var(--oc-accent-primary);
   }
 
   /* Responsive */
   @media (max-width: 480px) {
     .cta {
-      padding: 22px 16px;
+      padding: 22px var(--oc-space-4);
     }
 
     .blog-preview-head {
@@ -2393,17 +2397,17 @@ const asciiAurora = (() => {
 
     .blog-preview-link {
       display: inline-flex;
-      margin-top: 12px;
+      margin-top: var(--oc-space-3);
     }
 
     .blog-feature,
     .blog-recent {
-      padding: 24px 20px;
+      padding: var(--oc-space-5) 20px;
     }
 
     .blog-thumb {
       width: calc(100% + 40px);
-      margin: -24px -20px 16px;
+      margin: -24px -20px var(--oc-space-4);
     }
 
     .testimonials-track {
@@ -2428,8 +2432,8 @@ const asciiAurora = (() => {
     /* Quick Start mobile layout */
     .code-header {
       flex-wrap: wrap;
-      gap: 8px 16px;
-      padding: 10px 16px 0;
+      gap: var(--oc-space-2) var(--oc-space-4);
+      padding: 10px var(--oc-space-4) 0;
     }
 
     .code-label {
@@ -2455,7 +2459,7 @@ const asciiAurora = (() => {
     .os-btn,
     .pm-btn,
     .hackable-btn {
-      padding: 4px 2px;
+      padding: var(--oc-space-1) 2px;
       font-size: 0.65rem;
     }
 
@@ -2464,7 +2468,7 @@ const asciiAurora = (() => {
       order: 2;
       width: 100%;
       justify-content: flex-start;
-      gap: 16px;
+      gap: var(--oc-space-4);
       margin-bottom: -1px;
     }
 
@@ -2474,7 +2478,7 @@ const asciiAurora = (() => {
     }
 
     .code-content {
-      padding: 12px 14px;
+      padding: var(--oc-space-3) 14px;
       font-size: 0.65rem;
     }
 
@@ -2492,7 +2496,7 @@ const asciiAurora = (() => {
     }
 
     .app-download-btn {
-      padding: 12px 20px;
+      padding: var(--oc-space-3) 20px;
       font-size: 0.9rem;
     }
   }
@@ -2514,9 +2518,9 @@ const asciiAurora = (() => {
 
   /* Global Focus State: Replaces the default browser ring with your theme colors */
   :focus-visible {
-    outline: 3px solid var(--cyan-bright);
+    outline: 3px solid var(--oc-accent-secondary);
     outline-offset: 4px;
-    border-radius: 0;
+    border-radius: var(--oc-radius-control);
   }
 
   /* Respect user's system settings for reduced motion */

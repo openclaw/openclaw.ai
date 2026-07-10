@@ -3,7 +3,7 @@ updates:
   - package-ecosystem: github-actions
     directory: /
     schedule:
-      interval: weekly
+      interval: daily
     groups:
       github-actions:
         patterns:
@@ -12,7 +12,7 @@ updates:
   - package-ecosystem: npm
     directory: /
     schedule:
-      interval: weekly
+      interval: daily
     groups:
       npm:
         patterns:
@@ -21,19 +21,19 @@ updates:
   - package-ecosystem: docker
     directory: /scripts/docker/install-sh-smoke
     schedule:
-      interval: weekly
+      interval: daily
 
   - package-ecosystem: docker
     directory: /scripts/docker/install-sh-nonroot
     schedule:
-      interval: weekly
+      interval: daily
 
   - package-ecosystem: docker
     directory: /scripts/docker/install-sh-git-smoke
     schedule:
-      interval: weekly
+      interval: daily
 
   - package-ecosystem: docker
     directory: /scripts/e2e
     schedule:
-      interval: weekly
+      interval: daily

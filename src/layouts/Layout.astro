@@ -1,5 +1,9 @@
 ---
 import Analytics from '@vercel/analytics/astro';
+import '@openclaw/design-system/tokens.css';
+import '@openclaw/design-system/themes.css';
+import '@openclaw/design-system/typography.css';
+import '@openclaw/design-system/components.css';
 
 interface Props {
   title: string;
@@ -87,38 +91,7 @@ const structuredDataItems = structuredData ? Array.isArray(structuredData) ? str
 
     <style is:global>
       :root {
-        /* Neutral ink, aligned with the OpenClaw Foundation site */
-        --bg-deep: #101012;
-        --bg-surface: #19191c;
-        --bg-elevated: #202024;
-
-        /* Foundation coral */
-        --coral-bright: #f5654a;
-        --coral-mid: #e05540;
-        --coral-dark: #b23a28;
-
-        /* Sea glass — secondary accent, used sparingly */
-        --cyan-bright: #4fc8ae;
-        --cyan-mid: #2fa48d;
-        --cyan-glow: rgba(79, 200, 174, 0.35);
-
-        /* Text */
-        --text-primary: #ededed;
-        --text-secondary: #bcbcc4;
-        --text-muted: #9a9aa2;
-
-        /* Borders */
-        --border-subtle: rgba(154, 154, 162, 0.18);
-        --border-accent: rgba(245, 101, 74, 0.4);
-
-        --surface-card: rgba(25, 25, 28, 0.72);
-        --surface-card-strong: rgba(25, 25, 28, 0.9);
-        --surface-overlay: rgba(0, 0, 0, 0.3);
-        --surface-interactive: rgba(237, 237, 237, 0.08);
-        --surface-interactive-hover: rgba(237, 237, 237, 0.16);
-        --surface-cyan-soft: rgba(79, 200, 174, 0.14);
-        --surface-coral-soft: rgba(245, 101, 74, 0.14);
-        --surface-inset-highlight: rgba(237, 237, 237, 0.05);
+        /* Site-specific effects build on the shared OpenClaw palette. */
         --newsletter-gradient: rgba(25, 25, 28, 0.85);
         --press-featured-gradient: rgba(245, 101, 74, 0.05);
         --shadow-coral-soft: rgba(178, 58, 40, 0.26);
@@ -126,56 +99,22 @@ const structuredDataItems = structuredData ? Array.isArray(structuredData) ? str
         --shadow-coral-strong: rgba(178, 58, 40, 0.5);
         --shadow-cyan-soft: rgba(47, 164, 141, 0.24);
         --shadow-github-soft: rgba(237, 237, 237, 0.12);
-        --github-hover-color: #ededed;
-        --hero-title-start: #ededed;
-        --hero-title-end: #ededed;
-        --logo-gradient-start: #f5654a;
-        --logo-gradient-end: #b23a28;
-        --logo-glow: rgba(245, 101, 74, 0.35);
-        --logo-glow-hover: rgba(79, 200, 174, 0.5);
-
-        /* Text color for content sitting on the coral accent */
-        --on-accent: #101012;
-
-        /* Dot grid for the backdrop */
-        --chart-line: rgba(237, 237, 237, 0.09);
+        --github-hover-color: var(--oc-text-primary);
+        --hero-title-start: var(--oc-text-primary);
+        --hero-title-end: var(--oc-text-primary);
+        --logo-gradient-start: var(--oc-accent-primary);
+        --logo-gradient-end: var(--oc-accent-primary-deep);
+        --logo-glow: color-mix(in srgb, var(--oc-accent-primary) 35%, transparent);
+        --logo-glow-hover: color-mix(in srgb, var(--oc-accent-secondary) 50%, transparent);
 
         /* Fonts */
-        --font-display: 'Switzer', system-ui, sans-serif;
-        --font-body: 'Switzer', system-ui, sans-serif;
-        --font-serif: 'Sentient', Georgia, serif;
-        --font-mono: ui-monospace, 'SF Mono', 'Fira Code', 'JetBrains Mono', Menlo, monospace;
+        --oc-font-display: 'Switzer', system-ui, sans-serif;
+        --oc-font-body: 'Switzer', system-ui, sans-serif;
+        --oc-font-serif: 'Sentient', Georgia, serif;
+        --oc-font-mono: ui-monospace, 'SF Mono', 'Fira Code', 'JetBrains Mono', Menlo, monospace;
       }
 
       html[data-theme='light'] {
-        /* Warm paper, aligned with the Foundation light theme */
-        --bg-deep: #f6f5f3;
-        --bg-surface: #eceae6;
-        --bg-elevated: #ffffff;
-
-        --coral-bright: #d84a31;
-        --coral-mid: #c24028;
-        --coral-dark: #9c3222;
-
-        --cyan-bright: #14806e;
-        --cyan-mid: #0f6355;
-        --cyan-glow: rgba(20, 128, 110, 0.24);
-
-        --text-primary: #17171a;
-        --text-secondary: #46464e;
-        --text-muted: #63636c;
-
-        --border-subtle: rgba(23, 23, 26, 0.14);
-        --border-accent: rgba(216, 74, 49, 0.42);
-
-        --surface-card: rgba(255, 255, 255, 0.8);
-        --surface-card-strong: rgba(255, 255, 255, 0.95);
-        --surface-overlay: rgba(23, 23, 26, 0.08);
-        --surface-interactive: rgba(23, 23, 26, 0.07);
-        --surface-interactive-hover: rgba(23, 23, 26, 0.14);
-        --surface-cyan-soft: rgba(20, 128, 110, 0.13);
-        --surface-coral-soft: rgba(216, 74, 49, 0.12);
-        --surface-inset-highlight: rgba(23, 23, 26, 0.05);
         --newsletter-gradient: rgba(255, 255, 255, 0.9);
         --press-featured-gradient: rgba(216, 74, 49, 0.06);
         --shadow-coral-soft: rgba(156, 50, 34, 0.15);
@@ -183,17 +122,11 @@ const structuredDataItems = structuredData ? Array.isArray(structuredData) ? str
         --shadow-coral-strong: rgba(156, 50, 34, 0.3);
         --shadow-cyan-soft: rgba(15, 99, 85, 0.16);
         --shadow-github-soft: rgba(23, 23, 26, 0.18);
-        --github-hover-color: #17171a;
-        --hero-title-start: #17171a;
-        --hero-title-end: #17171a;
-        --logo-gradient-start: #e0563c;
-        --logo-gradient-end: #9c3222;
-        --logo-glow: rgba(216, 74, 49, 0.22);
-        --logo-glow-hover: rgba(20, 128, 110, 0.3);
-
-        --on-accent: #ffffff;
-
-        --chart-line: rgba(23, 23, 26, 0.12);
+        --github-hover-color: var(--oc-text-primary);
+        --hero-title-start: var(--oc-text-primary);
+        --hero-title-end: var(--oc-text-primary);
+        --logo-glow: color-mix(in srgb, var(--oc-accent-primary) 22%, transparent);
+        --logo-glow-hover: color-mix(in srgb, var(--oc-accent-secondary) 30%, transparent);
       }
 
       *, *::before, *::after {
@@ -207,9 +140,9 @@ const structuredDataItems = structuredData ? Array.isArray(structuredData) ? str
       }
 
       body {
-        font-family: var(--font-body);
-        background: var(--bg-deep);
-        color: var(--text-primary);
+        font-family: var(--oc-font-body);
+        background: var(--oc-bg-page);
+        color: var(--oc-text-primary);
         line-height: 1.6;
         min-height: 100vh;
         transition: background-color 0.25s ease, color 0.25s ease;
@@ -224,7 +157,7 @@ const structuredDataItems = structuredData ? Array.isArray(structuredData) ? str
         inset: 0;
         z-index: 0;
         pointer-events: none;
-        background-image: radial-gradient(var(--chart-line) 1px, transparent 1.5px);
+        background-image: radial-gradient(var(--oc-chart-line) 1px, transparent 1.5px);
         background-size: 26px 26px;
         mask-image: linear-gradient(to bottom, black, transparent 90%);
         -webkit-mask-image: linear-gradient(to bottom, black, transparent 90%);
@@ -258,8 +191,8 @@ const structuredDataItems = structuredData ? Array.isArray(structuredData) ? str
       }
 
       ::selection {
-        background: var(--coral-bright);
-        color: var(--bg-deep);
+        background: var(--oc-accent-primary);
+        color: var(--oc-bg-page);
       }
 
       .theme-toggle {
@@ -270,20 +203,20 @@ const structuredDataItems = structuredData ? Array.isArray(structuredData) ? str
         display: inline-flex;
         align-items: center;
         justify-content: center;
-        padding: 4px;
+        padding: var(--oc-space-1);
         border: none;
         background: none;
-        color: var(--text-muted);
+        color: var(--oc-text-muted);
         cursor: pointer;
         transition: color 150ms ease;
       }
 
       .theme-toggle:hover {
-        color: var(--text-primary);
+        color: var(--oc-text-primary);
       }
 
       .theme-toggle:focus-visible {
-        outline: 2px solid var(--coral-bright);
+        outline: 2px solid var(--oc-accent-primary);
         outline-offset: 2px;
       }
 
@@ -338,7 +271,7 @@ const structuredDataItems = structuredData ? Array.isArray(structuredData) ? str
       }
     </style>
   </head>
-  <body>
+  <body class="oc-app-surface">
     <button class="theme-toggle" type="button" data-theme-toggle aria-label="Switch color theme">
       <!-- Sun-and-moon morph, ported from the OpenClaw Foundation site -->
       <svg viewBox="0 0 24 24" aria-hidden="true">
