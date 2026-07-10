@@ -45,9 +45,9 @@ const featuredPress = pressArticles.slice(0, 4).map((article) => {
 });
 
 function postThumb(post: (typeof blogPosts)[number]): string | null {
-  if (post.data.ogImage?.src) return post.data.ogImage.src;
-  if (post.data.coverImage) return post.data.coverImage;
   if (post.data.image) return post.data.image;
+  if (post.data.coverImage) return post.data.coverImage;
+  if (post.data.ogImage?.src) return post.data.ogImage.src;
   const body = post.body ?? '';
   const md = body.match(/!\[[^\]]*\]\((\/[^)\s]+)/);
   if (md) return md[1];
