@@ -37,10 +37,10 @@ const integrations = {
   Spotify: { name: 'Spotify', kind: 'Tool', icon: iconPath(siSpotify), color: '#1DB954', description: 'Skills can reach daily apps.' },
   Hue: { name: 'Hue', kind: 'Home', icon: iconPath(siPhilipshue), color: '#0065D3', description: 'Smart-home actions from chat.' },
   Obsidian: { name: 'Obsidian', kind: 'Notes', icon: iconPath(siObsidian), color: '#7C3AED', description: 'Vaults, memory, and personal context.' },
-  Twitter: { name: 'Twitter', kind: 'Web', icon: iconPath(siX), color: 'var(--text-primary)', description: 'Research, drafts, bookmarks, posts.' },
+  Twitter: { name: 'Twitter', kind: 'Web', icon: iconPath(siX), color: 'var(--oc-text-primary)', description: 'Research, drafts, bookmarks, posts.' },
   Browser: { name: 'Browser', kind: 'Web', icon: iconPath(siGooglechrome), color: '#4285F4', description: 'Forms, pages, extraction, inspection.' },
   Gmail: { name: 'Gmail', kind: 'Inbox', icon: iconPath(siGmail), color: '#EA4335', description: 'Summaries, follow-ups, triage.' },
-  GitHub: { name: 'GitHub', kind: 'Code', icon: iconPath(siGithub), color: 'var(--text-primary)', description: 'Issues, PRs, reviews, releases.' },
+  GitHub: { name: 'GitHub', kind: 'Code', icon: iconPath(siGithub), color: 'var(--oc-text-primary)', description: 'Issues, PRs, reviews, releases.' },
 } as const satisfies Record<string, HomepageIntegration>;
 
 type IntegrationName = keyof typeof integrations;
