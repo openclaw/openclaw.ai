@@ -336,6 +336,8 @@ const asciiAurora = (() => {
     </section>
 
     <script>
+      import { initIntegrationRail } from '../scripts/home/integration-rail';
+
       // Windows install commands
       const windowsCmd = 'powershell -c "irm https://openclaw.ai/install.ps1 | iex"';
       const windowsBetaCmd = 'powershell -c "& ([scriptblock]::Create((irm https://openclaw.ai/install.ps1))) -Tag beta"';
@@ -641,202 +643,8 @@ const asciiAurora = (() => {
         });
       }
 
-      const integrationRails = document.querySelector('[data-integration-rails]');
-      if (integrationRails) {
-        const rows = [...integrationRails.querySelectorAll('.integration-track')];
-        const railboard = integrationRails.querySelector('.integrations-railboard');
-        const scrubber = integrationRails.querySelector('.integration-scrubber');
-        const scrubberTicks = [...integrationRails.querySelectorAll('.integration-scrubber span')];
-        const rowMetrics = new Map();
-        const CLONE_BUFFER = 96;
-        const MIN_TRAVEL_CARDS = 1.25;
-        const TRAVEL_DAMPING = 1;
-        const EDGE_REVEAL_MULTIPLIER = 3.4;
-        const EASE_SCROLL = 0.055;
-        const EASE_SCRUB = 0.22;
-        let current = 0;
-        let scrubProgress = null;
-        let manualProgress = null;
-        const clamp01 = (value) => Math.min(Math.max(value, 0), 1);
-        const setActiveIntegration = (name) => {
-          integrationRails.querySelectorAll('.integration-card').forEach((card) => {
-            const isActive = card.dataset.name === name;
-            card.classList.toggle('is-active', isActive);
-            card.setAttribute('aria-pressed', String(isActive));
-          });
-        };
-        const boardWidth = () => (railboard ?? integrationRails).getBoundingClientRect().width;
-        rows.forEach((row) => {
-          rowMetrics.set(row, { originals: [...row.children] });
-        });
-        const measureRow = (row) => {
-          const metrics = rowMetrics.get(row);
-          const first = metrics.originals[0]?.getBoundingClientRect();
-          const last = metrics.originals.at(-1)?.getBoundingClientRect();
-          const cardWidth = first?.width || 178;
-          const originalSpan = first && last ? last.right - first.left : cardWidth;
-          const edgeReveal = Math.min(boardWidth() * 0.11, 96) * EDGE_REVEAL_MULTIPLIER;
-          const rawTravel = Math.max(originalSpan - boardWidth() + edgeReveal, cardWidth * MIN_TRAVEL_CARDS);
-          const travel = rawTravel * TRAVEL_DAMPING;
-          const dir = row.dataset.dir === 'right' ? 1 : -1;
-          metrics.travel = travel;
-          metrics.dir = dir;
-          metrics.base = dir === 1 ? -travel : 0;
-          return metrics;
-        };
-        const ensureClones = (row) => {
-          const metrics = rowMetrics.get(row);
-          const neededWidth = boardWidth() + metrics.travel + CLONE_BUFFER;
-          let guard = 0;
-          while (row.scrollWidth < neededWidth && guard < 12) {
-            metrics.originals.forEach((card) => {
-              const clone = card.cloneNode(true);
-              clone.setAttribute('aria-hidden', 'true');
-              clone.setAttribute('tabindex', '-1');
-              row.appendChild(clone);
-            });
-            guard += 1;
-          }
-        };
-        const layoutRows = () => {
-          rows.forEach((row) => {
-            measureRow(row);
-            ensureClones(row);
-          });
-        };
-        const xAt = (row, progress) => {
-          const metrics = rowMetrics.get(row);
-          return metrics.base + metrics.dir * progress * metrics.travel;
-        };
-        const progressWindow = () => {
-          const viewport = window.innerHeight || document.documentElement.clientHeight;
-          return {
-            viewport,
-            startCenter: viewport * 0.72,
-            endCenter: viewport * 0.36,
-          };
-        };
-        const progressForSection = () => {
-          const rect = (railboard ?? integrationRails).getBoundingClientRect();
-          const { startCenter, endCenter } = progressWindow();
-          const boardCenter = rect.top + rect.height / 2;
-          return clamp01((startCenter - boardCenter) / (startCenter - endCenter));
-        };
-        const progressFromPointer = (event) => {
-          const rect = scrubber.getBoundingClientRect();
-          return clamp01((event.clientX - rect.left) / rect.width);
-        };
-        const setScrubProgress = (event) => {
-          manualProgress = progressFromPointer(event);
-          scrubProgress = manualProgress;
-        };
-        const applyTransforms = (progress) => {
-          rows.forEach((row) => {
-            row.style.transform = `translate3d(${xAt(row, progress)}px, 0, 0)`;
-          });
-        };
-        const updateScrubberTicks = (progress) => {
-          const scrubberPosition = progress * (scrubberTicks.length - 1);
-          scrubberTicks.forEach((tick, index) => {
-            const distance = Math.abs(index - scrubberPosition);
-            tick.classList.toggle('on', distance < 1.2);
-            tick.classList.toggle('near', distance >= 1.2 && distance < 3.4);
-          });
-        };
-        const auditIntegrationRails = (points = [0, 0.5, 1]) => {
-          const result = [];
-          const saved = current;
-          points.forEach((progress) => {
-            applyTransforms(progress);
-            const boardRect = (railboard ?? integrationRails).getBoundingClientRect();
-            rows.forEach((row) => {
-              const label = row.classList.contains('integration-track-top') ? 'top' : 'bottom';
-              [...row.children].forEach((card, index) => {
-                const rect = card.getBoundingClientRect();
-                const visibleWidth = Math.min(rect.right, boardRect.right) - Math.max(rect.left, boardRect.left);
-                if (visibleWidth <= 1) return;
-                result.push({
-                  progress,
-                  row: label,
-                  index,
-                  name: card.dataset.name,
-                  clone: card.getAttribute('aria-hidden') === 'true',
-                  visible: `${Math.round((visibleWidth / rect.width) * 100)}%`,
-                });
-              });
-            });
-          });
-          applyTransforms(saved);
-          return result;
-        };
-
-        layoutRows();
-        window.__auditIntegrationRails = auditIntegrationRails;
-
-        if (reducedMotion) {
-          const staticProgress = 0.5;
-          applyTransforms(staticProgress);
-          updateScrubberTicks(staticProgress);
-        } else {
-          current = progressForSection();
-          const updateIntegrationFrame = () => {
-            const target = scrubProgress ?? manualProgress ?? progressForSection();
-            current += (target - current) * (scrubProgress == null && manualProgress == null ? EASE_SCROLL : EASE_SCRUB);
-            applyTransforms(current);
-            updateScrubberTicks(current);
-
-            requestAnimationFrame(updateIntegrationFrame);
-          };
-
-          requestAnimationFrame(updateIntegrationFrame);
-
-          if (scrubber) {
-            scrubber.addEventListener('pointerdown', (event) => {
-              event.preventDefault();
-              scrubber.setPointerCapture(event.pointerId);
-              scrubber.classList.add('is-dragging');
-              setScrubProgress(event);
-            });
-
-            scrubber.addEventListener('pointermove', (event) => {
-              if (!scrubber.classList.contains('is-dragging')) return;
-              setScrubProgress(event);
-            });
-
-            const stopScrubbing = (event) => {
-              if (!scrubber.classList.contains('is-dragging')) return;
-              scrubber.classList.remove('is-dragging');
-              scrubProgress = null;
-              if (scrubber.hasPointerCapture(event.pointerId)) {
-                scrubber.releasePointerCapture(event.pointerId);
-              }
-            };
-
-            scrubber.addEventListener('pointerup', stopScrubbing);
-            scrubber.addEventListener('pointercancel', stopScrubbing);
-
-            window.addEventListener('scroll', () => {
-              if (!scrubber.classList.contains('is-dragging')) manualProgress = null;
-            }, { passive: true });
-
-            window.addEventListener('resize', () => {
-              layoutRows();
-              applyTransforms(manualProgress ?? current);
-            }, { passive: true });
-          }
-        }
-
-        integrationRails.addEventListener('click', (event) => {
-          const target = event.target instanceof Element ? event.target : null;
-          const card = target?.closest('.integration-card');
-          if (!card) return;
-          setActiveIntegration(card.dataset.name);
-          requestAnimationFrame(() => {
-            layoutRows();
-            applyTransforms(manualProgress ?? current);
-          });
-        });
-      }
+      const integrationRails = document.querySelector<HTMLElement>('[data-integration-rails]');
+      if (integrationRails) initIntegrationRail(integrationRails, reducedMotion);
     </script>
 
     <!-- People -->
@@ -2104,8 +1912,6 @@ const asciiAurora = (() => {
     border-top: 1px solid var(--border-subtle);
     border-bottom: 1px solid var(--border-subtle);
     background: color-mix(in srgb, var(--bg-surface) 8%, transparent);
-    mask-image: linear-gradient(to right, transparent, #000 12%, #000 88%, transparent);
-    -webkit-mask-image: linear-gradient(to right, transparent, #000 12%, #000 88%, transparent);
     cursor: ew-resize;
     touch-action: none;
     user-select: none;
