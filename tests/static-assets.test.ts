@@ -2,6 +2,8 @@ import { describe, expect, test } from 'bun:test';
 import { existsSync, readFileSync, readdirSync, statSync } from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { siGmail, siGooglechrome, siX } from 'simple-icons';
+import { bottomIntegrationRail } from '../src/data/homepage-integrations';
 import { channels, companionNodes, featuredProviders, gatewayHosts } from '../src/data/integrations';
 import { resolveAuthorProfile } from '../src/lib/authors';
 import { getCachedXAvatarSrc, getInitialsAvatarSrc } from '../src/lib/avatars';
@@ -160,15 +162,17 @@ describe('static public assets', () => {
     );
   });
 
-  test('keeps Google and X simple-icon assets wired into public pages', () => {
+  test('keeps Google and X simple-icon assets wired into integration surfaces', () => {
     const integrationsCatalog = readText('src/data/integrations.ts');
-    const homepage = readText('src/pages/index.astro');
+    const homepageIntegrations = new Map(
+      bottomIntegrationRail.map((integration) => [integration.name, integration]),
+    );
 
     expect(integrationsCatalog).toContain('icon: siIcon(siGoogle)');
     expect(integrationsCatalog).toContain('icon: siIcon(siX)');
-    expect(homepage).toContain("{ name: 'Twitter', icon: siIcon(siX)");
-    expect(homepage).toContain("{ name: 'Browser', icon: siIcon(siGooglechrome)");
-    expect(homepage).toContain("{ name: 'Gmail', icon: siIcon(siGmail)");
+    expect(homepageIntegrations.get('Twitter')?.icon).toBe(siX.path);
+    expect(homepageIntegrations.get('Browser')?.icon).toBe(siGooglechrome.path);
+    expect(homepageIntegrations.get('Gmail')?.icon).toBe(siGmail.path);
   });
 
   test('keeps the integrations catalog off removed and stale capability claims', () => {
