@@ -26,21 +26,21 @@ export type HomepageIntegration = {
 const iconPath = (icon: SimpleIcon) => icon.path;
 
 const integrations = {
-  WhatsApp: { name: 'WhatsApp', kind: 'Channel', icon: iconPath(siWhatsapp), color: '#25D366', description: 'Personal chats, group loops, approvals.' },
-  Telegram: { name: 'Telegram', kind: 'Channel', icon: iconPath(siTelegram), color: '#26A5E4', description: 'Bots, topics, rich media, updates.' },
-  Discord: { name: 'Discord', kind: 'Channel', icon: iconPath(siDiscord), color: '#5865F2', description: 'Servers, DMs, shared agent rooms.' },
-  Slack: { name: 'Slack', kind: 'Channel', icon: 'lucide:hash', color: '#E01E5A', description: 'Team channels and approval prompts.' },
-  Signal: { name: 'Signal', kind: 'Channel', icon: iconPath(siSignal), color: '#3A76F0', description: 'Private conversations with local control.' },
-  iMessage: { name: 'iMessage', kind: 'Channel', icon: iconPath(siApple), color: '#007AFF', description: 'Apple-native threads from your Mac.' },
-  Claude: { name: 'Claude', kind: 'Model', icon: iconPath(siAnthropic), color: '#D4A574', description: 'Bring frontier models into one session.' },
-  GPT: { name: 'GPT', kind: 'Model', icon: 'lucide:bot', color: '#00A67E', description: 'Reasoning, coding, and tool use together.' },
-  Spotify: { name: 'Spotify', kind: 'Tool', icon: iconPath(siSpotify), color: '#1DB954', description: 'Skills can reach daily apps.' },
-  Hue: { name: 'Hue', kind: 'Home', icon: iconPath(siPhilipshue), color: '#0065D3', description: 'Smart-home actions from chat.' },
-  Obsidian: { name: 'Obsidian', kind: 'Notes', icon: iconPath(siObsidian), color: '#7C3AED', description: 'Vaults, memory, and personal context.' },
-  Twitter: { name: 'Twitter', kind: 'Web', icon: iconPath(siX), color: 'var(--oc-text-primary)', description: 'Research, drafts, bookmarks, posts.' },
-  Browser: { name: 'Browser', kind: 'Web', icon: iconPath(siGooglechrome), color: '#4285F4', description: 'Forms, pages, extraction, inspection.' },
-  Gmail: { name: 'Gmail', kind: 'Inbox', icon: iconPath(siGmail), color: '#EA4335', description: 'Summaries, follow-ups, triage.' },
-  GitHub: { name: 'GitHub', kind: 'Code', icon: iconPath(siGithub), color: 'var(--oc-text-primary)', description: 'Issues, PRs, reviews, releases.' },
+  WhatsApp: { name: 'WhatsApp', kind: 'Channel', icon: iconPath(siWhatsapp), color: '#25D366', description: 'Your agent inside WhatsApp.' },
+  Telegram: { name: 'Telegram', kind: 'Channel', icon: iconPath(siTelegram), color: '#26A5E4', description: 'Your agent in chats and groups.' },
+  Discord: { name: 'Discord', kind: 'Channel', icon: iconPath(siDiscord), color: '#5865F2', description: 'Your agent in servers and DMs.' },
+  Slack: { name: 'Slack', kind: 'Channel', icon: 'lucide:hash', color: '#E01E5A', description: 'Your agent where your team works.' },
+  Signal: { name: 'Signal', kind: 'Channel', icon: iconPath(siSignal), color: '#3A76F0', description: 'Private chats with your agent.' },
+  iMessage: { name: 'iMessage', kind: 'Channel', icon: iconPath(siApple), color: '#007AFF', description: 'Your agent inside Messages.' },
+  Claude: { name: 'Claude', kind: 'Model', icon: iconPath(siAnthropic), color: '#D4A574', description: 'Claude, connected to your tools.' },
+  GPT: { name: 'GPT', kind: 'Model', icon: 'lucide:bot', color: '#00A67E', description: 'GPT, connected to your tools.' },
+  Spotify: { name: 'Spotify', kind: 'Tool', icon: iconPath(siSpotify), color: '#1DB954', description: 'Control your music from chat.' },
+  Hue: { name: 'Hue', kind: 'Home', icon: iconPath(siPhilipshue), color: '#0065D3', description: 'Control your lights from chat.' },
+  Obsidian: { name: 'Obsidian', kind: 'Notes', icon: iconPath(siObsidian), color: '#7C3AED', description: 'Put your vault to work.' },
+  Twitter: { name: 'Twitter', kind: 'Web', icon: iconPath(siX), color: 'var(--oc-text-primary)', description: 'Research, draft, and publish.' },
+  Browser: { name: 'Browser', kind: 'Web', icon: iconPath(siGooglechrome), color: '#4285F4', description: 'Browse, click, and get things done.' },
+  Gmail: { name: 'Gmail', kind: 'Inbox', icon: iconPath(siGmail), color: '#EA4335', description: 'Read, draft, and manage email.' },
+  GitHub: { name: 'GitHub', kind: 'Code', icon: iconPath(siGithub), color: 'var(--oc-text-primary)', description: 'Work across issues and pull requests.' },
 } as const satisfies Record<string, HomepageIntegration>;
 
 type IntegrationName = keyof typeof integrations;
