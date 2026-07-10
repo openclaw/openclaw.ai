@@ -220,31 +220,36 @@ const asciiAurora = renderAsciiAurora();
         <div id="code-macos" class="code-content" hidden>
           <div class="app-download-content">
             <div class="app-download-intro">
-              <span class="app-download-tagline">Companion Apps (Beta)</span>
+              <div class="app-download-title-row">
+                <span class="app-download-tagline">Companion Apps</span>
+                <span class="app-download-status">Beta</span>
+              </div>
               <span class="app-download-subtitle">Native controls for the gateway, chat, setup, and node features.</span>
             </div>
             <div class="app-download-grid">
               <div class="app-download-card">
                 <span class="app-download-platform">macOS</span>
-                <a href="https://github.com/openclaw/openclaw/releases/latest" class="app-download-btn" target="_blank" rel="noopener">
-                  <Icon icon="lucide:download" color="currentColor" size={20} />
-                  Download macOS
-                </a>
-                <span class="app-download-meta">Requires macOS 15+ · Universal Binary</span>
+                <span class="app-download-meta">macOS 15+ · Universal Binary</span>
+                <div class="app-download-actions">
+                  <a href="https://github.com/openclaw/openclaw/releases/latest" class="app-download-btn oc-action oc-action-primary" target="_blank" rel="noopener">
+                    <Icon icon="lucide:download" color="currentColor" size={18} />
+                    Download macOS
+                  </a>
+                </div>
               </div>
               <div class="app-download-card">
                 <span class="app-download-platform">Windows Hub</span>
-                <div class="windows-download-actions">
-                  <a href="https://github.com/openclaw/openclaw/releases/latest/download/OpenClawCompanion-Setup-x64.exe" class="app-download-btn" target="_blank" rel="noopener">
-                    <Icon icon="lucide:download" color="currentColor" size={20} />
+                <a class="app-download-meta" href="https://docs.openclaw.ai/platforms/windows" target="_blank" rel="noopener">Windows 10 20H2+ or Windows 11 · Tray, setup, chat, node mode</a>
+                <div class="app-download-actions windows-download-actions">
+                  <a href="https://github.com/openclaw/openclaw/releases/latest/download/OpenClawCompanion-Setup-x64.exe" class="app-download-btn oc-action oc-action-primary" target="_blank" rel="noopener">
+                    <Icon icon="lucide:download" color="currentColor" size={18} />
                     Download x64
                   </a>
-                  <a href="https://github.com/openclaw/openclaw/releases/latest/download/OpenClawCompanion-Setup-arm64.exe" class="app-download-btn app-download-btn-secondary" target="_blank" rel="noopener">
-                    <Icon icon="lucide:download" color="currentColor" size={20} />
+                  <a href="https://github.com/openclaw/openclaw/releases/latest/download/OpenClawCompanion-Setup-arm64.exe" class="app-download-btn app-download-btn-secondary oc-action" target="_blank" rel="noopener">
+                    <Icon icon="lucide:download" color="currentColor" size={18} />
                     Download ARM64
                   </a>
                 </div>
-                <a class="app-download-meta" href="https://docs.openclaw.ai/platforms/windows" target="_blank" rel="noopener">Windows 10 20H2+ or Windows 11 · Tray, setup, chat, node mode</a>
               </div>
             </div>
           </div>
@@ -2377,16 +2382,23 @@ const asciiAurora = renderAsciiAurora();
   .app-download-content {
     display: flex;
     flex-direction: column;
-    align-items: center;
-    gap: var(--oc-space-4);
-    padding: var(--oc-space-5) var(--oc-space-4);
-    text-align: center;
+    align-items: stretch;
+    gap: var(--oc-space-5);
+    width: min(100%, 760px);
+    margin: 0 auto;
+    padding: var(--oc-space-4) 0 var(--oc-space-2);
   }
 
-  .app-download-intro,
-  .app-download-card {
+  .app-download-intro {
     display: flex;
     flex-direction: column;
+    align-items: flex-start;
+    gap: var(--oc-space-2);
+    text-align: left;
+  }
+
+  .app-download-title-row {
+    display: flex;
     align-items: center;
     gap: var(--oc-space-2);
   }
@@ -2394,93 +2406,110 @@ const asciiAurora = renderAsciiAurora();
   .app-download-grid {
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 20px;
-    width: min(100%, 720px);
+    gap: 1px;
+    overflow: hidden;
+    border: 1px solid var(--oc-border-subtle);
+    background: var(--oc-border-subtle);
   }
 
   .app-download-card {
-    justify-content: flex-start;
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: var(--oc-space-2);
     min-width: 0;
-    padding: 18px;
-    border: 1px solid var(--oc-border-subtle);
-    border-radius: var(--oc-radius-surface);
-    background: rgba(255, 255, 255, 0.03);
+    min-height: 184px;
+    padding: var(--oc-space-5);
+    background: var(--oc-bg-page);
   }
 
   .app-download-tagline {
     font-family: var(--oc-font-display);
-    font-size: 1.1rem;
-    font-weight: 600;
+    font-size: 1.05rem;
+    font-weight: 650;
     color: var(--oc-text-primary);
+  }
+
+  .app-download-status {
+    display: inline-flex;
+    align-items: center;
+    min-height: 20px;
+    padding: 0 var(--oc-space-2);
+    border: 1px solid var(--oc-border-accent);
+    color: var(--oc-accent-primary);
+    font-family: var(--oc-font-mono);
+    font-size: 0.65rem;
+    font-weight: 700;
+    line-height: 1;
+    text-transform: uppercase;
   }
 
   .app-download-subtitle {
-    font-size: 0.9rem;
-    color: var(--oc-text-muted);
+    color: var(--oc-text-secondary);
+    font-family: var(--oc-font-body);
+    font-size: 0.84rem;
+    line-height: 1.5;
+    text-wrap: pretty;
   }
 
   .app-download-platform {
+    color: var(--oc-text-primary);
     font-family: var(--oc-font-display);
     font-size: 0.95rem;
-    font-weight: 600;
-    color: var(--oc-text-primary);
-  }
-
-  .app-download-btn {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    gap: 10px;
-    min-width: 190px;
-    padding: 14px 28px;
-    background: var(--oc-accent-primary);
-    color: var(--oc-text-on-accent);
-    border: none;
-    font-family: var(--oc-font-mono);
-    font-size: 0.85rem;
-    font-weight: 600;
-    white-space: nowrap;
-    text-decoration: none;
-    cursor: pointer;
-    transition:
-      background-color 0.25s cubic-bezier(0.4, 0, 0.2, 1),
-      border-color 0.25s cubic-bezier(0.4, 0, 0.2, 1),
-      color 0.25s cubic-bezier(0.4, 0, 0.2, 1);
-    box-shadow: none;
-  }
-
-  .app-download-btn-secondary {
-    background: rgba(255, 255, 255, 0.06);
-    border: 1px solid var(--oc-border-subtle);
-    box-shadow: none;
-  }
-
-  .app-download-btn:hover {
-    transform: none;
-    box-shadow: none;
-  }
-
-  .app-download-btn-secondary:hover {
-    box-shadow: none;
-  }
-
-  .app-download-btn svg {
-    width: 20px;
-    height: 20px;
-  }
-
-  .windows-download-actions {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    gap: 10px;
+    font-weight: 650;
   }
 
   .app-download-meta {
-    font-size: 0.8rem;
+    max-width: 38ch;
     color: var(--oc-text-muted);
+    font-family: var(--oc-font-mono);
+    font-size: 0.72rem;
+    line-height: 1.55;
     text-decoration: none;
+  }
+
+  a.app-download-meta:hover {
+    color: var(--oc-text-primary);
+  }
+
+  .app-download-actions {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--oc-space-2);
+    width: 100%;
+    margin-top: auto;
+  }
+
+  .windows-download-actions {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .app-download-btn {
+    width: 100%;
+    min-width: 0;
+    min-height: 42px;
+    padding-inline: var(--oc-space-3);
+    font-family: var(--oc-font-mono);
+    font-size: 0.74rem;
+    white-space: nowrap;
+  }
+
+  .app-download-btn-secondary {
+    border-color: color-mix(in srgb, var(--oc-text-muted) 45%, var(--oc-border-subtle));
+    background: var(--oc-bg-elevated);
+    color: var(--oc-text-primary);
+  }
+
+  .app-download-btn-secondary:hover {
+    border-color: color-mix(in srgb, var(--oc-text-primary) 42%, var(--oc-border-subtle));
+    background: var(--oc-surface-interactive-hover);
+    color: var(--oc-text-primary);
+  }
+
+  .app-download-btn svg {
+    width: 16px;
+    height: 16px;
+    flex: 0 0 auto;
   }
 
   /* Sponsors */
@@ -3004,16 +3033,31 @@ const asciiAurora = renderAsciiAurora();
 
     .app-download-grid {
       grid-template-columns: 1fr;
-      gap: 14px;
+    }
+
+    .app-download-content {
+      gap: var(--oc-space-4);
+      padding: var(--oc-space-2) 0 0;
     }
 
     .app-download-card {
-      padding: 14px;
+      min-height: 166px;
+      padding: var(--oc-space-4);
     }
 
     .app-download-btn {
-      padding: var(--oc-space-3) 20px;
-      font-size: 0.9rem;
+      padding-inline: var(--oc-space-3);
+      font-size: 0.72rem;
+    }
+  }
+
+  @media (max-width: 360px) {
+    .windows-download-actions {
+      grid-template-columns: 1fr;
+    }
+
+    .app-download-card {
+      min-height: 0;
     }
   }
 
