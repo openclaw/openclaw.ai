@@ -2121,6 +2121,11 @@ const asciiAurora = renderAsciiAurora();
     margin-bottom: 56px;
   }
 
+  /* Component display rules must not override the state machine's hidden state. */
+  .quickstart [hidden] {
+    display: none !important;
+  }
+
 
   .code-block {
     background: var(--oc-bg-surface);
