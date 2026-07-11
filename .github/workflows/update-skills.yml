@@ -26,7 +26,7 @@ jobs:
         run: |
           set -euo pipefail
           # The committed .agents directory keeps updates in universal project scope.
-          output="$(npx --yes skills@1.5.15 update --project --yes 2>&1)"
+          output="$(npx --yes skills@1.5.16 update --project --yes 2>&1)"
           printf '%s\n' "$output"
           if grep -q "Failed to update" <<<"$output"; then
             echo "One or more skills failed to update." >&2
