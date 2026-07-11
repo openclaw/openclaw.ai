@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+- Security: prevent blog and author JSON-LD metadata from breaking out of its script element (#208, thanks @SebTardif).
 - Testimonials: prune 20 low-signal shoutouts into the backup file, and add Windows chief @pavandavuluri's "Clawfather" Build shoutout and @rodrigofarinha on agent speed.
 
 - Testimonials: add 5 more shoutouts — GitHub's @ashleywolf on the fastest-growing project celebration, plus @bartslodyczka, @nelsonlopes_, @morganlinton, and @mronge — with cached avatars.
