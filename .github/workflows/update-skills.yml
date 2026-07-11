@@ -27,6 +27,8 @@ jobs:
           set -euo pipefail
           # The committed .agents directory keeps updates in universal project scope.
           output="$(npx --yes skills@1.5.16 update --project --yes 2>&1)"
+          # Headless agent detection also emits an Eve mirror; .agents is canonical here.
+          rm -rf agent
           printf '%s\n' "$output"
           if grep -q "Failed to update" <<<"$output"; then
             echo "One or more skills failed to update." >&2
