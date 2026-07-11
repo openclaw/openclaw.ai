@@ -76,7 +76,6 @@ const canonicalPostUrl = absoluteUrl(blogPostPath(post));
 const ogImage = resolveBlogSocialImage(post.id, post.data.ogImage);
 const articleImageUrl = absoluteUrl(ogImage.src);
 
-const descriptionHtml = post.data.descriptionHtml ?? post.data.description;
 const structuredAuthors = authors.map((author) => {
   const sameAs = getSortedAuthorLinkMeta(author)
     .map((link) => link.url)
@@ -127,7 +126,7 @@ const articleStructuredData = {
       <header class="article-header">
         <a class="back-link" href="/blog"><span aria-hidden="true">←</span> All posts</a>
         <h1>{post.data.title}</h1>
-        <p class="dek" set:html={descriptionHtml} />
+        <p class="dek">{post.data.description}</p>
 
         <div class="byline">
           <div class="byline-avatars">

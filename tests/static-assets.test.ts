@@ -34,6 +34,17 @@ function listSourceFiles(relativeDir: string): string[] {
 }
 
 describe('static public assets', () => {
+  test('renders blog descriptions as escaped text instead of raw HTML', () => {
+    const articlePage = readText('src/pages/blog/[...slug].astro');
+    const contentSchema = readText('src/content.config.ts');
+    const blogSources = listSourceFiles('src/content/blog').map(readText);
+
+    expect(articlePage).toContain('<p class="dek">{post.data.description}</p>');
+    expect(articlePage).not.toContain('set:html');
+    expect(contentSchema).not.toContain('descriptionHtml');
+    expect(blogSources.every((source) => !source.includes('descriptionHtml:'))).toBe(true);
+  });
+
   test('uses the canonical OpenClaw design-system contract', () => {
     const layout = readText('src/layouts/Layout.astro');
     const orderedImports = [
