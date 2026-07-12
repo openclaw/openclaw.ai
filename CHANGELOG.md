@@ -17,7 +17,7 @@
 - Press: refresh Featured In with 2026 Q2 coverage — TechCrunch on Microsoft's OpenClaw-inspired Scout, the iOS/Android launch, Red Hat's enterprise-hardening work, and CNBC on China's lobster rush; new homepage highlight order.
 - Testimonials: add 11 new shoutouts from the archive, including @sama, @elonmusk, @garrytan, @growing_daniel, @donasarkar, and @OmarShahine, with cached avatars.
 - Website: homepage facelift — hero call-to-action buttons, aurora glow and film-grain texture, larger section headers with chevron markers, refined feature and blog cards, glowing quick-start terminal, cleaner sponsor logo wall, and a wider 960px layout with more breathing room between sections.
-- Dependencies: update js-yaml to 5.2.1, RSS to 4.0.19, Simple Icons to 16.25.0, and Sharp to 0.35.3; add Astro-compatible Lucide icons and preserve the existing generated HTML whitespace behavior (#172, #176, #206, thanks @dependabot).
+- Dependencies: update Astro to 7.0.7, js-yaml to 5.2.1, RSS to 4.0.19, Simple Icons to 16.25.0, and Sharp to 0.35.3; update Astro-compatible Lucide icons to 1.24.0 and preserve the existing generated HTML whitespace behavior (#172, #176, #206, thanks @dependabot).
 - Ecosystem: add ClawScan, a composable security scanning harness for agent skills (#177, thanks @Patrick-Erichsen).
 - Ecosystem: render the Crabline card from its existing SVG banner instead of requesting a missing PNG.
 - Ecosystem: add ffmpeg-wasm, imsgcrawl, and photoscrawl to the project directory.
