@@ -18,6 +18,14 @@ function readText(relativePath) {
   return readFileSync(repoPath(relativePath), 'utf8');
 }
 
+function listHtmlFiles(relativeDir) {
+  return readdirSync(repoPath(relativeDir), { withFileTypes: true }).flatMap((entry) => {
+    const relativePath = path.join(relativeDir, entry.name);
+    if (entry.isDirectory()) return listHtmlFiles(relativePath);
+    return relativePath.endsWith('.html') ? [relativePath] : [];
+  });
+}
+
 function assertFileExists(relativePath) {
   assert.ok(existsSync(repoPath(relativePath)), `Expected ${relativePath} to exist`);
 }
@@ -30,6 +38,13 @@ function assertCopiedByteForByte(sourcePath, builtPath) {
 
 function assertContains(text, expected, context) {
   assert.ok(text.includes(expected), `Expected ${context} to contain ${expected}`);
+}
+
+function assertJsonLdIsParseable(html, context) {
+  const scripts = [...html.matchAll(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/g)];
+  for (const [, contents] of scripts) {
+    assert.doesNotThrow(() => JSON.parse(contents), `${context} must contain parseable JSON-LD`);
+  }
 }
 
 assertCopiedByteForByte('public/openclaw-logo-text-dark.png', 'dist/openclaw-logo-text-dark.png');
@@ -53,6 +68,10 @@ assert.ok(
 const homePage = readText('dist/index.html');
 const integrationsPage = readText('dist/integrations/index.html');
 const ecosystemPage = readText('dist/ecosystem/index.html');
+
+for (const relativePath of listHtmlFiles('dist')) {
+  assertJsonLdIsParseable(readText(relativePath), relativePath);
+}
 
 assertContains(homePage, siX.path, 'dist/index.html');
 assertContains(homePage, siGooglechrome.path, 'dist/index.html');

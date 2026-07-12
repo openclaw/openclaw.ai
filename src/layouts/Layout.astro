@@ -1,5 +1,6 @@
 ---
 import Analytics from '@vercel/analytics/astro';
+import { serializeJsonLd } from '../lib/serialize-json-ld';
 import '@openclaw/design-system/tokens.css';
 import '@openclaw/design-system/themes.css';
 import '@openclaw/design-system/typography.css';
@@ -76,7 +77,7 @@ const structuredDataItems = structuredData ? Array.isArray(structuredData) ? str
     <title>{title}</title>
 
     {structuredDataItems.map((item) => (
-      <script type="application/ld+json" set:html={JSON.stringify(item)} />
+      <script type="application/ld+json" set:html={serializeJsonLd(item)} />
     ))}
 
     <script is:inline>
