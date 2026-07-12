@@ -23,7 +23,7 @@
     "@lucide/astro": "^1.24.0",
     "@openclaw/design-system": "git+https://github.com/openclaw/design-system.git#v0.0.1",
     "@vercel/analytics": "^2.0.1",
-    "astro": "^7.0.7",
+    "astro": "^7.0.4",
     "js-yaml": "^5.2.1",
     "sharp": "0.35.3",
     "simple-icons": "^16.25.0"
