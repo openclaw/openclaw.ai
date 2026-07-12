@@ -1,7 +1,6 @@
 ---
 title: "OpenClaw Collaborates with NVIDIA for Stronger Agent Skill Security"
 description: "Every ClawHub skill now ships with a Skill Card documenting what the skill does and where it came from, and is scanned by SkillSpector for hidden instructions and other agentic risks"
-descriptionHtml: 'Every ClawHub skill now ships with a <a href="https://github.com/NVIDIA/Trustworthy-AI/blob/main/Skill%20Card.md">Skill Card</a> documenting what the skill does and where it came from, and is scanned by <a href="https://github.com/nvidia/skillspector">SkillSpector</a> for hidden instructions and other agentic risks'
 date: 2026-06-01T05:30:00.000Z
 authors:
   - name: "Vincent Koc"

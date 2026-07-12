@@ -19,7 +19,6 @@ const blog = defineCollection({
   schema: z.object({
     title: z.string(),
     description: z.string(),
-    descriptionHtml: z.string().optional(),
     date: z.date(),
     // Single author (legacy)
     author: z.string().optional(),
