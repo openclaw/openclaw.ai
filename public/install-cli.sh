@@ -29,18 +29,6 @@ ensure_home_env() {
 
 ensure_home_env
 
-# Track temp paths so fail/exit paths do not leak mktemp dirs/files.
-# Register paths in the caller: command substitutions run in a subshell, so
-# array mutations inside a helper would not reach this shell.
-TMPFILES=()
-cleanup_tmpfiles() {
-  local f
-  for f in "${TMPFILES[@]:-}"; do
-    rm -rf "$f" 2>/dev/null || true
-  done
-}
-trap cleanup_tmpfiles EXIT
-
 resolve_openclaw_effective_home() {
   local openclaw_home="${OPENCLAW_HOME:-}"
   if [[ -z "$openclaw_home" ]]; then
@@ -890,7 +878,6 @@ install_node() {
 
   mkdir -p "${PREFIX}/tools"
   tmp="$(mktemp -d)"
-  TMPFILES+=("$tmp")
   base_url="https://nodejs.org/dist/v${NODE_VERSION}"
   tarball="node-v${NODE_VERSION}-${os}-${arch}.tar.gz"
   url="${base_url}/${tarball}"
@@ -1129,7 +1116,6 @@ ensure_pnpm_git_prepare_allowlist() {
 
   if [[ -f "$workspace_file" ]] && ! grep -Fq "\"${dep}\"" "$workspace_file" && ! grep -Fq "${dep}:" "$workspace_file" && ! grep -Fq -- "- ${dep}" "$workspace_file"; then
     tmp="$(mktemp)"
-    TMPFILES+=("$tmp")
     if grep -q '^allowBuilds:[[:space:]]*$' "$workspace_file"; then
       awk -v dep="$dep" '
         BEGIN { inserted = 0 }
