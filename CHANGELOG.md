@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+- Windows installer: sync the OpenClaw 2026.7.1 runtime validation fix so upgraded Node 22/24 installs are checked through the active executable.
 - Security: prevent blog and author JSON-LD metadata from breaking out of its script element (#208, thanks @SebTardif).
 - Security: remove raw HTML from blog descriptions so frontmatter cannot inject active markup (#207, thanks @SebTardif).
 - Testimonials: prune 20 low-signal shoutouts into the backup file, and add Windows chief @pavandavuluri's "Clawfather" Build shoutout and @rodrigofarinha on agent speed.
