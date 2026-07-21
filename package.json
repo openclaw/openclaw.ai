@@ -21,7 +21,7 @@
   "dependencies": {
     "@astrojs/rss": "^4.0.19",
     "@lucide/astro": "^1.22.0",
-    "@openclaw/design-system": "git+https://github.com/openclaw/design-system.git#v0.1.0",
+    "@openclaw/design-system": "git+https://github.com/openclaw/carapace.git#v0.1.0",
     "@vercel/analytics": "^2.0.1",
     "astro": "^7.0.4",
     "js-yaml": "^5.2.1",

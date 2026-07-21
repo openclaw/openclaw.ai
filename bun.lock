@@ -7,7 +7,7 @@
       "dependencies": {
         "@astrojs/rss": "^4.0.19",
         "@lucide/astro": "^1.22.0",
-        "@openclaw/design-system": "git+https://github.com/openclaw/design-system.git#v0.1.0",
+        "@openclaw/design-system": "git+https://github.com/openclaw/carapace.git#v0.1.0",
         "@vercel/analytics": "^2.0.1",
         "astro": "^7.0.4",
         "js-yaml": "^5.2.1",
@@ -204,7 +204,7 @@
 
     "@nodable/entities": ["@nodable/entities@2.1.0", "", {}, "sha512-nyT7T3nbMyBI/lvr6L5TyWbFJAI9FTgVRakNoBqCD+PmID8DzFrrNdLLtHMwMszOtqZa8PAOV24ZqDnQrhQINA=="],
 
-    "@openclaw/design-system": ["@openclaw/carapace@github:openclaw/design-system#40c0ce5", {}, "openclaw-design-system-40c0ce5", "sha512-/nFHPTxZzhJ3QQ80DN2uLOIwg1Fwww/s5XBZarf1tDeEFCtgjpzgx2IVgoBraqw6s8b0c2zFXJSJffyoc4XEHQ=="],
+    "@openclaw/design-system": ["@openclaw/carapace@github:openclaw/carapace#40c0ce5", {}, "openclaw-carapace-40c0ce5", "sha512-iWeC+MvMs2kc//rSaqUOGv0KeaTH/JCRx3wAbYMQjHctRpKx8La06tXgxnxhu/pi0kpf459WlM3uRw2xciEA3w=="],
 
     "@oslojs/encoding": ["@oslojs/encoding@1.1.0", "", {}, "sha512-70wQhgYmndg4GCPxPPxPGevRKqTIJ2Nh4OkiMWmDAVYsTQ+Ta7Sq+rPevXyXGdzr30/qZBnyOalCszoMxlyldQ=="],
 
