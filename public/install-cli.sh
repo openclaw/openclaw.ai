@@ -795,6 +795,39 @@ checkout_git_openclaw_ref() {
 
   git -C "$repo_dir" fetch --tags origin
 
+  if try_checkout_git_openclaw_tag_or_sha "$repo_dir" "$ref"; then
+    return 0
+  fi
+
+  # npm republish versions (2026.7.1-2) often lack a matching git tag.
+  # Fall back to the base release tag (v2026.7.1) when present.
+  local fallback_ref
+  fallback_ref="$(npm_republish_git_tag_fallback "$ref" || true)"
+  if [[ -n "$fallback_ref" ]]; then
+    log "Git tag ${ref} not found; trying ${fallback_ref}"
+    if try_checkout_git_openclaw_tag_or_sha "$repo_dir" "$fallback_ref"; then
+      return 0
+    fi
+  fi
+
+  fail "Requested git version not found: ${ref}"
+}
+
+# Map npm republish tags (vX.Y.Z-N) to the base git release tag (vX.Y.Z).
+# Returns empty when the ref is not an npm-style republish suffix.
+npm_republish_git_tag_fallback() {
+  local ref="$1"
+  if [[ "$ref" =~ ^v([0-9]+\.[0-9]+\.[0-9]+)-([0-9]+)$ ]]; then
+    echo "v${BASH_REMATCH[1]}"
+    return 0
+  fi
+  return 1
+}
+
+try_checkout_git_openclaw_tag_or_sha() {
+  local repo_dir="$1"
+  local ref="$2"
+
   if git -C "$repo_dir" rev-parse --verify --quiet "refs/tags/${ref}^{commit}" >/dev/null; then
     git -C "$repo_dir" checkout --detach "$ref"
     return 0
@@ -805,7 +838,7 @@ checkout_git_openclaw_ref() {
     return 0
   fi
 
-  fail "Requested git version not found: ${ref}"
+  return 1
 }
 
 git_install_lockfile_flag() {
