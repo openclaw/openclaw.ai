@@ -11,19 +11,19 @@
       "source": "openclaw/design-system",
       "sourceType": "github",
       "skillPath": "openclaw-design/SKILL.md",
-      "computedHash": "096be7d1e5e65e62b7de5b96e3897b6ac3a1f45686ee5599dfcbaeaeb607b4ec"
+      "computedHash": "4a9004e762b08f6c9fc836de7b4db26fc27e7b9a90342884047bbffa51c21732"
     },
     "openclaw-design-audit": {
       "source": "openclaw/design-system",
       "sourceType": "github",
       "skillPath": "openclaw-design-audit/SKILL.md",
-      "computedHash": "12fec90fd4aa1aa569de1beb5a3c85d06887a5e548704dbd094355edc0f52ad3"
+      "computedHash": "aff7655c532d67205301590f76d8655a42f36d14fbd1960d4e4b9b8149291aa3"
     },
     "openclaw-design-system": {
       "source": "openclaw/design-system",
       "sourceType": "github",
       "skillPath": "openclaw-design-system/SKILL.md",
-      "computedHash": "475604f08f37186237fa62605fbfe16ea04367af81f4c3a8c59bcb395ae70cca"
+      "computedHash": "6d94e825c58fc5650a532e4ed8bc96208ede8a166089598d1924393cc46f3275"
     },
     "openclaw-marketing-pages": {
       "source": "openclaw/design-system",
