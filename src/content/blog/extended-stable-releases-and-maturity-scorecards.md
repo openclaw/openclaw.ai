@@ -1,5 +1,5 @@
 ---
-title: "OpenClaw Announces Extended Stable Releases and Maturity Scorecards"
+title: "OpenClaw Announces Extended Stable Releases and a Maturity Scorecard"
 description: "A new long-lived release channel and a public maturity scorecard make it easier to choose OpenClaw features for critical workloads."
 date: 2026-07-28
 author: "Kevin Lin"
@@ -23,7 +23,9 @@ To install the extended-stable version of OpenClaw:
 npm install -g openclaw@extended-stable
 ```
 
-To switch an existing package installation to extended-stable:
+This installs the selected release but does not persist the update channel.
+
+To persist extended-stable as the update channel for a new or existing package installation:
 
 ```bash
 openclaw update --channel extended-stable
@@ -39,4 +41,4 @@ Maturity is currently calculated from a combination of quality and completeness.
 
 Issues submitted against mature features will receive a dedicated label and be prioritized by maintainers. Mature features will also have real end-to-end tests that exercise them in production. Our goal is to maintain more than 90% end-to-end test coverage for all Stable-or-better features.
 
-Extended-stable releases and maturity scorecards are another step in OpenClaw's journey from a project used by early adopters to a platform that even hardened enterprises can rely on. This will be a long journey, and we are just getting started.
+Extended-stable releases and the maturity scorecard mark another step in OpenClaw's journey from a project used by early adopters to a platform that even hardened enterprises can rely on. This will be a long journey, and we are just getting started.
