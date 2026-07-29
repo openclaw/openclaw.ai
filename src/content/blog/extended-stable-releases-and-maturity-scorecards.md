@@ -13,7 +13,7 @@ What started as a side project with a funny name is turning into load-bearing in
 
 In recognition of OpenClaw's growing importance, we are adding the extended-stable release channel. These are long-lived OpenClaw releases with extended support and backported fixes.
 
-Extended-stable releases will roll out once a month. The first is the [OpenClaw 2026.6.33 release](https://github.com/openclaw/openclaw/releases/tag/v2026.6.33).
+Extended-stable releases will roll out once a month. The first, [OpenClaw 2026.6.33](https://github.com/openclaw/openclaw/releases/tag/v2026.6.33), is based on [OpenClaw 2026.6.11](https://github.com/openclaw/openclaw/releases/tag/v2026.6.11) and adds a curated set of security and reliability fixes backported from later releases.
 
 Each month's extended-stable line starts at `YYYY.M.33`. Backported security and reliability fixes increment the patch version by one. A release is supported until the next extended-stable release is cut, for a minimum of one month.
 
