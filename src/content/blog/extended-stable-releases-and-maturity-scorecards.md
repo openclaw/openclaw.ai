@@ -15,7 +15,7 @@ In recognition of OpenClaw's growing importance, we are adding the extended-stab
 
 Extended-stable releases will roll out once a month. The first is the [OpenClaw 2026.6.33 release](https://github.com/openclaw/openclaw/releases/tag/v2026.6.33).
 
-Each month's extended-stable line starts at `YYYY.M.33`. Backported security and reliability fixes increment the patch version by one. A release is supported for at least one month and until a new extended-stable release has been cut.
+Each month's extended-stable line starts at `YYYY.M.33`. Backported security and reliability fixes increment the patch version by one. A release is supported until the next extended-stable release is cut, for a minimum of one month.
 
 To install the extended-stable version of OpenClaw:
 
@@ -41,4 +41,4 @@ Maturity is currently calculated from a combination of quality and completeness.
 
 Issues submitted against mature features will receive a dedicated label and be prioritized by maintainers. Mature features will also have real end-to-end tests that exercise them in production. Our goal is to maintain more than 90% end-to-end test coverage for all Stable-or-better features.
 
-Extended-stable releases and the maturity scorecard mark another step in OpenClaw's journey from a project used by early adopters to a platform that even hardened enterprises can rely on. This will be a long journey, and we are just getting started.
+Extended-stable releases and the maturity scorecard mark another step in OpenClaw's journey from a project used by early adopters to a platform that even hardened enterprises can rely on. This will be a long effort, and we are just getting started.
