@@ -10,7 +10,7 @@ image: "/blog/extended-stable-releases-and-maturity-scorecards/road-to-lts.png"
 
 OpenClaw is maturing.
 
-What started as a side project with a funny name is turning into core infrastructure relied on by individuals and Fortune 500 companies to run increasingly critical workloads. In recognition of OpenClaw's growing importance, we are introducing **extended-stable releases**. These are long-lived OpenClaw channels with extended support and backported fixes.
+What started as a side project with a funny name is turning into core infrastructure relied on by individuals and Fortune 500 companies to run increasingly critical workloads. In recognition of OpenClaw's growing importance, we are introducing **[extended-stable releases](https://docs.openclaw.ai/install/development-channels)**. These are long-lived OpenClaw channels with extended support and backported fixes.
 
 Extended-stable releases will roll out once a month. The first, [OpenClaw 2026.6.33](https://github.com/openclaw/openclaw/releases/tag/v2026.6.33), is based on [OpenClaw 2026.6.11](https://github.com/openclaw/openclaw/releases/tag/v2026.6.11) and adds security and reliability fixes backported from later releases. Each month's extended-stable line starts at `YYYY.M.33`. Backported security and reliability fixes increment the patch version by one. A release is supported until the next extended-stable release is cut, for a minimum of one month. Extended-stable releases move us closer to supporting official LTS releases of OpenClaw. They let us harden our release process and iterate towards how to best offer long term support in the agentic era.
 
@@ -25,8 +25,6 @@ This installs the selected release but does not persist the update channel. To p
 ```bash
 openclaw update --channel extended-stable
 ```
-
-See the [release channel documentation](https://docs.openclaw.ai/install/development-channels) for complete channel semantics.
 
 Along with extended-stable releases, we are also announcing the [OpenClaw maturity scorecard](https://docs.openclaw.ai/maturity/scorecard). The scorecard is a full inventory of OpenClaw features and tracks where each feature sits in our maturity model. Features are organized by surface area (broad product capabilities) and category (families of related features within a surface).
 
