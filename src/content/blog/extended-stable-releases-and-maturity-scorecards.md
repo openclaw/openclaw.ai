@@ -20,7 +20,7 @@ Each month's extended-stable line starts at `YYYY.M.33`. Backported security and
 To install the extended-stable version of OpenClaw:
 
 ```bash
-curl -fsSL --proto '=https' --tlsv1.2 https://openclaw.ai/install.sh | bash -s -- --install-method npm --version extended-stable
+npm install -g openclaw@extended-stable
 ```
 
 To switch an existing package installation to extended-stable:
