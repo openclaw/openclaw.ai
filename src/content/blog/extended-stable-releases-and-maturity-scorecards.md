@@ -1,5 +1,5 @@
 ---
-title: "OpenClaw Announces Extended Stable Releases and a Maturity Scorecard"
+title: "A More Reliable OpenClaw: Extended-Stable Releases and the Maturity Scorecard"
 description: "A new long-lived release channel and a public maturity scorecard make it easier to choose OpenClaw features for critical workloads."
 date: 2026-07-28
 author: "Kevin Lin"
