@@ -103,8 +103,7 @@ const structuredData = {
 
     <section class="episodes" aria-labelledby="episodes-title">
       <div class="episodes-heading">
-        <p class="section-label">Episodes</p>
-        <h2 id="episodes-title">Every episode of The ClawCast.</h2>
+        <p id="episodes-title" class="section-label">Episodes</p>
       </div>
       <ol class="episode-list">
         {podcastEpisodes.map((episode) => (
@@ -290,18 +289,7 @@ const structuredData = {
   }
 
   .episodes-heading {
-    display: grid;
-    gap: 12px;
-    margin-bottom: 30px;
-  }
-
-  .episodes h2 {
-    max-width: 680px;
-    color: var(--oc-text-primary);
-    font-family: var(--oc-font-display);
-    font-size: clamp(1.65rem, 3vw, 2.5rem);
-    font-weight: 600;
-    line-height: 1.15;
+    margin-bottom: 18px;
   }
 
   .episode-list {
