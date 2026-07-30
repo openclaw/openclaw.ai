@@ -66,7 +66,6 @@ function isUrl(value: string): boolean {
       <header class="episode-hero">
         <div class="episode-intro">
           <p class="eyebrow">The ClawCast</p>
-          <p class="episode-number">Episode {episode.number}</p>
           <h1>{episode.title}</h1>
           <p class="episode-guests">{episode.guests}</p>
           <p class="episode-date">Aired {formatEpisodeDate(episode.airedAt)}</p>
@@ -82,14 +81,16 @@ function isUrl(value: string): boolean {
           </div>
         </div>
 
-        <img
-          src={shareImage}
-          alt="The ClawCast with Hannes Rudolph"
-          width="1200"
-          height="630"
-          class="episode-artwork"
-          fetchpriority="high"
-        />
+        <div class="episode-artwork-frame">
+          <img
+            src={shareImage}
+            alt="The ClawCast with Hannes Rudolph"
+            width="1200"
+            height="630"
+            class="episode-artwork"
+            fetchpriority="high"
+          />
+        </div>
       </header>
 
       <section class="description" aria-label="Episode description">
@@ -134,9 +135,9 @@ function isUrl(value: string): boolean {
   }
 
   article {
-    width: min(100% - 64px, 1080px);
+    width: min(100% - 64px, 960px);
     margin: 0 auto;
-    padding-top: clamp(52px, 9vh, 104px);
+    padding-top: clamp(44px, 7vh, 76px);
   }
 
   .back-link {
@@ -161,25 +162,19 @@ function isUrl(value: string): boolean {
   }
 
   .episode-hero {
-    display: grid;
-    grid-template-columns: minmax(0, 0.95fr) minmax(380px, 1.05fr);
-    align-items: center;
-    gap: clamp(40px, 7vw, 92px);
-    padding: clamp(48px, 8vw, 88px) 0;
-    border-bottom: 1px solid var(--oc-border-subtle);
+    padding: clamp(42px, 6vw, 68px) 0 0;
   }
 
-  .eyebrow,
-  .episode-number {
+  .episode-intro {
+    max-width: 760px;
+  }
+
+  .eyebrow {
     color: var(--oc-accent-primary);
     font-size: 0.78rem;
     font-weight: 700;
     letter-spacing: 0;
     text-transform: uppercase;
-  }
-
-  .episode-number {
-    margin-top: 18px;
   }
 
   h1,
@@ -190,9 +185,9 @@ function isUrl(value: string): boolean {
   }
 
   h1 {
-    margin-top: 8px;
-    font-size: clamp(3.2rem, 7vw, 6.2rem);
-    line-height: 0.98;
+    margin-top: 12px;
+    font-size: clamp(3rem, 6vw, 4.8rem);
+    line-height: 1;
   }
 
   .episode-guests {
@@ -250,16 +245,24 @@ function isUrl(value: string): boolean {
     background: transparent;
   }
 
+  .episode-artwork-frame {
+    width: min(100%, 860px);
+    margin-top: clamp(40px, 6vw, 64px);
+    padding: 7px;
+    border: 1px solid var(--oc-border-subtle);
+    background: var(--oc-surface-card-strong);
+    box-shadow: 8px 8px 0 color-mix(in srgb, var(--oc-accent-primary) 38%, transparent);
+  }
+
   .episode-artwork {
     display: block;
     width: 100%;
     height: auto;
-    border: 1px solid var(--oc-border-subtle);
-    box-shadow: 8px 8px 0 color-mix(in srgb, var(--oc-accent-primary) 38%, transparent);
   }
 
   .description {
-    padding: clamp(48px, 8vw, 88px) 0;
+    width: min(100%, 760px);
+    padding: clamp(44px, 6vw, 64px) 0 clamp(52px, 7vw, 76px);
     border-bottom: 1px solid var(--oc-border-subtle);
   }
 
@@ -332,17 +335,11 @@ function isUrl(value: string): boolean {
     }
 
     .episode-hero {
-      grid-template-columns: 1fr;
-      gap: 34px;
-      padding: 38px 0 48px;
-    }
-
-    .episode-artwork {
-      order: -1;
+      padding-top: 34px;
     }
 
     .description {
-      padding: 44px 0;
+      padding: 38px 0 48px;
     }
 
     .episode-navigation {
