@@ -3,6 +3,7 @@ import { Copy, Rss } from '@lucide/astro';
 import { siApplepodcasts, siDiscord, siSpotify, siYoutube } from 'simple-icons';
 import Layout from '../layouts/Layout.astro';
 import SiteFooter from '../components/SiteFooter.astro';
+import { formatEpisodeDate, getEpisodeSummary, podcastEpisodes } from '../data/podcast';
 
 const spotifyUrl = 'https://open.spotify.com/show/033M5Wn9WAAdujY1qAcIYO';
 const youtubeUrl = 'https://www.youtube.com/playlist?list=PLHl8GlRgxIlA';
@@ -100,6 +101,39 @@ const structuredData = {
       </span>
     </section>
 
+    <section class="episodes" aria-labelledby="episodes-title">
+      <div class="episodes-heading">
+        <p class="section-label">Episodes</p>
+        <h2 id="episodes-title">Every episode of The ClawCast.</h2>
+      </div>
+      <ol class="episode-list">
+        {podcastEpisodes.map((episode) => (
+          <li class="episode-row">
+            <div class="episode-row-meta">
+              <span>Episode {episode.number}</span>
+              <span>Aired {formatEpisodeDate(episode.airedAt)}</span>
+            </div>
+            <div class="episode-row-main">
+              <h3><a href={`/podcast/${episode.slug}`}>{episode.title}</a></h3>
+              <p class="episode-guests">{episode.guests}</p>
+              <p class="episode-summary">{getEpisodeSummary(episode)}</p>
+            </div>
+            <div class="episode-row-actions" aria-label={`Listen to ${episode.title}`}>
+              <a href={episode.youtubeUrl} target="_blank" rel="noopener">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d={siYoutube.path} /></svg>
+                YouTube
+              </a>
+              <a href={episode.spotifyUrl} target="_blank" rel="noopener">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d={siSpotify.path} /></svg>
+                {episode.spotifyLabel === 'Listen on Spotify' ? 'Spotify' : 'Spotify show'}
+              </a>
+              <a href={`/podcast/${episode.slug}`} class="episode-page-link">Episode page</a>
+            </div>
+          </li>
+        ))}
+      </ol>
+    </section>
+
     <section class="live-recording" aria-labelledby="live-recording-title">
       <div>
         <p class="section-label">Live recording</p>
@@ -161,7 +195,8 @@ const structuredData = {
   .about-show,
   .live-recording,
   .platforms,
-  .rss-utility {
+  .rss-utility,
+  .episodes {
     width: min(100% - 64px, 1080px);
     margin-inline: auto;
   }
@@ -247,6 +282,118 @@ const structuredData = {
     align-self: end;
     color: var(--oc-text-secondary);
     font-size: 1.02rem;
+  }
+
+  .episodes {
+    padding: clamp(48px, 8vw, 88px) 0;
+    border-bottom: 1px solid var(--oc-border-subtle);
+  }
+
+  .episodes-heading {
+    display: grid;
+    gap: 12px;
+    margin-bottom: 30px;
+  }
+
+  .episodes h2 {
+    max-width: 680px;
+    color: var(--oc-text-primary);
+    font-family: var(--oc-font-display);
+    font-size: clamp(1.65rem, 3vw, 2.5rem);
+    font-weight: 600;
+    line-height: 1.15;
+  }
+
+  .episode-list {
+    border-top: 1px solid var(--oc-border-subtle);
+    list-style: none;
+  }
+
+  .episode-row {
+    display: grid;
+    grid-template-columns: minmax(160px, 0.45fr) minmax(0, 1fr) minmax(148px, 0.32fr);
+    gap: clamp(22px, 4vw, 54px);
+    align-items: start;
+    padding: 26px 0;
+    border-bottom: 1px solid var(--oc-border-subtle);
+  }
+
+  .episode-row-meta {
+    display: grid;
+    gap: 6px;
+    color: var(--oc-text-secondary);
+    font-size: 0.85rem;
+    font-weight: 600;
+  }
+
+  .episode-row-meta span:first-child {
+    color: var(--oc-accent-primary);
+  }
+
+  .episode-row-main h3 {
+    color: var(--oc-text-primary);
+    font-family: var(--oc-font-display);
+    font-size: clamp(1.38rem, 2.5vw, 1.85rem);
+    font-weight: 600;
+    line-height: 1.15;
+  }
+
+  .episode-row-main h3 a {
+    color: inherit;
+    text-decoration: none;
+  }
+
+  .episode-row-main h3 a:hover {
+    color: var(--oc-accent-primary);
+  }
+
+  .episode-guests {
+    margin-top: 8px;
+    color: var(--oc-text-primary);
+    font-size: 0.94rem;
+    font-weight: 600;
+  }
+
+  .episode-summary {
+    margin-top: 12px;
+    color: var(--oc-text-secondary);
+  }
+
+  .episode-row-actions {
+    display: grid;
+    justify-items: start;
+    gap: 10px;
+    padding-top: 2px;
+  }
+
+  .episode-row-actions a {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    color: var(--oc-text-secondary);
+    font-size: 0.88rem;
+    font-weight: 600;
+    text-decoration: none;
+  }
+
+  .episode-row-actions svg {
+    width: 16px;
+    height: 16px;
+    fill: currentColor;
+  }
+
+  .episode-row-actions a:hover {
+    color: var(--oc-accent-primary);
+  }
+
+  .episode-row-actions a:focus-visible,
+  .episode-row-main h3 a:focus-visible {
+    outline: 2px solid var(--oc-accent-primary);
+    outline-offset: 3px;
+  }
+
+  .episode-page-link {
+    color: var(--oc-text-primary) !important;
   }
 
   .live-recording {
@@ -480,7 +627,8 @@ const structuredData = {
     .about-show,
     .live-recording,
     .platforms,
-    .rss-utility {
+    .rss-utility,
+    .episodes {
       width: min(100% - 40px, 1080px);
     }
 
@@ -506,6 +654,31 @@ const structuredData = {
       grid-template-columns: 1fr;
       gap: 18px;
       padding: 42px 0;
+    }
+
+    .episode-row {
+      grid-template-columns: 1fr;
+      gap: 14px;
+      padding: 24px 0;
+    }
+
+    .episode-row-meta {
+      display: flex;
+      flex-wrap: wrap;
+      column-gap: 10px;
+    }
+
+    .episode-row-meta span + span::before {
+      content: '·';
+      margin-right: 10px;
+      color: var(--oc-border-subtle);
+    }
+
+    .episode-row-actions {
+      display: flex;
+      flex-wrap: wrap;
+      column-gap: 16px;
+      row-gap: 10px;
     }
 
     .platforms {
