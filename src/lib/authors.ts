@@ -81,6 +81,16 @@ const authorProfiles: BlogAuthor[] = [
     avatar: '/blog/authors/gideon-adegbesan.jpg',
   },
   {
+    name: 'Kevin Lin',
+    handle: 'kevins8',
+    links: [
+      { label: '@kevins8', url: 'https://x.com/kevins8' },
+      { label: 'LinkedIn', url: 'https://www.linkedin.com/in/kevinslin-nimbus/' },
+      { label: 'GitHub', url: 'https://github.com/kevinslin' },
+    ],
+    avatar: '/blog/authors/kevin-lin.jpg',
+  },
+  {
     name: 'Nik Pash',
     title: 'Core Maintainer',
     org: 'OpenClaw / OpenAI',
