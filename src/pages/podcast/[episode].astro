@@ -1,6 +1,6 @@
 ---
 import { ArrowLeft, ArrowRight } from '@lucide/astro';
-import { siSpotify, siYoutube } from 'simple-icons';
+import { siSpotify, siX, siYoutube } from 'simple-icons';
 import Layout from '../../layouts/Layout.astro';
 import SiteFooter from '../../components/SiteFooter.astro';
 import {
@@ -108,7 +108,16 @@ const structuredData = {
                 <>
                   {index > 0 && <br />}
                   {line.href
-                    ? <a href={line.href} target="_blank" rel="noopener">{line.text}</a>
+                    ? (
+                      <a href={line.href} target="_blank" rel="noopener">
+                        {line.text}
+                        {line.href.startsWith('https://x.com/') && (
+                          <svg class="x-link-icon" viewBox="0 0 24 24" aria-hidden="true">
+                            <path d={siX.path} />
+                          </svg>
+                        )}
+                      </a>
+                    )
                     : line.text}
                 </>
               ))}
@@ -281,9 +290,19 @@ const structuredData = {
   }
 
   .description-copy a {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
     color: var(--oc-text-primary);
     text-decoration-color: var(--oc-accent-primary);
     text-underline-offset: 3px;
+  }
+
+  .description-copy .x-link-icon {
+    width: 0.72em;
+    height: 0.72em;
+    flex: none;
+    fill: currentColor;
   }
 
   .description-copy a:hover {
