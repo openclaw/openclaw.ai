@@ -92,9 +92,7 @@ function isUrl(value: string): boolean {
         />
       </header>
 
-      <section class="description" aria-labelledby="description-title">
-        <p class="eyebrow">Show notes</p>
-        <h2 id="description-title">From the YouTube description</h2>
+      <section class="description" aria-label="Episode description">
         <div class="description-copy">
           {episode.description.split('\n\n').map((paragraph) => (
             <p>
@@ -261,23 +259,12 @@ function isUrl(value: string): boolean {
   }
 
   .description {
-    display: grid;
-    grid-template-columns: minmax(220px, 0.55fr) minmax(0, 1fr);
-    column-gap: clamp(40px, 7vw, 92px);
     padding: clamp(48px, 8vw, 88px) 0;
     border-bottom: 1px solid var(--oc-border-subtle);
   }
 
-  .description h2 {
-    grid-column: 1;
-    margin-top: 14px;
-    font-size: clamp(1.65rem, 3vw, 2.35rem);
-    line-height: 1.1;
-  }
-
   .description-copy {
-    grid-column: 2;
-    grid-row: 1 / span 2;
+    max-width: 720px;
     color: var(--oc-text-secondary);
     font-size: 1.02rem;
     overflow-wrap: anywhere;
@@ -355,12 +342,7 @@ function isUrl(value: string): boolean {
     }
 
     .description {
-      display: block;
       padding: 44px 0;
-    }
-
-    .description h2 {
-      margin: 12px 0 26px;
     }
 
     .episode-navigation {
