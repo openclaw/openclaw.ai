@@ -23,6 +23,10 @@ const newerEpisode = podcastEpisodes[episodeIndex - 1];
 const olderEpisode = podcastEpisodes[episodeIndex + 1];
 const canonicalUrl = `https://openclaw.ai/podcast/${episode.slug}`;
 const shareImage = episode.shareImage ?? '/podcast/clawcast-share.png';
+const displayDescription = episode.description.replace(
+  /\n\nLearn more about The OpenClaw Foundation:\s*https:\/\/www\.openclaw\.org/u,
+  '',
+);
 const structuredData = {
   '@context': 'https://schema.org',
   '@type': 'PodcastEpisode',
@@ -95,7 +99,7 @@ function isUrl(value: string): boolean {
 
       <section class="description" aria-label="Episode description">
         <div class="description-copy">
-          {episode.description.split('\n\n').map((paragraph) => (
+          {displayDescription.split('\n\n').map((paragraph) => (
             <p>
               {paragraph.split(/(https?:\/\/\S+)/u).map((part) =>
                 isUrl(part)
