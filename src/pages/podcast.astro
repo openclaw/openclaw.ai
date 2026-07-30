@@ -1,0 +1,528 @@
+---
+import { Copy, Rss } from '@lucide/astro';
+import { siApplepodcasts, siDiscord, siSpotify, siYoutube } from 'simple-icons';
+import Layout from '../layouts/Layout.astro';
+import SiteFooter from '../components/SiteFooter.astro';
+
+const spotifyUrl = 'https://open.spotify.com/show/033M5Wn9WAAdujY1qAcIYO';
+const youtubeUrl = 'https://www.youtube.com/playlist?list=PLHl8GlRgxIlA';
+const rssUrl = 'https://anchor.fm/s/114b28260/podcast/rss';
+const discordUrl = 'https://discord.com/invite/clawd';
+
+const structuredData = {
+  '@context': 'https://schema.org',
+  '@type': 'PodcastSeries',
+  name: 'OpenClaw Podcast',
+  url: 'https://openclaw.ai/podcast',
+  webFeed: rssUrl,
+};
+---
+
+<Layout
+  title="OpenClaw Podcast"
+  description="The ClawCast is OpenClaw's official podcast, hosted by Hannes Rudolph. Listen on Spotify and YouTube, or subscribe with the RSS feed."
+  canonicalUrl="https://openclaw.ai/podcast"
+  structuredData={structuredData}
+>
+  <main class="podcast-page">
+    <section class="podcast-hero" aria-labelledby="podcast-title">
+      <div class="hero-content">
+        <p class="eyebrow">The ClawCast</p>
+        <h1 id="podcast-title">The OpenClaw Podcast.</h1>
+        <p class="intro">
+          Hosted by Hannes Rudolph, The ClawCast brings together the people building, maintaining, and using OpenClaw.
+        </p>
+      </div>
+      <div class="podcast-cover-frame">
+        <img
+          src="/podcast/clawcast-thumbnail.png"
+          alt="The ClawCast with Hannes Rudolph"
+          class="podcast-cover"
+          width="1254"
+          height="1254"
+          loading="eager"
+          decoding="async"
+          fetchpriority="high"
+        />
+      </div>
+    </section>
+
+    <section class="platforms" aria-label="Podcast platforms">
+      <a href={spotifyUrl} target="_blank" rel="noopener" class="platform-card">
+        <span class="platform-icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24"><path d={siSpotify.path} /></svg>
+        </span>
+        <span class="platform-content">
+          <span class="platform-name">Spotify</span>
+          <span class="platform-copy">Listen to The ClawCast</span>
+        </span>
+        <span class="platform-action">Open Spotify</span>
+      </a>
+
+      <a href={youtubeUrl} target="_blank" rel="noopener" class="platform-card">
+        <span class="platform-icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24"><path d={siYoutube.path} /></svg>
+        </span>
+        <span class="platform-content">
+          <span class="platform-name">YouTube</span>
+          <span class="platform-copy">Watch every episode</span>
+        </span>
+        <span class="platform-action">Open YouTube</span>
+      </a>
+
+      <div class="platform-card platform-card--coming-soon" aria-label="Apple Podcasts coming soon">
+        <span class="coming-soon">Coming soon</span>
+        <span class="platform-icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24"><path d={siApplepodcasts.path} /></svg>
+        </span>
+        <span class="platform-content">
+          <span class="platform-name">Apple Podcasts</span>
+          <span class="platform-copy">The show will be available here soon</span>
+        </span>
+      </div>
+    </section>
+
+    <section class="live-recording" aria-labelledby="live-recording-title">
+      <div>
+        <p class="section-label">Live recording</p>
+        <h2 id="live-recording-title">Join us every Wednesday at 11:30 AM PT.</h2>
+      </div>
+      <div class="live-details">
+        <p>Join the OpenClaw Discord and select the active Stage when we are live to listen in.</p>
+        <a href={discordUrl} target="_blank" rel="noopener" class="live-link">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d={siDiscord.path} /></svg>
+          Join live on Discord
+        </a>
+      </div>
+    </section>
+
+    <section class="about-show" aria-labelledby="about-show-title">
+      <div class="about-heading">
+        <p class="section-label">Inside the show</p>
+        <h2 id="about-show-title">Release deep-dives and the work of making agents useful every day.</h2>
+      </div>
+      <p class="about-copy">
+        Hear from OpenClaw maintainers, contributors, and guests about what they are learning, what they are making,
+        and what comes next for personal AI.
+      </p>
+    </section>
+
+    <section class="rss-utility" aria-label="RSS feed">
+      <span class="rss-icon" aria-hidden="true"><Rss size={21} strokeWidth={1.8} /></span>
+      <span class="rss-copy">
+        <span class="rss-title">RSS feed</span>
+        <span class="rss-description">Use it in any podcast app that supports RSS.</span>
+      </span>
+      <span class="rss-actions">
+        <a href={rssUrl} target="_blank" rel="noopener" class="rss-open">Open feed</a>
+        <button type="button" class="rss-button" data-copy-rss data-rss-url={rssUrl}>
+          <Copy size={16} aria-hidden="true" />
+          <span data-copy-rss-label>Copy RSS feed</span>
+        </button>
+      </span>
+    </section>
+
+    <SiteFooter current="podcast" credit="simple" />
+  </main>
+
+  <script is:inline>
+    const copyButton = document.querySelector('[data-copy-rss]');
+    const copyLabel = document.querySelector('[data-copy-rss-label]');
+
+    copyButton?.addEventListener('click', async () => {
+      const url = copyButton.dataset.rssUrl;
+      if (!url) return;
+
+      try {
+        await navigator.clipboard.writeText(url);
+        copyLabel.textContent = 'Copied';
+      } catch {
+        window.prompt('Copy the RSS feed URL:', url);
+      }
+
+      window.setTimeout(() => {
+        copyLabel.textContent = 'Copy RSS feed';
+      }, 1800);
+    });
+  </script>
+</Layout>
+
+<style>
+  .podcast-page {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .podcast-hero,
+  .about-show,
+  .live-recording,
+  .platforms,
+  .rss-utility {
+    width: min(100% - 64px, 1080px);
+    margin-inline: auto;
+  }
+
+  .podcast-hero {
+    display: grid;
+    grid-template-columns: minmax(0, 1.25fr) minmax(280px, 0.75fr);
+    align-items: center;
+    gap: clamp(40px, 7vw, 96px);
+    padding: clamp(84px, 13vh, 150px) 0 clamp(52px, 8vh, 88px);
+    border-bottom: 1px solid var(--oc-border-subtle);
+  }
+
+  .eyebrow {
+    margin-bottom: 18px;
+    color: var(--oc-accent-primary);
+    font-size: 0.78rem;
+    font-weight: 700;
+    letter-spacing: 0;
+    text-transform: uppercase;
+  }
+
+  h1 {
+    max-width: 760px;
+    color: var(--oc-text-primary);
+    font-family: var(--oc-font-display);
+    font-size: clamp(3.1rem, 7vw, 6rem);
+    font-weight: 600;
+    line-height: 0.98;
+  }
+
+  .intro {
+    max-width: 540px;
+    margin-top: 22px;
+    color: var(--oc-text-secondary);
+    font-size: clamp(1.05rem, 2vw, 1.25rem);
+  }
+
+  .podcast-cover-frame {
+    width: min(100%, 400px);
+    justify-self: end;
+    padding: 8px;
+    border: 1px solid var(--oc-border-subtle);
+    background: var(--oc-surface-card-strong);
+    box-shadow: 8px 8px 0 color-mix(in srgb, var(--oc-accent-primary) 38%, transparent);
+  }
+
+  .podcast-cover {
+    display: block;
+    width: 100%;
+    height: auto;
+    aspect-ratio: 1;
+    object-fit: cover;
+  }
+
+  .about-show {
+    display: grid;
+    grid-template-columns: minmax(0, 1.2fr) minmax(260px, 0.8fr);
+    gap: 42px;
+    padding: clamp(42px, 7vw, 76px) 0;
+    border-bottom: 1px solid var(--oc-border-subtle);
+  }
+
+  .section-label {
+    color: var(--oc-accent-primary);
+    font-size: 0.78rem;
+    font-weight: 700;
+    letter-spacing: 0;
+    text-transform: uppercase;
+  }
+
+  .about-show h2 {
+    max-width: 680px;
+    margin-top: 14px;
+    color: var(--oc-text-primary);
+    font-family: var(--oc-font-display);
+    font-size: clamp(1.65rem, 3vw, 2.5rem);
+    font-weight: 600;
+    line-height: 1.15;
+  }
+
+  .about-copy {
+    align-self: end;
+    color: var(--oc-text-secondary);
+    font-size: 1.02rem;
+  }
+
+  .live-recording {
+    display: grid;
+    grid-template-columns: minmax(0, 1.2fr) minmax(260px, 0.8fr);
+    gap: 42px;
+    padding: clamp(42px, 7vw, 76px) 0;
+    border-bottom: 1px solid var(--oc-border-subtle);
+  }
+
+  .live-recording h2 {
+    max-width: 680px;
+    margin-top: 14px;
+    color: var(--oc-text-primary);
+    font-family: var(--oc-font-display);
+    font-size: clamp(1.65rem, 3vw, 2.5rem);
+    font-weight: 600;
+    line-height: 1.15;
+  }
+
+  .live-details {
+    display: grid;
+    align-content: end;
+    justify-items: start;
+    gap: 20px;
+    color: var(--oc-text-secondary);
+    font-size: 1.02rem;
+  }
+
+  .live-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 9px;
+    min-height: 40px;
+    padding: 9px 12px;
+    border: 1px solid var(--oc-border-subtle);
+    border-radius: 4px;
+    color: var(--oc-text-primary);
+    font-size: 0.9rem;
+    font-weight: 600;
+    text-decoration: none;
+  }
+
+  .live-link svg {
+    width: 18px;
+    height: 18px;
+    fill: currentColor;
+  }
+
+  .live-link:hover {
+    border-color: var(--oc-accent-primary);
+    color: var(--oc-accent-primary);
+  }
+
+  .live-link:focus-visible {
+    outline: 2px solid var(--oc-accent-primary);
+    outline-offset: 2px;
+  }
+
+  .platforms {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 1px;
+    border: 1px solid var(--oc-border-subtle);
+    background: var(--oc-border-subtle);
+  }
+
+  .platform-card {
+    position: relative;
+    display: flex;
+    min-height: 240px;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 30px;
+    padding: 30px;
+    background: var(--oc-bg-page);
+    color: var(--oc-text-primary);
+    text-decoration: none;
+    transition: background-color 150ms ease, color 150ms ease;
+  }
+
+  .platform-card:hover {
+    background: var(--oc-surface-card-strong);
+  }
+
+  .platform-card:focus-visible {
+    outline: 2px solid var(--oc-accent-primary);
+    outline-offset: -2px;
+  }
+
+  .platform-icon {
+    display: inline-flex;
+    width: 42px;
+    height: 42px;
+    align-items: center;
+    justify-content: center;
+    color: var(--oc-text-primary);
+  }
+
+  .platform-icon svg {
+    width: 28px;
+    height: 28px;
+    fill: currentColor;
+  }
+
+  .platform-icon-rss svg {
+    fill: none;
+  }
+
+  .platform-content {
+    display: grid;
+    gap: 6px;
+    margin-top: auto;
+  }
+
+  .platform-name {
+    font-family: var(--oc-font-display);
+    font-size: 1.3rem;
+    font-weight: 600;
+  }
+
+  .platform-copy,
+  .platform-action {
+    color: var(--oc-text-secondary);
+  }
+
+  .platform-action {
+    font-size: 0.88rem;
+    font-weight: 600;
+  }
+
+  .platform-card:hover .platform-action {
+    color: var(--oc-accent-primary);
+  }
+
+  .platform-card--coming-soon {
+    cursor: default;
+  }
+
+  .platform-card--coming-soon .platform-icon,
+  .platform-card--coming-soon .platform-content {
+    opacity: 0.65;
+  }
+
+  .coming-soon {
+    position: absolute;
+    top: 22px;
+    right: 22px;
+    padding: 5px 8px;
+    border: 1px solid var(--oc-border-subtle);
+    background: var(--oc-bg-page);
+    color: var(--oc-text-secondary);
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0;
+    text-transform: uppercase;
+  }
+
+  .rss-utility {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 22px 0;
+    border-bottom: 1px solid var(--oc-border-subtle);
+  }
+
+  .rss-icon {
+    display: inline-flex;
+    align-items: center;
+    color: var(--oc-text-primary);
+  }
+
+  .rss-copy {
+    display: grid;
+    gap: 2px;
+  }
+
+  .rss-title {
+    color: var(--oc-text-primary);
+    font-weight: 600;
+  }
+
+  .rss-description {
+    color: var(--oc-text-secondary);
+    font-size: 0.92rem;
+  }
+
+  .rss-actions {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-left: auto;
+  }
+
+  .rss-open,
+  .rss-button {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    min-height: 36px;
+    padding: 7px 10px;
+    border: 1px solid var(--oc-border-subtle);
+    border-radius: 4px;
+    background: transparent;
+    color: var(--oc-text-primary);
+    font: inherit;
+    font-size: 0.86rem;
+    font-weight: 600;
+    text-decoration: none;
+  }
+
+  .rss-button {
+    cursor: pointer;
+  }
+
+  .rss-open:hover,
+  .rss-button:hover {
+    border-color: var(--oc-accent-primary);
+    color: var(--oc-accent-primary);
+  }
+
+  .rss-open:focus-visible,
+  .rss-button:focus-visible {
+    outline: 2px solid var(--oc-accent-primary);
+    outline-offset: 2px;
+  }
+
+  @media (max-width: 720px) {
+    .podcast-hero,
+    .about-show,
+    .live-recording,
+    .platforms,
+    .rss-utility {
+      width: min(100% - 40px, 1080px);
+    }
+
+    .podcast-hero {
+      grid-template-columns: 1fr;
+      gap: 32px;
+      padding-top: 88px;
+      padding-bottom: 48px;
+    }
+
+    .podcast-cover-frame {
+      width: min(100%, 360px);
+      justify-self: start;
+    }
+
+    .about-show {
+      grid-template-columns: 1fr;
+      gap: 18px;
+      padding: 42px 0;
+    }
+
+    .live-recording {
+      grid-template-columns: 1fr;
+      gap: 18px;
+      padding: 42px 0;
+    }
+
+    .platforms {
+      grid-template-columns: 1fr;
+    }
+
+    .platform-card {
+      min-height: 184px;
+      gap: 22px;
+      padding: 26px;
+    }
+
+    .rss-utility {
+      align-items: flex-start;
+      flex-wrap: wrap;
+    }
+
+    .rss-actions {
+      width: 100%;
+      margin-left: 0;
+    }
+  }
+</style>
