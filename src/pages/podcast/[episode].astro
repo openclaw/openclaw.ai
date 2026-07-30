@@ -84,17 +84,6 @@ function isUrl(value: string): boolean {
             </a>
           </div>
         </div>
-
-        <div class="episode-artwork-frame">
-          <img
-            src={shareImage}
-            alt="The ClawCast with Hannes Rudolph"
-            width="1200"
-            height="630"
-            class="episode-artwork"
-            fetchpriority="high"
-          />
-        </div>
       </header>
 
       <section class="description" aria-label="Episode description">
@@ -247,21 +236,6 @@ function isUrl(value: string): boolean {
 
   .episode-action--primary:hover {
     background: transparent;
-  }
-
-  .episode-artwork-frame {
-    width: min(100%, 860px);
-    margin-top: clamp(40px, 6vw, 64px);
-    padding: 7px;
-    border: 1px solid var(--oc-border-subtle);
-    background: var(--oc-surface-card-strong);
-    box-shadow: 8px 8px 0 color-mix(in srgb, var(--oc-accent-primary) 38%, transparent);
-  }
-
-  .episode-artwork {
-    display: block;
-    width: 100%;
-    height: auto;
   }
 
   .description {
