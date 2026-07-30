@@ -23,9 +23,27 @@ const newerEpisode = podcastEpisodes[episodeIndex - 1];
 const olderEpisode = podcastEpisodes[episodeIndex + 1];
 const canonicalUrl = `https://openclaw.ai/podcast/${episode.slug}`;
 const shareImage = episode.shareImage ?? '/podcast/clawcast-share.png';
-const displayDescription = episode.description.replace(
-  /\n\nLearn more about The OpenClaw Foundation:\s*https:\/\/www\.openclaw\.org/u,
-  '',
+const discordUrl = 'https://discord.com/invite/clawd';
+const displayDescription = episode.description
+  .replace(/\n\nLearn more about The OpenClaw Foundation:\s*https:\/\/www\.openclaw\.org/gu, '')
+  .replace(/\n\nListen on Spotify:\s*https:\/\/\S+/gu, '')
+  .replace(
+    /\n\nRecorded live every Wednesday at 11:30 AM PT on Discord\.\s*\nJoin our Discord:\s*https:\/\/\S+/gu,
+    '',
+  )
+  .trim();
+const descriptionParagraphs = displayDescription.split('\n\n').map((paragraph) =>
+  paragraph.split('\n').map((line) => {
+    const linkMatch = line.match(/^(.*?):\s*(https?:\/\/\S+)$/u);
+
+    if (linkMatch) {
+      return { text: linkMatch[1], href: linkMatch[2] };
+    }
+
+    return {
+      text: line === 'Guests and hosts socials:' ? 'Guests and hosts:' : line,
+    };
+  }),
 );
 const structuredData = {
   '@context': 'https://schema.org',
@@ -45,10 +63,6 @@ const structuredData = {
     contentUrl: episode.youtubeUrl,
   },
 };
-
-function isUrl(value: string): boolean {
-  return /^https?:\/\/\S+$/u.test(value);
-}
 ---
 
 <Layout
@@ -88,15 +102,22 @@ function isUrl(value: string): boolean {
 
       <section class="description" aria-label="Episode description">
         <div class="description-copy">
-          {displayDescription.split('\n\n').map((paragraph) => (
+          {descriptionParagraphs.map((paragraph) => (
             <p>
-              {paragraph.split(/(https?:\/\/\S+)/u).map((part) =>
-                isUrl(part)
-                  ? <a href={part} target="_blank" rel="noopener">{part}</a>
-                  : part
-              )}
+              {paragraph.map((line, index) => (
+                <>
+                  {index > 0 && <br />}
+                  {line.href
+                    ? <a href={line.href} target="_blank" rel="noopener">{line.text}</a>
+                    : line.text}
+                </>
+              ))}
             </p>
           ))}
+          <p class="live-recording">
+            Recorded live every Wednesday at 11:30 AM PT on Discord.{' '}
+            <a href={discordUrl} target="_blank" rel="noopener">Join our Discord</a>
+          </p>
         </div>
       </section>
 
