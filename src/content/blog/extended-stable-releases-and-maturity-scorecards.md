@@ -3,6 +3,7 @@ title: "On the Road to LTS: Extended-Stable Releases and the Maturity Scorecard"
 description: "A new long-lived release channel and a public maturity scorecard make it easier to choose OpenClaw features for critical workloads."
 date: 2026-07-30
 author: "Kevin Lin"
+authorAvatar: "/blog/authors/kevin-lin.jpg"
 draft: false
 tags: ["announcement", "release", "stability", "maturity"]
 image: "/blog/extended-stable-releases-and-maturity-scorecards/road-to-lts.png"
