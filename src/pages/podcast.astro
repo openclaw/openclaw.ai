@@ -6,7 +6,7 @@ import SiteFooter from '../components/SiteFooter.astro';
 import {
   formatEpisodeListDate,
   formatPodcastPeople,
-  getEpisodeSummary,
+  getEpisodeListingSummary,
   podcastEpisodes,
 } from '../data/podcast';
 
@@ -167,7 +167,7 @@ const structuredData = {
               </div>
             </div>
 
-            <p class="episode-summary">{getEpisodeSummary(episode)}</p>
+            <p class="episode-summary">{getEpisodeListingSummary(episode)}</p>
           </li>
         ))}
       </ol>

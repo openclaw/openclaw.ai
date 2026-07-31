@@ -19,6 +19,7 @@ export type PodcastEpisode = {
   spotifyUrl: string;
   spotifyLabel: string;
   description: string;
+  listingSummary?: string;
   descriptionLinks?: PodcastDescriptionLink[];
   shareImage?: string;
 };
@@ -39,6 +40,7 @@ export const podcastEpisodes: PodcastEpisode[] = [
     youtubeUrl: 'https://www.youtube.com/watch?v=WKfeP5zw0CY',
     spotifyUrl: 'https://open.spotify.com/episode/3OyE8Is3VPBOI41rvnpDJp',
     spotifyLabel: 'Listen on Spotify',
+    listingSummary: 'Hannes Rudolph and Patrick Erichsen answer community questions about how they use OpenClaw day to day, why release stability is a priority, and what is coming next for the Control UI, mobile apps, ClawHub, and agent workflows.',
     description: `In this episode of OpenClaw’s official podcast, The ClawCast, host Hannes Rudolph, OpenClaw Community Manager, and co-host Patrick Erichsen, OpenClaw Developer, answer community questions about how they use OpenClaw day to day, why the team is prioritizing release stability, and what is coming next for the Control UI, mobile apps, ClawHub, and agent workflows.
 
 The conversation covers configuration cleanup, reusable agent setups, Claw Scan and credential security, open-weight models, unified crons, and real-time voice.
@@ -69,6 +71,7 @@ Join our Discord: https://discord.com/invite/clawd`,
     youtubeUrl: 'https://www.youtube.com/watch?v=zSkI2vJlmbs',
     spotifyUrl: spotifyShowUrl,
     spotifyLabel: 'Open Spotify show',
+    listingSummary: 'Kevin Lin from OpenAI joins Hannes Rudolph and Patrick Erichsen to discuss OpenClaw 7.2, the new Control UI, and what it takes to pair effectively with an agent.',
     description: `In this episode of OpenClaw’s official podcast, The ClawCast, host Hannes Rudolph, OpenClaw Community Manager, and co-host Patrick Erichsen, OpenClaw Developer, are joined by Kevin Lin from OpenAI to discuss the upcoming OpenClaw 7.2 release, the new Control UI built for daily-driving agents, and what it really takes to pair with an agent instead of just handing off a task.
 
 The conversation covers using OpenClaw as an orchestrator that delegates coding to Codex, why human taste and judgment still matter for keeping code maintainable, where today’s frontier models still fall short, the revamped agentic onboarding (auto-detecting API keys and spinning up a local model so you can get from zero to one), the refactor from JSONL files to SQLite, and the new monthly “stable release” aimed at enterprises that want longer lead times between upgrades.
@@ -95,6 +98,7 @@ Kevin Lin: https://x.com/kevins8`,
     youtubeUrl: 'https://www.youtube.com/watch?v=zEiqIovjULc',
     spotifyUrl: 'https://open.spotify.com/episode/5EQQ2N2n1yYtRx9X2Q3JEf',
     spotifyLabel: 'Listen on Spotify',
+    listingSummary: 'Sam Odio, host of AI Worth Using, joins Hannes Rudolph and Patrick Erichsen to discuss making OpenClaw more accessible without sacrificing its flexibility and extensibility.',
     descriptionLinks: [
       { text: 'AI Worth Using', href: 'https://aiworthusing.com' },
     ],
@@ -131,6 +135,7 @@ Join our Discord: https://discord.com/invite/clawd`,
     youtubeUrl: 'https://www.youtube.com/watch?v=TQ7SgFXvieY',
     spotifyUrl: 'https://open.spotify.com/episode/2DQqQHQCZsl2sbGTKsLzq7',
     spotifyLabel: 'Listen on Spotify',
+    listingSummary: 'Josh Lehman, Sedrak Hovhannisyan, and Alexander Adamyan join Hannes Rudolph to discuss OpenClaw onboarding, agent self-improvement, and long-running autonomous workflows.',
     description: `In this episode of OpenClaw’s official podcast, The Clawcast, host Hannes Rudolph, OpenClaw Community Manager, is joined by Josh Lehman, OpenClaw maintainer and founder of Martian Engineering, and Sedrak Hovhannisyan and Alexander Adamyan, co-founders of Vana Labs, to discuss the OpenClaw onboarding overhaul, why the planned onboarding demo was cancelled, what OpenClaw can learn from Hermes’s self-improvement system, and how OpenClaw compares to tools like Codex for long-running autonomous workflows.
 
 The conversation covers the push to make OpenClaw easier for non-technical users, the role of skills and self-improvement in agent workflows, the difference between managed AI tools and user-owned open-source systems, and why OpenClaw's flexibility makes it uniquely powerful for automation.
@@ -164,6 +169,7 @@ Join our Discord: https://discord.com/invite/clawd`,
     youtubeUrl: 'https://www.youtube.com/watch?v=VJMhxh7KpqQ',
     spotifyUrl: 'https://open.spotify.com/episode/5GwMaO6y852bjiVTAimOYT',
     spotifyLabel: 'Listen on Spotify',
+    listingSummary: 'Sally Ann O’Malley and Peter Steinberger join Hannes Rudolph and Patrick Erichsen to discuss OpenClaw stability, security, mobile apps, and the project’s future.',
     description: `In this episode of OpenClaw’s official podcast, The Clawcast, host Hannes Rudolph, OpenClaw Community Manager, and co-host Patrick Erichsen, OpenClaw Developer, are joined by Sally Ann O’Malley from Red Hat, a maintainer of the OpenClaw OSS repo, and Peter Steinberger, founder of OpenClaw, to discuss OpenClaw stability, security, the future of OpenClaw, and the community’s response to our recently released OpenClaw mobile app.
 
 Learn more about The OpenClaw Foundation:
@@ -195,6 +201,7 @@ Join our Discord: https://discord.com/invite/clawd`,
     youtubeUrl: 'https://www.youtube.com/watch?v=IfJJnR1LIE0',
     spotifyUrl: 'https://open.spotify.com/episode/199ux52AK8oXunvP7siG8Z',
     spotifyLabel: 'Listen on Spotify',
+    listingSummary: 'Adam from GosuCoder joins Hannes Rudolph and Patrick Erichsen to discuss OpenClaw and the latest developments in AI.',
     description: `In this inaugural episode of the official OpenClaw podcast, The ClawCast, host Hannes Rudolph (OpenClaw Community Manager) and co-host Patrick Erichsen (OpenClaw Developer) are joined by Adam from the YouTube channel GosuCoder to discuss all things OpenClaw and the latest happenings in AI.
 
 Guest:
@@ -209,6 +216,10 @@ Join our Discord: https://discord.com/invite/clawd`,
 
 export function getEpisodeSummary(episode: PodcastEpisode): string {
   return episode.description.split('\n\n')[0];
+}
+
+export function getEpisodeListingSummary(episode: PodcastEpisode): string {
+  return episode.listingSummary ?? getEpisodeSummary(episode);
 }
 
 export function formatPodcastPeople(people: PodcastPerson[]): string {
