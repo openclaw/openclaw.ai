@@ -1,5 +1,5 @@
 ---
-import { Copy, Rss } from '@lucide/astro';
+import { Rss } from '@lucide/astro';
 import { siApplepodcasts, siDiscord, siSpotify, siYoutube } from 'simple-icons';
 import Layout from '../layouts/Layout.astro';
 import SiteFooter from '../components/SiteFooter.astro';
@@ -87,19 +87,15 @@ const structuredData = {
         </div>
 
         <div class="rss-utility" aria-label="RSS feed">
-          <a href={rssUrl} target="_blank" rel="noopener" class="rss-link">
-            <Rss size={15} strokeWidth={1.8} aria-hidden="true" />
-            RSS
-          </a>
           <button
             type="button"
-            class="rss-button"
+            class="rss-link"
             data-copy-rss
             data-rss-url={rssUrl}
             title="Copy RSS feed"
           >
-            <Copy size={14} aria-hidden="true" />
-            <span class="sr-only" data-copy-rss-label aria-live="polite">Copy RSS feed</span>
+            <Rss size={15} strokeWidth={1.8} aria-hidden="true" />
+            <span data-copy-rss-label aria-live="polite">RSS</span>
           </button>
         </div>
       </div>
@@ -181,15 +177,29 @@ const structuredData = {
       const url = copyButton.dataset.rssUrl;
       if (!url) return;
 
+      let copied = false;
+
       try {
         await navigator.clipboard.writeText(url);
-        copyLabel.textContent = 'Copied';
+        copied = true;
       } catch {
-        window.prompt('Copy the RSS feed URL:', url);
+        const textarea = document.createElement('textarea');
+        textarea.value = url;
+        textarea.setAttribute('readonly', '');
+        textarea.style.position = 'fixed';
+        textarea.style.opacity = '0';
+        document.body.appendChild(textarea);
+        textarea.focus();
+        textarea.select();
+        textarea.setSelectionRange(0, textarea.value.length);
+        copied = document.execCommand('copy');
+        textarea.remove();
       }
 
+      copyLabel.textContent = copied ? 'Copied' : 'Copy failed';
+
       window.setTimeout(() => {
-        copyLabel.textContent = 'Copy RSS feed';
+        copyLabel.textContent = 'RSS';
       }, 1800);
     });
   </script>
@@ -574,8 +584,7 @@ const structuredData = {
     margin-top: 10px;
   }
 
-  .rss-link,
-  .rss-button {
+  .rss-link {
     display: inline-flex;
     align-items: center;
     min-height: 28px;
@@ -587,38 +596,17 @@ const structuredData = {
     font-size: 0.76rem;
     font-weight: 600;
     text-decoration: none;
-  }
-
-  .rss-link {
     gap: 6px;
-  }
-
-  .rss-button {
-    justify-content: center;
     cursor: pointer;
   }
 
-  .rss-link:hover,
-  .rss-button:hover {
+  .rss-link:hover {
     color: var(--oc-accent-primary);
   }
 
-  .rss-link:focus-visible,
-  .rss-button:focus-visible {
+  .rss-link:focus-visible {
     outline: 2px solid var(--oc-accent-primary);
     outline-offset: 2px;
-  }
-
-  .sr-only {
-    position: absolute;
-    width: 1px;
-    height: 1px;
-    padding: 0;
-    margin: -1px;
-    overflow: hidden;
-    clip: rect(0, 0, 0, 0);
-    white-space: nowrap;
-    border: 0;
   }
 
   @media (max-width: 720px) {
