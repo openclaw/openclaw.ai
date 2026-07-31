@@ -226,3 +226,12 @@ export function formatEpisodeDate(isoDate: string): string {
     year: 'numeric',
   }).format(new Date(`${isoDate}T12:00:00Z`));
 }
+
+export function formatEpisodeListDate(isoDate: string): string {
+  return new Intl.DateTimeFormat('en-US', {
+    timeZone: 'UTC',
+    month: 'short',
+    day: 'numeric',
+    year: 'numeric',
+  }).format(new Date(`${isoDate}T12:00:00Z`));
+}
