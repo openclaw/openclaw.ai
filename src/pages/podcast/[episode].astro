@@ -33,6 +33,35 @@ const displayDescription = episode.description
     '',
   )
   .trim();
+
+function escapeRegExp(value: string): string {
+  return value.replace(/[.*+?^${}()|[\]\\]/gu, '\\$&');
+}
+
+function parseDescriptionLine(line: string) {
+  const linkMatch = line.match(/^(.*?):\s*(https?:\/\/\S+)$/u);
+
+  if (linkMatch) {
+    return [{ text: linkMatch[1], href: linkMatch[2] }];
+  }
+
+  const inlineLinks = episode.descriptionLinks ?? [];
+
+  if (inlineLinks.length === 0) {
+    return [{ text: line }];
+  }
+
+  const linkPattern = new RegExp(
+    `(${inlineLinks.map((link) => escapeRegExp(link.text)).join('|')})`,
+    'gu',
+  );
+
+  return line.split(linkPattern).filter(Boolean).map((text) => {
+    const link = inlineLinks.find((item) => item.text === text);
+    return link ? { text, href: link.href } : { text };
+  });
+}
+
 const descriptionParagraphs = displayDescription
   .split('\n\n')
   .filter((paragraph) =>
@@ -40,15 +69,7 @@ const descriptionParagraphs = displayDescription
     && !paragraph.startsWith('Guest:')
   )
   .map((paragraph) =>
-    paragraph.split('\n').map((line) => {
-      const linkMatch = line.match(/^(.*?):\s*(https?:\/\/\S+)$/u);
-
-      if (linkMatch) {
-        return { text: linkMatch[1], href: linkMatch[2] };
-      }
-
-      return { text: line };
-    }),
+    paragraph.split('\n').map(parseDescriptionLine),
   );
 const structuredData = {
   '@context': 'https://schema.org',
@@ -126,25 +147,24 @@ const structuredData = {
               {paragraph.map((line, index) => (
                 <>
                   {index > 0 && <br />}
-                  {line.href
-                    ? (
-                      <a href={line.href} target="_blank" rel="noopener">
-                        {line.text}
-                        {line.href.startsWith('https://x.com/') && (
-                          <svg
-                            class="x-link-icon"
-                            viewBox="0 0 24 24"
-                            width="12"
-                            height="12"
-                            fill="currentColor"
-                            aria-hidden="true"
-                          >
-                            <path d={siX.path} />
-                          </svg>
-                        )}
-                      </a>
-                    )
-                    : line.text}
+                  {line.map((part) =>
+                    part.href
+                      ? (
+                        <a href={part.href} target="_blank" rel="noopener">{part.text}{part.href.startsWith('https://x.com/') && (
+                            <svg
+                              class="x-link-icon"
+                              viewBox="0 0 24 24"
+                              width="12"
+                              height="12"
+                              fill="currentColor"
+                              aria-hidden="true"
+                            >
+                              <path d={siX.path} />
+                            </svg>
+                          )}</a>
+                      )
+                      : part.text
+                  )}
                 </>
               ))}
             </p>

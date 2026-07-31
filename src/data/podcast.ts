@@ -3,6 +3,11 @@ export type PodcastPerson = {
   xUrl?: string;
 };
 
+export type PodcastDescriptionLink = {
+  text: string;
+  href: string;
+};
+
 export type PodcastEpisode = {
   number: number;
   slug: string;
@@ -14,6 +19,7 @@ export type PodcastEpisode = {
   spotifyUrl: string;
   spotifyLabel: string;
   description: string;
+  descriptionLinks?: PodcastDescriptionLink[];
   shareImage?: string;
 };
 
@@ -89,13 +95,14 @@ Kevin Lin: https://x.com/kevins8`,
     youtubeUrl: 'https://www.youtube.com/watch?v=zEiqIovjULc',
     spotifyUrl: 'https://open.spotify.com/episode/5EQQ2N2n1yYtRx9X2Q3JEf',
     spotifyLabel: 'Listen on Spotify',
+    descriptionLinks: [
+      { text: 'AI Worth Using', href: 'https://aiworthusing.com' },
+    ],
     description: `In this episode of OpenClaw’s official podcast, The ClawCast, host Hannes Rudolph, OpenClaw Community Manager, and co-host Patrick Erichsen, OpenClaw Developer, are joined by Sam Odio, host of AI Worth Using, to discuss how OpenClaw can remain powerful for hackers, become more accessible to AI tinkerers, and ultimately grow into something anyone can use without sacrificing its flexibility and extensibility.
 
 The conversation also explores agent security, lowering the technical barrier to experimentation, and what OpenClaw can learn from delegation and systems engineering as agentic workflows become more capable.
 
 Learn more about The OpenClaw Foundation: https://www.openclaw.org
-
-Listen to AI Worth Using: https://aiworthusing.com
 
 Guests and hosts socials:
 Hannes Rudolph: https://x.com/hrudolph
