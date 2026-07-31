@@ -2,7 +2,9 @@
 import { Check, Rss } from '@lucide/astro';
 import { siApplepodcasts, siSpotify, siYoutube } from 'simple-icons';
 import Layout from '../layouts/Layout.astro';
+import SectionHeader from '../components/SectionHeader.astro';
 import SiteFooter from '../components/SiteFooter.astro';
+import SiteTopbar from '../components/SiteTopbar.astro';
 import { formatEpisodeListDate, getEpisodeListingSummary, podcastEpisodes } from '../data/podcast';
 
 const spotifyUrl = 'https://open.spotify.com/show/033M5Wn9WAAdujY1qAcIYO';
@@ -28,7 +30,10 @@ const structuredData = {
   ogImageHeight={630}
   structuredData={structuredData}
 >
+  <SiteTopbar active="podcast" />
+
   <main class="podcast-page">
+    <div class="rail">
     <section class="podcast-hero" aria-labelledby="podcast-title">
       <div class="hero-content">
         <p class="eyebrow">The OpenClaw Podcast</p>
@@ -36,9 +41,7 @@ const structuredData = {
         <p class="intro">
           Hosted by Hannes Rudolph, The ClawCast features conversations with the people building, maintaining, and
           using OpenClaw — release deep-dives, what maintainers and guests are learning, and what comes next for
-          personal AI. Recorded live every Wednesday at 11:30 AM PT — join the
-          <a href={discordUrl} target="_blank" rel="noopener">OpenClaw Discord</a> and select the active Stage to
-          listen in.
+          personal AI.
         </p>
       </div>
 
@@ -112,10 +115,11 @@ const structuredData = {
       </div>
     </section>
 
-    <section class="episodes" aria-labelledby="episodes-title">
-      <div class="episodes-heading">
-        <p id="episodes-title" class="section-label">Episodes</p>
-      </div>
+    <section class="episodes" aria-label="Episodes">
+      <SectionHeader
+        title="Episodes"
+        link={{ href: discordUrl, text: 'Live Wednesdays 11:30 AM PT on Discord' }}
+      />
       <ol class="episode-list">
         {podcastEpisodes.map((episode) => (
           <li class="episode-row">
@@ -154,6 +158,7 @@ const structuredData = {
         ))}
       </ol>
     </section>
+    </div>
 
     <SiteFooter current="podcast" credit="simple" />
   </main>
@@ -203,10 +208,16 @@ const structuredData = {
     flex-direction: column;
   }
 
-  .podcast-hero,
-  .episodes {
-    width: min(100% - 64px, 1080px);
-    margin-inline: auto;
+  .rail {
+    width: 100%;
+    max-width: 1060px;
+    margin: 0 auto;
+    padding: 0 var(--oc-space-7);
+    border-left: 1px solid var(--oc-border-subtle);
+    border-right: 1px solid var(--oc-border-subtle);
+    flex: 1;
+    display: flex;
+    flex-direction: column;
   }
 
   .podcast-hero {
@@ -214,11 +225,10 @@ const structuredData = {
     grid-template-areas:
       'content cover'
       'listen cover';
-    grid-template-columns: minmax(0, 1fr) minmax(280px, 340px);
-    gap: 24px 72px;
+    grid-template-columns: minmax(0, 1fr) minmax(260px, 300px);
+    gap: 24px 56px;
     align-items: start;
-    padding: 64px 0 44px;
-    border-bottom: 1px solid var(--oc-border-subtle);
+    padding: 56px 0 48px;
   }
 
   .hero-content {
@@ -230,9 +240,10 @@ const structuredData = {
   .eyebrow {
     margin-bottom: 10px;
     color: var(--oc-accent-primary);
+    font-family: var(--oc-font-mono);
     font-size: 0.78rem;
-    font-weight: 700;
-    letter-spacing: 0;
+    font-weight: 600;
+    letter-spacing: 0.1em;
     text-transform: uppercase;
   }
 
@@ -249,23 +260,6 @@ const structuredData = {
     margin-top: 14px;
     color: var(--oc-text-secondary);
     font-size: 1.12rem;
-  }
-
-  .intro a {
-    color: var(--oc-text-primary);
-    text-decoration: underline;
-    text-decoration-color: var(--oc-border-subtle);
-    text-underline-offset: 3px;
-  }
-
-  .intro a:hover {
-    color: var(--oc-accent-primary);
-    text-decoration-color: currentColor;
-  }
-
-  .intro a:focus-visible {
-    outline: 2px solid var(--oc-accent-primary);
-    outline-offset: 2px;
   }
 
   .podcast-cover-frame {
@@ -287,49 +281,47 @@ const structuredData = {
     object-fit: cover;
   }
 
-  .section-label {
-    color: var(--oc-accent-primary);
-    font-size: 0.78rem;
-    font-weight: 700;
-    letter-spacing: 0;
-    text-transform: uppercase;
-  }
-
   .episodes {
-    padding: 44px 0 72px;
-    border-bottom: 1px solid var(--oc-border-subtle);
-  }
-
-  .episodes-heading {
-    margin-bottom: 14px;
+    padding: 48px 0 64px;
+    border-top: 1px solid var(--oc-border-subtle);
   }
 
   .episode-list {
-    border-top: 1px solid var(--oc-border-subtle);
     list-style: none;
   }
 
   .episode-row {
+    position: relative;
     display: grid;
     grid-template-columns: 140px minmax(0, 1fr);
     gap: 28px;
     align-items: start;
-    padding: 30px 0;
+    margin: 0 -24px;
+    padding: 30px 24px;
     border-bottom: 1px solid var(--oc-border-subtle);
+    transition: background 0.15s ease;
+  }
+
+  .episode-row:first-child {
+    border-top: 1px solid var(--oc-border-subtle);
+  }
+
+  .episode-row:hover {
+    background: var(--oc-bg-surface);
   }
 
   .episode-row-meta {
     display: grid;
     gap: 10px;
     color: var(--oc-text-secondary);
-    font-size: 0.76rem;
+    font-family: var(--oc-font-mono);
+    font-size: 0.74rem;
   }
 
   .episode-row-meta span:first-child {
     color: var(--oc-accent-primary);
-    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
     font-weight: 600;
-    letter-spacing: 0;
+    letter-spacing: 0.08em;
   }
 
   .episode-row-meta time {
@@ -357,7 +349,13 @@ const structuredData = {
     text-decoration: none;
   }
 
-  .episode-row-header h3 a:hover {
+  .episode-row-header h3 a::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+  }
+
+  .episode-row:hover .episode-row-header h3 a {
     color: var(--oc-accent-primary);
   }
 
@@ -370,6 +368,8 @@ const structuredData = {
   }
 
   .episode-row-actions {
+    position: relative;
+    z-index: 1;
     display: flex;
     flex-shrink: 0;
     gap: 8px;
@@ -420,7 +420,7 @@ const structuredData = {
     align-items: center;
     padding: 10px 12px;
     border: 1px solid var(--oc-border-subtle);
-    border-radius: 4px;
+    border-radius: 0;
     color: var(--oc-text-primary);
     text-decoration: none;
     transition: border-color 150ms ease, color 150ms ease;
@@ -532,9 +532,10 @@ const structuredData = {
   }
 
   @media (max-width: 720px) {
-    .podcast-hero,
-    .episodes {
-      width: min(100% - 40px, 1080px);
+    .rail {
+      padding: 0 20px;
+      border-left: none;
+      border-right: none;
     }
 
     .podcast-hero {
@@ -564,7 +565,8 @@ const structuredData = {
     .episode-row {
       grid-template-columns: 1fr;
       gap: 10px;
-      padding: 26px 0;
+      margin: 0 -20px;
+      padding: 26px 20px;
     }
 
     .episodes {

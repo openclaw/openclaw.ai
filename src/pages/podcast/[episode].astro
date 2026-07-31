@@ -3,6 +3,7 @@ import { ArrowLeft, ArrowRight } from '@lucide/astro';
 import { siSpotify, siX, siYoutube } from 'simple-icons';
 import Layout from '../../layouts/Layout.astro';
 import SiteFooter from '../../components/SiteFooter.astro';
+import SiteTopbar from '../../components/SiteTopbar.astro';
 import {
   formatEpisodeDate,
   formatPodcastPeople,
@@ -100,7 +101,10 @@ const structuredData = {
   ogImageHeight={630}
   structuredData={structuredData}
 >
+  <SiteTopbar active="podcast" />
+
   <main class="episode-page">
+    <div class="rail">
     <article>
       <a class="back-link" href="/podcast">
         <ArrowLeft size={16} aria-hidden="true" />
@@ -239,6 +243,7 @@ const structuredData = {
         ) : <span />}
       </nav>
     </article>
+    </div>
 
     <SiteFooter current="podcast" credit="simple" />
   </main>
@@ -251,9 +256,20 @@ const structuredData = {
     flex-direction: column;
   }
 
-  article {
-    width: min(100% - 64px, 960px);
+  .rail {
+    width: 100%;
+    max-width: 1060px;
     margin: 0 auto;
+    padding: 0 var(--oc-space-7);
+    border-left: 1px solid var(--oc-border-subtle);
+    border-right: 1px solid var(--oc-border-subtle);
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+  }
+
+  article {
+    width: 100%;
     padding-top: clamp(44px, 7vh, 76px);
   }
 
@@ -262,8 +278,9 @@ const structuredData = {
     align-items: center;
     gap: 7px;
     color: var(--oc-text-secondary);
-    font-size: 0.92rem;
-    font-weight: 600;
+    font-family: var(--oc-font-mono);
+    font-size: 0.8rem;
+    font-weight: 500;
     text-decoration: none;
   }
 
@@ -288,9 +305,10 @@ const structuredData = {
 
   .eyebrow {
     color: var(--oc-accent-primary);
+    font-family: var(--oc-font-mono);
     font-size: 0.78rem;
-    font-weight: 700;
-    letter-spacing: 0;
+    font-weight: 600;
+    letter-spacing: 0.1em;
     text-transform: uppercase;
   }
 
@@ -327,8 +345,10 @@ const structuredData = {
 
   .episode-credits span {
     color: var(--oc-text-secondary);
-    font-size: 0.72rem;
-    font-weight: 700;
+    font-family: var(--oc-font-mono);
+    font-size: 0.7rem;
+    font-weight: 600;
+    letter-spacing: 0.08em;
     text-transform: uppercase;
   }
 
@@ -346,7 +366,7 @@ const structuredData = {
     gap: 9px;
     padding: 10px 13px;
     border: 1px solid var(--oc-border-subtle);
-    border-radius: 4px;
+    border-radius: 0;
     color: var(--oc-text-primary);
     font-size: 0.9rem;
     font-weight: 600;
@@ -412,8 +432,10 @@ const structuredData = {
 
   .episode-people-row > span {
     color: var(--oc-text-secondary);
-    font-size: 0.72rem;
-    font-weight: 700;
+    font-family: var(--oc-font-mono);
+    font-size: 0.7rem;
+    font-weight: 600;
+    letter-spacing: 0.08em;
     text-transform: uppercase;
   }
 
@@ -463,8 +485,11 @@ const structuredData = {
 
   .episode-nav-link span {
     color: var(--oc-text-secondary);
-    font-size: 0.82rem;
-    font-weight: 600;
+    font-family: var(--oc-font-mono);
+    font-size: 0.74rem;
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
   }
 
   .episode-nav-link strong {
@@ -485,8 +510,13 @@ const structuredData = {
   }
 
   @media (max-width: 720px) {
+    .rail {
+      padding: 0 20px;
+      border-left: none;
+      border-right: none;
+    }
+
     article {
-      width: min(100% - 40px, 1080px);
       padding-top: 46px;
     }
 
