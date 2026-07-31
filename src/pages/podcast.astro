@@ -87,18 +87,20 @@ const structuredData = {
         </div>
 
         <div class="rss-utility" aria-label="RSS feed">
-          <span class="rss-icon" aria-hidden="true"><Rss size={19} strokeWidth={1.8} /></span>
-          <span class="rss-copy">
-            <span class="rss-title">RSS feed</span>
-            <span class="rss-description">Use it in any podcast app.</span>
-          </span>
-          <span class="rss-actions">
-            <a href={rssUrl} target="_blank" rel="noopener" class="rss-open">Open</a>
-            <button type="button" class="rss-button" data-copy-rss data-rss-url={rssUrl}>
-              <Copy size={15} aria-hidden="true" />
-              <span data-copy-rss-label>Copy</span>
-            </button>
-          </span>
+          <a href={rssUrl} target="_blank" rel="noopener" class="rss-link">
+            <Rss size={15} strokeWidth={1.8} aria-hidden="true" />
+            RSS
+          </a>
+          <button
+            type="button"
+            class="rss-button"
+            data-copy-rss
+            data-rss-url={rssUrl}
+            title="Copy RSS feed"
+          >
+            <Copy size={14} aria-hidden="true" />
+            <span class="sr-only" data-copy-rss-label aria-live="polite">Copy RSS feed</span>
+          </button>
         </div>
       </div>
     </section>
@@ -214,20 +216,20 @@ const structuredData = {
       'content cover'
       'listen cover';
     grid-template-columns: minmax(0, 1fr) minmax(280px, 340px);
-    gap: 34px 72px;
+    gap: 24px 72px;
     align-items: start;
-    padding: 76px 0 56px;
+    padding: 64px 0 44px;
     border-bottom: 1px solid var(--oc-border-subtle);
   }
 
   .hero-content {
     grid-area: content;
     align-self: end;
-    padding-top: 18px;
+    padding-top: 8px;
   }
 
   .eyebrow {
-    margin-bottom: 14px;
+    margin-bottom: 10px;
     color: var(--oc-accent-primary);
     font-size: 0.78rem;
     font-weight: 700;
@@ -245,7 +247,7 @@ const structuredData = {
 
   .intro {
     max-width: 600px;
-    margin-top: 18px;
+    margin-top: 14px;
     color: var(--oc-text-secondary);
     font-size: 1.12rem;
   }
@@ -302,7 +304,7 @@ const structuredData = {
   }
 
   .episodes {
-    padding: clamp(48px, 8vw, 88px) 0;
+    padding: 52px 0 72px;
     border-bottom: 1px solid var(--oc-border-subtle);
   }
 
@@ -567,71 +569,55 @@ const structuredData = {
   .rss-utility {
     display: flex;
     align-items: center;
-    gap: 10px;
-    margin-top: 14px;
-    padding-top: 14px;
-    border-top: 1px solid var(--oc-border-subtle);
-  }
-
-  .rss-icon {
-    display: inline-flex;
-    align-items: center;
-    color: var(--oc-text-primary);
-  }
-
-  .rss-copy {
-    display: grid;
     gap: 2px;
+    margin-top: 10px;
   }
 
-  .rss-title {
-    color: var(--oc-text-primary);
-    font-weight: 600;
-  }
-
-  .rss-description {
-    color: var(--oc-text-secondary);
-    font-size: 0.8rem;
-  }
-
-  .rss-actions {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    margin-left: auto;
-  }
-
-  .rss-open,
+  .rss-link,
   .rss-button {
     display: inline-flex;
     align-items: center;
-    gap: 7px;
-    min-height: 32px;
-    padding: 5px 8px;
-    border: 1px solid var(--oc-border-subtle);
-    border-radius: 4px;
+    min-height: 28px;
+    padding: 4px 6px;
+    border: 0;
     background: transparent;
-    color: var(--oc-text-primary);
+    color: var(--oc-text-secondary);
     font: inherit;
-    font-size: 0.8rem;
+    font-size: 0.76rem;
     font-weight: 600;
     text-decoration: none;
   }
 
+  .rss-link {
+    gap: 6px;
+  }
+
   .rss-button {
+    justify-content: center;
     cursor: pointer;
   }
 
-  .rss-open:hover,
+  .rss-link:hover,
   .rss-button:hover {
-    border-color: var(--oc-accent-primary);
     color: var(--oc-accent-primary);
   }
 
-  .rss-open:focus-visible,
+  .rss-link:focus-visible,
   .rss-button:focus-visible {
     outline: 2px solid var(--oc-accent-primary);
     outline-offset: 2px;
+  }
+
+  .sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
   }
 
   @media (max-width: 720px) {
@@ -648,9 +634,9 @@ const structuredData = {
         'cover'
         'listen';
       grid-template-columns: 1fr;
-      gap: 28px;
+      gap: 24px;
       padding-top: 72px;
-      padding-bottom: 44px;
+      padding-bottom: 36px;
     }
 
     .hero-content {
@@ -684,6 +670,10 @@ const structuredData = {
       padding: 24px 0;
     }
 
+    .episodes {
+      padding: 40px 0 56px;
+    }
+
     .episode-row-meta {
       display: flex;
       flex-wrap: wrap;
@@ -712,14 +702,5 @@ const structuredData = {
       padding: 9px 11px;
     }
 
-    .rss-utility {
-      align-items: flex-start;
-      flex-wrap: wrap;
-    }
-
-    .rss-actions {
-      width: 100%;
-      margin-left: 0;
-    }
   }
 </style>
