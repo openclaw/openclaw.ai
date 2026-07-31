@@ -26,7 +26,7 @@ const structuredData = {
 
 <Layout
   title="OpenClaw Podcast"
-  description="The ClawCast is OpenClaw's official podcast, hosted by Hannes Rudolph. Listen on Spotify and YouTube, or subscribe with the RSS feed."
+  description="The ClawCast is OpenClaw's official video podcast, hosted by Hannes Rudolph. Find every episode on Spotify and YouTube, or subscribe with the RSS feed."
   canonicalUrl="https://openclaw.ai/podcast"
   ogImage="/podcast/clawcast-share.png"
   ogImageWidth={1200}
@@ -57,26 +57,35 @@ const structuredData = {
         />
       </div>
 
-      <div class="listen-panel">
-        <p class="listen-label">Listen and watch</p>
+      <div class="platform-panel">
         <div class="platforms" aria-label="Podcast platforms">
-          <a href={spotifyUrl} target="_blank" rel="noopener" class="platform-card">
+          <a
+            href={spotifyUrl}
+            target="_blank"
+            rel="noopener"
+            class="platform-card"
+            aria-label="Open The ClawCast on Spotify"
+          >
             <span class="platform-icon" aria-hidden="true">
               <svg viewBox="0 0 24 24"><path d={siSpotify.path} /></svg>
             </span>
             <span class="platform-content">
               <span class="platform-name">Spotify</span>
-              <span class="platform-action">Listen</span>
             </span>
           </a>
 
-          <a href={youtubeUrl} target="_blank" rel="noopener" class="platform-card">
+          <a
+            href={youtubeUrl}
+            target="_blank"
+            rel="noopener"
+            class="platform-card"
+            aria-label="Open The ClawCast on YouTube"
+          >
             <span class="platform-icon" aria-hidden="true">
               <svg viewBox="0 0 24 24"><path d={siYoutube.path} /></svg>
             </span>
             <span class="platform-content">
               <span class="platform-name">YouTube</span>
-              <span class="platform-action">Watch</span>
             </span>
           </a>
 
@@ -172,12 +181,12 @@ const structuredData = {
                   </p>
                 )}
               </div>
-              <div class="episode-row-actions" aria-label={`Listen to ${episode.title}`}>
+              <div class="episode-row-actions" aria-label={`Platforms for ${episode.title}`}>
                 <a
                   href={episode.youtubeUrl}
                   target="_blank"
                   rel="noopener"
-                  aria-label={`Watch ${episode.title} on YouTube`}
+                  aria-label={`Open ${episode.title} on YouTube`}
                   title="YouTube"
                 >
                   <svg viewBox="0 0 24 24" aria-hidden="true"><path d={siYoutube.path} /></svg>
@@ -187,7 +196,7 @@ const structuredData = {
                   target="_blank"
                   rel="noopener"
                   aria-label={`${episode.spotifyLabel}: ${episode.title}`}
-                  title={episode.spotifyLabel === 'Listen on Spotify' ? 'Spotify' : 'Spotify show'}
+                  title={episode.spotifyLabel === 'Open in Spotify' ? 'Spotify' : 'Spotify show'}
                 >
                   <svg viewBox="0 0 24 24" aria-hidden="true"><path d={siSpotify.path} /></svg>
                 </a>
@@ -550,16 +559,8 @@ const structuredData = {
     outline-offset: 2px;
   }
 
-  .listen-panel {
+  .platform-panel {
     grid-area: listen;
-  }
-
-  .listen-label {
-    margin-bottom: 10px;
-    color: var(--oc-text-secondary);
-    font-size: 0.72rem;
-    font-weight: 700;
-    text-transform: uppercase;
   }
 
   .platforms {

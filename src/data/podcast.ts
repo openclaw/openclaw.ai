@@ -39,7 +39,7 @@ export const podcastEpisodes: PodcastEpisode[] = [
     airedAt: '2026-07-30',
     youtubeUrl: 'https://www.youtube.com/watch?v=WKfeP5zw0CY',
     spotifyUrl: 'https://open.spotify.com/episode/3OyE8Is3VPBOI41rvnpDJp',
-    spotifyLabel: 'Listen on Spotify',
+    spotifyLabel: 'Open in Spotify',
     listingSummary: 'Hannes Rudolph and Patrick Erichsen answer community questions about how they use OpenClaw day to day, why release stability is a priority, and what is coming next for the Control UI, mobile apps, ClawHub, and agent workflows.',
     description: `In this episode of OpenClaw’s official podcast, The ClawCast, host Hannes Rudolph, OpenClaw Community Manager, and co-host Patrick Erichsen, OpenClaw Developer, answer community questions about how they use OpenClaw day to day, why the team is prioritizing release stability, and what is coming next for the Control UI, mobile apps, ClawHub, and agent workflows.
 
@@ -97,7 +97,7 @@ Kevin Lin: https://x.com/kevins8`,
     airedAt: '2026-07-15',
     youtubeUrl: 'https://www.youtube.com/watch?v=zEiqIovjULc',
     spotifyUrl: 'https://open.spotify.com/episode/5EQQ2N2n1yYtRx9X2Q3JEf',
-    spotifyLabel: 'Listen on Spotify',
+    spotifyLabel: 'Open in Spotify',
     listingSummary: 'Sam Odio, host of AI Worth Using, joins Hannes Rudolph and Patrick Erichsen to discuss making OpenClaw more accessible without sacrificing its flexibility and extensibility.',
     descriptionLinks: [
       { text: 'AI Worth Using', href: 'https://aiworthusing.com' },
@@ -134,7 +134,7 @@ Join our Discord: https://discord.com/invite/clawd`,
     airedAt: '2026-07-08',
     youtubeUrl: 'https://www.youtube.com/watch?v=TQ7SgFXvieY',
     spotifyUrl: 'https://open.spotify.com/episode/2DQqQHQCZsl2sbGTKsLzq7',
-    spotifyLabel: 'Listen on Spotify',
+    spotifyLabel: 'Open in Spotify',
     listingSummary: 'Josh Lehman, Sedrak Hovhannisyan, and Alexander Adamyan join Hannes Rudolph to discuss OpenClaw onboarding, agent self-improvement, and long-running autonomous workflows.',
     description: `In this episode of OpenClaw’s official podcast, The Clawcast, host Hannes Rudolph, OpenClaw Community Manager, is joined by Josh Lehman, OpenClaw maintainer and founder of Martian Engineering, and Sedrak Hovhannisyan and Alexander Adamyan, co-founders of Vana Labs, to discuss the OpenClaw onboarding overhaul, why the planned onboarding demo was cancelled, what OpenClaw can learn from Hermes’s self-improvement system, and how OpenClaw compares to tools like Codex for long-running autonomous workflows.
 
@@ -168,7 +168,7 @@ Join our Discord: https://discord.com/invite/clawd`,
     airedAt: '2026-07-01',
     youtubeUrl: 'https://www.youtube.com/watch?v=VJMhxh7KpqQ',
     spotifyUrl: 'https://open.spotify.com/episode/5GwMaO6y852bjiVTAimOYT',
-    spotifyLabel: 'Listen on Spotify',
+    spotifyLabel: 'Open in Spotify',
     listingSummary: 'Sally Ann O’Malley and Peter Steinberger join Hannes Rudolph and Patrick Erichsen to discuss OpenClaw stability, security, mobile apps, and the project’s future.',
     description: `In this episode of OpenClaw’s official podcast, The Clawcast, host Hannes Rudolph, OpenClaw Community Manager, and co-host Patrick Erichsen, OpenClaw Developer, are joined by Sally Ann O’Malley from Red Hat, a maintainer of the OpenClaw OSS repo, and Peter Steinberger, founder of OpenClaw, to discuss OpenClaw stability, security, the future of OpenClaw, and the community’s response to our recently released OpenClaw mobile app.
 
@@ -200,7 +200,7 @@ Join our Discord: https://discord.com/invite/clawd`,
     airedAt: '2026-06-24',
     youtubeUrl: 'https://www.youtube.com/watch?v=IfJJnR1LIE0',
     spotifyUrl: 'https://open.spotify.com/episode/199ux52AK8oXunvP7siG8Z',
-    spotifyLabel: 'Listen on Spotify',
+    spotifyLabel: 'Open in Spotify',
     listingSummary: 'Adam from GosuCoder joins Hannes Rudolph and Patrick Erichsen to discuss OpenClaw and the latest developments in AI.',
     description: `In this inaugural episode of the official OpenClaw podcast, The ClawCast, host Hannes Rudolph (OpenClaw Community Manager) and co-host Patrick Erichsen (OpenClaw Developer) are joined by Adam from the YouTube channel GosuCoder to discuss all things OpenClaw and the latest happenings in AI.
 
