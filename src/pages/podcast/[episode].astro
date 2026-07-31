@@ -112,7 +112,14 @@ const structuredData = {
                       <a href={line.href} target="_blank" rel="noopener">
                         {line.text}
                         {line.href.startsWith('https://x.com/') && (
-                          <svg class="x-link-icon" viewBox="0 0 24 24" aria-hidden="true">
+                          <svg
+                            class="x-link-icon"
+                            viewBox="0 0 24 24"
+                            width="12"
+                            height="12"
+                            fill="currentColor"
+                            aria-hidden="true"
+                          >
                             <path d={siX.path} />
                           </svg>
                         )}
