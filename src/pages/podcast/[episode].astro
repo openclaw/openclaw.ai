@@ -101,8 +101,11 @@ const structuredData = {
                 {formatPodcastPeople(episode.guests)}
               </p>
             )}
+            <p>
+              <span>Date</span>
+              {formatEpisodeDate(episode.airedAt)}
+            </p>
           </div>
-          <p class="episode-date">Aired {formatEpisodeDate(episode.airedAt)}</p>
           <div class="episode-actions" aria-label="Listen to this episode">
             <a href={episode.youtubeUrl} target="_blank" rel="noopener" class="episode-action episode-action--primary">
               <svg viewBox="0 0 24 24" aria-hidden="true"><path d={siYoutube.path} /></svg>
@@ -307,11 +310,6 @@ const structuredData = {
     font-size: 0.72rem;
     font-weight: 700;
     text-transform: uppercase;
-  }
-
-  .episode-date {
-    margin-top: 9px;
-    color: var(--oc-text-secondary);
   }
 
   .episode-actions {
