@@ -146,13 +146,23 @@ const structuredData = {
                 )}
               </div>
               <div class="episode-row-actions" aria-label={`Listen to ${episode.title}`}>
-                <a href={episode.youtubeUrl} target="_blank" rel="noopener">
+                <a
+                  href={episode.youtubeUrl}
+                  target="_blank"
+                  rel="noopener"
+                  aria-label={`Watch ${episode.title} on YouTube`}
+                  title="YouTube"
+                >
                   <svg viewBox="0 0 24 24" aria-hidden="true"><path d={siYoutube.path} /></svg>
-                  YouTube
                 </a>
-                <a href={episode.spotifyUrl} target="_blank" rel="noopener">
+                <a
+                  href={episode.spotifyUrl}
+                  target="_blank"
+                  rel="noopener"
+                  aria-label={`${episode.spotifyLabel}: ${episode.title}`}
+                  title={episode.spotifyLabel === 'Listen on Spotify' ? 'Spotify' : 'Spotify show'}
+                >
                   <svg viewBox="0 0 24 24" aria-hidden="true"><path d={siSpotify.path} /></svg>
-                  {episode.spotifyLabel === 'Listen on Spotify' ? 'Spotify' : 'Spotify show'}
                 </a>
               </div>
             </div>
@@ -441,23 +451,23 @@ const structuredData = {
   .episode-row-actions {
     display: flex;
     flex-wrap: wrap;
-    gap: 8px 16px;
+    gap: 8px;
     margin-top: 16px;
   }
 
   .episode-row-actions a {
     display: inline-flex;
+    width: 28px;
+    height: 28px;
     align-items: center;
-    gap: 7px;
+    justify-content: center;
     color: var(--oc-text-secondary);
-    font-size: 0.88rem;
-    font-weight: 600;
     text-decoration: none;
   }
 
   .episode-row-actions svg {
-    width: 16px;
-    height: 16px;
+    width: 17px;
+    height: 17px;
     fill: currentColor;
   }
 
