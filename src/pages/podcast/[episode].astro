@@ -5,6 +5,7 @@ import Layout from '../../layouts/Layout.astro';
 import SiteFooter from '../../components/SiteFooter.astro';
 import {
   formatEpisodeDate,
+  formatPodcastPeople,
   getEpisodeSummary,
   podcastEpisodes,
   type PodcastEpisode,
@@ -32,19 +33,23 @@ const displayDescription = episode.description
     '',
   )
   .trim();
-const descriptionParagraphs = displayDescription.split('\n\n').map((paragraph) =>
-  paragraph.split('\n').map((line) => {
-    const linkMatch = line.match(/^(.*?):\s*(https?:\/\/\S+)$/u);
+const descriptionParagraphs = displayDescription
+  .split('\n\n')
+  .filter((paragraph) =>
+    !paragraph.startsWith('Guests and hosts socials:')
+    && !paragraph.startsWith('Guest:')
+  )
+  .map((paragraph) =>
+    paragraph.split('\n').map((line) => {
+      const linkMatch = line.match(/^(.*?):\s*(https?:\/\/\S+)$/u);
 
-    if (linkMatch) {
-      return { text: linkMatch[1], href: linkMatch[2] };
-    }
+      if (linkMatch) {
+        return { text: linkMatch[1], href: linkMatch[2] };
+      }
 
-    return {
-      text: line === 'Guests and hosts socials:' ? 'Guests and hosts:' : line,
-    };
-  }),
-);
+      return { text: line };
+    }),
+  );
 const structuredData = {
   '@context': 'https://schema.org',
   '@type': 'PodcastEpisode',
@@ -85,7 +90,18 @@ const structuredData = {
         <div class="episode-intro">
           <p class="eyebrow">The ClawCast</p>
           <h1>{episode.title}</h1>
-          <p class="episode-guests">{episode.guests}</p>
+          <div class="episode-credits">
+            <p>
+              <span>Hosts</span>
+              {formatPodcastPeople(episode.hosts)}
+            </p>
+            {episode.guests.length > 0 && (
+              <p>
+                <span>{episode.guests.length === 1 ? 'Guest' : 'Guests'}</span>
+                {formatPodcastPeople(episode.guests)}
+              </p>
+            )}
+          </div>
           <p class="episode-date">Aired {formatEpisodeDate(episode.airedAt)}</p>
           <div class="episode-actions" aria-label="Listen to this episode">
             <a href={episode.youtubeUrl} target="_blank" rel="noopener" class="episode-action episode-action--primary">
@@ -130,6 +146,54 @@ const structuredData = {
               ))}
             </p>
           ))}
+          <div class="episode-people">
+            <div class="episode-people-row">
+              <span>Hosts</span>
+              <p>
+                {episode.hosts.map((person) =>
+                  person.xUrl ? (
+                    <a href={person.xUrl} target="_blank" rel="noopener">
+                      {person.name}
+                      <svg
+                        class="x-link-icon"
+                        viewBox="0 0 24 24"
+                        width="12"
+                        height="12"
+                        fill="currentColor"
+                        aria-hidden="true"
+                      >
+                        <path d={siX.path} />
+                      </svg>
+                    </a>
+                  ) : person.name
+                )}
+              </p>
+            </div>
+            {episode.guests.length > 0 && (
+              <div class="episode-people-row">
+                <span>{episode.guests.length === 1 ? 'Guest' : 'Guests'}</span>
+                <p>
+                  {episode.guests.map((person) =>
+                    person.xUrl ? (
+                      <a href={person.xUrl} target="_blank" rel="noopener">
+                        {person.name}
+                        <svg
+                          class="x-link-icon"
+                          viewBox="0 0 24 24"
+                          width="12"
+                          height="12"
+                          fill="currentColor"
+                          aria-hidden="true"
+                        >
+                          <path d={siX.path} />
+                        </svg>
+                      </a>
+                    ) : person.name
+                  )}
+                </p>
+              </div>
+            )}
+          </div>
           <p class="live-recording">
             Recorded live every Wednesday at 11:30 AM PT on Discord.{' '}
             <a href={discordUrl} target="_blank" rel="noopener">Join our Discord</a>
@@ -220,12 +284,29 @@ const structuredData = {
     line-height: 1;
   }
 
-  .episode-guests {
-    max-width: 580px;
+  .episode-credits {
+    display: grid;
+    max-width: 650px;
+    gap: 7px;
     margin-top: 22px;
+  }
+
+  .episode-credits p {
+    display: grid;
+    grid-template-columns: 62px minmax(0, 1fr);
+    gap: 12px;
+    align-items: baseline;
+    max-width: 580px;
     color: var(--oc-text-primary);
     font-size: clamp(1.05rem, 2vw, 1.28rem);
     font-weight: 600;
+  }
+
+  .episode-credits span {
+    color: var(--oc-text-secondary);
+    font-size: 0.72rem;
+    font-weight: 700;
+    text-transform: uppercase;
   }
 
   .episode-date {
@@ -294,6 +375,38 @@ const structuredData = {
 
   .description-copy p + p {
     margin-top: 22px;
+  }
+
+  .episode-people {
+    display: grid;
+    gap: 12px;
+    margin-top: 28px;
+    padding-top: 24px;
+    border-top: 1px solid var(--oc-border-subtle);
+  }
+
+  .episode-people-row {
+    display: grid;
+    grid-template-columns: 62px minmax(0, 1fr);
+    gap: 12px;
+    align-items: baseline;
+  }
+
+  .episode-people-row > span {
+    color: var(--oc-text-secondary);
+    font-size: 0.72rem;
+    font-weight: 700;
+    text-transform: uppercase;
+  }
+
+  .episode-people-row p {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px 16px;
+  }
+
+  .live-recording {
+    margin-top: 28px;
   }
 
   .description-copy a {

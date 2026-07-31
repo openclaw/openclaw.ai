@@ -1,8 +1,14 @@
+export type PodcastPerson = {
+  name: string;
+  xUrl?: string;
+};
+
 export type PodcastEpisode = {
   number: number;
   slug: string;
   title: string;
-  guests: string;
+  hosts: PodcastPerson[];
+  guests: PodcastPerson[];
   airedAt: string;
   youtubeUrl: string;
   spotifyUrl: string;
@@ -18,7 +24,11 @@ export const podcastEpisodes: PodcastEpisode[] = [
     number: 6,
     slug: 'episode-6',
     title: 'Episode 6',
-    guests: 'Hannes Rudolph and Patrick Erichsen',
+    hosts: [
+      { name: 'Hannes Rudolph', xUrl: 'https://x.com/hrudolph' },
+      { name: 'Patrick Erichsen', xUrl: 'https://x.com/Pat_Erichsen' },
+    ],
+    guests: [],
     airedAt: '2026-07-30',
     youtubeUrl: 'https://www.youtube.com/watch?v=WKfeP5zw0CY',
     spotifyUrl: 'https://open.spotify.com/episode/3OyE8Is3VPBOI41rvnpDJp',
@@ -42,7 +52,13 @@ Join our Discord: https://discord.com/invite/clawd`,
     number: 5,
     slug: 'episode-5',
     title: 'Episode 5',
-    guests: 'Hannes Rudolph, Patrick Erichsen, and Kevin Lin',
+    hosts: [
+      { name: 'Hannes Rudolph', xUrl: 'https://x.com/hrudolph' },
+      { name: 'Patrick Erichsen', xUrl: 'https://x.com/Pat_Erichsen' },
+    ],
+    guests: [
+      { name: 'Kevin Lin', xUrl: 'https://x.com/kevins8' },
+    ],
     airedAt: '2026-07-22',
     youtubeUrl: 'https://www.youtube.com/watch?v=zSkI2vJlmbs',
     spotifyUrl: spotifyShowUrl,
@@ -62,7 +78,13 @@ Kevin Lin: https://x.com/kevins8`,
     number: 4,
     slug: 'episode-4',
     title: 'Episode 4',
-    guests: 'Hannes Rudolph, Patrick Erichsen, and Sam Odio',
+    hosts: [
+      { name: 'Hannes Rudolph', xUrl: 'https://x.com/hrudolph' },
+      { name: 'Patrick Erichsen', xUrl: 'https://x.com/Pat_Erichsen' },
+    ],
+    guests: [
+      { name: 'Sam Odio', xUrl: 'https://x.com/sodio' },
+    ],
     airedAt: '2026-07-15',
     youtubeUrl: 'https://www.youtube.com/watch?v=zEiqIovjULc',
     spotifyUrl: 'https://open.spotify.com/episode/5EQQ2N2n1yYtRx9X2Q3JEf',
@@ -90,7 +112,14 @@ Join our Discord: https://discord.com/invite/clawd`,
     number: 3,
     slug: 'episode-3',
     title: 'Episode 3',
-    guests: 'Hannes Rudolph, Josh Lehman, Sedrak Hovhannisyan, and Alexander Adamyan',
+    hosts: [
+      { name: 'Hannes Rudolph', xUrl: 'https://x.com/hrudolph' },
+    ],
+    guests: [
+      { name: 'Josh Lehman', xUrl: 'https://x.com/jlehman_' },
+      { name: 'Sedrak Hovhannisyan', xUrl: 'https://x.com/Sedrak1010' },
+      { name: 'Alexander Adamyan', xUrl: 'https://x.com/sashforce' },
+    ],
     airedAt: '2026-07-08',
     youtubeUrl: 'https://www.youtube.com/watch?v=TQ7SgFXvieY',
     spotifyUrl: 'https://open.spotify.com/episode/2DQqQHQCZsl2sbGTKsLzq7',
@@ -116,7 +145,14 @@ Join our Discord: https://discord.com/invite/clawd`,
     number: 2,
     slug: 'episode-2',
     title: 'Episode 2',
-    guests: "Hannes Rudolph, Patrick Erichsen, Sally Ann O'Malley, and Peter Steinberger",
+    hosts: [
+      { name: 'Hannes Rudolph', xUrl: 'https://x.com/hrudolph' },
+      { name: 'Patrick Erichsen', xUrl: 'https://x.com/Pat_Erichsen' },
+    ],
+    guests: [
+      { name: "Sally Ann O'Malley", xUrl: 'https://x.com/somalley108' },
+      { name: 'Peter Steinberger', xUrl: 'https://x.com/steipete' },
+    ],
     airedAt: '2026-07-01',
     youtubeUrl: 'https://www.youtube.com/watch?v=VJMhxh7KpqQ',
     spotifyUrl: 'https://open.spotify.com/episode/5GwMaO6y852bjiVTAimOYT',
@@ -141,7 +177,13 @@ Join our Discord: https://discord.com/invite/clawd`,
     number: 1,
     slug: 'episode-1',
     title: 'Episode 1',
-    guests: 'Hannes Rudolph, Patrick Erichsen, and Adam from GosuCoder',
+    hosts: [
+      { name: 'Hannes Rudolph', xUrl: 'https://x.com/hrudolph' },
+      { name: 'Patrick Erichsen', xUrl: 'https://x.com/Pat_Erichsen' },
+    ],
+    guests: [
+      { name: 'Adam from GosuCoder' },
+    ],
     airedAt: '2026-06-24',
     youtubeUrl: 'https://www.youtube.com/watch?v=IfJJnR1LIE0',
     spotifyUrl: 'https://open.spotify.com/episode/199ux52AK8oXunvP7siG8Z',
@@ -160,6 +202,13 @@ Join our Discord: https://discord.com/invite/clawd`,
 
 export function getEpisodeSummary(episode: PodcastEpisode): string {
   return episode.description.split('\n\n')[0];
+}
+
+export function formatPodcastPeople(people: PodcastPerson[]): string {
+  return new Intl.ListFormat('en-US', {
+    style: 'long',
+    type: 'conjunction',
+  }).format(people.map((person) => person.name));
 }
 
 export function formatEpisodeDate(isoDate: string): string {

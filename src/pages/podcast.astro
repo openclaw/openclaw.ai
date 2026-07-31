@@ -3,7 +3,7 @@ import { Copy, Rss } from '@lucide/astro';
 import { siApplepodcasts, siDiscord, siSpotify, siYoutube } from 'simple-icons';
 import Layout from '../layouts/Layout.astro';
 import SiteFooter from '../components/SiteFooter.astro';
-import { formatEpisodeDate, getEpisodeSummary, podcastEpisodes } from '../data/podcast';
+import { formatEpisodeDate, formatPodcastPeople, getEpisodeSummary, podcastEpisodes } from '../data/podcast';
 
 const spotifyUrl = 'https://open.spotify.com/show/033M5Wn9WAAdujY1qAcIYO';
 const youtubeUrl = 'https://www.youtube.com/playlist?list=PLHl8GlRgxIlA';
@@ -114,7 +114,15 @@ const structuredData = {
             </div>
             <div class="episode-row-main">
               <h3><a href={`/podcast/${episode.slug}`}>{episode.title}</a></h3>
-              <p class="episode-guests">{episode.guests}</p>
+              <div class="episode-credits">
+                <p><span>Hosts</span>{formatPodcastPeople(episode.hosts)}</p>
+                {episode.guests.length > 0 && (
+                  <p>
+                    <span>{episode.guests.length === 1 ? 'Guest' : 'Guests'}</span>
+                    {formatPodcastPeople(episode.guests)}
+                  </p>
+                )}
+              </div>
               <p class="episode-summary">{getEpisodeSummary(episode)}</p>
             </div>
             <div class="episode-row-actions" aria-label={`Listen to ${episode.title}`}>
@@ -335,11 +343,26 @@ const structuredData = {
     color: var(--oc-accent-primary);
   }
 
-  .episode-guests {
+  .episode-credits {
+    display: grid;
+    gap: 4px;
     margin-top: 8px;
+  }
+
+  .episode-credits p {
+    display: grid;
+    grid-template-columns: 50px minmax(0, 1fr);
+    gap: 8px;
     color: var(--oc-text-primary);
     font-size: 0.94rem;
     font-weight: 600;
+  }
+
+  .episode-credits span {
+    color: var(--oc-text-secondary);
+    font-size: 0.68rem;
+    font-weight: 700;
+    text-transform: uppercase;
   }
 
   .episode-summary {
