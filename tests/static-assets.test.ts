@@ -45,13 +45,13 @@ describe('static public assets', () => {
     expect(blogSources.every((source) => !source.includes('descriptionHtml:'))).toBe(true);
   });
 
-  test('uses the canonical OpenClaw design-system contract', () => {
+  test('uses the canonical OpenClaw Carapace contract', () => {
     const layout = readText('src/layouts/Layout.astro');
     const orderedImports = [
-      "import '@openclaw/design-system/tokens.css'",
-      "import '@openclaw/design-system/themes.css'",
-      "import '@openclaw/design-system/typography.css'",
-      "import '@openclaw/design-system/components.css'",
+      "import '@openclaw/carapace/tokens.css'",
+      "import '@openclaw/carapace/themes.css'",
+      "import '@openclaw/carapace/typography.css'",
+      "import '@openclaw/carapace/components.css'",
     ];
     const importOffsets = orderedImports.map((entry) => layout.indexOf(entry));
 

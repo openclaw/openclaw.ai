@@ -1,5 +1,12 @@
 ---
-import { siDiscord, siGithub } from 'simple-icons';
+import {
+  siDiscord,
+  siGithub,
+  siInstagram,
+  siReddit,
+  siTiktok,
+  siYoutube,
+} from 'simple-icons';
 
 const linkGroups = [
   {
@@ -14,6 +21,7 @@ const linkGroups = [
     title: 'Resources',
     links: [
       { id: 'blog', label: 'Blog', href: '/blog' },
+      { id: 'podcast', label: 'Podcast', href: '/podcast' },
       { id: 'press', label: 'Press', href: '/press' },
       { id: 'shoutouts', label: 'Shoutouts', href: '/shoutouts' },
     ],
@@ -32,6 +40,15 @@ const socialLinks = [
   { label: 'X', href: 'https://x.com/openclaw', glyph: '𝕏' },
   { label: 'GitHub', href: 'https://github.com/openclaw/openclaw', path: siGithub.path },
   { label: 'Discord', href: 'https://discord.com/invite/clawd', path: siDiscord.path },
+  { label: 'Reddit', href: 'https://www.reddit.com/r/openclaw/', path: siReddit.path },
+  { label: 'TikTok', href: 'https://www.tiktok.com/@open_claw', path: siTiktok.path },
+  {
+    label: 'LinkedIn',
+    href: 'https://www.linkedin.com/company/the-openclaw-foundation',
+    path: 'M20.45 20.45h-3.55v-5.57c0-1.33-.03-3.04-1.85-3.04-1.85 0-2.14 1.45-2.14 2.94v5.67H9.36V9h3.41v1.56h.05c.48-.9 1.64-1.85 3.37-1.85 3.6 0 4.27 2.37 4.27 5.46v6.28ZM5.34 7.43a2.06 2.06 0 1 1 0-4.12 2.06 2.06 0 0 1 0 4.12ZM7.11 20.45H3.56V9h3.55v11.45ZM22.22 0H1.77C.79 0 0 .77 0 1.72v20.56C0 23.23.79 24 1.77 24h20.45c.98 0 1.78-.77 1.78-1.72V1.72C24 .77 23.2 0 22.22 0Z',
+  },
+  { label: 'Instagram', href: 'https://www.instagram.com/openclaw_org/', path: siInstagram.path },
+  { label: 'YouTube', href: 'https://www.youtube.com/@OpenClawYT', path: siYoutube.path },
 ];
 
 const {

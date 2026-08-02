@@ -1,0 +1,535 @@
+---
+import { ArrowLeft, ArrowRight } from '@lucide/astro';
+import { siSpotify, siX, siYoutube } from 'simple-icons';
+import Layout from '../../layouts/Layout.astro';
+import SiteFooter from '../../components/SiteFooter.astro';
+import SiteTopbar from '../../components/SiteTopbar.astro';
+import {
+  formatEpisodeDate,
+  formatPodcastPeople,
+  getEpisodeSummary,
+  podcastEpisodes,
+  type PodcastEpisode,
+} from '../../data/podcast';
+
+export function getStaticPaths() {
+  return podcastEpisodes.map((episode) => ({
+    params: { episode: episode.slug },
+    props: { episode },
+  }));
+}
+
+const { episode } = Astro.props as { episode: PodcastEpisode };
+const episodeIndex = podcastEpisodes.findIndex((item) => item.slug === episode.slug);
+const newerEpisode = podcastEpisodes[episodeIndex - 1];
+const olderEpisode = podcastEpisodes[episodeIndex + 1];
+const canonicalUrl = `https://openclaw.ai/podcast/${episode.slug}`;
+const shareImage = episode.shareImage ?? '/podcast/clawcast-share.png';
+const discordUrl = 'https://discord.com/invite/clawd';
+const displayDescription = episode.description
+  .replace(/\n\nLearn more about The OpenClaw Foundation:\s*https:\/\/www\.openclaw\.org/gu, '')
+  .replace(/\n\nListen on Spotify:\s*https:\/\/\S+/gu, '')
+  .replace(
+    /\n\nRecorded live every Wednesday at 11:30 AM PT on Discord\.\s*\nJoin our Discord:\s*https:\/\/\S+/gu,
+    '',
+  )
+  .trim();
+
+function escapeRegExp(value: string): string {
+  return value.replace(/[.*+?^${}()|[\]\\]/gu, '\\$&');
+}
+
+function parseDescriptionLine(line: string) {
+  const linkMatch = line.match(/^(.*?):\s*(https?:\/\/\S+)$/u);
+
+  if (linkMatch) {
+    return [{ text: linkMatch[1], href: linkMatch[2] }];
+  }
+
+  const inlineLinks = episode.descriptionLinks ?? [];
+
+  if (inlineLinks.length === 0) {
+    return [{ text: line }];
+  }
+
+  const linkPattern = new RegExp(
+    `(${inlineLinks.map((link) => escapeRegExp(link.text)).join('|')})`,
+    'gu',
+  );
+
+  return line.split(linkPattern).filter(Boolean).map((text) => {
+    const link = inlineLinks.find((item) => item.text === text);
+    return link ? { text, href: link.href } : { text };
+  });
+}
+
+const descriptionParagraphs = displayDescription
+  .split('\n\n')
+  .filter((paragraph) =>
+    !paragraph.startsWith('Guests and hosts socials:')
+    && !paragraph.startsWith('Guest:')
+  )
+  .map((paragraph) =>
+    paragraph.split('\n').map(parseDescriptionLine),
+  );
+const structuredData = {
+  '@context': 'https://schema.org',
+  '@type': 'PodcastEpisode',
+  name: `The ClawCast - ${episode.title}`,
+  url: canonicalUrl,
+  datePublished: `${episode.airedAt}T12:00:00Z`,
+  description: getEpisodeSummary(episode),
+  image: `https://openclaw.ai${shareImage}`,
+  partOfSeries: {
+    '@type': 'PodcastSeries',
+    name: 'The OpenClaw Podcast',
+    url: 'https://openclaw.ai/podcast',
+  },
+  associatedMedia: {
+    '@type': 'VideoObject',
+    contentUrl: episode.youtubeUrl,
+  },
+};
+---
+
+<Layout
+  title={`The ClawCast ${episode.title}`}
+  description={getEpisodeSummary(episode)}
+  canonicalUrl={canonicalUrl}
+  ogImage={shareImage}
+  ogImageWidth={1200}
+  ogImageHeight={630}
+  structuredData={structuredData}
+>
+  <SiteTopbar active="podcast" />
+
+  <main class="episode-page">
+    <div class="rail">
+    <article>
+      <a class="back-link" href="/podcast">
+        <ArrowLeft size={16} aria-hidden="true" />
+        All episodes
+      </a>
+
+      <header class="episode-hero">
+        <div class="episode-intro">
+          <p class="eyebrow">The ClawCast</p>
+          <h1>{episode.title}</h1>
+          <div class="episode-credits">
+            <p>
+              <span>Hosts</span>
+              {formatPodcastPeople(episode.hosts)}
+            </p>
+            {episode.guests.length > 0 && (
+              <p>
+                <span>{episode.guests.length === 1 ? 'Guest' : 'Guests'}</span>
+                {formatPodcastPeople(episode.guests)}
+              </p>
+            )}
+            <p>
+              <span>Date</span>
+              {formatEpisodeDate(episode.airedAt)}
+            </p>
+          </div>
+          <div class="episode-actions" aria-label="Episode platforms">
+            <a href={episode.youtubeUrl} target="_blank" rel="noopener" class="episode-action episode-action--primary">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d={siYoutube.path} /></svg>
+              Watch on YouTube
+            </a>
+            <a href={episode.spotifyUrl} target="_blank" rel="noopener" class="episode-action">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d={siSpotify.path} /></svg>
+              {episode.spotifyLabel}
+            </a>
+          </div>
+        </div>
+      </header>
+
+      <section class="description" aria-label="Episode description">
+        <div class="description-copy">
+          {descriptionParagraphs.map((paragraph) => (
+            <p>
+              {paragraph.map((line, index) => (
+                <>
+                  {index > 0 && <br />}
+                  {line.map((part) =>
+                    part.href
+                      ? (
+                        <a href={part.href} target="_blank" rel="noopener">{part.text}{part.href.startsWith('https://x.com/') && (
+                            <svg
+                              class="x-link-icon"
+                              viewBox="0 0 24 24"
+                              width="12"
+                              height="12"
+                              fill="currentColor"
+                              aria-hidden="true"
+                            >
+                              <path d={siX.path} />
+                            </svg>
+                          )}</a>
+                      )
+                      : part.text
+                  )}
+                </>
+              ))}
+            </p>
+          ))}
+          <div class="episode-people">
+            <div class="episode-people-row">
+              <span>Hosts</span>
+              <p>
+                {episode.hosts.map((person) =>
+                  person.xUrl ? (
+                    <a href={person.xUrl} target="_blank" rel="noopener">
+                      {person.name}
+                      <svg
+                        class="x-link-icon"
+                        viewBox="0 0 24 24"
+                        width="12"
+                        height="12"
+                        fill="currentColor"
+                        aria-hidden="true"
+                      >
+                        <path d={siX.path} />
+                      </svg>
+                    </a>
+                  ) : person.name
+                )}
+              </p>
+            </div>
+            {episode.guests.length > 0 && (
+              <div class="episode-people-row">
+                <span>{episode.guests.length === 1 ? 'Guest' : 'Guests'}</span>
+                <p>
+                  {episode.guests.map((person) =>
+                    person.xUrl ? (
+                      <a href={person.xUrl} target="_blank" rel="noopener">
+                        {person.name}
+                        <svg
+                          class="x-link-icon"
+                          viewBox="0 0 24 24"
+                          width="12"
+                          height="12"
+                          fill="currentColor"
+                          aria-hidden="true"
+                        >
+                          <path d={siX.path} />
+                        </svg>
+                      </a>
+                    ) : person.name
+                  )}
+                </p>
+              </div>
+            )}
+          </div>
+          <p class="live-recording">
+            <a href={discordUrl} target="_blank" rel="noopener">Join the OpenClaw Discord</a>
+            {' '}every Wednesday at 11:30 AM PT.
+          </p>
+        </div>
+      </section>
+
+      <nav class="episode-navigation" aria-label="Episode navigation">
+        {newerEpisode ? (
+          <a href={`/podcast/${newerEpisode.slug}`} class="episode-nav-link">
+            <span>Newer episode</span>
+            <strong>{newerEpisode.title}</strong>
+          </a>
+        ) : <span />}
+        {olderEpisode ? (
+          <a href={`/podcast/${olderEpisode.slug}`} class="episode-nav-link episode-nav-link--next">
+            <span>Older episode</span>
+            <strong>{olderEpisode.title} <ArrowRight size={16} aria-hidden="true" /></strong>
+          </a>
+        ) : <span />}
+      </nav>
+    </article>
+    </div>
+
+    <SiteFooter current="podcast" credit="simple" />
+  </main>
+</Layout>
+
+<style>
+  .episode-page {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .rail {
+    width: 100%;
+    max-width: 1060px;
+    margin: 0 auto;
+    padding: 0 var(--oc-space-7);
+    border-left: 1px solid var(--oc-border-subtle);
+    border-right: 1px solid var(--oc-border-subtle);
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+  }
+
+  article {
+    width: 100%;
+    padding-top: clamp(44px, 7vh, 76px);
+  }
+
+  .back-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    color: var(--oc-text-secondary);
+    font-family: var(--oc-font-mono);
+    font-size: 0.8rem;
+    font-weight: 500;
+    text-decoration: none;
+  }
+
+  .back-link:hover {
+    color: var(--oc-accent-primary);
+  }
+
+  .back-link:focus-visible,
+  .episode-action:focus-visible,
+  .episode-nav-link:focus-visible {
+    outline: 2px solid var(--oc-accent-primary);
+    outline-offset: 3px;
+  }
+
+  .episode-hero {
+    padding: clamp(42px, 6vw, 68px) 0 0;
+  }
+
+  .episode-intro {
+    max-width: 760px;
+  }
+
+  .eyebrow {
+    color: var(--oc-accent-primary);
+    font-family: var(--oc-font-mono);
+    font-size: 0.78rem;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+
+  h1,
+  h2 {
+    color: var(--oc-text-primary);
+    font-family: var(--oc-font-display);
+    font-weight: 600;
+  }
+
+  h1 {
+    margin-top: 12px;
+    font-size: clamp(3rem, 6vw, 4.8rem);
+    line-height: 1;
+  }
+
+  .episode-credits {
+    display: grid;
+    max-width: 650px;
+    gap: 7px;
+    margin-top: 22px;
+  }
+
+  .episode-credits p {
+    display: grid;
+    grid-template-columns: 62px minmax(0, 1fr);
+    gap: 12px;
+    align-items: baseline;
+    max-width: 580px;
+    color: var(--oc-text-primary);
+    font-size: clamp(1.05rem, 2vw, 1.28rem);
+    font-weight: 600;
+  }
+
+  .episode-credits span {
+    color: var(--oc-text-secondary);
+    font-family: var(--oc-font-mono);
+    font-size: 0.7rem;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .episode-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 28px;
+  }
+
+  .episode-action {
+    display: inline-flex;
+    min-height: 42px;
+    align-items: center;
+    gap: 9px;
+    padding: 10px 13px;
+    border: 1px solid var(--oc-border-subtle);
+    border-radius: 0;
+    color: var(--oc-text-primary);
+    font-size: 0.9rem;
+    font-weight: 600;
+    text-decoration: none;
+  }
+
+  .episode-action svg {
+    width: 19px;
+    height: 19px;
+    fill: currentColor;
+  }
+
+  .episode-action--primary {
+    border-color: var(--oc-accent-primary);
+    background: var(--oc-accent-primary);
+    color: var(--oc-bg-page);
+  }
+
+  .episode-action:hover {
+    border-color: var(--oc-accent-primary);
+    color: var(--oc-accent-primary);
+  }
+
+  .episode-action--primary:hover {
+    background: transparent;
+  }
+
+  .description {
+    width: min(100%, 760px);
+    padding: clamp(44px, 6vw, 64px) 0 clamp(52px, 7vw, 76px);
+    border-bottom: 1px solid var(--oc-border-subtle);
+  }
+
+  .description-copy {
+    max-width: 720px;
+    color: var(--oc-text-secondary);
+    font-size: 1.02rem;
+    overflow-wrap: anywhere;
+  }
+
+  .description-copy p {
+    white-space: pre-line;
+  }
+
+  .description-copy p + p {
+    margin-top: 22px;
+  }
+
+  .episode-people {
+    display: grid;
+    gap: 12px;
+    margin-top: 28px;
+    padding-top: 24px;
+    border-top: 1px solid var(--oc-border-subtle);
+  }
+
+  .episode-people-row {
+    display: grid;
+    grid-template-columns: 62px minmax(0, 1fr);
+    gap: 12px;
+    align-items: baseline;
+  }
+
+  .episode-people-row > span {
+    color: var(--oc-text-secondary);
+    font-family: var(--oc-font-mono);
+    font-size: 0.7rem;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .episode-people-row p {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px 16px;
+  }
+
+  .live-recording {
+    margin-top: 28px;
+  }
+
+  .description-copy a {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    color: var(--oc-text-primary);
+    text-decoration-color: var(--oc-accent-primary);
+    text-underline-offset: 3px;
+  }
+
+  .description-copy .x-link-icon {
+    width: 0.72em;
+    height: 0.72em;
+    flex: none;
+    fill: currentColor;
+  }
+
+  .description-copy a:hover {
+    color: var(--oc-accent-primary);
+  }
+
+  .episode-navigation {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 24px;
+    padding: 28px 0;
+  }
+
+  .episode-nav-link {
+    display: grid;
+    gap: 4px;
+    color: var(--oc-text-primary);
+    text-decoration: none;
+  }
+
+  .episode-nav-link span {
+    color: var(--oc-text-secondary);
+    font-family: var(--oc-font-mono);
+    font-size: 0.74rem;
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .episode-nav-link strong {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    font-family: var(--oc-font-display);
+    font-size: 1.1rem;
+  }
+
+  .episode-nav-link--next {
+    text-align: right;
+    justify-items: end;
+  }
+
+  .episode-nav-link:hover strong {
+    color: var(--oc-accent-primary);
+  }
+
+  @media (max-width: 720px) {
+    .rail {
+      padding: 0 20px;
+      border-left: none;
+      border-right: none;
+    }
+
+    article {
+      padding-top: 46px;
+    }
+
+    .episode-hero {
+      padding-top: 34px;
+    }
+
+    .description {
+      padding: 38px 0 48px;
+    }
+
+    .episode-navigation {
+      gap: 18px;
+    }
+  }
+</style>
