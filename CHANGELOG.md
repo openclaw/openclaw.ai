@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+- Docs: rewrite the README as a concise contributor front door and move hosted installer details into a dedicated guide.
 - Windows installer: sync the OpenClaw 2026.7.1 runtime validation fix so upgraded Node 22/24 installs are checked through the active executable.
 - Security: prevent blog and author JSON-LD metadata from breaking out of its script element (#208, thanks @SebTardif).
 - Security: remove raw HTML from blog descriptions so frontmatter cannot inject active markup (#207, thanks @SebTardif).
