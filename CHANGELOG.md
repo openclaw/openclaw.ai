@@ -19,7 +19,7 @@
 - Press: refresh Featured In with 2026 Q2 coverage — TechCrunch on Microsoft's OpenClaw-inspired Scout, the iOS/Android launch, Red Hat's enterprise-hardening work, and CNBC on China's lobster rush; new homepage highlight order.
 - Testimonials: add 11 new shoutouts from the archive, including @sama, @elonmusk, @garrytan, @growing_daniel, @donasarkar, and @OmarShahine, with cached avatars.
 - Website: homepage facelift — hero call-to-action buttons, aurora glow and film-grain texture, larger section headers with chevron markers, refined feature and blog cards, glowing quick-start terminal, cleaner sponsor logo wall, and a wider 960px layout with more breathing room between sections.
-- Dependencies: update Astro to 7.1.6, js-yaml to 5.2.3, Lucide Astro to 1.28.0, Simple Icons to 16.28.0, Carapace to 0.6.1, the skills CLI to 1.5.21, the installer smoke image to Node 26, and pinned GitHub Actions to Checkout 7.0.1 and Setup Node 7.0.0; keep RSS, Analytics, and Sharp current, and force patched SVGO and PostCSS transitives (#172, #176, #206, #216, thanks @dependabot).
+- Dependencies: update Astro to 7.1.6, js-yaml to 5.2.3, Lucide Astro to 1.28.0, Simple Icons to 16.28.0, Carapace to 0.6.1, the skills CLI to 1.5.22, the installer smoke image to Node 26, and pinned GitHub Actions to Checkout 7.0.1 and Setup Node 7.0.0; keep RSS, Analytics, and Sharp current, and force patched SVGO and PostCSS transitives (#172, #176, #206, #216, thanks @dependabot).
 - Ecosystem: add ClawScan, a composable security scanning harness for agent skills (#177, thanks @Patrick-Erichsen).
 - Ecosystem: render the Crabline card from its existing SVG banner instead of requesting a missing PNG.
 - Ecosystem: add ffmpeg-wasm, imsgcrawl, and photoscrawl to the project directory.
