@@ -126,6 +126,7 @@ const structuredData = {
           >
             <Rss size={20} strokeWidth={1.8} aria-hidden="true" class="rss-icon" />
             <Check size={20} strokeWidth={2} aria-hidden="true" class="check-icon" />
+            <span class="rss-visible-label" data-copy-rss-visible>Copy RSS</span>
             <span class="sr-only" data-copy-rss-label aria-live="polite">Copy RSS feed URL</span>
           </button>
         </div>
@@ -180,6 +181,7 @@ const structuredData = {
   <script is:inline>
     const copyButton = document.querySelector('[data-copy-rss]');
     const copyLabel = document.querySelector('[data-copy-rss-label]');
+    const copyVisibleLabel = document.querySelector('[data-copy-rss-visible]');
 
     copyButton?.addEventListener('click', async () => {
       const url = copyButton.dataset.rssUrl;
@@ -206,10 +208,12 @@ const structuredData = {
 
       if (copied) copyButton.classList.add('is-copied');
       copyLabel.textContent = copied ? 'Copied RSS feed URL' : 'Copy failed';
+      copyVisibleLabel.textContent = copied ? 'Copied' : 'Try again';
 
       window.setTimeout(() => {
         copyButton.classList.remove('is-copied');
         copyLabel.textContent = 'Copy RSS feed URL';
+        copyVisibleLabel.textContent = 'Copy RSS';
       }, 1800);
     });
   </script>
@@ -624,6 +628,10 @@ const structuredData = {
     color: var(--oc-accent-primary);
   }
 
+  .rss-visible-label {
+    display: none;
+  }
+
   .sr-only {
     position: absolute;
     width: 1px;
@@ -656,9 +664,9 @@ const structuredData = {
         'cover'
         'listen';
       grid-template-columns: 1fr;
-      gap: var(--oc-space-4);
-      padding-top: var(--oc-space-6);
-      padding-bottom: var(--oc-space-4);
+      gap: 24px;
+      padding-top: 72px;
+      padding-bottom: 36px;
     }
 
     .hero-content {
@@ -670,7 +678,7 @@ const structuredData = {
     }
 
     .podcast-cover-frame {
-      width: min(100%, 200px);
+      width: min(100%, 320px);
       justify-self: start;
     }
 
@@ -682,7 +690,7 @@ const structuredData = {
     }
 
     .episodes {
-      padding: var(--oc-space-4) 0 56px;
+      padding: 40px 0 56px;
     }
 
     .episode-row-meta {
@@ -698,17 +706,27 @@ const structuredData = {
     }
 
     .platforms {
-      grid-template-columns: repeat(2, minmax(0, 1fr));
+      grid-template-columns: 1fr;
     }
 
     .platform-card {
-      min-height: var(--oc-control-min-height);
-      padding: var(--oc-space-2);
+      width: 100%;
+      height: 64px;
+      min-height: 64px;
+      padding: 9px 11px;
     }
 
     .platform-card--rss {
+      justify-content: flex-start;
+      gap: 10px;
       aspect-ratio: auto;
-      padding: 0;
+      padding: 9px 11px;
+    }
+
+    .rss-visible-label {
+      display: inline;
+      font-size: 0.92rem;
+      font-weight: 600;
     }
 
   }
