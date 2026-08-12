@@ -40,7 +40,7 @@ const structuredData = {
         <h1 id="podcast-title">The ClawCast</h1>
         <p class="intro">
           Hosted by Hannes Rudolph, The ClawCast features conversations with the people building, maintaining, and
-          using OpenClaw — release deep-dives, what maintainers and guests are learning, and what comes next for
+          using OpenClaw: release deep-dives, what maintainers and guests are learning, and what comes next for
           personal AI.
         </p>
         <a
@@ -76,7 +76,7 @@ const structuredData = {
       </div>
 
       <div class="platform-panel">
-        <div class="platforms" aria-label="Podcast platforms">
+        <div class="platforms" role="group" aria-label="Podcast platforms">
           <a
             href={spotifyUrl}
             target="_blank"
@@ -107,7 +107,7 @@ const structuredData = {
             </span>
           </a>
 
-          <div class="platform-card platform-card--coming-soon" aria-label="Apple Podcasts coming soon">
+          <div class="platform-card platform-card--coming-soon">
             <span class="platform-icon" aria-hidden="true">
               <svg viewBox="0 0 24 24"><path d={siApplepodcasts.path} /></svg>
             </span>
@@ -145,7 +145,7 @@ const structuredData = {
             <div class="episode-row-body">
               <div class="episode-row-header">
                 <h3><a href={`/podcast/${episode.slug}`}>{episode.title}</a></h3>
-                <div class="episode-row-actions" aria-label={`Platforms for ${episode.title}`}>
+                <div class="episode-row-actions" role="group" aria-label={`Platforms for ${episode.title}`}>
                   <a
                     href={episode.youtubeUrl}
                     target="_blank"
@@ -220,6 +220,13 @@ const structuredData = {
     min-height: 100vh;
     display: flex;
     flex-direction: column;
+  }
+
+  :global(html[data-theme='light']) .eyebrow,
+  :global(html[data-theme='light']) .live-recording-label,
+  :global(html[data-theme='light']) .episode-row-meta span:first-child,
+  :global(html[data-theme='light']) .episodes :global(.section-title) {
+    color: var(--oc-accent-primary-deep);
   }
 
   .rail {
@@ -402,7 +409,7 @@ const structuredData = {
     margin: 0 -24px;
     padding: 30px 24px;
     border-bottom: 1px solid var(--oc-border-subtle);
-    transition: background 0.15s ease;
+    transition: background var(--oc-duration-fast) var(--oc-ease-out);
   }
 
   .episode-row:first-child {
@@ -500,7 +507,7 @@ const structuredData = {
 
   .episode-row-actions a:focus-visible,
   .episode-row-header h3 a:focus-visible {
-    outline: 2px solid var(--oc-accent-primary);
+    outline: 2px solid var(--oc-focus-ring);
     outline-offset: 3px;
   }
 
@@ -526,7 +533,9 @@ const structuredData = {
     border-radius: 0;
     color: var(--oc-text-primary);
     text-decoration: none;
-    transition: border-color 150ms ease, color 150ms ease;
+    transition:
+      border-color var(--oc-duration-fast) var(--oc-ease-out),
+      color var(--oc-duration-fast) var(--oc-ease-out);
   }
 
   .platform-card:hover {
@@ -534,7 +543,7 @@ const structuredData = {
   }
 
   .platform-card:focus-visible {
-    outline: 2px solid var(--oc-accent-primary);
+    outline: 2px solid var(--oc-focus-ring);
     outline-offset: 2px;
   }
 
@@ -647,9 +656,9 @@ const structuredData = {
         'cover'
         'listen';
       grid-template-columns: 1fr;
-      gap: 24px;
-      padding-top: 72px;
-      padding-bottom: 36px;
+      gap: var(--oc-space-4);
+      padding-top: var(--oc-space-6);
+      padding-bottom: var(--oc-space-4);
     }
 
     .hero-content {
@@ -661,7 +670,7 @@ const structuredData = {
     }
 
     .podcast-cover-frame {
-      width: min(100%, 320px);
+      width: min(100%, 200px);
       justify-self: start;
     }
 
@@ -673,7 +682,7 @@ const structuredData = {
     }
 
     .episodes {
-      padding: 40px 0 56px;
+      padding: var(--oc-space-4) 0 56px;
     }
 
     .episode-row-meta {
@@ -689,12 +698,12 @@ const structuredData = {
     }
 
     .platforms {
-      grid-template-columns: 1fr;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
     }
 
     .platform-card {
-      min-height: 58px;
-      padding: 9px 11px;
+      min-height: var(--oc-control-min-height);
+      padding: var(--oc-space-2);
     }
 
     .platform-card--rss {
