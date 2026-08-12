@@ -24,7 +24,7 @@ const episodeIndex = podcastEpisodes.findIndex((item) => item.slug === episode.s
 const newerEpisode = podcastEpisodes[episodeIndex - 1];
 const olderEpisode = podcastEpisodes[episodeIndex + 1];
 const canonicalUrl = `https://openclaw.ai/podcast/${episode.slug}`;
-const shareImage = episode.shareImage ?? '/podcast/clawcast-share.png';
+const shareImage = episode.shareImage ?? '/podcast/clawcast-social-preview.png';
 const discordUrl = 'https://discord.com/invite/clawd';
 const displayDescription = episode.description
   .replace(/\n\nLearn more about The OpenClaw Foundation:\s*https:\/\/www\.openclaw\.org/gu, '')
