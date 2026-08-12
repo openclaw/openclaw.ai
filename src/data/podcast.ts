@@ -28,6 +28,38 @@ const spotifyShowUrl = 'https://open.spotify.com/show/033M5Wn9WAAdujY1qAcIYO';
 
 export const podcastEpisodes: PodcastEpisode[] = [
   {
+    number: 7,
+    slug: 'episode-7',
+    title: 'Unfiltered Q&A with OpenClaw Founder Peter Steinberger',
+    hosts: [
+      { name: 'Hannes Rudolph', xUrl: 'https://x.com/hrudolph' },
+      { name: 'Patrick Erichsen', xUrl: 'https://x.com/Pat_Erichsen' },
+    ],
+    guests: [
+      { name: 'Peter Steinberger', xUrl: 'https://x.com/steipete' },
+    ],
+    airedAt: '2026-08-12',
+    youtubeUrl: 'https://www.youtube.com/watch?v=WhkfUnKJuoY',
+    spotifyUrl: 'https://open.spotify.com/episode/5mA2L9xmW76nq4erEKb3MP',
+    spotifyLabel: 'Open in Spotify',
+    listingSummary: 'Peter Steinberger, founder of OpenClaw, joins Hannes Rudolph and Patrick Erichsen for an unfiltered community Q&A about where OpenClaw is headed, the upcoming release, and how agents are changing software development.',
+    description: `An unfiltered Q&A with Peter Steinberger, founder of OpenClaw. Host Hannes Rudolph and co-host Patrick Erichsen put community questions to Peter about where OpenClaw is headed, the upcoming release, and how agents are changing the way software gets built.
+
+Together, they cover cloud-backed multiplayer workflows, using OpenClaw to build OpenClaw, SQLite, team servers, agent-to-agent collaboration, memory, model routing, onboarding, browser control, hardware experiments, and why open source remains OpenClaw’s core differentiator.
+
+Learn more about The OpenClaw Foundation: https://www.openclaw.org
+
+Guests and hosts socials:
+Hannes Rudolph: https://x.com/hrudolph
+Patrick Erichsen: https://x.com/Pat_Erichsen
+Peter Steinberger: https://x.com/steipete
+
+Listen on Spotify: https://open.spotify.com/episode/5mA2L9xmW76nq4erEKb3MP
+
+Recorded live every Wednesday at 11:30 AM PT on Discord.
+Join our Discord: https://discord.com/invite/clawd`,
+  },
+  {
     number: 6,
     slug: 'episode-6',
     title: 'Episode 6',
