@@ -2,13 +2,19 @@ import { describe, expect, test } from 'bun:test';
 import { podcastEpisodes } from '../src/data/podcast';
 
 describe('podcast episode catalog', () => {
+  test('uses the website Episode N title convention', () => {
+    for (const episode of podcastEpisodes) {
+      expect(episode.title).toBe(`Episode ${episode.number}`);
+    }
+  });
+
   test('keeps Episode 7 first with its approved destinations and participants', () => {
     const episode = podcastEpisodes[0];
 
     expect(episode).toMatchObject({
       number: 7,
       slug: 'episode-7',
-      title: 'Unfiltered Q&A with OpenClaw Founder Peter Steinberger',
+      title: 'Episode 7',
       airedAt: '2026-08-12',
       youtubeUrl: 'https://www.youtube.com/watch?v=WhkfUnKJuoY',
       spotifyUrl: 'https://open.spotify.com/episode/5mA2L9xmW76nq4erEKb3MP',
