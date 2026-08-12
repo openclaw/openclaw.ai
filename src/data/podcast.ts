@@ -30,7 +30,7 @@ export const podcastEpisodes: PodcastEpisode[] = [
   {
     number: 7,
     slug: 'episode-7',
-    title: 'Episode 7',
+    title: 'Unfiltered Q&A with OpenClaw Founder Peter Steinberger',
     hosts: [
       { name: 'Hannes Rudolph', xUrl: 'https://x.com/hrudolph' },
       { name: 'Patrick Erichsen', xUrl: 'https://x.com/Pat_Erichsen' },
