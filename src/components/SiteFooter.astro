@@ -5,56 +5,96 @@ import {
   siInstagram,
   siReddit,
   siTiktok,
+  siX,
   siYoutube,
-} from 'simple-icons';
+} from "simple-icons";
 
 const linkGroups = [
   {
-    title: 'Product',
+    title: "Product",
     links: [
-      { id: 'showcase', label: 'Showcase', href: '/showcase' },
-      { id: 'integrations', label: 'Integrations', href: '/integrations' },
-      { id: 'docs', label: 'Docs', href: 'https://docs.openclaw.ai', external: true },
+      { id: "showcase", label: "Showcase", href: "/showcase" },
+      { id: "integrations", label: "Integrations", href: "/integrations" },
+      {
+        id: "docs",
+        label: "Docs",
+        href: "https://docs.openclaw.ai",
+        external: true,
+      },
     ],
   },
   {
-    title: 'Resources',
+    title: "Resources",
     links: [
-      { id: 'blog', label: 'Blog', href: '/blog' },
-      { id: 'podcast', label: 'Podcast', href: '/podcast' },
-      { id: 'press', label: 'Press', href: '/press' },
-      { id: 'shoutouts', label: 'Shoutouts', href: '/shoutouts' },
+      { id: "blog", label: "Blog", href: "/blog" },
+      { id: "podcast", label: "Podcast", href: "/podcast" },
+      { id: "press", label: "Press", href: "/press" },
+      { id: "shoutouts", label: "Shoutouts", href: "/shoutouts" },
     ],
   },
   {
-    title: 'Project',
+    title: "Project",
     links: [
-      { id: 'foundation', label: 'Foundation', href: 'https://openclaw.org', external: true },
-      { id: 'security', label: 'Security', href: '/blog#security' },
-      { id: 'github', label: 'GitHub', href: 'https://github.com/openclaw/openclaw', external: true },
+      {
+        id: "foundation",
+        label: "Foundation",
+        href: "https://openclaw.org",
+        external: true,
+      },
+      { id: "security", label: "Security", href: "/blog#security" },
+      {
+        id: "github",
+        label: "GitHub",
+        href: "https://github.com/openclaw/openclaw",
+        external: true,
+      },
     ],
   },
 ];
 
 const socialLinks = [
-  { label: 'X', href: 'https://x.com/openclaw', glyph: '𝕏' },
-  { label: 'GitHub', href: 'https://github.com/openclaw/openclaw', path: siGithub.path },
-  { label: 'Discord', href: 'https://discord.com/invite/clawd', path: siDiscord.path },
-  { label: 'Reddit', href: 'https://www.reddit.com/r/openclaw/', path: siReddit.path },
-  { label: 'TikTok', href: 'https://www.tiktok.com/@open_claw', path: siTiktok.path },
+  { label: "X", href: "https://x.com/openclaw", path: siX.path },
   {
-    label: 'LinkedIn',
-    href: 'https://www.linkedin.com/company/the-openclaw-foundation',
-    path: 'M20.45 20.45h-3.55v-5.57c0-1.33-.03-3.04-1.85-3.04-1.85 0-2.14 1.45-2.14 2.94v5.67H9.36V9h3.41v1.56h.05c.48-.9 1.64-1.85 3.37-1.85 3.6 0 4.27 2.37 4.27 5.46v6.28ZM5.34 7.43a2.06 2.06 0 1 1 0-4.12 2.06 2.06 0 0 1 0 4.12ZM7.11 20.45H3.56V9h3.55v11.45ZM22.22 0H1.77C.79 0 0 .77 0 1.72v20.56C0 23.23.79 24 1.77 24h20.45c.98 0 1.78-.77 1.78-1.72V1.72C24 .77 23.2 0 22.22 0Z',
+    label: "GitHub",
+    href: "https://github.com/openclaw/openclaw",
+    path: siGithub.path,
   },
-  { label: 'Instagram', href: 'https://www.instagram.com/openclaw_org/', path: siInstagram.path },
-  { label: 'YouTube', href: 'https://www.youtube.com/@OpenClawYT', path: siYoutube.path },
+  {
+    label: "Discord",
+    href: "https://discord.com/invite/clawd",
+    path: siDiscord.path,
+  },
+  {
+    label: "Reddit",
+    href: "https://www.reddit.com/r/openclaw/",
+    path: siReddit.path,
+  },
+  {
+    label: "TikTok",
+    href: "https://www.tiktok.com/@open_claw",
+    path: siTiktok.path,
+  },
+  {
+    label: "LinkedIn",
+    href: "https://www.linkedin.com/company/the-openclaw-foundation",
+    path: "M20.45 20.45h-3.55v-5.57c0-1.33-.03-3.04-1.85-3.04-1.85 0-2.14 1.45-2.14 2.94v5.67H9.36V9h3.41v1.56h.05c.48-.9 1.64-1.85 3.37-1.85 3.6 0 4.27 2.37 4.27 5.46v6.28ZM5.34 7.43a2.06 2.06 0 1 1 0-4.12 2.06 2.06 0 0 1 0 4.12ZM7.11 20.45H3.56V9h3.55v11.45ZM22.22 0H1.77C.79 0 0 .77 0 1.72v20.56C0 23.23.79 24 1.77 24h20.45c.98 0 1.78-.77 1.78-1.72V1.72C24 .77 23.2 0 22.22 0Z",
+  },
+  {
+    label: "Instagram",
+    href: "https://www.instagram.com/openclaw_org/",
+    path: siInstagram.path,
+  },
+  {
+    label: "YouTube",
+    href: "https://www.youtube.com/@OpenClawYT",
+    path: siYoutube.path,
+  },
 ];
 
 const {
   current,
-  credit = 'full',
-  spacing = 'roomy',
+  credit = "full",
+  spacing = "roomy",
   showDisclaimer = false,
 } = Astro.props;
 
@@ -64,53 +104,108 @@ const visibleGroups = linkGroups.map((group) => ({
 }));
 ---
 
-<footer class:list={['footer', `footer--${spacing}`]}>
+<footer class:list={["footer", `footer--${spacing}`]}>
   <div class="footer-top">
     <section class="footer-brand" aria-label="OpenClaw">
       <a href="/" class="footer-logo">OpenClaw</a>
-      {credit === 'simple' ? (
-        <p class="footer-credit">Built by <a href="https://molty.me" target="_blank" rel="noopener">Molty 🦞</a>.</p>
-      ) : (
-        <p class="footer-credit">Built by <a href="https://molty.me" target="_blank" rel="noopener" class="credit-strong">Molty 🦞</a>, a space lobster AI with a soul, by <a href="https://steipete.me" target="_blank" rel="noopener">Peter Steinberger</a> & <a href="https://github.com/openclaw/openclaw#community" target="_blank" rel="noopener">community</a>.</p>
-      )}
-      <p class="foundation-note">An <a href="https://openclaw.org" target="_blank" rel="noopener">OpenClaw Foundation</a> project.</p>
+      {
+        credit === "simple" ? (
+          <p class="footer-credit">
+            Built by{" "}
+            <a href="https://molty.me" target="_blank" rel="noopener">
+              Molty 🦞
+            </a>
+            .
+          </p>
+        ) : (
+          <p class="footer-credit">
+            Built by{" "}
+            <a
+              href="https://molty.me"
+              target="_blank"
+              rel="noopener"
+              class="credit-strong"
+            >
+              Molty 🦞
+            </a>
+            , a space lobster AI with a soul, by{" "}
+            <a href="https://steipete.me" target="_blank" rel="noopener">
+              Peter Steinberger
+            </a>{" "}
+            &{" "}
+            <a
+              href="https://github.com/openclaw/openclaw#community"
+              target="_blank"
+              rel="noopener"
+            >
+              community
+            </a>
+            .
+          </p>
+        )
+      }
+      <p class="foundation-note">
+        An <a href="https://openclaw.org" target="_blank" rel="noopener"
+          >OpenClaw Foundation</a
+        > project.
+      </p>
       <nav class="footer-socials" aria-label="Social links">
-        {socialLinks.map((link) => (
-          <a href={link.href} target="_blank" rel="noopener" aria-label={link.label}>
-            {link.path
-              ? (
-                <svg class="social-icon" viewBox="0 0 24 24" aria-hidden="true">
-                  <path d={link.path} />
-                </svg>
-              )
-              : <span class="social-glyph" aria-hidden="true">{link.glyph}</span>}
-          </a>
-        ))}
+        {
+          socialLinks.map((link) => (
+            <a
+              href={link.href}
+              target="_blank"
+              rel="noopener"
+              aria-label={link.label}
+            >
+              <svg class="social-icon" viewBox="0 0 24 24" aria-hidden="true">
+                <path d={link.path} />
+              </svg>
+            </a>
+          ))
+        }
       </nav>
     </section>
 
-    {visibleGroups.map((group) => (
-      <nav class="footer-group" aria-label={group.title}>
-        <h2>{group.title}</h2>
-        {group.links.map((link) => (
-          <a
-            href={link.href}
-            target={link.external ? '_blank' : undefined}
-            rel={link.external ? 'noopener' : undefined}
-          >
-            {link.label}
-          </a>
-        ))}
-      </nav>
-    ))}
+    {
+      visibleGroups.map((group) => (
+        <nav class="footer-group" aria-label={group.title}>
+          <h2>{group.title}</h2>
+          {group.links.map((link) => (
+            <a
+              href={link.href}
+              target={link.external ? "_blank" : undefined}
+              rel={link.external ? "noopener" : undefined}
+            >
+              {link.label}
+            </a>
+          ))}
+        </nav>
+      ))
+    }
   </div>
 
   <div class="footer-legal">
-    <p>{showDisclaimer ? 'Independent project, not affiliated with Anthropic.' : 'Open-source assistant infrastructure.'}</p>
+    <p>
+      {
+        showDisclaimer
+          ? "Independent project, not affiliated with Anthropic."
+          : "Open-source assistant infrastructure."
+      }
+    </p>
     <p class="footer-year">© 2026</p>
     <p class="footer-foundation-meta">
-      <a href="https://openclaw.org" target="_blank" rel="noopener" class="foundation-name">
-        <img src="https://pbs.twimg.com/profile_images/2017100664984186880/orbYx-3U_400x400.jpg" alt="" loading="lazy" />
+      <a
+        href="https://openclaw.org"
+        target="_blank"
+        rel="noopener"
+        class="foundation-name"
+      >
+        <img
+          src="https://pbs.twimg.com/profile_images/2017100664984186880/orbYx-3U_400x400.jpg"
+          alt=""
+          loading="lazy"
+        />
         <span>OpenClaw Foundation</span>
       </a>
     </p>
@@ -204,7 +299,9 @@ const visibleGroups = linkGroups.map((group) => ({
     color: inherit;
     text-underline-offset: 0.22em;
     text-decoration-color: color-mix(in srgb, currentColor 45%, transparent);
-    transition: color 0.14s ease, text-decoration-color 0.14s ease;
+    transition:
+      color 0.14s ease,
+      text-decoration-color 0.14s ease;
   }
 
   .footer-credit .credit-strong {
@@ -234,7 +331,9 @@ const visibleGroups = linkGroups.map((group) => ({
     color: var(--oc-text-muted);
     line-height: 1;
     text-decoration: none;
-    transition: color 0.14s ease, transform 0.14s ease;
+    transition:
+      color 0.14s ease,
+      transform 0.14s ease;
   }
 
   .footer-socials a:hover {
@@ -243,11 +342,6 @@ const visibleGroups = linkGroups.map((group) => ({
 
   .footer-socials a:active {
     transform: scale(0.96);
-  }
-
-  .social-glyph {
-    font-family: var(--oc-font-mono);
-    font-size: 1rem;
   }
 
   .social-icon {
