@@ -47,6 +47,12 @@ function assertJsonLdIsParseable(html, context) {
   }
 }
 
+function parseJsonLd(html) {
+  return [...html.matchAll(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/g)].map(
+    ([, contents]) => JSON.parse(contents),
+  );
+}
+
 assertCopiedByteForByte('public/openclaw-logo-text-dark.png', 'dist/openclaw-logo-text-dark.png');
 assertCopiedByteForByte('public/logo.png', 'dist/logo.png');
 assertCopiedByteForByte('public/granola.png', 'dist/granola.png');
@@ -72,6 +78,39 @@ const ecosystemPage = readText('dist/ecosystem/index.html');
 for (const relativePath of listHtmlFiles('dist')) {
   assertJsonLdIsParseable(readText(relativePath), relativePath);
 }
+
+const podcastThumbnails = new Set();
+const podcastEpisodeFiles = listHtmlFiles('dist/podcast').filter((file) =>
+  /episode-\d+/.test(file),
+);
+for (const relativePath of podcastEpisodeFiles) {
+  const podcastEpisode = parseJsonLd(readText(relativePath)).find(
+    (item) => item['@type'] === 'PodcastEpisode',
+  );
+  const video = podcastEpisode?.associatedMedia;
+
+  assert.equal(video?.['@type'], 'VideoObject', `${relativePath} must describe its video`);
+  assert.equal(video.name, podcastEpisode.name, `${relativePath} must name its video`);
+  assert.equal(
+    video.description,
+    podcastEpisode.description,
+    `${relativePath} must describe its video`,
+  );
+  assert.match(video.thumbnailUrl, /^https:\/\/i\.ytimg\.com\/vi\/[\w-]{11}\/hqdefault\.jpg$/);
+  assert.match(video.uploadDate, /^\d{4}-\d{2}-\d{2}$/);
+  assert.match(video.embedUrl, /^https:\/\/www\.youtube\.com\/embed\/[\w-]{11}$/);
+  assert.equal(
+    video.contentUrl,
+    undefined,
+    `${relativePath} must not use a watch page as contentUrl`,
+  );
+  podcastThumbnails.add(video.thumbnailUrl);
+}
+assert.equal(
+  podcastThumbnails.size,
+  podcastEpisodeFiles.length,
+  'Each podcast episode must use its unique video thumbnail',
+);
 
 assertContains(homePage, siX.path, 'dist/index.html');
 assertContains(homePage, siGooglechrome.path, 'dist/index.html');

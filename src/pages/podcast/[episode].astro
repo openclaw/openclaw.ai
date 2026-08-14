@@ -26,6 +26,14 @@ const olderEpisode = podcastEpisodes[episodeIndex + 1];
 const canonicalUrl = `https://openclaw.ai/podcast/${episode.slug}`;
 const shareImage = episode.shareImage ?? '/podcast/clawcast-social-preview.png';
 const discordUrl = 'https://discord.com/invite/clawd';
+const episodeName = `The ClawCast - ${episode.title}`;
+const episodeSummary = getEpisodeSummary(episode);
+const youtubeVideoId = new URL(episode.youtubeUrl).searchParams.get('v');
+
+if (!youtubeVideoId) {
+  throw new Error(`Podcast episode ${episode.slug} is missing a YouTube video ID`);
+}
+
 const displayDescription = episode.description
   .replace(/\n\nLearn more about The OpenClaw Foundation:\s*https:\/\/www\.openclaw\.org/gu, '')
   .replace(/\n\nListen on Spotify:\s*https:\/\/\S+/gu, '')
@@ -75,10 +83,10 @@ const descriptionParagraphs = displayDescription
 const structuredData = {
   '@context': 'https://schema.org',
   '@type': 'PodcastEpisode',
-  name: `The ClawCast - ${episode.title}`,
+  name: episodeName,
   url: canonicalUrl,
   datePublished: `${episode.airedAt}T12:00:00Z`,
-  description: getEpisodeSummary(episode),
+  description: episodeSummary,
   image: `https://openclaw.ai${shareImage}`,
   partOfSeries: {
     '@type': 'PodcastSeries',
@@ -87,14 +95,18 @@ const structuredData = {
   },
   associatedMedia: {
     '@type': 'VideoObject',
-    contentUrl: episode.youtubeUrl,
+    name: episodeName,
+    description: episodeSummary,
+    thumbnailUrl: `https://i.ytimg.com/vi/${youtubeVideoId}/hqdefault.jpg`,
+    uploadDate: episode.airedAt,
+    embedUrl: `https://www.youtube.com/embed/${youtubeVideoId}`,
   },
 };
 ---
 
 <Layout
   title={`The ClawCast ${episode.title}`}
-  description={getEpisodeSummary(episode)}
+  description={episodeSummary}
   canonicalUrl={canonicalUrl}
   ogImage={shareImage}
   ogImageWidth={1200}
