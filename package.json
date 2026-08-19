@@ -21,7 +21,7 @@
   "dependencies": {
     "@astrojs/rss": "^4.0.19",
     "@lucide/astro": "^1.28.0",
-    "@openclaw/carapace": "git+https://github.com/openclaw/carapace.git#v0.6.1",
+    "@openclaw/carapace": "git+https://github.com/openclaw/carapace.git#v0.6.2",
     "@vercel/analytics": "^2.0.1",
     "astro": "^7.1.6",
     "js-yaml": "^5.2.3",

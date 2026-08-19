@@ -7,7 +7,7 @@
       "dependencies": {
         "@astrojs/rss": "^4.0.19",
         "@lucide/astro": "^1.28.0",
-        "@openclaw/carapace": "git+https://github.com/openclaw/carapace.git#v0.6.1",
+        "@openclaw/carapace": "git+https://github.com/openclaw/carapace.git#v0.6.2",
         "@vercel/analytics": "^2.0.1",
         "astro": "^7.1.6",
         "js-yaml": "^5.2.3",
@@ -206,7 +206,7 @@
 
     "@nodable/entities": ["@nodable/entities@2.1.0", "", {}, "sha512-nyT7T3nbMyBI/lvr6L5TyWbFJAI9FTgVRakNoBqCD+PmID8DzFrrNdLLtHMwMszOtqZa8PAOV24ZqDnQrhQINA=="],
 
-    "@openclaw/carapace": ["@openclaw/carapace@github:openclaw/carapace#3a8bcfb", {}, "openclaw-carapace-3a8bcfb", "sha512-UD1qbCzSKMlvDGt4VYH41dtSf77vGZCzXkpGzmVevpanBM3flhAHU/TIedvm+eYadts49wt3+ipQK5Jmh70ZDw=="],
+    "@openclaw/carapace": ["@openclaw/carapace@github:openclaw/carapace#c6247b0", {}, "openclaw-carapace-c6247b0", "sha512-EaJ2/RGalvfee/3n5FPih2d8ydsyf8yhdG7a5WXTmHkx7JYhISnXbOj79uYgPe7DbA4uLTNF7kD2X3vToVqCng=="],
 
     "@oslojs/encoding": ["@oslojs/encoding@1.1.0", "", {}, "sha512-70wQhgYmndg4GCPxPPxPGevRKqTIJ2Nh4OkiMWmDAVYsTQ+Ta7Sq+rPevXyXGdzr30/qZBnyOalCszoMxlyldQ=="],
 
