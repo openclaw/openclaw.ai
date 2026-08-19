@@ -11,7 +11,7 @@ const outletIcon = (url: string) => `/press/icons/${new URL(url).hostname.replac
 
 <Layout
   title="Press — OpenClaw"
-  description="Coverage of OpenClaw across technology, business, and culture."
+  description="Press coverage and media contact information for OpenClaw."
   canonicalUrl="https://openclaw.ai/press"
 >
   <div class="stars"></div>
@@ -25,6 +25,9 @@ const outletIcon = (url: string) => `/press/icons/${new URL(url).hostname.replac
       </h1>
       <p class="subtitle">
         Reporting on OpenClaw's product, company news, and people, with articles added when outlets report something new and every link pointing to the original piece.
+      </p>
+      <p class="media-contact">
+        Media inquiries: <a href="mailto:press@openclaw.org">press@openclaw.org</a>
       </p>
     </header>
 
@@ -149,6 +152,18 @@ const outletIcon = (url: string) => `/press/icons/${new URL(url).hostname.replac
     margin: 0 auto;
     color: var(--oc-text-secondary);
     font-size: 1.08rem;
+  }
+
+  .media-contact {
+    margin: var(--oc-space-4) auto 0;
+    color: var(--oc-text-muted);
+    font-size: 0.95rem;
+  }
+
+  .media-contact a {
+    color: var(--oc-accent-primary);
+    font-weight: 700;
+    text-underline-offset: 0.2em;
   }
 
   .press-grid {
