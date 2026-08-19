@@ -41,7 +41,7 @@ for script in "${SCRIPTS[@]}"; do
 
   main_body="$(awk '
     /^function Main \{/ { in_main = 1; next }
-    /^\$mainResults = @\(Main\)/ { in_main = 0 }
+    /^\$null = Main/ { in_main = 0 }
     in_main { print }
   ' "$script")"
 
@@ -54,19 +54,16 @@ for script in "${SCRIPTS[@]}"; do
   require_contains "$script" 'function Test-BooleanSuccessResult {'
   require_contains "$script" 'function Resolve-NpmOpenClawInstallSpec {'
   # shellcheck disable=SC2016
-  require_contains "$script" '$npmInstallArguments = @("install", "-g") + $freshnessArgs + @("$installSpec")'
+  require_contains "$script" '$npmInstallArguments = @("install", "-g") + $freshnessArgs + $lifecycleArguments + @("$installSpec")'
   # shellcheck disable=SC2016
-  require_contains "$script" 'Invoke-NpmCommand -Arguments $npmInstallArguments'
+  require_contains "$script" 'Invoke-NpmCommand -CommandPath $npmCommand -WorkingDirectory $npmCwd -Arguments $npmInstallArguments'
   # shellcheck disable=SC2016
   require_contains "$script" 'return "$PackageName@$trimmedTag"'
-  require_contains "$script" 'return (Fail-Install -Code 2)'
-  require_contains "$script" 'return (Fail-Install)'
+  require_contains "$script" 'Fail-Install -Code 2'
   # shellcheck disable=SC2016
-  require_contains "$script" '$mainResults = @(Main)'
-  # shellcheck disable=SC2016
-  require_contains "$script" '$installSucceeded = Test-BooleanSuccessResult -Results $mainResults'
-  # shellcheck disable=SC2016
-  require_contains "$script" 'Complete-Install -Succeeded:$installSucceeded'
+  if [[ "$(tail -n 2 "$script")" != $'$null = Main\nComplete-Install' ]]; then
+    fail "$(relative_path "$script"): expected Main and Complete-Install to finish the script"
+  fi
   # shellcheck disable=SC2016
   require_contains "$script" 'throw "OpenClaw installation failed with exit code $($script:InstallExitCode)."'
 done
