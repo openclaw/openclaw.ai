@@ -18,7 +18,16 @@ describe('podcast episode catalog', () => {
       'Patrick Erichsen',
     ]);
     expect(episode.guests.map(({ name }) => name)).toEqual(['Josh Lehman']);
+    expect(episode.description).toContain('Josh Lehman, OpenClaw Developer');
+    expect(episode.description).not.toContain('Martian Engineering');
     expect(episode.description).toContain('live-demo major parts of the upcoming OpenClaw release');
     expect(episode.description).toContain('a shared RoboClaw gateway');
+  });
+
+  test('uses Josh Lehman’s current OpenClaw role in Episode 3', () => {
+    const episode = podcastEpisodes.find(({ number }) => number === 3);
+
+    expect(episode?.description).toContain('Josh Lehman, OpenClaw Developer');
+    expect(episode?.description).not.toContain('Martian Engineering');
   });
 });

@@ -42,8 +42,8 @@ export const podcastEpisodes: PodcastEpisode[] = [
     youtubeUrl: 'https://www.youtube.com/watch?v=8HWopYIwbN8',
     spotifyUrl: 'https://open.spotify.com/episode/26L06Vw1R0ceMMl7x7cEPT',
     spotifyLabel: 'Open in Spotify',
-    listingSummary: 'Josh Lehman joins Hannes Rudolph and Patrick Erichsen for live demos of the upcoming OpenClaw release, including the rebuilt web UI, Multiplayer OpenClaw, and a streamlined Mac onboarding experience.',
-    description: `In this episode of OpenClaw’s official podcast, The ClawCast, host Hannes Rudolph, OpenClaw Community Manager, and co-host Patrick Erichsen, OpenClaw Developer, are joined by Josh Lehman, OpenClaw maintainer and founder of Martian Engineering, to live-demo major parts of the upcoming OpenClaw release: the rebuilt web UI, Multiplayer OpenClaw, and the new Mac onboarding experience.
+    listingSummary: 'OpenClaw Developer Josh Lehman joins Hannes Rudolph and Patrick Erichsen for live demos of the upcoming OpenClaw release, including the rebuilt web UI, Multiplayer OpenClaw, and a streamlined Mac onboarding experience.',
+    description: `In this episode of OpenClaw’s official podcast, The ClawCast, host Hannes Rudolph, OpenClaw Community Manager, and co-host Patrick Erichsen, OpenClaw Developer, are joined by Josh Lehman, OpenClaw Developer, to live-demo major parts of the upcoming OpenClaw release: the rebuilt web UI, Multiplayer OpenClaw, and the new Mac onboarding experience.
 
 The demos show the Control UI as a full browser-based software development environment, a shared RoboClaw gateway where teammates can see, share, and take over agent sessions, and a streamlined macOS installer that discovers existing models, credentials, skills, and plugins. The conversation also covers why the release is taking longer, the push for stability, the self-learning Skill Workshop, and the rewritten memory system.
 
@@ -199,8 +199,8 @@ Join our Discord: https://discord.com/invite/clawd`,
     youtubeUrl: 'https://www.youtube.com/watch?v=TQ7SgFXvieY',
     spotifyUrl: 'https://open.spotify.com/episode/2DQqQHQCZsl2sbGTKsLzq7',
     spotifyLabel: 'Open in Spotify',
-    listingSummary: 'Josh Lehman, Sedrak Hovhannisyan, and Alexander Adamyan join Hannes Rudolph to discuss OpenClaw onboarding, agent self-improvement, and long-running autonomous workflows.',
-    description: `In this episode of OpenClaw’s official podcast, The Clawcast, host Hannes Rudolph, OpenClaw Community Manager, is joined by Josh Lehman, OpenClaw maintainer and founder of Martian Engineering, and Sedrak Hovhannisyan and Alexander Adamyan, co-founders of Vana Labs, to discuss the OpenClaw onboarding overhaul, why the planned onboarding demo was cancelled, what OpenClaw can learn from Hermes’s self-improvement system, and how OpenClaw compares to tools like Codex for long-running autonomous workflows.
+    listingSummary: 'OpenClaw Developer Josh Lehman, Sedrak Hovhannisyan, and Alexander Adamyan join Hannes Rudolph to discuss OpenClaw onboarding, agent self-improvement, and long-running autonomous workflows.',
+    description: `In this episode of OpenClaw’s official podcast, The Clawcast, host Hannes Rudolph, OpenClaw Community Manager, is joined by Josh Lehman, OpenClaw Developer, and Sedrak Hovhannisyan and Alexander Adamyan, co-founders of Vana Labs, to discuss the OpenClaw onboarding overhaul, why the planned onboarding demo was cancelled, what OpenClaw can learn from Hermes’s self-improvement system, and how OpenClaw compares to tools like Codex for long-running autonomous workflows.
 
 The conversation covers the push to make OpenClaw easier for non-technical users, the role of skills and self-improvement in agent workflows, the difference between managed AI tools and user-owned open-source systems, and why OpenClaw's flexibility makes it uniquely powerful for automation.
 
