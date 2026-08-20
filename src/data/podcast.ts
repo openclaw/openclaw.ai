@@ -28,6 +28,38 @@ const spotifyShowUrl = 'https://open.spotify.com/show/033M5Wn9WAAdujY1qAcIYO';
 
 export const podcastEpisodes: PodcastEpisode[] = [
   {
+    number: 8,
+    slug: 'episode-8',
+    title: 'Live Demo: OpenClaw’s New Web UI, Multiplayer OpenClaw, and Mac Onboarding',
+    hosts: [
+      { name: 'Hannes Rudolph', xUrl: 'https://x.com/hrudolph' },
+      { name: 'Patrick Erichsen', xUrl: 'https://x.com/Pat_Erichsen' },
+    ],
+    guests: [
+      { name: 'Josh Lehman', xUrl: 'https://x.com/jlehman_' },
+    ],
+    airedAt: '2026-08-19',
+    youtubeUrl: 'https://www.youtube.com/watch?v=8HWopYIwbN8',
+    spotifyUrl: 'https://open.spotify.com/episode/26L06Vw1R0ceMMl7x7cEPT',
+    spotifyLabel: 'Open in Spotify',
+    listingSummary: 'Josh Lehman joins Hannes Rudolph and Patrick Erichsen for live demos of the upcoming OpenClaw release, including the rebuilt web UI, Multiplayer OpenClaw, and a streamlined Mac onboarding experience.',
+    description: `In this episode of OpenClaw’s official podcast, The ClawCast, host Hannes Rudolph, OpenClaw Community Manager, and co-host Patrick Erichsen, OpenClaw Developer, are joined by Josh Lehman, OpenClaw maintainer and founder of Martian Engineering, to live-demo major parts of the upcoming OpenClaw release: the rebuilt web UI, Multiplayer OpenClaw, and the new Mac onboarding experience.
+
+The demos show the Control UI as a full browser-based software development environment, a shared RoboClaw gateway where teammates can see, share, and take over agent sessions, and a streamlined macOS installer that discovers existing models, credentials, skills, and plugins. The conversation also covers why the release is taking longer, the push for stability, the self-learning Skill Workshop, and the rewritten memory system.
+
+Learn more about The OpenClaw Foundation: https://www.openclaw.org
+
+Guests and hosts socials:
+Hannes Rudolph: https://x.com/hrudolph
+Patrick Erichsen: https://x.com/Pat_Erichsen
+Josh Lehman: https://x.com/jlehman_
+
+Listen on Spotify: https://open.spotify.com/episode/26L06Vw1R0ceMMl7x7cEPT
+
+Recorded live every Wednesday at 11:30 AM PT on Discord.
+Join our Discord: https://discord.com/invite/clawd`,
+  },
+  {
     number: 7,
     slug: 'episode-7',
     title: 'Unfiltered Q&A with OpenClaw Founder Peter Steinberger',
